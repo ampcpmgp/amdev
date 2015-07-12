@@ -1,0 +1,14 @@
+{
+  "name": "amdevenZ",
+  "version": "0.1.0",
+  "description": "development enviroment",
+  "main": "./lib/Browser",
+  "scripts": {
+    "test": "echo error?"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "am-deven": "latest"
+  }
+}
