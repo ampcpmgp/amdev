@@ -1,8 +1,9 @@
 {
-  "name": "amdevenZ",
+  "name": "amdeven",
   "version": "0.1.0",
-  "description": "development enviroment",
-  "main": "./lib/Browser",
+  "description": "am development enviroment",
+  "main": "./electron/lib/Browser",
+  "main": "./test/am-deven/lib/Browser",
   "scripts": {
     "test": "echo error?"
   },
