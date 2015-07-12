@@ -1,11 +1,7 @@
-AutoEvent = require("../proj/web/mylib/am/AutoEvent.js")
+#AutoEvent = require("am-autoevent")
+$ = require("jquery")
 
 class ExternalSite
-  ###
-    document: https://github.com/atom/atom-shell/blob/master/docs/api/web-view-tag.md
-    how to use:
-      @es = new @ExternalSite "#foo"
-  ###
   webview: null
   ready_flag: 0
   constructor: (@selector, @dom, @src, which = "append", @width = "100%", @height = "640px") ->
@@ -30,7 +26,7 @@ class ExternalSite
   exejs: (code) ->
     @webview.executeJavaScript code
 
-class @AtomApp
+module.exports = class @AppClass
   inspector_: 1
   #module
   ipc: require("ipc")
@@ -39,7 +35,7 @@ class @AtomApp
   fs: require("fs")
   #class
   ExternalSite: ExternalSite
-  AutoEvent: AutoEvent
+  #AutoEvent: AutoEvent
   constructor: ->
     @init()
     @live_reload()
@@ -79,5 +75,3 @@ class @AtomApp
         $("body").append("<style type=\"text/css\">#{me.fs.readFileSync(filepath, {encoding:"utf-8"})}</style>")
       )
     )
-
-module.exports = @AtomApp

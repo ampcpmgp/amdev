@@ -16,7 +16,7 @@ class Watcher
       )
     )
 
-class Browser# extends @NodeJsApp
+module.exports class Browser# extends @NodeJsApp
   #configuration
   url: "file://#{__dirname.replace(/lib$/, '')}/index.html"
   ignore_dir: "./.ignore/"
@@ -92,5 +92,3 @@ class Browser# extends @NodeJsApp
       )
   etc: ->
     @global_shortcut()
-
-module.exports = Browser

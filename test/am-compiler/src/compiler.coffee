@@ -1,2 +1,2 @@
-Compiler = require("am_modules/am-compiler")
+Compiler = require("#{process.cwd()}/am_modules/am-compiler")
 new Compiler()
