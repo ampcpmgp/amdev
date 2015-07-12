@@ -18,7 +18,7 @@ class Watcher
 
 class Browser# extends @NodeJsApp
   #configuration
-  url: "file://" + __dirname.replace(/lib$/, "") + "/index.html"
+  url: "file://#{__dirname.replace(/lib$/, '')}/index.html"
   ignore_dir: "./.ignore/"
   cson_path: "./.ignore/browser.cson"
   data: {}
@@ -44,7 +44,7 @@ class Browser# extends @NodeJsApp
         height: 800
       @fs.mkdir(@ignore_dir,=>@fs.writeFile(@cson_path, @cson.createCSONString(result)))
     @data = result
-  start: ->
+  start: (@url = @url)->
     require("crash-reporter").start()
     @ipc_event()
     @app_start()
