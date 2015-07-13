@@ -1,6 +1,4 @@
-{
-  dir:
-    electron: null # if use as electron application, specified directory
-    web: "./web/" #if use am-deven server, specified directory
-    node: null # if use as nodejs application, specified directory
-}
+  web: "./web/" #if use am-deven server, specified directory
+  #electron: null # if use as electron application, specified directory
+  #node: null # if use as nodejs application, specified directory
+  ### dev ###

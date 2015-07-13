@@ -1,2 +1,2 @@
-Browser = new require('am-deven/electron/lib/Browser')
+Browser = new require('../../am_modules/am-deven/electron/lib/Browser')
 new Browser().start()

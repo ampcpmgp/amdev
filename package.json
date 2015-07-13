@@ -2,8 +2,7 @@
   "name": "amdeven",
   "version": "0.1.0",
   "description": "am development enviroment",
-  "main": "./electron/lib/Browser",
-  "main": "./test/am-deven/lib/Browser",
+  "main": "./electron/lib/browser2",
   "scripts": {
     "test": "echo error?"
   },
