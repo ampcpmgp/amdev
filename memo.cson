@@ -25,6 +25,10 @@
     cson化
       コマンドという子プロセスの起動
       Browser起動、一旦全デフォルトでam-devenを起動する
+      csonから設定されたディレクトリを読み込みに行く
+      index.html起動
+      app起動
+      サーバー起動（csonから読み込む）
   cson vs coffee
     cson設定しても結局coffee必須なら意味なし？
     →　csonをmoduleから読み込む設定にする
@@ -39,7 +43,7 @@
   Compilerや制作完了したjs
 6/15
   コンパイラjsは残す。&jsをgitignoreに再度登録。&bower導入&browserify導入してみよう
-  Browserifyなど必要以上の環境構築はせずにchromiumやiojsの対応を待つ。
+  Browserifyなど必要以上の環境構築はせずにchromiumやnodeの対応を待つ。
   2. 名前を考える - 午前の開発環境
     AMDevEn
     AmDeven

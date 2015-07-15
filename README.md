@@ -48,7 +48,7 @@ windows7
 
 #### cloud9
   git clone
-  nvm install v1.* #iojs
+  nvm install v1.* #node
 
 ###(配置)
   /electron-version/

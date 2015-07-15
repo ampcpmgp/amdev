@@ -2,9 +2,10 @@
   "name": "amdeven",
   "version": "0.1.0",
   "description": "am development enviroment",
-  "main": "./electron/lib/browser2",
+  "main": "./index.js",
   "scripts": {
-    "test": "echo error?"
+    "test": "node ./am_modules/am-deven/electron/lib/start",
+    "electron": "node -e require('am-deven/electron/lib/start')"
   },
   "author": "",
   "license": "ISC",

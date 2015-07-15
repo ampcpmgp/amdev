@@ -1,4 +1,8 @@
+{
+  #required
+  electron_dir_name: "../electron-v0.29.1-win32-x64"
+  electron_start_file: "am_modules/am-deven/electron/lib/start_browser"
   web: "./web/" #if use am-deven server, specified directory
   #electron: null # if use as electron application, specified directory
   #node: null # if use as nodejs application, specified directory
-  ### dev ###
+}
