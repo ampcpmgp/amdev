@@ -1,8 +1,7 @@
 {
   #required
   electron_dir_name: "../electron-v0.29.1-win32-x64" #version
-  electron_start_file: "am_modules/am-deven/electron/lib/start_browser"
-  electron_indexfile: "am_modules/am-deven/electron/index.html"
+  electron_html: "app/index.html"
   #watch dir, for reload
   browser: "./browser/"
   app: "./app/"

@@ -2,7 +2,7 @@
   "name": "amdeven",
   "version": "0.1.0",
   "description": "am development enviroment",
-  "main": "./index.js",
+  "main": "./browser/lib/start.js",
   "scripts": {
     "test": "node ./am_modules/am-deven/electron/lib/start",
     "electron": "node -e require('am-deven/electron/lib/start')"
