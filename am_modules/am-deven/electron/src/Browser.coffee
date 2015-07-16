@@ -18,7 +18,7 @@ class Watcher
 
 module.exports = class Browser# extends @NodeJsApp
   #configuration
-  url: "file://#{__dirname.replace(/lib$/, '')}/index.html"
+  url: "file://#{process.cwd()}/"
   ignore_dir: "./.ignore/"
   cson_path: "./.ignore/browser.cson"
   data: {}
@@ -32,7 +32,9 @@ module.exports = class Browser# extends @NodeJsApp
   shell: require("shell")
   #member
   mainWindow: 0
-  constructor: ->
+  constructor: (path)->
+    @url += path if path
+    console.log @url
     @watcher = new Watcher(@)
     try
       result = @cson.load(@cson_path)
