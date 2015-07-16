@@ -1,0 +1,11 @@
+{
+  "name": "am-node-parts",
+  "version": "1.0.1",
+  "description": "node parts",
+  "main": "./lib/NodeApp.js",
+  "scripts": {
+    "test": "echo error?"
+  },
+  "author": "",
+  "license": "ISC"
+}

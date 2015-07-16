@@ -1,0 +1,5 @@
+cson = require("cson")
+CmdExe = require("./CmdExe")
+config = cson.load('config.cson')
+child = new CmdExe(config.electron_dir_name, config.electron_start_file)
+child.start()
