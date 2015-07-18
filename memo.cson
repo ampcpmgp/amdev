@@ -21,6 +21,47 @@
 低
   instant.coffee 更新無し、即時実行js
 ### 過去ログ ###
+7/19
+fs.watchの動き
+  dir/ 監視(event, name)
+  ↓
+    /tmp.txt 作成
+      event = rename, name = tmp.txt
+      event = change, name = tmp.txt
+    ↓
+    /dir2/ 作成
+      event = rename, name = dir2
+    ↓
+    /dir2/test3.txt 作成
+      event = rename, name = test3.txt
+      event = change, name = test3.txt
+    ↓
+    /tmp.txt 名前変更 -> tmp2.txt
+      event = rename, name = null
+      event = rename, name = tmp2.txt
+      event = change, name = tmp2.txt
+    ↓
+    /dir2/ -> /dir3/
+      event = rename, name = null
+      event = rename, name = dir3
+    ↓
+    /tmp.txt 編集
+      event = change, name = tmp.txt
+      event = change, name = tmp.txt
+    ↓
+    /dir2/test3.txt 編集
+      #イベント発火せず
+    ↓
+    /dir2/test3.txt -> test4.txt
+      event = change, name = dir2
+      #dir名変更も同様
+    ↓
+    /dir2/dir3/*
+      #何をしてもイベント発火せず
+7/18
+  watcherフロー
+    new Class
+    watch -> changed?
 7/14
   設計見通し
     cson化

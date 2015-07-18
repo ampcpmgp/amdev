@@ -28,7 +28,22 @@ windows7
       "main": "./test/am-deven/lib/Browser",
 
 
-###以下過去
+###実行時フロー###
+  run.bat (electron->Browser.js)
+  index.html(on node)
+    app.js
+      electron app
+        ?
+      node
+        compiler
+        server
+
+
+
+
+
+
+###以下過去###
 
 
 ###(動作確認)
