@@ -56,7 +56,7 @@ windows7
 
 ###(自分の開発環境)
 #### my package
-  choco install -yf io.js nodejs skype line lhaplus cmder atom notepadplusplus ruby googlechrome clover dexpot autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary
+  choco install -yf io.js nodejs skype line lhaplus cmder atom notepadplusplus ruby googlechrome clover dexpot autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary python
   choco install -yf firefox-dev -pre
 #### download
   clibor - http://www.amunsnet.com/
