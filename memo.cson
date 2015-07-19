@@ -20,6 +20,7 @@
 中
   js_dom -> cheerio
 低
+  console.log の削除
   instant.coffee 更新無し、即時実行js
 ### 過去ログ ###
 7/19
