@@ -1,3 +1,3 @@
-console.log "compiler start"
+#comipler, watcher
 Compiler = require("am-compiler")
 new Compiler()
