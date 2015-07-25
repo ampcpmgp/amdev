@@ -1,11 +1,26 @@
-#amdeven
-AM-development enviroment
+##### 取扱説明書
+```coffee-script
+amdeven?
+  AM development enviroment
+  午前の開発環境
 
-##my develop
-windows7
+deploy
+  npm install amdeven
 
+this project delevelopment environment
+  windows7
+  node.js
+  coffee-script
+  ruby
+    sass
+  babel + es2015 (rarely)
 
-###configuration
+my build environment
+  choco install -yf ruby nodejs skype line lhaplus cmder atom notepadplusplus googlechrome firefox clover autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary python2
+  # download
+  clibor - http://www.amunsnet.com/
+  apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments
+  #if use
   if use coffee-script
     npm install -g coffee-script
   if use sass
@@ -13,21 +28,17 @@ windows7
     gem source -a http://rubygems.org/
     gem install sass
 
-###my enviroment
-####atom
-  apm install pigments highlight-selected save-session tabs-to-spaces
-
-###my atom enviroment
-  apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff
+cloud9 setup
+  git clone
+  fin?
 
 
-####develop
-  if am-deven
-    config package.json
-      "main": "./electron/lib/Browser",
-      "main": "./test/am-deven/lib/Browser",
 
 
+
+```
+
+#過去ログ
 ###実行時フロー###
   run.bat (electron->Browser.js)
   index.html(on node)
@@ -38,31 +49,6 @@ windows7
         compiler
         server
 
-
-
-
-
-
-###以下過去###
-
-
-###(動作確認)
-windows7
-
-###(開発環境)
-#### ruby(if use sass)
-  gem source -a http://rubygems.org/
-  gem install sass
-
-###(自分の開発環境)
-#### my package
-  choco install -yf io.js nodejs skype line lhaplus cmder atom notepadplusplus ruby googlechrome clover dexpot autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary python
-  choco install -yf firefox-dev -pre
-#### download
-  clibor - http://www.amunsnet.com/
-
-#### cloud9
-  git clone
   nvm install v1.* #node
 
 ###(配置)
