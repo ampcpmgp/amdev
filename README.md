@@ -16,7 +16,7 @@ this project delevelopment environment
   babel + es2015 (rarely)
 
 my build environment
-  choco install -yf ruby nodejs skype line lhaplus cmder atom notepadplusplus googlechrome firefox clover autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary python2
+  choco install -yf ruby nodejs python2 skype line lhaplus cmder atom notepadplusplus googlechrome firefox clover autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary
   # download
   clibor - http://www.amunsnet.com/
   apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments
