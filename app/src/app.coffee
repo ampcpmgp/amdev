@@ -1,5 +1,5 @@
 #Server
-window.np = new (require("am-node-parts"))
+window.np = new (require("am-deven/app/lib/NodeApp"))
 np.start()
 #Compiler
 fork = require("child_process").fork
