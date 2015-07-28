@@ -17,6 +17,8 @@ this project delevelopment environment
 
 my build environment
   choco install -yf ruby nodejs python2 skype line lhaplus cmder atom notepadplusplus googlechrome firefox clover autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary
+  windows7?
+    choco install -yf visualstudio2012wdx
   # download
   clibor - http://www.amunsnet.com/
   apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments
