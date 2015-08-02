@@ -1,11 +1,11 @@
-modules = [
+@modules = [
   "am-deven"
   "am-common"
   "am-compiler"
   "am-node-parts"
   "am-autoevent"
 ]
-window.npm_publish = (modules = modules) =>
+window.npm_publish = (modules = @modules) =>
   exec = require("child_process").exec
   command = "npm version patch && npm publish"
 
