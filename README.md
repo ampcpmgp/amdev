@@ -7,18 +7,24 @@ amdeven?
 deploy
   npm install amdeven
 
+
 this project delevelopment environment
   windows7
-  node.js
-  coffee-script
-  ruby
-    sass
-  babel + es2015 (rarely)
+    #要インストール
+    node.js
+    coffee-script
+    ruby
+      sass
+    #組み込まれている
+    babel + es2015 #組み込み済み
 
 my build environment
   choco install -yf ruby nodejs python2 skype line lhaplus cmder atom notepadplusplus googlechrome firefox clover autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary
   windows7?
+    #動作確認したような
     choco install -yf visualstudio2012wdx
+    #動作未確認
+    choco install -yf installvisualstudioexpress2013windowsdesktop
   # download
   clibor - http://www.amunsnet.com/
   apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments
@@ -30,12 +36,17 @@ my build environment
     gem source -a http://rubygems.org/
     gem install sass
 
+
 cloud9 setup
   git clone
   fin?
 
 
-
+development
+  git clone
+  各モジュールでのnpm install
+  全終了後
+  coffee "./node_modules/am-deven/app/src/compile_all.coffee"
 
 
 ```
