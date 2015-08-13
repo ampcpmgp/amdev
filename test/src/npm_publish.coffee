@@ -1,11 +1,6 @@
-@modules = [
-  "am-deven"
-  "am-common"
-  "am-compiler"
-  "am-node-parts"
-  "am-autoevent"
-]
-window.npm_publish = (modules = @modules) =>
+fs = require("fs")
+dirs = fs.readdirSync("./node_modules/")
+window.npm_publish = (modules = dirs) =>
   exec = require("child_process").exec
   command = "npm version patch && npm publish"
 
@@ -17,4 +12,4 @@ window.npm_publish = (modules = @modules) =>
   for module in modules
     func("cd ./node_modules/#{module} && #{command}")
 
-console.log "if publish all modules, input %cnpm_publish() or npm_publish(['am-deven']) %cin console", "color: red", "color:inherit"
+console.log "if publish all modules, input %cnpm_publish() or npm_publish(#{JSON.stringify(dirs)}) %cin console", "color: red", "color:inherit"
