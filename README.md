@@ -24,7 +24,7 @@ my build environment
     #動作確認したような
     choco install -yf visualstudio2012wdx
     #動作未確認
-    choco install -yf installvisualstudioexpress2013windowsdesktop
+    choco install -yf visualstudio2015community # window 10
   # download
   clibor - http://www.amunsnet.com/
   apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments

@@ -1,3 +1,4 @@
 #comipler, watcher
 Compiler = require("am-compiler")
-new Compiler()
+compiler = new Compiler()
+compiler.start()
