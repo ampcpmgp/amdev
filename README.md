@@ -15,8 +15,6 @@ this project delevelopment environment
     coffee-script
     ruby
       sass
-    #組み込まれている
-    babel + es2015 #組み込み済み
 
 my build environment
   choco install -yf ruby nodejs python2 skype line lhaplus cmder atom notepadplusplus googlechrome firefox clover autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary
