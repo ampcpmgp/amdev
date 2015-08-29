@@ -8,7 +8,7 @@ electron (download to ../)
 #first
 npm install am-deven
 node ./node_modules/am-deven/app/lib/copy_template.js
-#execute
+#edit electron version (run.bat)
 start ../electron-v0.30.4-win32-x64/electron.exe ./
 
 
