@@ -9,7 +9,7 @@ electron (download to ../)
 npm install am-deven
 node ./node_modules/am-deven/app/lib/copy_template.js
 #execute
-start ../electron-v0.30.4-win32-x64/electron.exe ./browser/lib/stsart.js
+start ../electron-v0.30.4-win32-x64/electron.exe ./
 
 
 amdeven?
