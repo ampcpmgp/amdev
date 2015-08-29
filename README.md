@@ -6,7 +6,7 @@ node.js
 electron (download to ../)
 #command
 #first
-npm install am-deven --save
+npm install am-deven
 node ./node_modules/am-deven/app/lib/copy_template.js
 #execute
 start ../electron-v0.30.4-win32-x64/electron.exe ./browser/lib/stsart.js
