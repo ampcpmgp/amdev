@@ -1,5 +1,14 @@
 ##### 取扱説明書
 ```coffee-script
+###use am-deven###
+#required
+node.js
+electron (download to ../)
+#command
+npm install am-deven --save
+node ./node_modules/am-deven/app/lib/copy_template.js
+
+
 amdeven?
   AM development enviroment
   午前の開発環境
@@ -10,11 +19,10 @@ deploy
 
 this project delevelopment environment
   windows7
-    #要インストール
-    node.js
     coffee-script
-    ruby
-      sass
+    #option
+    ruby(sass)
+
 
 my build environment
   choco install -yf ruby nodejs python2 skype line lhaplus cmder atom notepadplusplus googlechrome firefox clover autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary
