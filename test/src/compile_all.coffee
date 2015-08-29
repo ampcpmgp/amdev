@@ -5,4 +5,4 @@ window.compile_all = =>
     console.log out
     )
 
-console.log "if want to compile, input %ccompile_all() %cin console", "color: red", "color:inherit"
+console.log "if want to compile all, input %ccompile_all() %cin console", "color: red", "color:inherit"
