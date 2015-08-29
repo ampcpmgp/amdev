@@ -28,6 +28,7 @@ my build environment
   # download
   clibor - http://www.amunsnet.com/
   apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments
+  apm install editorconfig
   #if use
   if use coffee-script
     npm install -g coffee-script
@@ -50,7 +51,6 @@ development
 
 
 ```
-
 #過去ログ
 ###実行時フロー###
   run.bat (electron->Browser.js)
