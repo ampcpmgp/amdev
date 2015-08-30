@@ -1,6 +1,6 @@
 ##### 取扱説明書
 ```coffee-script
-###use am-deven on windows7###
+###used am-deven on windows7###
 #required
 node.js
 electron (download to ../)
@@ -8,25 +8,24 @@ electron (download to ../)
 #first
 npm install am-deven
 node ./node_modules/am-deven/app/lib/copy_template.js
+npm install
 #edit electron version (run.bat)
 start ../electron-v0.30.4-win32-x64/electron.exe ./
 
-
 amdeven?
-  AM development enviroment
+  AM development environment
   午前の開発環境
-
-deploy
-  npm install amdeven
-
 
 this project delevelopment environment
   windows7
-    coffee-script
+    #required
+    npm install -g coffee-script
     #option
-    ruby(sass)
+    choco install -yf ruby
+    gem source -a http://rubygems.org/
+    gem install sass
 
-
+###my deven environment###
 my build environment
   choco install -yf ruby nodejs python2 skype line lhaplus cmder atom notepadplusplus googlechrome firefox clover autoit crystaldiskinfo githubforwindows libreoffice googlechrome.canary
   windows7?
@@ -34,30 +33,19 @@ my build environment
     choco install -yf visualstudio2012wdx
     #動作未確認
     choco install -yf visualstudio2015community # window 10
-  # download
-  clibor - http://www.amunsnet.com/
-  apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments
-  apm install editorconfig
-  #if use
-  if use coffee-script
-    npm install -g coffee-script
-  if use sass
-    choco install -yf ruby
-    gem source -a http://rubygems.org/
-    gem install sass
+    # download
+    clibor - http://www.amunsnet.com/
+    # atom package
+    apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments
+    apm install editorconfig
 
-
-cloud9 setup
-  git clone
-  fin?
-
-
-development
-  git clone
-  各モジュールでのnpm install
-  全終了後
-  coffee "./node_modules/am-deven/app/src/compile_all.coffee"
-
+git clone https://github.com/ampcpmgp/amdeven/
+cd node_modules/am-autoevent/ && npm install
+cd ../../node_modules/am-common/ && npm install
+cd ../../node_modules/am-compiler/ && npm install
+cd ../../node_modules/am-node-parts/ && npm install
+cd  ../../node_modules/am-deven/ && npm install
+coffee -cm ./
 
 ```
 #過去ログ
