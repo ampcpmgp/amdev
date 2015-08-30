@@ -40,13 +40,14 @@ my build environment
     apm install editorconfig
 
 git clone https://github.com/ampcpmgp/amdeven/
-cd node_modules/am-autoevent/ && npm install
-cd ../../node_modules/am-common/ && npm install
-cd ../../node_modules/am-compiler/ && npm install
-cd ../../node_modules/am-node-parts/ && npm install
-cd  ../../node_modules/am-deven/ && npm install
-coffee -cm ./
+cd node_modules/am-autoevent/ && npm install && coffee -cm ./
+cd ../../node_modules/am-common/ && npm install && coffee -cm ./
+cd ../../node_modules/am-compiler/ && npm install && coffee -cm ./
+cd ../../node_modules/am-node-parts/ && npm install && coffee -cm ./
+cd  ../../node_modules/am-deven/ && npm install && coffee -cm ./
+cd ../../ & coffee -cm ./
 
+#end
 ```
 #過去ログ
 ###実行時フロー###
