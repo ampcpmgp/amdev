@@ -45,7 +45,7 @@ cd ../../node_modules/am-common/ && npm install && coffee -cm ./
 cd ../../node_modules/am-compiler/ && npm install && coffee -cm ./
 cd ../../node_modules/am-node-parts/ && npm install && coffee -cm ./
 cd  ../../node_modules/am-deven/ && npm install && coffee -cm ./
-cd ../../ & coffee -cm ./
+cd ../../ && coffee -cm ./
 
 #end
 ```
