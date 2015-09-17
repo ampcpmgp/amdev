@@ -1,1 +1,2 @@
-console.log 1
+window.onload = =>
+  require("./app.js")
