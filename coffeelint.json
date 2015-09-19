@@ -1,0 +1,14 @@
+{
+  "indentation" : {
+    "level" : "error",
+    "value" : 2
+  },
+  "line_endings" : {
+    "value" : "windows",
+    "level" : "error"
+  },
+  "max_line_length": {
+    "value" : 120,
+    "level" : "error"
+  }
+}

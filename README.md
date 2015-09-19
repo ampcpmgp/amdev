@@ -1,5 +1,20 @@
+# amdeven?
+* AM development environment
+* 午前の開発環境
+
+## how to use
+?
+
+### 開発環境
+atom package
+
+`
+apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments editorconfig linter-coffeelint
+`
+
+## past log
+
 ##### 取扱説明書
-```coffee-script
 ###used am-deven on windows7###
 #required
 node.js
@@ -35,9 +50,6 @@ my build environment
     choco install -yf visualstudio2015community # window 10
     # download
     clibor - http://www.amunsnet.com/
-    # atom package
-    apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments
-    apm install editorconfig
 
 git clone https://github.com/ampcpmgp/amdeven/
 cd node_modules/am-autoevent/ && npm install && coffee -cm ./
@@ -48,7 +60,7 @@ cd  ../../node_modules/am-deven/ && npm install && coffee -cm ./
 cd ../../ && coffee -cm ./
 
 #end
-```
+
 #過去ログ
 ###実行時フロー###
   run.bat (electron->Browser.js)
