@@ -2,12 +2,14 @@
 * AM development environment
 * 午前の開発環境
 
-## how to use
+## how to use (作成途中)
 ```
+#必要環境
+node.js, electron (download to ../), ???
+
 npm install am-deven
 node ./node_modules/am-deven/app/lib/copy_template.js
 npm install
-
 
 # edit electron version (run.bat)
 start ../electron-v0.30.4-win32-x64/electron.exe ./
@@ -27,9 +29,6 @@ clibor - http://www.amunsnet.com/
 
 # atom package
 apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments editorconfig linter-coffeelint
-
-# electron
-electron (download to ../)
 
 # compiler
 npm install -g coffee-script
