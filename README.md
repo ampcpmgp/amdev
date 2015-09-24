@@ -36,15 +36,10 @@ gem source -a http://rubygems.org/
 gem install sass
 
 
-# todo - nodeから起動させる
-# command
-git clone https://github.com/ampcpmgp/amdeven/
-cd node_modules/am-autoevent/ && npm install && coffee -cm ./
-cd ../../node_modules/am-common/ && npm install && coffee -cm ./
-cd ../../node_modules/am-compiler/ && npm install && coffee -cm ./
-cd ../../node_modules/am-node-parts/ && npm install && coffee -cm ./
-cd  ../../node_modules/am-deven/ && npm install && coffee -cm ./
-cd ../../ && coffee -cm ./
+# clone後
+coffee ./test/lib/init.coffee
+# TODO windows 7 & VS2015 でエラーが出る
+# TODO windows 10で確認する
 
 #
 ```
