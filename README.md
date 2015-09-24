@@ -20,9 +20,9 @@ start ../electron-v0.30.4-win32-x64/electron.exe ./
 
 ```
 # install chocolatey
-choco install -yf visualstudio2015community
+choco install -yf ruby nodejs python2 visualstudio2015community
 choco install -yf githubforwindows atom
-choco install -yf ruby nodejs python2 skype line lhaplus cmder  notepadplusplus googlechrome firefox clover autoit crystaldiskinfo libreoffice googlechrome.canary
+choco install -yf skype line lhaplus cmder  notepadplusplus googlechrome firefox clover autoit crystaldiskinfo libreoffice googlechrome.canary
 
 # download
 clibor - http://www.amunsnet.com/
