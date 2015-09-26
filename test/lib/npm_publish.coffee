@@ -1,20 +1,17 @@
 fs = require("fs")
-dirs = fs.readdirSync("./node_modules/")
-window.npm_publish = (modules = dirs) ->
+modules = fs.readdirSync("./node_modules/")
+window.npm_publish = (uploadModules = modules) ->
   exec = require("child_process").exec
   command = "npm version patch && npm publish"
+  console.log "npm upload start - #{uploadModules}"
+  for module in uploadModules
+    exec("cd ./node_modules/#{module} && #{command}", (e, out, err) -> console.log out)
 
-  func = (command) ->
-    exec(command, (e, out, err) ->
-      console.log out
-      )
-
-  for module in modules
-    func("cd ./node_modules/#{module} && #{command}")
-
-# TODO: readdirを使い見やすくする。
-# TODO: browser再起動ボタンをつける
-console.log(
-  "if publish all modules, input %cnpm_publish() or npm_publish(#{JSON.stringify(dirs)}) %cin console",
-  "color: red", "color:inherit"
-)
+$box = $(".npm-update-box")
+$button = $(npmUpdateButton.content).find("button")
+for module in modules
+  $fragment = $(document.createDocumentFragment())
+  do($button) ->
+    $button = $button.clone().text(module).attr("onclick", $button.attr("onclick").replace(/!val!/, module))
+    $fragment.append($button)
+  $box.append($fragment)
