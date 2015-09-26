@@ -1,4 +1,4 @@
-### TODO: vanillajsを使いやすい名前に変えたい
+### TODO 0: vanillajsを使いやすい名前に変えたい
 on = addEventListener
 off = removeEventListner
 ####

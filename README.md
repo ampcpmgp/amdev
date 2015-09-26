@@ -38,8 +38,8 @@ gem install sass
 
 # clone後
 coffee ./test/lib/init.coffee
-# TODO windows 7 & VS2015 でエラーが出る
-# TODO windows 10で確認する
+# TODO 1: windows 7 & VS2015 でエラーが出る
+# TODO 1: windows 10で確認する
 
 #
 ```
