@@ -6,8 +6,6 @@ sampleCode = ->
   np.server.start()
   #readline
   np.readline_func("./package.json", (line) -> console.log(line))
-  #check
-  #np.ignore_regexp =  /(\/node_modules\/)|(\/\.[^\/]+\/)/
   #check dir
   np.check_dir_tree("./", /coffee$/, (loc, file) -> console.log(loc))
   #watch dir tree
@@ -19,3 +17,4 @@ sampleCode = ->
       fs.writeFileSync("./test/src/1.txt")
       fs.unlinkSync("test/src/1.txt")
     , 1500)
+  # TODO: サーバーのクラスタ起動と別処理扱いの処理追加、websocketも同様に。
