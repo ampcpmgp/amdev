@@ -28,7 +28,7 @@ choco install -yf skype line lhaplus cmder  notepadplusplus googlechrome firefox
 clibor - http://www.amunsnet.com/
 
 # atom package
-apm install pigments highlight-selected save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments editorconfig linter-coffeelint script highlight-column
+apm install pigments highlight-selected highlight-column save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments editorconfig linter linter-coffeelint script pretty-json
 
 # compiler
 npm install -g coffee-script
