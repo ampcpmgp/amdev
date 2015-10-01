@@ -29,6 +29,10 @@ clibor - http://www.amunsnet.com/
 
 # atom package
 apm install pigments highlight-selected highlight-column save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments editorconfig linter linter-coffeelint script pretty-json
+## styesheet
+atom-text-editor {
+    font-family: "Avenir Next",Verdana, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "游ゴシック", "Yu Gothic", "メイリオ", Meiryo, Osaka, sans-serif;
+}
 
 # compiler
 npm install -g coffee-script
