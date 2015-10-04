@@ -35,8 +35,8 @@ atom-text-editor {
 }
 
 # compiler
-npm install -g coffee-script
-gem source -a http://rubygems.org/
+npm install -g coffee-script &&
+gem source -a http://rubygems.org/ &&
 gem install sass
 
 
