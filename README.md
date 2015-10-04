@@ -5,7 +5,7 @@
 ## how to use (作成途中)
 ```
 #必要環境
-node.js, electron (download to ../), ???
+node.js, npm 3 (over), electron (download to ../), ???
 
 npm install am-deven
 node ./node_modules/am-deven/app/lib/copy_template.js
