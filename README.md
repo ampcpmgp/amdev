@@ -39,6 +39,9 @@ npm install -g coffee-script &&
 gem source -a http://rubygems.org/ &&
 gem install sass
 
+# if npm version below 3
+npm install -g npm
+
 
 # clone後
 coffee ./test/lib/init.coffee
