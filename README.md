@@ -8,7 +8,7 @@
 node.js, npm (version3 over), electron (download to ../), ???
 
 npm install am-deven
-node ./node_modules/am-deven/app/lib/copy_template.js
+node ./node_modules/am-deven/app/lib/copy_template.js &&
 npm install
 
 # edit electron version (run.bat)
