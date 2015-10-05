@@ -22,5 +22,4 @@ for module in modules
 
 #Compile all
 window.compile_all = ->
-  command = "coffee ./node_modules/am-deven/app/lib/compile_all.coffee"
-  exec(command, (e, out, err) -> console.log out)
+  require("am-compiler/lib/compile_all")
