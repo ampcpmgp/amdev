@@ -45,8 +45,7 @@ npm install -g npm
 
 # clone後
 coffee ./test/lib/init.coffee
-# TODO 1: windows 7 & VS2015 でエラーが出る
-# TODO 1: windows 10で確認する
+# (windows 10 + VS2015)でエラー。0になると良いが、一旦動くので気にしない。
 
 #
 ```
