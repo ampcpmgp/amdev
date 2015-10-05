@@ -17,4 +17,3 @@ sampleCode = ->
       fs.writeFileSync("./test/src/1.txt")
       fs.unlinkSync("test/src/1.txt")
     , 1500)
-  # TODO: サーバーのクラスタ起動と別処理扱いの処理追加、websocketも同様に。
