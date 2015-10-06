@@ -4,6 +4,7 @@
   "description": "am development enviroment",
   "main": "browser/lib/start.js",
   "scripts": {
+    "asModule": "node -e require('am-deven/app/lib/copy_template')"
   },
   "author": "",
   "license": "ISC"
