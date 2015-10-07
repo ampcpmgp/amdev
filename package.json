@@ -4,7 +4,8 @@
   "description": "am development enviroment",
   "main": "browser/lib/start.js",
   "scripts": {
-    "asModule": "node -e require('am-deven/app/lib/copy_template')"
+    "asModule": "node -e require('am-deven/app/lib/copy_template')",
+    "compileAll": "coffee node_modules/am-compiler/lib/compile_all.coffee"
   },
   "author": "",
   "license": "ISC"

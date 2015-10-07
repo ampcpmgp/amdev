@@ -22,4 +22,5 @@ for module in modules
 
 #Compile all
 window.compile_all = ->
-  require("am-compiler/lib/compile_all")
+  command = "npm run compileAll"
+  exec(command)
