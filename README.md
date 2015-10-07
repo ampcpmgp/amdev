@@ -21,13 +21,13 @@ start ../electron-v0.30.4-win32-x64/electron.exe ./
 # install chocolatey
 choco install -yf ruby nodejs python2 visualstudio2015community
 choco install -yf githubforwindows atom
-choco install -yf skype line lhaplus cmder  notepadplusplus googlechrome firefox clover autoit crystaldiskinfo libreoffice googlechrome.canary
+choco install -yf skype line lhaplus cmder  notepadplusplus googlechrome firefox clover autoit crystaldiskinfo crystaldiskmark libreoffice googlechrome.canary
 
 # download
 clibor - http://www.amunsnet.com/
 
 # atom package
-apm install pigments highlight-selected highlight-column save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments editorconfig linter linter-coffeelint script pretty-json atom-terminal 
+apm install pigments highlight-selected highlight-column save-session tabs-to-spaces minimap minimap-git-diff minimap-pigments editorconfig linter linter-coffeelint script pretty-json atom-terminal
 ## styesheet
 atom-text-editor {
     font-family: "Avenir Next",Verdana, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "游ゴシック", "Yu Gothic", "メイリオ", Meiryo, Osaka, sans-serif;
