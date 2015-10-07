@@ -1,11 +1,11 @@
 fs = require("fs")
 exec = require('child_process').exec
-cmd = "coffee -cm ./ && "
+cmd = ""
 
 # TODO: npm installとコンパイルを分ける
 # TODO: フローはnpm install -> mix compiler
 addList = (err, files) ->
-  cmd += "cd node_modules/#{file}/ && npm install && coffee -cm ./ && cd ../../ && " for file in files
+  cmd += "cd node_modules/#{file}/ && npm install && cd ../../ && " for file in files
   cmd += "exit"
   console.log cmd
   console.log "child process start"

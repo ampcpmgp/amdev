@@ -4,7 +4,9 @@
   "description": "am development enviroment",
   "main": "browser/lib/start.js",
   "scripts": {
+    "init": "npm run compileAll && npm run installAll",
     "asModule": "node -e require('am-deven/app/lib/copy_template')",
+    "installAll": "coffee ./test/lib/init.coffee",
     "compileAll": "coffee node_modules/am-compiler/lib/compile_all.coffee"
   },
   "author": "",
