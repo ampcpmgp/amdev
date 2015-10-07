@@ -2,8 +2,6 @@ fs = require("fs")
 exec = require('child_process').exec
 cmd = ""
 
-# TODO: npm installとコンパイルを分ける
-# TODO: フローはnpm install -> mix compiler
 addList = (err, files) ->
   cmd += "cd node_modules/#{file}/ && npm install && cd ../../ && " for file in files
   cmd += "exit"

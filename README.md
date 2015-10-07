@@ -10,7 +10,7 @@ node.js, npm (version3 over), electron (download to ../), ???
 npm install am-deven
 npm run init
 
-TODO: 外部設定から起動できるようにする
+TODO: electronのバージョンを外部から指定する（portのように）、最新を探したりする
 # edit electron version (run.bat)
 start ../electron-v0.30.4-win32-x64/electron.exe ./
 ```
