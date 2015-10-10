@@ -7,7 +7,9 @@
     "init": "npm run compileAll && npm run installAll",
     "asModule": "node -e require('am-deven/app/lib/copy_template')",
     "installAll": "coffee ./test/lib/init.coffee",
-    "compileAll": "coffee node_modules/am-compiler/lib/compile_all.coffee"
+    "compileAll": "coffee node_modules/am-compiler/lib/compile_all.coffee",
+    "TODO": ": electronのバージョンを外部から指定する（portのように）、最新を探したりする",
+    "electron":  "start ../electron-v0.33.4-win32-x64/electron.exe ./"
   },
   "author": "",
   "license": "ISC"
