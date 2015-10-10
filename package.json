@@ -5,6 +5,7 @@
   "main": "browser/lib/start.js",
   "scripts": {
     "init": "npm run compileAll && npm run installAll",
+    "以下気を付ける": "setTemplate->undoTemplateの順で行わないとバグ",
     "setTemplate": "coffee node_modules/am-deven/test/lib/setTemplate.coffee && npm run electron",
     "undoTemplate": "coffee node_modules/am-deven/test/lib/undoTemplate.coffee",
     "installAll": "coffee ./test/lib/init.coffee",
