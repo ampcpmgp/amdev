@@ -8,7 +8,7 @@
     "cl": "coffee node_modules/am-deven/app/lib/cl.coffee",
     "start": "npm run compileAll && npm run serverStart",
     "serverStart": "coffee app/lib/server.coffee",
-    "以下気を付ける": "setTemplate->undoTemplateの順で行わないとバグ",
+    "以下気を付ける": "setTemplate->undoTemplateの順で行わないとバグ,ファイルロックは解除",
     "setTemplate": "coffee node_modules/am-deven/test/lib/setTemplate.coffee && npm run electron",
     "undoTemplate": "coffee node_modules/am-deven/test/lib/undoTemplate.coffee",
     "installAll": "coffee test/lib/init.coffee",
