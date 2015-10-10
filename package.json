@@ -6,6 +6,7 @@
   "scripts": {
     "init": "npm run compileAll && npm run installAll",
     "cl": "coffee node_modules/am-deven/app/lib/cl.coffee",
+    "TODO": "再起動を作る",
     "restart": "echo restart",
     "以下気を付ける": "setTemplate->undoTemplateの順で行わないとバグ",
     "setTemplate": "coffee node_modules/am-deven/test/lib/setTemplate.coffee && npm run electron",
