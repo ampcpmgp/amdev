@@ -1,5 +1,5 @@
 #config
-interval = 5 * 60000 / 60
+interval = 5 * 60000# / 60 テスト時は５秒に１回
 #vars
 exec = require("child_process").exec
 check = -> do(check) ->
