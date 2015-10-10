@@ -25,6 +25,7 @@ choco install -yf githubforwindows atom
 choco install -yf skype line lhaplus cmder  notepadplusplus googlechrome firefox clover autoit crystaldiskinfo crystaldiskmark libreoffice googlechrome.canary
 
 # download
+TODO: cliborを含んだ開発環境を作る
 clibor - http://www.amunsnet.com/
 
 # atom package
