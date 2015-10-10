@@ -4,10 +4,10 @@
   "description": "am development enviroment",
   "main": "browser/lib/start.js",
   "scripts": {
-    "init": "npm run compileAll && npm run installAll",
+    "init": "npm run installAll && npm run compileAll",
     "cl": "coffee node_modules/am-deven/app/lib/cl.coffee",
-    "TODO": "再起動を作る",
-    "start": "coffee app/lib/server.coffee",
+    "start": "npm run compileAll && npm run serverStart",
+    "serverStart": "coffee app/lib/server.coffee",
     "以下気を付ける": "setTemplate->undoTemplateの順で行わないとバグ",
     "setTemplate": "coffee node_modules/am-deven/test/lib/setTemplate.coffee && npm run electron",
     "undoTemplate": "coffee node_modules/am-deven/test/lib/undoTemplate.coffee",
