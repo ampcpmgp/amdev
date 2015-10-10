@@ -4,7 +4,7 @@
   "description": "am development enviroment",
   "main": "browser/lib/start.js",
   "scripts": {
-    "init": "npm run compileAll && npm run installAll",
+    "init": "npm run installAll && npm run compileAll",
     "cl": "coffee node_modules/am-deven/app/lib/cl.coffee",
     "start": "npm run compileAll && npm run serverStart",
     "serverStart": "coffee app/lib/server.coffee",
