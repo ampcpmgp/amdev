@@ -5,7 +5,8 @@
   "main": "browser/lib/start.js",
   "scripts": {
     "init": "npm run compileAll && npm run installAll",
-    "asModule": "node -e require('am-deven/app/lib/copy_template')",
+    "setTemplate": "coffee -w node_modules/am-deven/test/lib/setTemplate.coffee",
+    "undoTemplate": "coffee -w node_modules/am-deven/test/lib/undoTemplate.coffee",
     "installAll": "coffee ./test/lib/init.coffee",
     "compileAll": "coffee node_modules/am-compiler/lib/compile_all.coffee",
     "TODO": ": electronのバージョンを外部から指定する（portのように）、最新を探したりする",
