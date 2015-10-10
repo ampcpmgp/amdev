@@ -7,7 +7,7 @@
     "init": "npm run compileAll && npm run installAll",
     "cl": "coffee node_modules/am-deven/app/lib/cl.coffee",
     "TODO": "再起動を作る",
-    "restart": "echo restart",
+    "start": "coffee app/lib/server.coffee",
     "以下気を付ける": "setTemplate->undoTemplateの順で行わないとバグ",
     "setTemplate": "coffee node_modules/am-deven/test/lib/setTemplate.coffee && npm run electron",
     "undoTemplate": "coffee node_modules/am-deven/test/lib/undoTemplate.coffee",
