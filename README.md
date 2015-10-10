@@ -8,7 +8,7 @@
 node.js, npm (version3 over), electron (download to ../), ???
 
 npm install am-deven
-npm run init
+node -e require('am-deven/app/lib/copy_template') && npm run init
 
 TODO: electronのバージョンを外部から指定する（portのように）、最新を探したりする
 # edit electron version (run.bat)
