@@ -1,4 +1,3 @@
-compiler: [
-  "coffeescript"
-  "sass"
-]
+compiler:
+  "coffeescript": /\.coffee$/
+  "sass": /\.sass$/
