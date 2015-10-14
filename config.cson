@@ -1,3 +1,10 @@
-compiler:
-  "coffeescript": /\.coffee$/
-  "sass": /\.sass$/
+"browser-window": #https://github.com/atom/electron/blob/master/docs/api/browser-window.md
+  "x": 0
+  "y": 0
+  "width": 1027
+  "height": 968
+  "web-preferences":
+    "preload": "/app/lib/app.js" #auto add head - process.cwd() +
+"compiler":
+  "coffeescript": "/\.coffee$/"
+  "sass": "/\.sass$/"
