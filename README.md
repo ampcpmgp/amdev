@@ -5,7 +5,7 @@
 ## how to use (作成途中)
 ```
 #requirement
-node.js, npm (version3 over), electron (download to ../), ???
+node.js(v4 over), npm (v3 over), electron (always latest) (download to ../), ???
 
 npm install am-deven
 node -e require('am-deven/app/lib/copy_template') && npm run init
