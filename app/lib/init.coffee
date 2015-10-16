@@ -1,10 +1,9 @@
 fs = require("fs")
 exec = require("child_process").exec
-#reload button
+###reload button###
 browserRestart = (e) -> require("ipc").send("restart")
 $(restart).on("click", browserRestart)
-
-#upload npm
+###upload npm###
 modules = fs.readdirSync("./node_modules/")
 window.npm_publish = (uploadModules = modules) ->
   command = "npm version patch && npm publish"
@@ -19,8 +18,7 @@ for module in modules
     $button = $button.clone().text(module).attr("onclick", $button.attr("onclick").replace(/!val!/, module))
     $fragment.append($button)
   $box.append($fragment)
-
-#Compile all
+###Compile all###
 window.compile_all = ->
   command = "npm run compileAll"
   exec(command)
