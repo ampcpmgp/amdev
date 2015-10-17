@@ -15,10 +15,10 @@ TODO: electronのバージョンを外部から指定する（portのように�
 start ../electron-v0.30.4-win32-x64/electron.exe ./
 ```
 
-## CIサーバー側に必要なもの
+### CIサーバー側に必要なもの
 npm install -g forever
 
-#### my build environment
+### my build environment
 
 ```
 # install chocolatey
