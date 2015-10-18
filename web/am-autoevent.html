@@ -5,8 +5,8 @@
     <title>am auto event</title>
     <script src="jquery" charset="utf-8"></script>
     <script src="am-autoevent"></script>
-    <script src="/lib/socket.io.js"></script>
-    <script src="/lib/CommonJs.js"></script>
+    <script src="/socket.io-client/socket.io.js"></script>
+    <script src="/am-common"></script>
     <script src="/lib/NodeClient.js"></script>
   </head>
   <body>
@@ -14,6 +14,7 @@
   </body>
   <script src="/lib/am-autoevent.js" charset="utf-8"></script>
   <script charset="utf-8">
-    ca = new NodeClient()
+    nc = new NodeClient()
+    nc.start()
   </script>
 </html>
