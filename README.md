@@ -6,6 +6,7 @@
 ```
 #requirement
 node.js(v4 over), npm (v3 over), electron (always latest) (download to ../), ???
+now only support windows 7, 10
 
 npm install am-deven
 node -e require('am-deven/app/lib/copy_template') && npm run init
