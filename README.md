@@ -32,7 +32,7 @@ TODO: cliborを含んだ開発環境を作る
 clibor - http://www.amunsnet.com/
 
 # atom package
-apm install pigments highlight-selected highlight-column save-session editorconfig linter linter-coffeelint script pretty-json atom-terminal file-icons
+apm install pigments highlight-selected highlight-column save-session editorconfig linter linter-coffeelint script atom-terminal file-icons atom-beatify
 ## styesheet
 atom-text-editor {
     font-family: "Avenir Next",Verdana, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "游ゴシック", "Yu Gothic", "メイリオ", Meiryo, Osaka, sans-serif;
