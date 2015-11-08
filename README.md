@@ -8,8 +8,11 @@
 node.js(v4 over), npm (v3 over), electron (always latest) (download to ../), ???
 now only support windows 7, 10
 
-npm install am-deven
-node -e require('am-deven/app/lib/copy_template') && npm run init
+npm install am-template
+node -e require("am-template")("coffee")
+npm i
+npm compileAll
+npm run electron
 
 TODO: electronのバージョンを外部から指定する（portのように）、最新を探したりする
 # edit electron version (run.bat)
