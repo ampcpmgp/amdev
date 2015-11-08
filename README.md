@@ -9,9 +9,9 @@ node.js(v4 over), npm (v3 over), electron (always latest) (download to ../), ???
 now only support windows 7, 10
 
 npm install am-template
-node -e require("am-template")("coffee")
-npm i
-npm compileAll
+node -e require('am-template')('coffee')
+npm install
+npm run compileAll
 npm run electron
 
 TODO: electronのバージョンを外部から指定する（portのように）、最新を探したりする
