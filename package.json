@@ -6,7 +6,8 @@
   "scripts": {
     "init": "npm run installAll && npm run compileAll",
     "cl": "forever start node_modules/am-deven/app/lib/cl.js",
-    "start": "npm run compileAll && npm run serverStart",
+    "start": "npm run compileAll && npm run electron",
+    "start:server": "npm run compileAll && npm run serverStart",
     "serverStart": "node app/lib/server.js",
     "以下気を付ける": "setTemplate->undoTemplateの順で行わないとバグ,ファイルロックは解除",
     "setTemplate": "node node_modules/am-deven/test/lib/setTemplate.js && npm run electron",
