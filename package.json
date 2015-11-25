@@ -19,5 +19,23 @@
     "electron2": "start ../electron-v0.35.1-win32-x64/electron.exe ./browser/build/start.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "chokidar": "latest",
+    "coffee-loader": "latest",
+    "coffee-script": "latest",
+    "cson": "latest",
+    "data-utils": "latest",
+    "fs-extra": "latest",
+    "ftp": "latest",
+    "is_js": "latest",
+    "jquery": "latest",
+    "jsdom": "latest",
+    "mime": "latest",
+    "mkdirp": "latest",
+    "readline": "latest",
+    "socket.io": "latest",
+    "socket.io-client": "latest",
+    "webpack": "2.0.1-beta"
+  }
 }
