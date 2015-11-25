@@ -15,8 +15,7 @@
     "installAll": "node test/lib/init.js",
     "TODO": ": electronのバージョンを外部から指定する（portのように）、最新を探したりする",
     "compileAll": "coffee node_modules/am-compiler/lib/compile_all.coffee",
-    "electron": "start ../electron-v0.35.1-win32-x64/electron.exe ./browser/lib/start.js",
-    "electron2": "start ../electron-v0.35.1-win32-x64/electron.exe ./browser/build/start.js"
+    "electron": "start ../electron-v0.35.1-win32-x64/electron.exe ./browser/build/start.js"
   },
   "author": "",
   "license": "ISC",
@@ -36,6 +35,7 @@
     "readline": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
+    "underscore": "latest",
     "webpack": "2.0.1-beta"
   }
 }
