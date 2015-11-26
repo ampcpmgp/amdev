@@ -5,7 +5,7 @@
   "height": 968
   "icon": "./web/favicon.ico"
   "web-preferences":
-    "preload": "/app/build/renderer.js" #auto add head - process.cwd() +
+    "preload": "/app/build/preload.js" #auto add head - process.cwd() +
 "compiler":
   "coffeescript": "/\.coffee$/"
   "sass": "/\.sass$/"

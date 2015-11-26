@@ -30,7 +30,7 @@ electronOption = _.clone(baseOption)
 electronOption.target = "electron"
 electronOption.entry =
     "browser/build/start": "./browser/src/start.coffee"
-    "app/build/renderer": "./app/src/renderer.coffee"
+    "app/build/preload": "./app/src/preload.coffee"
 nodeOption = _.clone(baseOption)
 nodeOption.target = "electron"
 nodeOption.entry =
