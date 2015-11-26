@@ -37,6 +37,8 @@ nodeOption.entry =
 "app/build/server": "./app/src/server.coffee"
 browserOption = _.clone(baseOption)
 browserOption.target = "electron"
+browserOption.entry =
+"web/build/client": "./web/src/client.coffee"
 
 #compiler
 callback = (err, stats) =>
@@ -55,6 +57,8 @@ callback = (err, stats) =>
 module.exports = [
   compiler = webpack(electronOption)
   nodeCompiler = webpack(nodeOption)
+  browserOption = webpack(nodeOption)
 ]
 compiler.watch({},callback)
 nodeCompiler.watch({},callback)
+browserOption.watch({},callback)
