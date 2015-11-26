@@ -6,7 +6,7 @@
   "scripts": {
     "init": "npm run installAll && npm run compileAll",
     "cl": "forever start node_modules/am-deven/app/lib/cl.js",
-    "start": "npm run compileAll && npm run electron",
+    "start": "start ../electron-v0.35.1-win32-x64/electron.exe ./browser/build/start.js",
     "start:server": "npm run compileAll && npm run serverStart",
     "serverStart": "node app/lib/server.js",
     "以下気を付ける": "setTemplate->undoTemplateの順で行わないとバグ,ファイルロックは解除",
@@ -14,8 +14,7 @@
     "undoTemplate": "node node_modules/am-deven/test/lib/undoTemplate.js",
     "installAll": "node test/lib/init.js",
     "TODO": ": electronのバージョンを外部から指定する（portのように）、最新を探したりする",
-    "compileAll": "coffee node_modules/am-compiler/lib/compile_all.coffee",
-    "electron": "start ../electron-v0.35.1-win32-x64/electron.exe ./browser/build/start.js"
+    "compileAll": "coffee node_modules/am-compiler/lib/compile_all.coffee"
   },
   "author": "",
   "license": "ISC",
