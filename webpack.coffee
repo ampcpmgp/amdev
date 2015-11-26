@@ -52,7 +52,9 @@ callback = (err, stats) =>
     )
   return if(jsonStats.errors.length > 0)
   # if(jsonStats.warnings.length > 0)
-compiler = webpack(electronOption)
+module.exports = [
+  compiler = webpack(electronOption)
+  nodeCompiler = webpack(nodeOption)
+]
 compiler.watch({},callback)
-nodeCompiler = webpack(nodeOption)
 nodeCompiler.watch({},callback)

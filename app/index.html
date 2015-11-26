@@ -1,3 +1,14 @@
+<!-- parts -->
+<button type="button" name="button" id="restart">Browser restart</button>
+<template id="npmUpdateButton">
+  <button type="button" name="npm-update" onclick="npm_publish(['!val!'])"></button>
+</template>
+<div class="npm-update-box">
+  npm update:
+</div>
+<button type="button" name="npm-update-all" onclick="npm_publish()">update all</button><br>
+<button type="button" name="button" onclick="compile_all()">compile all</button>
+<!-- server -->
 <script type="text/javascript">
   require("./build/server")
 </script>
