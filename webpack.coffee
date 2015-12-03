@@ -29,17 +29,17 @@ electronOption = _.clone(baseOption)
 electronOption.target = "electron"
 electronOption.externals = nodeModules
 electronOption.entry =
-  "browser/build/start": "./browser/src/start.coffee"
-  "app/build/preload": "./app/src/preload.coffee"
+    "browser/build/start": "./browser/src/start.coffee"
+    "app/build/preload": "./app/src/preload.coffee"
 nodeOption = _.clone(baseOption)
 nodeOption.target = "electron"
 nodeOption.externals = nodeModules
 nodeOption.entry =
-  "app/build/server": "./app/src/server.coffee"
+"app/build/server": "./app/src/server.coffee"
 webOption = _.clone(baseOption)
 webOption.target = "electron"
 webOption.entry =
-  "web/build/client": "./web/src/client.coffee"
+"web/build/client": "./web/src/client.coffee"
 
 #compiler
 callback = (err, stats) =>
