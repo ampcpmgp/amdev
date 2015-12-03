@@ -3,7 +3,7 @@ logs
 *.log
 .*/
 .*config.cson
-node_modules/
+node_modules/*/node_modules/
 # my config
 *.exe
 *.map

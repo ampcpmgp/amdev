@@ -1,4 +1,8 @@
-<!-- parts -->
+<!-- preload -->
+<script type="text/javascript">
+  $ = require("am-deven/node_modules/jquery/")
+</script>
+<!-- dom -->
 <button type="button" name="button" id="restart">Browser restart</button>
 <template id="npmUpdateButton">
   <button type="button" name="npm-update" onclick="npm_publish(['!val!'])"></button>
@@ -8,7 +12,12 @@
 </div>
 <button type="button" name="npm-update-all" onclick="npm_publish()">update all</button><br>
 <button type="button" name="button" onclick="compile_all()">compile all</button>
-<!-- server -->
-<script type="text/javascript">
-  require("./build/server")
-</script>
+<!-- scripts -->
+<script src="./lib/server.js" charset="utf-8"></script>
+<!-- <script src="../test/lib/am-deven.js" charset="utf-8"></script> -->
+<!-- <script src="../test/lib/am-compiler.js" charset="utf-8"></script> -->
+<!-- <script src="../test/lib/am-node-parts.js" charset="utf-8"></script> -->
+<!-- <script src="../test/lib/am-common.js" charset="utf-8"></script> -->
+<script src="../test/lib/am-crawler.js" charset="utf-8"></script>
+<script src="./lib/init.js" charset="utf-8"></script>
+<script src="../test/lib/instant.js" charset="utf-8"></script>
