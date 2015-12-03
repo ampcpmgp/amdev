@@ -3,11 +3,14 @@ exec = require('child_process').exec
 cmd = ""
 
 addList = (err, files) ->
-  cmd += "cd node_modules/#{file}/ && npm install && cd ../../ && " for file in files
+  cmd += "cd node_modules/#{file}/ && npm install --msvs_version=2013 && cd ../../ && " for file in files
   cmd += "exit"
   console.log cmd
   console.log "child process start"
   child = exec(cmd, initFin)
+  child.on("data", (data) ->
+    console.log data
+    )
 initFin = (error, stdout, stderr) ->
   return console.log error if error
   return console.log stderr if stderr
