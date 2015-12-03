@@ -16,6 +16,7 @@ baseOption =
   output:
     path: path.resolve()
     filename: "[name].js"
+  externals: nodeModules
   module:
     loaders: [
       {test: /\.coffee$/, loader: "coffee-loader"}
@@ -27,18 +28,16 @@ baseOption =
 
 electronOption = _.clone(baseOption)
 electronOption.target = "electron"
-electronOption.externals = nodeModules
 electronOption.entry =
     "browser/build/start": "./browser/src/start.coffee"
     "app/build/preload": "./app/src/preload.coffee"
 nodeOption = _.clone(baseOption)
 nodeOption.target = "electron"
-nodeOption.externals = nodeModules
 nodeOption.entry =
 "app/build/server": "./app/src/server.coffee"
-webOption = _.clone(baseOption)
-webOption.target = "electron"
-webOption.entry =
+browserOption = _.clone(baseOption)
+browserOption.target = "electron"
+browserOption.entry =
 "web/build/client": "./web/src/client.coffee"
 
 #compiler
@@ -58,8 +57,8 @@ callback = (err, stats) =>
 module.exports = [
   compiler = webpack(electronOption)
   nodeCompiler = webpack(nodeOption)
-  webOption = webpack(webOption)
+  browserOption = webpack(nodeOption)
 ]
 compiler.watch({},callback)
 nodeCompiler.watch({},callback)
-webOption.watch({},callback)
+browserOption.watch({},callback)
