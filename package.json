@@ -17,6 +17,12 @@
     "compileAll": "coffee node_modules/am-compiler/lib/compile_all.coffee",
     "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./browser/lib/start.js"
   },
+  "dependencies": {
+
+  },
+  "devDependencies": {
+
+  },
   "author": "",
   "license": "ISC"
 }
