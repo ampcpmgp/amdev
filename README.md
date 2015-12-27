@@ -11,8 +11,7 @@ now only support windows 7, 10
 npm install am-template
 node -e require('am-template')('coffee')
 npm install
-npm run compileAll
-npm run electron
+npm start
 
 TODO: electronのバージョンを外部から指定する（portのように）、最新を探したりする
 # edit electron version (run.bat)
