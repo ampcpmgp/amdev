@@ -28,6 +28,7 @@ baseOption =
 electronOption = _.clone(baseOption)
 electronOption.target = "atom"
 electronOption.externals = nodeModules
+# TODO: entryは外側から設定可能にする - Browser側とは連携する必要もある
 electronOption.entry =
   "browser/.build/start": "./browser/start.coffee"
   "app/.build/preload": "./app/preload.coffee"
