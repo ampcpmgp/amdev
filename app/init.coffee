@@ -1,15 +1,16 @@
+$ = require("jquery")
 fs = require("fs")
 exec = require("child_process").exec
 ###reload button###
 browserRestart = (e) -> require("ipc").send("restart")
 $(restart).on("click", browserRestart)
 ###upload npm###
-modules = fs.readdirSync("./node_modules/")
+modules = fs.readdirSync("./am_modules/")
 window.npm_publish = (uploadModules = modules) ->
-  command = "npm version patch && npm publish"
+  command = "coffee -c ./ && npm version patch && npm publish"
   console.log "npm upload start - #{uploadModules}"
   for module in uploadModules
-    exec("cd ./node_modules/#{module} && #{command}", (e, out, err) -> console.log out)
+    exec("cd ./am_modules/#{module} && #{command}", (e, out, err) -> console.log out)
 $box = $(".npm-update-box")
 $button = $(npmUpdateButton.content).find("button")
 for module in modules
