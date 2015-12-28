@@ -72,9 +72,7 @@ module.exports = class Server extends Common
     fs.watch("./web/index.html", (event, name) ->
       _watcher_callback()
       )
-    funcs.watch_dir_tree("./web/.build/", /.*/, (loc, eventname, filename) ->
-      # TODO: compile前ファイルは一括でどこかで登録する
-      return if filename.match(/\.(coffee|map|sass)$/)
+    fs.watch("./web/.build/client.js", (event, name) ->
       _watcher_callback()
       )
   send_reload_event: (socket) -> socket.emit("reload")
