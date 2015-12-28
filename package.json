@@ -32,10 +32,10 @@
     "readline": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
+    "underscore": "latest",
     "webpack": "2.0.2-beta"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "author": "",
   "license": "ISC"
 }
