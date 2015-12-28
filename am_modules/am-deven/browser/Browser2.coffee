@@ -11,6 +11,8 @@ cson = require("cson")
 mainWindow = null
 
 class Watcher
+  constructor: ->
+    @firstReadObj = {}
   restart: =>
     cmd = fse.readJsonSync("package.json").scripts.electron
     exec(cmd)
@@ -19,6 +21,7 @@ class Watcher
     chokidar
       .watch(["./browser/.build/"])
       .on("change", (path) =>
+        return @firstReadObj[path] = true unless @firstReadObj[path]
         return unless path.match(/\.js$/)
         @restart()
       )
