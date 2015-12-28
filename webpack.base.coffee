@@ -32,7 +32,7 @@ electronOption.externals = nodeModules
 electronOption.entry =
   "browser/.build/start": "./browser/start.coffee"
   "app/.build/preload": "./app/preload.coffee"
-  "app/.build/init": "./app/init.coffee"
+  "app/.build/electron": "./app/electron.coffee"
 nodeOption = _.clone(baseOption)
 nodeOption.target = "node"
 nodeOption.externals = nodeModules
