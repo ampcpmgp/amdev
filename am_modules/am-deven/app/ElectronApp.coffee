@@ -1,7 +1,8 @@
+$ = require("jquery")
+chokidar = require("chokidar")
 fs = require("fs")
 ipcRenderer = require('electron').ipcRenderer
 np = new (require("am-node-parts"))
-$ = require("jquery")
 
 module.exports = class ElectronApp
   _inspector: 1
@@ -23,11 +24,9 @@ module.exports = class ElectronApp
           y: e.clientY
         ipcRenderer.send('inspect element', obj, "mainWindow")
   live_reload: ->
-    #Watcher
-    _watcher_callback = (loc, eventname, filename) =>
-      # TODO: compile前ファイルは一括でどこかで登録する
-      if @_start_flag then return else @_start_flag = true
-      location.reload()
-    _watch_callback = (eventname, file) -> _watcher_callback(null, eventname, file)
-    fs.watch("./app/index.html", _watch_callback)
-    fs.watch("./app/.build/", _watch_callback)
+    # TODO: 初回起動時にリロードがかかる
+    chokidar
+      .watch(["./app/.build/", "./app/index.html"])
+      .on("change", (path) =>
+        location.reload()
+      )
