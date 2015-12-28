@@ -1,6 +1,6 @@
 {
   "name": "am-compiler",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "compiler",
   "main": "compile",
   "scripts": {
@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "coffee-script": "latest"
+    "coffee-loader": "latest",
+    "coffee-script": "latest",
+    "underscore": "latest",
+    "webpack": "2.0.2-beta"
   }
 }
