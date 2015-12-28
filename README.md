@@ -90,7 +90,7 @@ websocketも同様に。
         /atom/ # atom project
         /node/ # node
         /web/ #
-          /mylib/CommonJs.coffee # クライアント、サーバー共通ポート設定
+          /myCommonJs.coffee # クライアント、サーバー共通ポート設定
 #
 
 ###(初回実行)
