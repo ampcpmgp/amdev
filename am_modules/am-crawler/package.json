@@ -2,7 +2,7 @@
   "name": "am-crawler",
   "version": "1.0.3",
   "description": "crawler",
-  "main": "Crawler.js",
+  "main": "Crawler",
   "scripts": {
     "test": "echo error?"
   },

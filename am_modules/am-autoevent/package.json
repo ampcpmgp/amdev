@@ -2,7 +2,7 @@
   "name": "am-autoevent",
   "version": "1.0.17",
   "description": "web client event",
-  "main": "AutoEvent.js",
+  "main": "AutoEvent",
   "scripts": {
     "test": "echo error?"
   },

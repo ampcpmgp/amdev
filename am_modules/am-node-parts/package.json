@@ -2,7 +2,7 @@
   "name": "am-node-parts",
   "version": "1.0.18",
   "description": "node parts",
-  "main": "NodeApp.js",
+  "main": "NodeApp",
   "scripts": {
     "test": "echo error?"
   },

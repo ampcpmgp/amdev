@@ -2,7 +2,7 @@
   "name": "am-template",
   "version": "1.0.8",
   "description": "template",
-  "main": "index.js",
+  "main": "index",
   "scripts": {
     "test": "echo error?"
   },

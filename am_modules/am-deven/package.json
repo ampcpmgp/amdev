@@ -2,7 +2,7 @@
   "name": "am-deven",
   "version": "0.1.62",
   "description": "test",
-  "main": "app.js",
+  "main": "app",
   "scripts": {
     "test": "echo error?"
   },

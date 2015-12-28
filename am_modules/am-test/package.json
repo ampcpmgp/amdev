@@ -2,7 +2,7 @@
   "name": "am-test",
   "version": "0.1.2",
   "description": "test",
-  "main": "Test.js",
+  "main": "Test",
   "scripts": {
     "test": "echo error?"
   },

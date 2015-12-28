@@ -2,7 +2,7 @@
   "name": "am-wordflow",
   "version": "1.0.3",
   "description": "word tree object, to flow",
-  "main": "WordFlow.js",
+  "main": "WordFlow",
   "scripts": {
     "test": "echo error?"
   },
