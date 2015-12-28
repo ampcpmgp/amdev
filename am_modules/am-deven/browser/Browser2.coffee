@@ -74,6 +74,6 @@ module.exports = class Browser
   ipcEvent: =>
     ipc.on("restart", @watcher.restart)
   startCompiler: ->
-    fork("./node_modules/am-compiler/start").on("message", @sendMsg)
+    # fork("./node_modules/am-compiler/start").on("message", @sendMsg)
   sendMsg: (msg) =>
     mainWindow?.webContents.send("browser send msg", msg)
