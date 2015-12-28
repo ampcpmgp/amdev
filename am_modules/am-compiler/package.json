@@ -2,7 +2,7 @@
   "name": "am-compiler",
   "version": "1.0.21",
   "description": "compiler",
-  "main": "Compiler",
+  "main": "compile",
   "scripts": {
     "test": "echo error?"
   },

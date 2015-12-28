@@ -6,14 +6,14 @@
   "scripts": {
     "init": "npm run installAll && npm run compileAll",
     "cl": "forever start node_modules/am-deven/app/cl.js",
-    "start": "coffee webpack.coffee && npm run electron",
+    "start": "npm run compileAll && npm run electron",
     "start:server": "npm run compileAll && node app/server.js",
     "以下気を付ける": "setTemplate->undoTemplateの順で行わないとバグ,ファイルロックは解除",
     "setTemplate": "node node_modules/am-deven/test/setTemplate.js && npm run electron",
     "undoTemplate": "node node_modules/am-deven/test/undoTemplate.js",
     "installAll": "coffee test/init.coffee",
     "TODO": ": electronのバージョンを外部から指定する（portのように）、最新を探したりする",
-    "compileAll": "coffee node_modules/am-compiler/compile_all.coffee",
+    "compileAll": "coffee webpack.coffee",
     "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./browser/.build/start.js"
   },
   "dependencies": {

@@ -19,7 +19,3 @@ for module in modules
     $button = $button.clone().text(module).attr("onclick", $button.attr("onclick").replace(/!val!/, module))
     $fragment.append($button)
   $box.append($fragment)
-###Compile all###
-window.compile_all = ->
-  command = "npm run compileAll"
-  exec(command)
