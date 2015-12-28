@@ -9,6 +9,7 @@
     "start": "npm run compileAll && npm run electron",
     "start:server": "npm run compileAll && node app/server.js",
     "compileAll": "coffee webpack.coffee",
+    "watchAll": "coffee webpackWatch.coffee",
     "serverStart": "npm i && node app/server",
     "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./"
   },
@@ -17,7 +18,8 @@
     "am-common": "latest",
     "am-compiler": "latest",
     "am-deven": "latest",
-    "am-node-parts": "latest"
+    "am-node-parts": "latest",
+    "am-template": "latest"
   },
   "author": "",
   "license": "ISC"

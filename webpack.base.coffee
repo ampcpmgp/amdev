@@ -23,7 +23,7 @@ baseOption =
   devtool: "cheap-module-eval-source-map" #
   resolve:
     modulesDirectories: ["am_modules", "node_modules"]
-    extensions: ["", ".js", ".coffee"]
+    extensions: ["", ".coffee", ".js"]
 
 electronOption = _.clone(baseOption)
 electronOption.target = "atom"
