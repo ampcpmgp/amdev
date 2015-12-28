@@ -1,8 +1,8 @@
 {
-  "name": "am-crawler",
+  "name": "am-wordflow",
   "version": "1.0.3",
-  "description": "crawler",
-  "main": "Crawler.js",
+  "description": "word tree object, to flow",
+  "main": "WordFlow",
   "scripts": {
     "test": "echo error?"
   },

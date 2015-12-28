@@ -1,4 +1,7 @@
-class @NodeClient extends @Common
+Common = require("am-common")
+io = require("socket.io-client/socket.io.js")
+
+module.exports = class NodeClient extends Common
   ###modules###
   ws: null
   ###websocket required variables###

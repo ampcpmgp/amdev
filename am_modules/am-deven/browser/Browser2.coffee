@@ -11,14 +11,17 @@ cson = require("cson")
 mainWindow = null
 
 class Watcher
+  constructor: ->
+    @firstReadObj = {}
   restart: =>
     cmd = fse.readJsonSync("package.json").scripts.electron
     exec(cmd)
     setTimeout(app.quit, 0)
   start: =>
     chokidar
-      .watch(["./browser/", "./node_modules/am-deven/browser/"])
+      .watch(["./browser/.build/"])
       .on("change", (path) =>
+        return @firstReadObj[path] = true unless @firstReadObj[path]
         return unless path.match(/\.js$/)
         @restart()
       )
@@ -74,6 +77,6 @@ module.exports = class Browser
   ipcEvent: =>
     ipc.on("restart", @watcher.restart)
   startCompiler: ->
-    fork("./node_modules/am-compiler/start").on("message", @sendMsg)
+    exec("coffee webpackWatch.coffee").stdout.on("data", @sendMsg)
   sendMsg: (msg) =>
     mainWindow?.webContents.send("browser send msg", msg)

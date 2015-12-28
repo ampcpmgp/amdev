@@ -2,13 +2,14 @@
   "name": "am-deven",
   "version": "0.1.62",
   "description": "test",
-  "main": "app.js",
+  "main": "app",
   "scripts": {
     "test": "echo error?"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "am-common": "latest",
     "chokidar": "latest",
     "cson": "latest",
     "data-utils": "latest",

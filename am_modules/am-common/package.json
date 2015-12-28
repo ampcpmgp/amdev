@@ -2,7 +2,7 @@
   "name": "am-common",
   "version": "1.0.20",
   "description": "for use server and client",
-  "main": "Common.js",
+  "main": "Common",
   "scripts": {
     "test": "echo error?"
   },
