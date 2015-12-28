@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "am-common": "latest",
     "chokidar": "latest",
     "cson": "latest",
     "data-utils": "latest",

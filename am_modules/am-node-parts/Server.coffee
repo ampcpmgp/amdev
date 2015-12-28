@@ -69,10 +69,10 @@ module.exports = class Server extends Common
     _watcher_callback = =>
       @check_reload_list()
       @send_reload_event(socket) for socket in @reload_list
-    fs.watch("./web/", (event, name) ->
+    fs.watch("./web/index.html", (event, name) ->
       _watcher_callback()
       )
-    funcs.watch_dir_tree("./web/", /.*/, (loc, eventname, filename) ->
+    funcs.watch_dir_tree("./web/.build/", /.*/, (loc, eventname, filename) ->
       # TODO: compile前ファイルは一括でどこかで登録する
       return if filename.match(/\.(coffee|map|sass)$/)
       _watcher_callback()
