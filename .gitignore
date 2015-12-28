@@ -1,10 +1,10 @@
-# Logs
+#common
 logs
 *.log
 .*/
 .*config.cson
-node_modules/*/node_modules/
-# my config
+node_modules
+#my config
 *.exe
 *.map
 *.js
