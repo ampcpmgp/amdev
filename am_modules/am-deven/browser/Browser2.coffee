@@ -77,6 +77,6 @@ module.exports = class Browser
   ipcEvent: =>
     ipc.on("restart", @watcher.restart)
   startCompiler: ->
-    exec("coffee webpackWatch.coffee").stdout.on("data", @sendMsg)
+    exec(fse.readJsonSync("package.json").scripts.compileAll).stdout.on("data", @sendMsg)
   sendMsg: (msg) =>
     mainWindow?.webContents.send("browser send msg", msg)
