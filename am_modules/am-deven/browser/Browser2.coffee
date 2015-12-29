@@ -22,7 +22,8 @@ class Watcher
       .watch(["./browser/.build/"])
       .on("change", (path) =>
         return @firstReadObj[path] = true unless @firstReadObj[path]
-        return unless path.match(/\.js$/)
+        return unless path.match(/\.js$/) or @restartFlg
+        @restartFlg = true
         @restart()
       )
 module.exports = class Browser
