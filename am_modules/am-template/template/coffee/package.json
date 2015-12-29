@@ -2,7 +2,7 @@
   "name": "amdeven-project",
   "version": "0.0.0",
   "description": "project on am development environment",
-  "main": "browser/start.js",
+  "main": "browser/.build/start.js",
   "scripts": {
     "init": "npm i && npm run compileAll",
     "cl": "npm run compileAll && node node_modules/am-deven/app/cl",
