@@ -1,2 +1,2 @@
-@np = new (require("am-node-parts"))
-@np.start()
+np = new (require("am-node-parts"))
+np.start()
