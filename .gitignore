@@ -1,6 +1,7 @@
 #common
 logs
 *.log
+.*
 .*/
 .*config.cson
 node_modules

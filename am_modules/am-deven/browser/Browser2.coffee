@@ -13,6 +13,16 @@ ipc = require('electron').ipcMain
 
 mainWindow = null
 
+class Locker
+  path: ".lock"
+  unlock: => fse.removeSync(@path)
+  check: =>
+    if fs.existsSync(@path)
+      console.log "exists #{@path}"
+      app.quit()
+  lock: =>
+    fse.ensureFileSync(@path)
+
 class Watcher
   constructor: ->
     @firstReadObj = {}
@@ -27,8 +37,10 @@ class Watcher
         return @firstReadObj[path] = true unless @firstReadObj[path]
         return unless path.match(/\.js$/) or @restartFlg
         @restartFlg = true
+        Locker::unlock()
         @restart()
       )
+
 module.exports = class Browser
   configCson: ".config.cson"
   init: =>
@@ -39,6 +51,9 @@ module.exports = class Browser
     @option = @config["browser-window"]
     @
   start: (@url) =>
+    #同時起動防止
+    Locker::check()
+    Locker::lock()
     #reload
     @watcher = new Watcher()
     @watcher.start()
@@ -58,12 +73,13 @@ module.exports = class Browser
       mainWindow.loadUrl(@url)
       mainWindow.openDevTools()
       mainWindow.webContents.on("did-finish-load", =>
-        mainWindow.setAlwaysOnTop(false) unless @option["always-on-top"]
+        mainWindow?.setAlwaysOnTop(false) unless @option["always-on-top"]
         )
       mainWindow.on('closed', =>
         mainWindow = null
       )
       mainWindow.on("close", (e) =>
+        Locker::unlock()
         return unless mainWindow.getPosition
         xy = mainWindow.getPosition()
         wh = mainWindow.getSize()
