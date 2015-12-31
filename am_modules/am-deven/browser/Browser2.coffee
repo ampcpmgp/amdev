@@ -25,7 +25,6 @@ class Locker
 
 class Watcher
   constructor: ->
-    @firstReadObj = {}
   restart: =>
     Locker::unlock()
     unless @restartFlg
@@ -37,7 +36,6 @@ class Watcher
     chokidar
       .watch(["./browser/.build/"])
       .on("change", (path) =>
-        return @firstReadObj[path] = true unless @firstReadObj[path]
         return unless path.match(/\.js$/)
         @restart()
       )
@@ -92,8 +90,9 @@ module.exports = class Browser
         fs.writeFileSync(@configCson, csonString)
         mainWindow = null
       )
+      # TODO: npm run watchAllで代用、工数かからないならelectronに寄せる
       #compiler
-      @startCompiler()
+      # @startCompiler()
     )
   ipcEvent: =>
     ipc.on("restart", @watcher.restart)
