@@ -13,20 +13,9 @@ ipc = require('electron').ipcMain
 
 mainWindow = null
 
-class Locker
-  path: ".lock"
-  unlock: => fse.removeSync(@path)
-  check: =>
-    if fs.existsSync(@path)
-      console.log "exists #{@path}"
-      app.quit()
-  lock: =>
-    fse.ensureFileSync(@path)
-
 class Watcher
   constructor: ->
   restart: =>
-    Locker::unlock()
     unless @restartFlg
       cmd = fse.readJsonSync("package.json").scripts.electron
       exec(cmd)
@@ -51,8 +40,6 @@ module.exports = class Browser
     @
   start: (@url) =>
     #同時起動防止
-    Locker::check()
-    Locker::lock()
     #reload
     @watcher = new Watcher()
     @watcher.start()
@@ -78,7 +65,6 @@ module.exports = class Browser
         mainWindow = null
       )
       mainWindow.on("close", (e) =>
-        Locker::unlock()
         return unless mainWindow?.getPosition
         xy = mainWindow.getPosition()
         wh = mainWindow.getSize()
