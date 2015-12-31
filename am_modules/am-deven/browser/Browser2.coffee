@@ -1,13 +1,16 @@
 require('crash-reporter').start()
-app = require('app')
-BrowserWindow = require('browser-window')
-ipc = require('electron').ipcMain
-exec = require("child_process").exec
-fork = require("child_process").fork
-fs = require("fs")
 fse = require("fs-extra")
 chokidar = require("chokidar")
 cson = require("cson")
+
+fs = require("fs")
+exec = require("child_process").exec
+fork = require("child_process").fork
+# path = require("path")
+app = require('app')
+BrowserWindow = require('browser-window')
+ipc = require('electron').ipcMain
+
 mainWindow = null
 
 class Watcher
