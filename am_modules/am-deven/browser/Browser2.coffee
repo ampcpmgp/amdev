@@ -27,17 +27,18 @@ class Watcher
   constructor: ->
     @firstReadObj = {}
   restart: =>
-    cmd = fse.readJsonSync("package.json").scripts.electron
-    exec(cmd)
+    Locker::unlock()
+    unless @restartFlg
+      cmd = fse.readJsonSync("package.json").scripts.electron
+      exec(cmd)
+    @restartFlg = true
     setTimeout(app.quit, 0)
   start: =>
     chokidar
       .watch(["./browser/.build/"])
       .on("change", (path) =>
         return @firstReadObj[path] = true unless @firstReadObj[path]
-        return unless path.match(/\.js$/) or @restartFlg
-        @restartFlg = true
-        Locker::unlock()
+        return unless path.match(/\.js$/)
         @restart()
       )
 
