@@ -80,7 +80,7 @@ module.exports = class Browser
       )
       mainWindow.on("close", (e) =>
         Locker::unlock()
-        return unless mainWindow.getPosition
+        return unless mainWindow?.getPosition
         xy = mainWindow.getPosition()
         wh = mainWindow.getSize()
         @option.x = xy[0]
