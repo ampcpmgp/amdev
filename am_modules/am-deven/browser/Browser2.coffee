@@ -53,7 +53,7 @@ module.exports = class Browser
       #make renderer
       option = JSON.parse(JSON.stringify(@option))
       option["web-preferences"].preload = "#{process.cwd()}#{@option["web-preferences"].preload}"
-      mainWindow = new BrowserWindow(option)
+      mainWindow = @mainWindow = new BrowserWindow(option)
       mainWindow.setAlwaysOnTop(true)
       @url = "file://#{process.cwd()}#{@url}" unless @url.match(/^(http|\/\/)/)
       mainWindow.loadUrl(@url)
@@ -81,7 +81,9 @@ module.exports = class Browser
       # @startCompiler()
     )
   ipcEvent: =>
-    ipc.on("restart", @watcher.restart)
+    ipc
+      .on('inspect element', (e, arg, renderer) => @[renderer].inspectElement(arg.x, arg.y))
+      .on("restart", @watcher.restart)
   startCompiler: ->
     exec(fse.readJsonSync("package.json").scripts.watchAll).stdout.on("data", @sendMsg)
   sendMsg: (msg) =>
