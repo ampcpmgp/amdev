@@ -27,7 +27,6 @@
     "ftp": "latest",
     "is_js": "latest",
     "jquery": "latest",
-    "jsdom": "latest",
     "mime": "latest",
     "mkdirp": "latest",
     "readline": "latest",

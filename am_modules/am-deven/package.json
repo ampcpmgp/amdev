@@ -16,7 +16,6 @@
     "fs-extra": "latest",
     "ftp": "latest",
     "jquery": "latest",
-    "jsdom": "latest",
     "mime": "latest",
     "mkdirp": "latest",
     "readline": "latest",
