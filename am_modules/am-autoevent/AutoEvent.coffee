@@ -16,14 +16,11 @@ class @AutoEvent
     inner_func.push(callback)
     @
   set_value: (selector, value) =>
-    $dom = document.querySelector(selector)
-    @add_event( => $dom.value = value )
+    @add_event( => document.querySelector(selector).value = value )
   set_html: (selector, value) =>
-    $dom = document.querySelector(selector)
-    @add_event( => $dom.innerHTML = value )
+    @add_event( => document.querySelector(selector).innerHTML = value )
   click: (selector) =>
-    $dom = document.querySelector(selector)
-    @add_event( => $dom.click())
+    @add_event( => document.querySelector(selector).click())
   wait_event: (callback) =>
     @funcs.push(callback)
     @
