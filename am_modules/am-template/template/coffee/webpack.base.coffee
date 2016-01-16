@@ -1,5 +1,6 @@
 # TODO: templateと共通の部分は共有化する
 fs =require("fs")
+fse = require("fs-extra")
 path = require("path")
 webpack = require("webpack")
 _ = require("underscore")
@@ -45,6 +46,14 @@ browserOption.entry =
   "web/.build/client": "./web/client.coffee"
 
 #compiler
+# TODO: おいおい、全ファイルコンパイル済み後、実行に変える
+start = () =>
+  console.log 1
+  cmd = fse.readJsonSync("package.json").scripts.electron
+  require("child_process").exec(cmd)
+checkNum = 0
+check = =>
+  start() if (++checkNum is 3)
 callback = (err, stats) =>
   return console.log(err) if (err)
   jsonStats = stats.toJson()
@@ -58,6 +67,7 @@ callback = (err, stats) =>
     )
   return if(jsonStats.errors.length > 0)
   # if(jsonStats.warnings.length > 0)
+  check()
 module.exports =
   _callback: callback
   electronCompiler: webpack(electronOption)
