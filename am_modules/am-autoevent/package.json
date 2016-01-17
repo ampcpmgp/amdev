@@ -1,6 +1,6 @@
 {
   "name": "am-autoevent",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "web client event",
   "main": "AutoEvent",
   "scripts": {

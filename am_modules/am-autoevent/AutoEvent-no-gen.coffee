@@ -1,18 +1,18 @@
-class window.AmAutoEvent
+module.exports = class AutoEvent
   constructor: -> 1
   contoller: =>
     i = -1
+    curFuncNum = 0
     while (@funcs[++i])
-      @inner_funcs[i].push( => @gen.next())
-      yield @funcs[i]()
+      @inner_funcs[i].push(=> @funcs[++curFuncNum]?())
+    @funcs[0](curFuncNum)
   register: =>
     @funcs = []
     @inner_funcs = []
-    @gen = @contoller()
     @func_num = -1
     @
   start: =>
-    @gen.next()
+    @contoller()
   add_event: (callback) =>
     inner_func = @inner_funcs[@func_num]
     inner_func.push(callback)
@@ -46,4 +46,3 @@ class window.AmAutoEvent
         if document.querySelector(selector) and exists then stop_timer()
       , 100)
       )
-module?.exports = window.AmAutoEvent
