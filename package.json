@@ -13,7 +13,7 @@
     "undoTemplate": "node node_modules/am-deven/test/undoTemplate.js",
     "installAll": "coffee test/init.coffee",
     "TODO": ": electronのバージョンを外部から指定する（portのように）、最新を探したりする",
-    "watchAll": "coffee webpackWatch.coffee",
+    "watchAll": "coffee webpack-watch.coffee",
     "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./browser/.build/start.js"
   },
   "dependencies": {
