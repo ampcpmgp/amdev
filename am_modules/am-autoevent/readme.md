@@ -1,6 +1,8 @@
 ```coffeescript
+# generator
 AutoEvent = require("am-autoevent")
-
+# or no-generator
+AutoEvent = require("am-autoevent/AutoEvent-no-gen")
 ae = new AutoEvent()
 ae.register()
   .wait(1000).click("#test").click("#test")
