@@ -1,3 +1,18 @@
+# 工事中
+```coffee
+TODO: [
+  am_modulesのnpm向けビルド方法、要考慮:
+    要点1:
+      内部的にrequireしているpackageのコンパイルについて:
+        自分以外知らない: coffeeのまま
+        解決案1: browserとnodeで使うもので、全結合かrequire無視か分ける
+        解決案2: 全てのmoduleでrequire無視
+    要点2:
+      es6とcoffeeでの、ビルドあるなしの差について:
+        要考慮: uglifyも絡むことがあり、altES*もあり得るため必要なし?
+]
+```
+
 # amdeven?
 * AM development environment
 * 午前の開発環境
