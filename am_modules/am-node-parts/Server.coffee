@@ -63,8 +63,11 @@ module.exports = class Server extends Common
     @app.listen(@http_port)
     @websocket.on("connection", (socket) =>
       @reload_list.push(socket)
+      socket.on("test", @ws_event_test)
     )
     @ws_event_reload()
+  ws_event_test: (msg) =>
+    console.log msg
   ws_event_reload: =>
     _watcher_callback = =>
       @check_reload_list()

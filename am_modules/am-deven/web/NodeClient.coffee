@@ -29,6 +29,6 @@ module.exports = class NodeClient extends Common
       if @params.all then @ws.emit("all")
       @ws.on("reload", => @reload())
       @ws.on("css reload", (css) -> $("body").append("<style type=\"text/css\">#{css}</style>"))
-      @ws.on("message", (msg) -> console.log msg)
+      @ws.on("test", (msg) -> console.log msg)
       @ws.on("disconnect", -> console.log("websocket server disconnected"))
   reload: -> location.reload()
