@@ -1,4 +1,4 @@
-class @AutoEvent
+class AutoEvent
   constructor: -> 1
   contoller: =>
     i = -1
@@ -45,4 +45,4 @@ class @AutoEvent
       , 100)
       )
 
-module?.exports = @AutoEvent
+module?.exports = AutoEvent
