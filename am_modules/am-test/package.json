@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chokidar": "jquery"
+    "am-autoevent": "latest",
+    "am-common": "latest",
+    "jquery": "latest"
   }
 }
