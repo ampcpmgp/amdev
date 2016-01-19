@@ -53,14 +53,6 @@ atom-text-editor {
     font-family: "Avenir Next",Verdana, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "游ゴシック", "Yu Gothic", "メイリオ", Meiryo, Osaka, sans-serif;
 }
 
-# compiler
-gem source -a http://rubygems.org/ &&
-gem install sass
-
-# if npm version below 3
-npm install -g npm
-
-
 # clone後
 # (windows 10 + VS2015)でエラー。0になると良いが、一旦動くので気にしない。
 npm run init
