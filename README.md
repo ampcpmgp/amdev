@@ -28,9 +28,7 @@ node -e require('am-template')('coffee')
 npm install
 npm start
 
-TODO: electronのバージョンを外部から指定する（portのように）、最新を探したりする
-# edit electron version (run.bat)
-start ../electron-v0.30.4-win32-x64/electron.exe ./
+TODO: electronを自動ダウンロードする
 ```
 
 ### CIサーバー側に必要なもの
