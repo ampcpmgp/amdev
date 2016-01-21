@@ -10,6 +10,12 @@ TODO: [
     要点2:
       es6とcoffeeでの、ビルドあるなしの差について:
         要考慮: uglifyも絡むことがあり、altES*もあり得るため必要なし?
+  開発環境として:[
+    chrome extenstions
+    atom package
+    raspberry pi - raspbian
+
+  ]
 ]
 ```
 
