@@ -35,4 +35,10 @@ module.exports = class Test
     selector = selector.join(",") if typeof selector is "object"
     $(selector).hide()
   _replace: =>
+    for selector, value of @params
+      [type, value] = value.split(":") if value.match(":")
+      if type is "value"
+        $(selector).val(value)
+      else
+        $(selector).text(value)
   _auto: =>
