@@ -1,4 +1,4 @@
-class window.AmAutoEvent
+module.exports = class AutoEvent
   constructor: -> 1
   contoller: =>
     i = -1
@@ -46,4 +46,3 @@ class window.AmAutoEvent
         if document.querySelector(selector) and exists then stop_timer()
       , 100)
       )
-module?.exports = window.AmAutoEvent
