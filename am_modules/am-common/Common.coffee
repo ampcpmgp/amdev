@@ -1,7 +1,7 @@
 class Common
   http_port: 8080
   ws_port: 8080 #50000
-  get_params: (url) ->
+  getParams: (url) ->
     params = {}
     url = decodeURI(url) if decodeURI
     query = url.replace(/.*\?(.*)$/, "$1")

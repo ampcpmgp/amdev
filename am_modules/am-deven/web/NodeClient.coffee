@@ -9,7 +9,7 @@ module.exports = class NodeClient extends Common
   params: null
   connectFlag: false
   constructor: ->
-    @params = @get_params location.href
+    @params = @getParams location.href
   start: ->
     if @params.ws then @connect_websocket()
   connect_websocket: ->

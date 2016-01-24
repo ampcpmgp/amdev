@@ -37,7 +37,7 @@ module.exports = class Server extends Common
   http_server_action: (req, res) ->
     #initial
     url = req.url.replace(/\/{2,}/, "/")
-    params = @get_params url
+    params = @getParams url
     url = url.replace(/\?.*$/, "")
     if url[url.length-1] is "/" then url += "index.html"
     ###get file###
