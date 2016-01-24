@@ -8,11 +8,8 @@ module.exports = class AutoEvent
   register: =>
     @funcs = []
     @inner_funcs = []
-    @gen = @contoller()
     @func_num = -1
     @
-  start: =>
-    @gen.next()
   add_event: (callback) =>
     inner_func = @inner_funcs[@func_num]
     inner_func.push(callback)
