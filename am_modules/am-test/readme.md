@@ -3,7 +3,7 @@
 ## 工事中
 ## sample
 ```
-import Test from 'test/Test';
+import Test from 'am-test';
 class NewTest extends Test {
   params1(params1Val) {
     console.log(params1Val);
@@ -22,8 +22,4 @@ console.log = (msg) =>
 console._error = console.error
 console.error = (msg) =>
   console._error("new error #{msg}")
-
-
-a = 1
-console.log a[5]
 ```
