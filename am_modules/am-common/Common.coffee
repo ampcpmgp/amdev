@@ -10,7 +10,7 @@ module.exports = class Common
       for val in query.split("&")
         param = val.split("=")
         val = param[1]
-        if val
+        if val?
           if val.match "," then val = val.split ","
         else
           val = true
