@@ -1,4 +1,4 @@
-class Common
+module.exports = class Common
   http_port: 8080
   ws_port: 8080 #50000
   getParams: (url) ->
@@ -16,5 +16,3 @@ class Common
           val = true
         params[param[0]] = val
       params
-
-if module? then module.exports = Common else @Common = Common
