@@ -1,5 +1,4 @@
 module.exports = class AutoEvent
-  constructor: -> 1
   contoller: =>
     i = -1
     while (@funcs[++i])
