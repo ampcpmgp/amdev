@@ -1,1 +1,1 @@
-console.log 3
+require("am-test")
