@@ -6,8 +6,8 @@ func = (Klass) =>
   ae = new Klass()
   ae.register()
     .wait(1000).click("#test").click("#test")
-    .wait(1500).click("#test").set_value("#test",300)
-    .wait_selector("#test").set_html("#test", Date.now())
+    .wait(1500).click("#test").setValue("#test",300)
+    .waitSelector("#test").setHtml("#test", Date.now())
     .start()
 
 

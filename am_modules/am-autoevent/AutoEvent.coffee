@@ -3,43 +3,43 @@ module.exports = class AutoEvent
   contoller: =>
     i = -1
     while (@funcs[++i])
-      @inner_funcs[i].push( => @gen.next())
+      @innerFuncs[i].push( => @gen.next())
       yield @funcs[i]()
   register: =>
     @funcs = []
-    @inner_funcs = []
-    @func_num = -1
+    @innerFuncs = []
+    @funcNum = -1
     @
-  add_event: (callback) =>
-    inner_func = @inner_funcs[@func_num]
-    inner_func.push(callback)
+  addEvent: (callback) =>
+    innerFunc = @innerFuncs[@funcNum]
+    innerFunc.push(callback)
     @
-  set_value: (selector, value) =>
-    @add_event( => document.querySelector(selector).value = value )
-  set_html: (selector, value) =>
-    @add_event( => document.querySelector(selector).innerHTML = value )
+  setValue: (selector, value) =>
+    @addEvent(=> document.querySelector(selector).value = value)
+  setHtml: (selector, value) =>
+    @addEvent(=> document.querySelector(selector).innerHTML = value)
   click: (selector) =>
-    @add_event( => document.querySelector(selector).click())
-  wait_event: (callback) =>
+    @addEvent(=> document.querySelector(selector).click())
+  waitEvent: (callback) =>
     @funcs.push(callback)
     @
   wait: (msec) =>
-    func_num = ++@func_num
-    inner_func = @inner_funcs[func_num] = []
+    funcNum = ++@funcNum
+    innerFunc = @innerFuncs[funcNum] = []
     func = =>
-      func() for func in inner_func
-    @wait_event( => setTimeout(func, msec))
-  wait_selector: (selector, exists=true) =>
-    func_num = ++@func_num
-    inner_func = @inner_funcs[func_num] = []
+      func() for func in innerFunc
+    @waitEvent( => setTimeout(func, msec))
+  waitSelector: (selector, exists=true) =>
+    funcNum = ++@funcNum
+    innerFunc = @innerFuncs[funcNum] = []
     func = =>
-      func() for func in inner_func
+      func() for func in innerFunc
     testTimer = null
-    stop_timer = =>
+    stopTimer = =>
       clearInterval(testTimer)
       func()
-    @wait_event( =>
+    @waitEvent( =>
       testTimer = setInterval( =>
-        if document.querySelector(selector) and exists then stop_timer()
+        if document.querySelector(selector) and exists then stopTimer()
       , 100)
       )
