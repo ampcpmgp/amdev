@@ -4,7 +4,7 @@ module.exports = class Test
   params: require("am-common")::getParams(location.search)
   AutoEvent: require("am-autoevent/AutoEvent-no-gen")
   preStart: =>
-    @[key](@params[key]) for key, value of @params when typeof me[key] is "function"
+    @[key](@params[key]) for key, value of @params when typeof @[key] is "function"
     $(@start)
   start: =>
     @_color(@params.color) if @params.color?
@@ -35,7 +35,7 @@ module.exports = class Test
     selector = selector.join(",") if typeof selector is "object"
     $(selector).hide()
   _replace: =>
-    for selector, value of @params
+    for selector, value of @params when typeof value is "string"
       [type, value] = value.split(":") if value.match(":")
       if type is "value"
         $(selector).val(value)
