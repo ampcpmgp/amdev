@@ -2,7 +2,7 @@
 
 ## 工事中
 ## sample
-```
+```js
 import Test from 'am-test';
 class NewTest extends Test {
   params1(params1Val) {
@@ -12,9 +12,17 @@ class NewTest extends Test {
 window.nt = new NewTest();
 nt.preStart();
 ```
+```coffee
+Test = require("am-test")
+class SampleTest extends Test
+  params1: (params1Val) =>
+    console.log(params1Val)
+window.nt = new SampleTest()
+nt.preStart()
+```
 
 ### test codeのサンプル
-```
+```coffee
 console._log = console.log
 console.log = (msg) =>
   console._log("new message" + msg)
