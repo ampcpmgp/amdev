@@ -10,11 +10,10 @@ TODO: [
     要点2:
       es6とcoffeeでの、ビルドあるなしの差について:
         要考慮: uglifyも絡むことがあり、altES*もあり得るため必要なし?
-  開発環境として:[
+  開発環境として: [
     chrome extenstions
     atom package
     raspberry pi - raspbian
-
   ]
 ]
 ```
@@ -53,7 +52,7 @@ TODO: cliborを含んだ開発環境を作る
 clibor - http://www.amunsnet.com/
 
 # atom package
-apm install pigments highlight-selected highlight-column save-session editorconfig linter linter-coffeelint script atom-terminal file-icons atom-beautify pretty-json quantum-shell
+apm install pigments highlight-selected highlight-column save-session editorconfig linter linter-coffeelint script atom-terminal file-icons atom-beautify pretty-json quantum-shell autocomplete-python language-haskell autocomplete-haskell
 ## styesheet
 atom-text-editor {
     font-family: "Avenir Next",Verdana, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "游ゴシック", "Yu Gothic", "メイリオ", Meiryo, Osaka, sans-serif;
