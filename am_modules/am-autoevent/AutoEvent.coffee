@@ -1,9 +1,4 @@
 module.exports = class AutoEvent
-  contoller: =>
-    i = -1
-    while (@funcs[++i])
-      @innerFuncs[i].push( => @gen.next())
-      yield @funcs[i]()
   register: =>
     @funcs = []
     @innerFuncs = []
