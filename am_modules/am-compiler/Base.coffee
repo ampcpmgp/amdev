@@ -30,9 +30,9 @@ module.exports = class Base
       )
     #
     @config()
-    @electronCompiler = webpack(@electronOption).watch({}, (err, stats) => @callback(err,stats))
-    @nodeCompiler = webpack(@nodeOption).watch({}, (err, stats) => @callback(err,stats))
-    @browserCompiler = webpack(@browserOption).watch({}, (err, stats) => @callback(err,stats))
+    @electronCompiler = webpack(@electronOption).watch({}, (err, stats) => callback(err,stats))
+    @nodeCompiler = webpack(@nodeOption).watch({}, (err, stats) => callback(err,stats))
+    @browserCompiler = webpack(@browserOption).watch({}, (err, stats) => callback(err,stats))
   config: => #am-devenでの設定
     @electronOption = _.clone(@baseOption)
     @electronOption.target = "atom"
@@ -50,10 +50,10 @@ module.exports = class Base
     @browserOption.target = "web"
     @browserOption.entry =
       "web/.build/client": "./web/client.coffee"
-  electronStart: =>
+  electronStart = =>
     cmd = fse.readJsonSync("package.json").scripts.electron
     require("child_process").exec(cmd)
-  callback: (err, stats) =>
+  callback = (err, stats) =>
     return console.log(err) if (err)
     jsonStats = stats.toJson()
     console.log stats.toString(
@@ -65,4 +65,4 @@ module.exports = class Base
       chunkModules: false
       )
     return if(jsonStats.errors.length > 0)
-    @electronStart() if (++@checkNum is 3)
+    electronStart() if (++@checkNum is 3)
