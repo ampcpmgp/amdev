@@ -2,16 +2,12 @@
   "name": "am-compiler",
   "version": "1.0.23",
   "description": "compiler",
-  "main": "compile",
+  "main": "Base",
   "scripts": {
     "test": "echo error?"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "coffee-loader": "latest",
-    "coffee-script": "latest",
-    "underscore": "latest",
-    "webpack": "2.0.2-beta"
   }
 }

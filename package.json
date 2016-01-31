@@ -33,7 +33,7 @@
     "socket.io": "latest",
     "socket.io-client": "latest",
     "underscore": "latest",
-    "webpack": "2.0.2-beta"
+    "webpack": "2.0.6-beta"
   },
   "devDependencies": {},
   "author": "",
