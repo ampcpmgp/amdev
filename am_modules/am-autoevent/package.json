@@ -7,5 +7,8 @@
     "test": "echo error?"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "latest"
+  }
 }

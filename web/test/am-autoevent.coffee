@@ -8,6 +8,7 @@ func = (Klass) =>
     .wait(1000).click("#test").click("#test")
     .wait(1500).click("#test").setValue("#input",Date.now())
     .waitSelector("#test").setHtml("#test", Date.now())
+    .wait("300").addEvent(=> console.log("fin"))
     .start()
 
 

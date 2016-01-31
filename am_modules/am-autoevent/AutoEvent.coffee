@@ -1,3 +1,5 @@
+$ = require("jquery")
+
 module.exports = class AutoEvent
   register: =>
     @funcs = []
@@ -9,11 +11,11 @@ module.exports = class AutoEvent
     innerFunc.push(callback)
     @
   setValue: (selector, value) =>
-    @addEvent(=> document.querySelector(selector).value = value)
+    @addEvent(=> $(selector).val(value))
   setHtml: (selector, value) =>
-    @addEvent(=> document.querySelector(selector).innerHTML = value)
+    @addEvent(=> $(selector).html(value))
   click: (selector) =>
-    @addEvent(=> document.querySelector(selector).click())
+    @addEvent(=> $(selector).click())
   waitEvent: (callback) =>
     @funcs.push(callback)
     @
@@ -34,6 +36,6 @@ module.exports = class AutoEvent
       func()
     @waitEvent( =>
       testTimer = setInterval( =>
-        if document.querySelector(selector) and exists then stopTimer()
+        if $(selector)[0] and exists then stopTimer()
       , 100)
       )
