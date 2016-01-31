@@ -1,5 +1,5 @@
 $ = require("jquery")
-AutoEvent = require("am-autoevent/AutoEvent-gen")
+AutoEvent = require("am-autoevent")
 AutoEventNoGen = require("am-autoevent/AutoEvent-no-gen")
 
 func = (Klass) =>
