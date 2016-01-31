@@ -19,7 +19,7 @@ module.exports = class Base
     devtool: "cheap-module-eval-source-map"
     resolve:
       modulesDirectories: ["am_modules", "node_modules"]
-      extensions: ["", ".coffee", ".js"]
+      extensions: [".coffee", ".js", ""]
   start: =>
     #node_moduelsを読み込まないよう設定
     fs.readdirSync('node_modules')
@@ -65,5 +65,4 @@ module.exports = class Base
       chunkModules: false
       )
     return if(jsonStats.errors.length > 0)
-    console.log @checkNum
     @electronStart() if (++@checkNum is 3)
