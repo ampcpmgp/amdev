@@ -20,15 +20,16 @@ module.exports = class Base
     resolve:
       modulesDirectories: ["am_modules", "node_modules"]
       extensions: [".coffee", ".js", ""]
-  start: =>
+  init: =>
     #node_moduelsを読み込まないよう設定
     fs.readdirSync('node_modules')
       .filter((x) =>
         ['.bin'].indexOf(x) is -1
-      ).forEach((mod) =>
-        @nodeModules[mod] = 'commonjs ' + mod
-      )
-    #
+        ).forEach((mod) =>
+          @nodeModules[mod] = 'commonjs ' + mod
+          )
+  start: =>
+    @init()
     @config()
     @electronCompiler = webpack(@electronOption).watch({}, (err, stats) => @callback(err,stats))
     @nodeCompiler = webpack(@nodeOption).watch({}, (err, stats) => @callback(err,stats))
