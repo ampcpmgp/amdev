@@ -1,12 +1,12 @@
 <!-- dom -->
 <button type="button" name="button" id="restart">Browser restart</button>
 <template id="npmUpdateButton">
-  <button type="button" name="npm-update" onclick="npm_publish(['!val!'])"></button>
+  <button type="button" name="npm-update" onclick="npmPublish(['!val!'])"></button>
 </template>
 <div class="npm-update-box">
   npm update:
 </div>
-<button type="button" name="npm-update-all" onclick="npm_publish()">update all</button><br>
+<button type="button" name="npm-update-all" onclick="npmPublish()">update all</button><br>
 <!-- scripts -->
 <script src="./.build/server.js" charset="utf-8"></script>
 <script src="./.build/electron.js" charset="utf-8"></script>

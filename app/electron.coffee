@@ -12,7 +12,7 @@ do -> #upload npm
       $button = $button.clone().text(module).attr("onclick", $button.attr("onclick").replace(/!val!/, module))
       $fragment.append($button)
     $box.append($fragment)
-  window.npm_publish = (uploadModules = modules) ->
+  window.npmPublish = (uploadModules = modules) ->
     command = "coffee -c ./ && npm version patch && npm publish"
     console.log "npm upload start - #{uploadModules}"
     for module in uploadModules
