@@ -1,6 +1,10 @@
 $ = require("jquery")
 fs = require("fs")
+Compiler = require("am-compiler")
 exec = require("child_process").exec
+
+class ModuleCompiler extends Compiler
+
 $(restart).on("click", (e) -> require("ipc").send("restart"))
 do -> #upload npm
   modules = fs.readdirSync("./am_modules/")
