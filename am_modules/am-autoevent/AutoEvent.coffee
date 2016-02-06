@@ -15,7 +15,7 @@ module.exports = class AutoEvent
   setValue: (selector, value) =>
     @addEvent(=> doc.$(selector)?.value = value)
   setHtml: (selector, value) =>
-    @addEvent(=> doc.$(selector)?.innerHtml = value)
+    @addEvent(=> doc.$(selector)?.innerHTML = value)
   click: (selector) =>
     @addEvent(=> doc.$(selector)?.click())
   waitEvent: (callback) =>
