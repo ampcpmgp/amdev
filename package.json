@@ -4,17 +4,17 @@
   "description": "am development enviroment",
   "main": "./app/server.js",
   "scripts": {
-    "init": "npm run installAll && npm run compileAll",
+    "init": "npm run install && npm run compile",
     "cl": "forever start node_modules/am-deven/app/cl.js",
-    "start": "npm run watchAll",
-    "start:server": "npm run compileAll && node app/server.js",
+    "start": "npm run watch",
+    "start:server": "npm run compile && node app/server.js",
     "以下気を付ける": "setTemplate->undoTemplateの順で行わないとバグ,ファイルロックは解除",
     "setTemplate": "node node_modules/am-deven/test/setTemplate.js && npm run electron",
     "undoTemplate": "node node_modules/am-deven/test/undoTemplate.js",
-    "installAll": "coffee test/init.coffee",
+    "install": "coffee test/init.coffee",
     "TODO": ": electronのバージョンを外部から指定する（portのように）、最新を探したりする",
-    "watchAll": "coffee -e \"(require('./am_modules/am-compiler/Base.coffee'))::start()\"",
-    "compileAll": "TODO:compileAllを作る - CIとも連携",
+    "watch": "coffee -e \"(require('./am_modules/am-compiler/Base.coffee'))::start()\"",
+    "compile": "TODO:compileを作る - CIとも連携",
     "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./browser/.build/start.js"
   },
   "dependencies": {

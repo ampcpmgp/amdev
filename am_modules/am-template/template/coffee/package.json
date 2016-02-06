@@ -4,11 +4,11 @@
   "description": "project on am development environment",
   "main": "browser/.build/start.js",
   "scripts": {
-    "init": "npm i && npm run compileAll",
-    "cl": "npm run compileAll && node node_modules/am-deven/app/cl",
-    "start": "npm run watchAll",
-    "start:server": "npm run compileAll && node app/server.js",
-    "watchAll": "coffee -e \"(require('./am_modules/am-compiler'))::start()\"",
+    "init": "npm i && npm run compile",
+    "cl": "npm run compile && node node_modules/am-deven/app/cl",
+    "start": "npm run watch",
+    "start:server": "npm run compile && node app/server.js",
+    "watch": "coffee -e \"(require('./am_modules/am-compiler'))::start()\"",
     "serverStart": "npm i && node app/server",
     "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./"
   },

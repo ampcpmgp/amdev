@@ -9,7 +9,7 @@ proc = null
 json = require("fs").readFileSync("./package.json", {encoding: "utf-8"})
 commands = JSON.parse(json).scripts
 start = ->
-  preproc = execSync(commands.compileAll, {encoding:"utf-8"})
+  preproc = execSync(commands.compile, {encoding:"utf-8"})
   console.log preproc
   proc = exec(commands.serverStart)
   proc.once("close", => setTimeout(start, interval))

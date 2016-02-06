@@ -76,7 +76,7 @@ module.exports = class Browser
         fs.writeFileSync(@configCson, csonString)
         mainWindow = null
       )
-      # TODO: npm run watchAllで代用、工数かからないならelectronに寄せる
+      # TODO: npm run watchで代用、工数かからないならelectronに寄せる
       #compiler
       # @startCompiler()
     )
@@ -85,6 +85,6 @@ module.exports = class Browser
       .on('inspect element', (e, arg, renderer) => @[renderer].inspectElement(arg.x, arg.y))
       .on("restart", @watcher.restart)
   startCompiler: ->
-    exec(fse.readJsonSync("package.json").scripts.watchAll).stdout.on("data", @sendMsg)
+    exec(fse.readJsonSync("package.json").scripts.watch).stdout.on("data", @sendMsg)
   sendMsg: (msg) =>
     mainWindow?.webContents.send("browser send msg", msg)
