@@ -25,6 +25,7 @@ class SampleTest extends Test
     , 4000)
   global: =>
     require("am-autoevent/src/autoevent")
+    console.log amAutoEvent
 
 window.nt = new SampleTest()
 nt.preStart()
