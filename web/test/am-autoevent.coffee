@@ -23,6 +23,8 @@ class SampleTest extends Test
     setTimeout( =>
       func(AutoEventNoGen)
     , 4000)
+  global: =>
+    require("am-autoevent/src/autoevent")
 
 window.nt = new SampleTest()
 nt.preStart()
