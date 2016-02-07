@@ -1,6 +1,6 @@
 {
   "name": "am-autoevent",
-  "version": "1.0.27",
+  "version": "1.0.30",
   "description": "web client event",
   "main": "AutoEvent-gen",
   "scripts": {
@@ -8,6 +8,5 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-  }
+  "dependencies": {}
 }
