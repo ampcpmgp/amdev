@@ -253,6 +253,8 @@
 	(function() {
 	  window.amAutoEvent = new (__webpack_require__(0))();
 
+	  console.log("amAutoEvent loaded");
+
 	}).call(this);
 
 
