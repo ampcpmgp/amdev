@@ -7,6 +7,7 @@ module.exports = class AutoEvent
     @funcs = []
     @innerFuncs = []
     @funcNum = -1
+    @wait(0)
     @
   addEvent: (callback) =>
     innerFunc = @innerFuncs[@funcNum]

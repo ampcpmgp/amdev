@@ -13,7 +13,7 @@ class SampleTest extends Test
     func = (Klass) =>
       ae = new Klass()
       ae.register()
-        .wait(1000).click("#test").click("#test")
+        .click("#test").click("#test")
         .wait(1500).click("#test").setValue("#input",Date.now())
         .wait(200).click("#test2").setValue("#input2",Date.now())
         .waitSelector("#test").setHtml("#test", Date.now())
