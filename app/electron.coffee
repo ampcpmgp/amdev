@@ -17,7 +17,16 @@ do -> #upload npm
       $fragment.append($button)
     $box.append($fragment)
   window.npmPublish = (uploadModules = modules) ->
-    command = "coffee -c ./ && npm version patch && npm publish"
+    command = "coffee -c ./"
     console.log "npm upload start - #{uploadModules}"
     for module in uploadModules
-      exec("cd ./am_modules/#{module} && #{command}", (e, out, err) -> console.log out)
+      dir = "./am_modules/#{module}"
+      webpackCommand = ""
+      srcFiles = []
+      srcFiles = fs.readdirSync("#{dir}/src/") if fs.existsSync("#{dir}/src/")
+      for file in srcFiles when file.match(/\.js/)
+        # TODO: コンパイラは一律にしたい
+        webpackCommand = "&& webpack ./src/#{file} build/#{file}"
+      exec("cd #{dir} && #{command} #{webpackCommand} && npm version patch && npm publish",
+        (e, out, err) -> console.log out
+      )
