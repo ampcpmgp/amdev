@@ -3,7 +3,7 @@ The event operation of a web page, it can be easily automated.(maybe)
 
 https://github.com/ampcpmgp/amdeven/tree/master/am_modules/am-autoevent
 
-## sample code(coffeescript, or es2015)
+## sample code(coffeescript, or es2015 syntax)
 ```coffeescript
 # generator
 AutoEvent = require("am-autoevent")
