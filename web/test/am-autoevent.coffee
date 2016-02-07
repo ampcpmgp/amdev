@@ -16,10 +16,10 @@ class SampleTest extends Test
         .click("#test").click("#test")
         .wait(1500).click("#test").setValue("#input",Date.now())
         .wait(200).click("#test2").setValue("#input2",Date.now())
+        .wait("300").addEvent(=> console.log("hello"))
         .waitSelector("#test").setHtml("#test", Date.now())
-        .wait("300").addEvent(=> console.log("fin"))
-        .start(3)
-    func(AutoEvent)
+        .start(3, => console.log("finished!"))
+    func(AutoEventNoGen)
     # setTimeout( =>
     #   func(AutoEventNoGen)
     # , 4000)
