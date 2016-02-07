@@ -4,7 +4,7 @@ module.exports = class AutoEvent extends AutoEventBase
     curFuncNum = 0
     @innerFuncs[@funcs.length] = []
     @funcs.push(=>
-      if loopNum--
+      if --loopNum
         curFuncNum = 0
         @funcs[0]()
       else
