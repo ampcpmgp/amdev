@@ -33,7 +33,10 @@ module.exports = class AutoEvent
       func()
     @waitEvent( =>
       testTimer = setInterval( =>
-        if doc.$(selector)? and exists then stopTimer()
+        if exists
+          if doc.$(selector)? then stopTimer()
+        else
+          unless doc.$(selector)? then stopTimer()
       , 100)
       )
   _createFuncInWait: () =>
