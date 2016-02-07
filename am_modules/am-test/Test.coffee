@@ -5,7 +5,7 @@ module.exports = class Test
   AutoEvent: require("am-autoevent/AutoEvent-no-gen")
   preStart: =>
     @[key](@params[key]) for key, value of @params when typeof @[key] is "function"
-    $(@start)
+    $(() => @start())
   start: =>
     @_color(@params.color) if @params.color?
     @_hide(@params.hide) if @params.hide?
@@ -42,3 +42,4 @@ module.exports = class Test
       else
         $(selector).text(value)
   _auto: =>
+    # TODO: autoevent連携

@@ -27,5 +27,4 @@ class SampleTest extends Test
     require("am-autoevent/src/autoevent")
     console.log amAutoEvent
 
-window.nt = new SampleTest()
-nt.preStart()
+SampleTest::preStart()
