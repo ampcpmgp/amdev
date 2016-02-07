@@ -22,16 +22,10 @@ module.exports = class AutoEvent
     @funcs.push(callback)
     @
   wait: (msec) =>
-    funcNum = ++@funcNum
-    innerFunc = @innerFuncs[funcNum] = []
-    func = (func) =>
-      func() for func in innerFunc
+    func = @_createFuncInWait()
     @waitEvent( => setTimeout(func, msec))
   waitSelector: (selector, exists=true) =>
-    funcNum = ++@funcNum
-    innerFunc = @innerFuncs[funcNum] = []
-    func = (func) =>
-      func() for func in innerFunc
+    func = @_createFuncInWait()
     testTimer = null
     stopTimer = =>
       clearInterval(testTimer)
@@ -41,3 +35,8 @@ module.exports = class AutoEvent
         if doc.$(selector)? and exists then stopTimer()
       , 100)
       )
+  _createFuncInWait: () =>
+    funcNum = ++@funcNum
+    innerFunc = @innerFuncs[funcNum] = []
+    (func) =>
+      func() for func in innerFunc
