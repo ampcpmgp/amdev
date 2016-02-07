@@ -64,10 +64,23 @@
 	      return AutoEvent.__super__.constructor.apply(this, arguments);
 	    }
 
-	    AutoEvent.prototype.contoller = function() {
+	    AutoEvent.prototype.contoller = function(loopNum, callback) {
 	      var curFuncNum, i;
-	      i = -1;
 	      curFuncNum = 0;
+	      this.innerFuncs[this.funcs.length] = [];
+	      this.funcs.push((function(_this) {
+	        return function() {
+	          if (--loopNum) {
+	            curFuncNum = 0;
+	            return _this.funcs[0]();
+	          } else {
+	            if (typeof callback === "function") {
+	              return callback();
+	            }
+	          }
+	        };
+	      })(this));
+	      i = -1;
 	      while (this.funcs[++i]) {
 	        this.innerFuncs[i].push((function(_this) {
 	          return function() {
@@ -76,11 +89,14 @@
 	          };
 	        })(this));
 	      }
-	      return this.funcs[0](curFuncNum);
+	      return this.funcs[0]();
 	    };
 
-	    AutoEvent.prototype.start = function() {
-	      return this.contoller();
+	    AutoEvent.prototype.start = function(loopNum, callback) {
+	      if (loopNum == null) {
+	        loopNum = 1;
+	      }
+	      return this.contoller(loopNum, callback);
 	    };
 
 	    return AutoEvent;
@@ -107,6 +123,7 @@
 
 	  module.exports = AutoEvent = (function() {
 	    function AutoEvent() {
+	      this._createFuncInWait = bind(this._createFuncInWait, this);
 	      this.waitSelector = bind(this.waitSelector, this);
 	      this.wait = bind(this.wait, this);
 	      this.waitEvent = bind(this.waitEvent, this);
@@ -121,6 +138,7 @@
 	      this.funcs = [];
 	      this.innerFuncs = [];
 	      this.funcNum = -1;
+	      this.wait(0);
 	      return this;
 	    };
 
@@ -164,20 +182,8 @@
 	    };
 
 	    AutoEvent.prototype.wait = function(msec) {
-	      var func, funcNum, innerFunc;
-	      funcNum = ++this.funcNum;
-	      innerFunc = this.innerFuncs[funcNum] = [];
-	      func = (function(_this) {
-	        return function() {
-	          var i, len, results;
-	          results = [];
-	          for (i = 0, len = innerFunc.length; i < len; i++) {
-	            func = innerFunc[i];
-	            results.push(func());
-	          }
-	          return results;
-	        };
-	      })(this);
+	      var func;
+	      func = this._createFuncInWait();
 	      return this.waitEvent((function(_this) {
 	        return function() {
 	          return setTimeout(func, msec);
@@ -186,23 +192,11 @@
 	    };
 
 	    AutoEvent.prototype.waitSelector = function(selector, exists) {
-	      var func, funcNum, innerFunc, stopTimer, testTimer;
+	      var func, stopTimer, testTimer;
 	      if (exists == null) {
 	        exists = true;
 	      }
-	      funcNum = ++this.funcNum;
-	      innerFunc = this.innerFuncs[funcNum] = [];
-	      func = (function(_this) {
-	        return function() {
-	          var i, len, results;
-	          results = [];
-	          for (i = 0, len = innerFunc.length; i < len; i++) {
-	            func = innerFunc[i];
-	            results.push(func());
-	          }
-	          return results;
-	        };
-	      })(this);
+	      func = this._createFuncInWait();
 	      testTimer = null;
 	      stopTimer = (function(_this) {
 	        return function() {
@@ -213,12 +207,35 @@
 	      return this.waitEvent((function(_this) {
 	        return function() {
 	          return testTimer = setInterval(function() {
-	            if ((doc.$(selector) != null) && exists) {
-	              return stopTimer();
+	            if (exists) {
+	              if (doc.$(selector) != null) {
+	                return stopTimer();
+	              }
+	            } else {
+	              if (doc.$(selector) == null) {
+	                return stopTimer();
+	              }
 	            }
 	          }, 100);
 	        };
 	      })(this));
+	    };
+
+	    AutoEvent.prototype._createFuncInWait = function() {
+	      var funcNum, innerFunc;
+	      funcNum = ++this.funcNum;
+	      innerFunc = this.innerFuncs[funcNum] = [];
+	      return (function(_this) {
+	        return function() {
+	          var func, i, len, results;
+	          results = [];
+	          for (i = 0, len = innerFunc.length; i < len; i++) {
+	            func = innerFunc[i];
+	            results.push(func());
+	          }
+	          return results;
+	        };
+	      })(this);
 	    };
 
 	    return AutoEvent;
