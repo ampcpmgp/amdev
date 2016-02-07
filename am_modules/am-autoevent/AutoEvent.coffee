@@ -38,5 +38,4 @@ module.exports = class AutoEvent
   _createFuncInWait: () =>
     funcNum = ++@funcNum
     innerFunc = @innerFuncs[funcNum] = []
-    (func) =>
-      func() for func in innerFunc
+    => func() for func in innerFunc
