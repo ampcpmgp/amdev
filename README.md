@@ -45,7 +45,7 @@ npm install -g forever
 # install chocolatey
 choco install -yf ruby nodejs python2 visualstudio2015community
 choco install -yf githubforwindows atom
-choco install -yf skype line lhaplus cmder  notepadplusplus googlechrome firefox clover autoit crystaldiskinfo crystaldiskmark libreoffice googlechrome.canary
+choco install -yf skype line lhaplus cmder  notepadplusplus googlechrome firefox clover autoit crystaldiskinfo greenshot crystaldiskmark libreoffice googlechrome.canary
 
 # download
 TODO: cliborを含んだ開発環境を作る
