@@ -24,7 +24,7 @@ module.exports = class AutoEvent
   wait: (msec) =>
     funcNum = ++@funcNum
     innerFunc = @innerFuncs[funcNum] = []
-    func = =>
+    func = (func) =>
       func() for func in innerFunc
     @waitEvent( => setTimeout(func, msec))
   waitSelector: (selector, exists=true) =>
