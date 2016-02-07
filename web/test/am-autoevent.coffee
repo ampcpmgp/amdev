@@ -18,11 +18,11 @@ class SampleTest extends Test
         .wait(200).click("#test2").setValue("#input2",Date.now())
         .waitSelector("#test").setHtml("#test", Date.now())
         .wait("300").addEvent(=> console.log("fin"))
-        .start()
+        .start(3)
     func(AutoEvent)
-    setTimeout( =>
-      func(AutoEventNoGen)
-    , 4000)
+    # setTimeout( =>
+    #   func(AutoEventNoGen)
+    # , 4000)
   global: =>
     require("am-autoevent/src/autoevent")
     console.log amAutoEvent
