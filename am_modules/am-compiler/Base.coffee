@@ -14,7 +14,9 @@ module.exports = class Base
       filename: "[name].js"
     module:
       loaders: [
-        {test: /\.coffee$/, loader: "coffee-loader"}
+        {test: /\.coffee$/, loader: "coffee"}
+        {test: /\.cson$/, loader: "cson"}
+        {test: /\.html$/, loader: "html"}
       ]
     devtool: "cheap-module-eval-source-map"
     resolve:

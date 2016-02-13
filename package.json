@@ -20,6 +20,8 @@
   "dependencies": {
     "chokidar": "latest",
     "coffee-loader": "latest",
+    "cson-loader": "latest",
+    "html-loader": "latest",
     "coffee-script": "latest",
     "cson": "latest",
     "data-utils": "latest",

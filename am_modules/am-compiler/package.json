@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "coffee-loader": "latest",
+    "cson-loader": "latest",
+    "html-loader": "latest",
     "webpack": "2.0.2-beta"
   }
 }
