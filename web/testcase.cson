@@ -1,0 +1,4 @@
+"top:/?ws": "top"
+"test:/test/":
+  "autoevent:am-autoevent.html?ws": "autoevent"
+  "test:am-test.html?ws": "test"
