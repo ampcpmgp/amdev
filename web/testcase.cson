@@ -1,6 +1,8 @@
 top: "/?ws"
-"test:/test/":
-  "autoevent:am-autoevent.html?ws":
+test:
+  default: "/test"
+  autoevent:
+    default: "am-autoevent.html?ws"
     test: "&test"
     global: "&global"
   test: "am-test.html?ws"
