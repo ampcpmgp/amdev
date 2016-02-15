@@ -14,7 +14,7 @@
     "install": "coffee test/init.coffee",
     "TODO": ": electronのバージョンを外部から指定する（portのように）、最新を探したりする",
     "watch": "coffee -e \"(require('./am_modules/am-compiler/Base.coffee'))::start()\"",
-    "compile": "TODO:compileを作る - CIとも連携",
+    "_compile": "TODO:compileを作る - CIとも連携",
     "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./browser/.build/start.js"
   },
   "dependencies": {
