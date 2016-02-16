@@ -35,7 +35,7 @@ npm start
 choco install -yf githubforwindows atom
 choco install -yf skype line lhaplus cmder notepadplusplus googlechrome firefox clover autoit crystaldiskinfo greenshot crystaldiskmark libreoffice googlechrome.canarcy
 #TODO: chromeがapngに対応したらそっちを探して対応する
-choco install -yf screentogif
+choco install -yf screentogif -version 1.3
 # download
 TODO: cliborを含んだ開発環境を作る
 clibor - http://www.amunsnet.com/
