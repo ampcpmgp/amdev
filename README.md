@@ -14,8 +14,16 @@ npm install
 npm start
 ```
 
-### CIサーバー側に必要なもの
-npm install -g forever
+### Inspection server(例、ubuntu server 14.04 on さくらのVPS)
+```
+sudo apt-get update
+sudo apt-get install git curl
+curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+sudo apt-get install -y nodejs
+# if npm 2, enter [sudo npm install -g npm]
+npm install -g forever coffeescript
+```
+
 
 ## this project environment
 ### this build environment
