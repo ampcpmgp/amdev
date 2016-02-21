@@ -11,10 +11,10 @@ commands = JSON.parse(json).scripts
 start = ->
   preproc = execSync(commands.compile, {encoding:"utf-8"})
   console.log preproc
-  proc = exec(commands.serverStart)
-  proc.once("close", => setTimeout(start, interval))
-  proc.stdout.on("data", (data) ->
-    console.log data
+  proc = exec(commands["start:server"])
+    .once("close", => start())
+    .stdout.on("data", (data) ->
+      console.log data
     )
 check = ->
   try
