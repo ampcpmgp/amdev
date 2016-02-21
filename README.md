@@ -3,14 +3,13 @@
 * 午前の開発環境
 
 ## how to use
+### development
+now only windows 7, 10
 ```
-#requirement
-now only support windows 7, 10
-
 npm install am-template
 node -e require('am-template')('coffee')
 npm install
-TODO: electronを自動ダウンロードする
+#TODO: electronを自動ダウンロードする
 (download electron to ../)
 npm start
 ```
@@ -18,6 +17,7 @@ npm start
 ### CIサーバー側に必要なもの
 npm install -g forever
 
+## this project environment
 ### this build environment
 ```
 git clone github.com/ampcpmgp/amdeven
