@@ -30,6 +30,13 @@ module.exports = class Base
         ).forEach((mod) =>
           @nodeModules[mod] = 'commonjs ' + mod
           )
+  compile: =>
+    @electronStart = =>
+    @init()
+    @config()
+    @electronCompiler = webpack(@electronOption).run((err, stats) => @callback(err,stats))
+    @nodeCompiler = webpack(@nodeOption).run((err, stats) => @callback(err,stats))
+    @browserCompiler = webpack(@browserOption).run((err, stats) => @callback(err,stats))
   start: =>
     @init()
     @config()

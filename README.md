@@ -20,7 +20,7 @@ sudo apt-get update
 sudo apt-get install git curl
 curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install -y nodejs
-# if npm 2, enter [sudo npm install -g npm]
+# if npm v2, enter [sudo npm install -g npm]
 git clone {https://github.com/ampcpmgp/amdeven}
 sudo npm install -g forever coffee-script
 ```
