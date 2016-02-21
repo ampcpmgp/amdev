@@ -15,7 +15,7 @@
     "TODO": ": electronのバージョンを外部から指定する（portのように）、最新を探したりする",
     "watch": "coffee -e \"(require('./am_modules/am-compiler/Base.coffee'))::start()\"",
     "compile": "coffee -e \"(require('./am_modules/am-compiler/Base.coffee'))::compile()\"",
-    "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./browser/.build/start.js"
+    "electron": "electron ./browser/.build/start.js"
   },
   "dependencies": {
     "chokidar": "latest",
@@ -37,7 +37,9 @@
     "underscore": "latest",
     "webpack": "2.0.2-beta"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "electron-prebuilt": "latest"
+  },
   "author": "",
   "license": "ISC"
 }
