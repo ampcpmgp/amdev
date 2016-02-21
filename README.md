@@ -21,7 +21,8 @@ sudo apt-get install git curl
 curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install -y nodejs
 # if npm 2, enter [sudo npm install -g npm]
-npm install -g forever coffeescript
+git clone {https://github.com/ampcpmgp/amdeven}
+sudo npm install -g forever coffee-script
 ```
 
 
@@ -30,7 +31,7 @@ npm install -g forever coffeescript
 ```
 git clone github.com/ampcpmgp/amdeven
 
-npm i -g coffeescript
+npm i -g coffee-script
 npm run init
 (download electron to ../)
 npm start
