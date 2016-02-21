@@ -19,6 +19,9 @@ module.exports = class Server extends Common
   reload_list: []
   start: ->
     @app = http.createServer((req, res) => @http_server_action(req, res))
+    listen = => @app.listen(@http_port)
+    # TODO: reload時に前プロセスが残りportエラーで引っかかったのを解消。よりスマートに
+    setTimeout(listen, 0)
     @ws_start()
   _check_exists_file: (file) ->
     for dir in @web_dir
@@ -44,7 +47,7 @@ module.exports = class Server extends Common
     path = @_check_exists_file(url)
     if path
       data = fs.readFileSync(path)
-      type = mime.lookup path
+      type = mime.lookup(path)
       res.writeHead(200, "Content-Type": type)
       res.end(data)
     else
@@ -60,7 +63,6 @@ module.exports = class Server extends Common
       @websocket = sio(@app)
     else
       @websocket = sio(@ws_port)
-    @app.listen(@http_port)
     @websocket.on("connection", (socket) =>
       @reload_list.push(socket)
       socket.on("test", @ws_event_test)
