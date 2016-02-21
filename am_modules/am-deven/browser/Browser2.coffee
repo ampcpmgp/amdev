@@ -76,8 +76,7 @@ module.exports = class Browser
         fs.writeFileSync(@configCson, csonString)
         mainWindow = null
       )
-      # TODO: npm run watchで代用、工数かからないならelectronに寄せる
-      #compiler
+      # TODO: コンパイラはelectronに寄せたい
       # @startCompiler()
     )
   ipcEvent: =>

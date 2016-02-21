@@ -43,7 +43,6 @@ class Crawler
       > 求人数(#{jobNum})　平均年収(#{averageIncome}万円)
     """)
   retry: (err) =>
-    # TODO: retry
     Crawler::replyMessage += "#{@siteName} - レスポンスエラー\n"
     @msg.send(Crawler::replyMessage + "```") unless --Crawler::num
   _getAverageIncome: ($) =>

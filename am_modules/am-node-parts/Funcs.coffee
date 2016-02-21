@@ -28,7 +28,7 @@ module.exports = class Funcs
             __time = 0
             fs.watch(dir, (eventname, filename) ->
               time = Date.now()
-              # TODO: なぜfs.watchが大量イベント発行するか、確認する
+              # TODO: なぜfs.watchが大量イベント発行するか、確認する→仕様っぽい、chokidarあたりに寄せたい
               return if __eventname is eventname and (time - __time) < 400 and __filename is filename
               __eventname = eventname
               __time = time

@@ -1,4 +1,3 @@
-# TODO: templateと共通の部分は共有化する
 fs =require("fs")
 fse = require("fs-extra")
 path = require("path")

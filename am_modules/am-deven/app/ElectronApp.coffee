@@ -24,7 +24,6 @@ module.exports = class ElectronApp
           y: e.clientY
         ipcRenderer.send('inspect element', obj, "mainWindow")
   live_reload: ->
-    # TODO: 初回起動時にリロードがかかる
     chokidar
       .watch(["./app/.build/", "./app/index.html"])
       .on("change", (path) =>

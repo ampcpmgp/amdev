@@ -1,4 +1,4 @@
-# TODO: am-template検討(coffeeに限らずテンプレートを用意するため)
+# TODO: yo検討。gitignoreが強引すぎ。
 f = require("fs")
 fs = require('fs-extra')
 path = process.cwd()

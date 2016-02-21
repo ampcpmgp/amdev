@@ -9,8 +9,6 @@ now only windows 7, 10
 npm install am-template
 node -e require('am-template')('coffee')
 npm install
-#TODO: electronを自動ダウンロードする
-(download electron to ../)
 npm start
 ```
 
@@ -61,9 +59,9 @@ atom-text-editor {
 npm run init
 ```
 
-## TODOS
+## やりたいこと
 ```coffee
-TODO: [
+やりたいリスト: [
   am_modulesのnpm向けビルド方法、要考慮:
     要点1:
       内部的にrequireしているpackageのコンパイルについて:

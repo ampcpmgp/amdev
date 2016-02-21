@@ -12,6 +12,9 @@
     "serverStart": "npm i && node app/server",
     "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./"
   },
+  "devDependencies": {
+    "electron-prebuilt": "latest"
+  },
   "dependencies": {
     "am-autoevent": "latest",
     "am-common": "latest",
