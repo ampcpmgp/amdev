@@ -31,6 +31,7 @@
     "jquery": "latest",
     "mime": "latest",
     "mkdirp": "latest",
+    "pouchdb": "latest",
     "readline": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
