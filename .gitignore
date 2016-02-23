@@ -6,7 +6,6 @@ logs
 .*config.cson
 node_modules
 #my config
-*.exe
 *.map
 *.js
 *.css
