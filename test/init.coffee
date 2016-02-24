@@ -3,7 +3,7 @@ exec = require('child_process').exec
 cmd = ""
 
 addList = (err, files) ->
-  cmd += "cd am_modules/#{file}/ && npm install --msvs_version=2013 && cd ../../ && " for file in files
+  cmd += "cd am_modules/#{file}/ && npm i --prune && cd ../../ && " for file in files
   cmd += "exit"
   console.log cmd
   console.log "child process start"
