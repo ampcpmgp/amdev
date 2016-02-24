@@ -20,6 +20,7 @@
     "chokidar": "latest",
     "coffee-loader": "latest",
     "coffee-script": "latest",
+    "cron": "latest",
     "cson": "latest",
     "cson-loader": "latest",
     "data-utils": "latest",
@@ -35,6 +36,7 @@
     "readline": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
+    "superagent": "latest",
     "underscore": "latest",
     "webpack": "2.0.2-beta"
   },
