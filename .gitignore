@@ -9,3 +9,5 @@ node_modules
 *.map
 *.js
 *.css
+# allow
+!*.exe
