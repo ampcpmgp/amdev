@@ -2,6 +2,8 @@
 * AM development environment
 * 午前の開発環境
 
+![](data/Animation.gif)
+
 ## how to use
 ### development
 now only windows 7, 10
