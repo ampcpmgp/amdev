@@ -8,4 +8,3 @@ switch location.pathname
   when "/test/am-test.html" then require("./test/am-test")
   when "/"
     testcase = require("./testcase.cson")
-    console.log testcase
