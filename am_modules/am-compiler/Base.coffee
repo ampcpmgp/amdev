@@ -47,18 +47,18 @@ module.exports = class Base
     @electronOption.target = "atom"
     @electronOption.externals = @nodeModules
     @electronOption.entry =
-      "browser/.build/start": "./browser/start.coffee"
-      "app/.build/preload": "./app/preload.coffee"
-      "app/.build/electron": "./app/electron.coffee"
+      "browser/.build/start": "./browser/test/start.coffee"
+      "app/.build/preload": "./app/test/preload.coffee"
+      "app/.build/electron": "./app/test/electron.coffee"
     @nodeOption = _.clone(@baseOption)
     @nodeOption.target = "node"
     @nodeOption.externals = @nodeModules
     @nodeOption.entry =
-      "app/.build/server": "./app/server.coffee"
+      "app/.build/server": "./app/test/server.coffee"
     @browserOption = _.clone(@baseOption)
     @browserOption.target = "web"
     @browserOption.entry =
-      "web/.build/client": "./web/client.coffee"
+      "web/.build/client": "./web/test/client.coffee"
   compileModule: (dir, callback) =>
     @config()
     modulesDirectories = JSON.parse(JSON.stringify(@browserOption.resolve.modulesDirectories))
