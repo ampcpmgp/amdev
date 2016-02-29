@@ -59,6 +59,17 @@ module.exports = class Base
     @browserOption.target = "web"
     @browserOption.entry =
       "web/.build/client": "./web/client.coffee"
+  compileModule: (dir, callback) =>
+    @config()
+    modulesDirectories = JSON.parse(JSON.stringify(@browserOption.resolve.modulesDirectories))
+    moduleDir = "am_modules/#{dir}"
+    modulesDirectories.unshift("#{moduleDir}/node_modules")
+    @browserOption.resolve.modulesDirectories = modulesDirectories
+    files = fs.readdirSync("#{moduleDir}")
+    @browserOption.entry = {}
+    coffeeFiles = (file for file in files when file.match(/\.coffee$/))
+    @browserOption.entry["#{moduleDir}/#{coffeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeFile}" for coffeFile in coffeeFiles
+    webpack(@browserOption).run(=> callback())
   electronStart: =>
     cmd = fse.readJsonSync("package.json").scripts.electron
     require("child_process").exec(cmd)
