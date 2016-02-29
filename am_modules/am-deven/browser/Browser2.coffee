@@ -39,7 +39,6 @@ module.exports = class Browser
     @option = @config.browserWindow
     @
   start: =>
-    console.log @config
     @url = @config.browserWindow.webPreferences.url
     #同時起動防止
     #reload
