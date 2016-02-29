@@ -1,6 +1,6 @@
 Browser = require("am-deven/browser/Browser2")
 browser = new Browser()
-browser.init().start("/app/index.html")
+browser.init().start()
 
 #prev ver
 # browser = new (require("am-deven/browser/Browser"))

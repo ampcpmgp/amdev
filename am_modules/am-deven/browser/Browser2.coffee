@@ -38,7 +38,9 @@ module.exports = class Browser
       @config = cson.load(@configCson[1..])
     @option = @config.browserWindow
     @
-  start: (@url) =>
+  start: =>
+    console.log @config
+    @url = @config.browserWindow.webPreferences.url
     #同時起動防止
     #reload
     @watcher = new Watcher()

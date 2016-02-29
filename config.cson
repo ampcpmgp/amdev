@@ -6,6 +6,7 @@ browserWindow: #https://github.com/atom/electron/blob/master/docs/api/browser-wi
   height: 968
   icon: "./web/favicon.ico"
   webPreferences:
+    url: "/app/index.html"
     preload: "/app/.build/preload.js" #auto add head - process.cwd() +
 compiler:
   coffeescript: "/\.coffee$/"
