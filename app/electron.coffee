@@ -34,11 +34,10 @@ do -> #upload npm
             (e, out, err) -> console.log out
           )
         ModuleCompiler::compileModule(module, callback)
-        console.log module
       else
-        return
         exec("cd #{dir} && #{command} && npm version patch && npm publish",
           (e, out, err) -> console.log out
         )
 
-$("button:contains(am-autoevent)").click()
+# test caseにうつす
+# $("button:contains(am-autoevent)").click()
