@@ -3,8 +3,8 @@ nc = new NodeClient()
 nc.start()
 
 switch location.pathname
-  when "/test/am-autoevent.html" then require("./test/am-autoevent")
-  when "/test/am-test.html" then require("./test/am-test")
+  when "/modules/am-autoevent.html" then require("./modules/am-autoevent")
+  when "/modules/am-test.html" then require("./modules/am-test")
   when "/"
     generate = require("am-test/generate")
     testcase = require("./testcase.cson")
