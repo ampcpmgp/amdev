@@ -1,6 +1,8 @@
+cson = require("cson")
+config = cson.load(".config.cson")
 #config
 console.log new Date(), "process start"
-interval = 5 * 60000# / 60  # テスト時は５秒に１回
+interval = config.ci * 60000# / 60  # テスト時は５秒に１回
 #vars
 execSync = require("child_process").execSync
 exec = require("child_process").exec
