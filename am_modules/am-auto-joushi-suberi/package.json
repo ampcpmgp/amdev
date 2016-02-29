@@ -1,0 +1,11 @@
+{
+  "name": "am-auto-joushi-suberi",
+  "version": "1.0.1",
+  "description": "?",
+  "main": "Auto",
+  "scripts": {
+    "test": "echo error?"
+  },
+  "author": "",
+  "license": "ISC"
+}
