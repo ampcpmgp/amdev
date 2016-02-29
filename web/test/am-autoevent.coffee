@@ -24,7 +24,7 @@ class SampleTest extends Test
         )
     func(AutoEvent)
   global: =>
-    require("am-autoevent/src/autoevent")
+    require("am-autoevent/amAutoevent")
     console.log amAutoEvent
 
 SampleTest::preStart()
