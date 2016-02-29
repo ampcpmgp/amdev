@@ -11,3 +11,5 @@ browserWindow: #https://github.com/atom/electron/blob/master/docs/api/browser-wi
 compiler:
   coffeescript: "/\.coffee$/"
   sass: "/\.sass$/"
+cl:
+  intervalMin: 5

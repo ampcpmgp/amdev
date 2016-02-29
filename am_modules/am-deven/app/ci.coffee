@@ -1,8 +1,11 @@
 cson = require("cson")
-config = cson.load(".config.cson")
+fs = require("fs")
+config = cson.load(".config.cson") if fs.existsSync(".config.cson")
+intervalMin = config?.ci?.intervalMin
+intervalMin = 10 unless intervalMin
 #config
 console.log new Date(), "process start"
-interval = config.ci * 60000# / 60  # テスト時は５秒に１回
+interval = intervalMin * 60000# / 60  # テスト時は５秒に１回
 #vars
 execSync = require("child_process").execSync
 exec = require("child_process").exec
