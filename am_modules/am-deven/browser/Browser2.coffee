@@ -36,7 +36,7 @@ module.exports = class Browser
       @config = cson.load(@configCson)
     catch
       @config = cson.load(@configCson[1..])
-    @option = @config["browser-window"]
+    @option = @config.browserWindow
     @
   start: (@url) =>
     #同時起動防止
@@ -52,7 +52,7 @@ module.exports = class Browser
     app.on('ready', () =>
       #make renderer
       option = JSON.parse(JSON.stringify(@option))
-      option["web-preferences"].preload = "#{process.cwd()}#{@option["web-preferences"].preload}"
+      option.webPreferences.preload = "#{process.cwd()}#{@option.webPreferences.preload}"
       mainWindow = @mainWindow = new BrowserWindow(option)
       mainWindow.setAlwaysOnTop(true)
       @url = "file://#{process.cwd()}#{@url}" unless @url.match(/^(http|\/\/)/)
