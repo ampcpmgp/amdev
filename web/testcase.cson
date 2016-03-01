@@ -1,8 +1,6 @@
 top: "/?ws"
 test:
-  default: "/test"
   autoevent:
-    default: "am-autoevent.html?ws"
-    test: "&test"
-    global: "&global"
-  test: "am-test.html?ws"
+    test: "/modules/am-autoevent.html?ws&test"
+    global: "/modules/am-autoevent.html?ws&global"
+  test: "/modules/am-test.html?ws"
