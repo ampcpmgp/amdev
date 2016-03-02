@@ -4,9 +4,8 @@ html = ""
 
 recursive = (key, value, depth) =>
   if typeof value is "object"
-    for key2, value2 of value
-      recursive(key2, "", depth) if typeof value2 is "object"
-      recursive(key2, value2, depth + 1)
+    recursive(key, "", depth)
+    recursive(key2, value2, depth + 1) for key2, value2 of value
   else
     generateHtml(key, value, depth)
 generateHtml = (key, value, depth) =>
