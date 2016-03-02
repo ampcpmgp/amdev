@@ -30,6 +30,7 @@
     "html-loader": "latest",
     "is_js": "latest",
     "jquery": "latest",
+    "json-loader": "latest",
     "mime": "latest",
     "mkdirp": "latest",
     "pouchdb": "latest",

@@ -1,0 +1,16 @@
+{
+  "browserWindow": {
+    "x": 0,
+    "y": 0,
+    "width": 1027,
+    "height": 968,
+    "icon": "./web/favicon.ico",
+    "webPreferences": {
+      "url": "/app/index.html",
+      "preload": "/app/.build/preload.js"
+    }
+  },
+  "cl": {
+    "intervalMin": 5
+  }
+}

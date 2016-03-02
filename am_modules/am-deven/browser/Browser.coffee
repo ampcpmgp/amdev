@@ -35,7 +35,7 @@ module.exports = class Browser
     try
       @config = cson.load(@configCson)
     catch
-      @config = cson.load(@configCson[1..])
+      @test = require("./config.json")
     @option = @config.browserWindow
     @
   start: =>

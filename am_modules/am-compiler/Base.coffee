@@ -16,6 +16,7 @@ module.exports = class Base
         {test: /\.coffee$/, loader: "coffee"}
         {test: /\.cson$/, loader: "cson"}
         {test: /\.html$/, loader: "html"}
+        {test: /\.json$/, loader: "json"}
       ]
     devtool: "cheap-module-eval-source-map"
     resolve:
