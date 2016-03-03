@@ -9,3 +9,5 @@ switch location.pathname
     generate = require("am-test/generate")
     testcase = require("./testcase.cson")
     generate(testcase)
+
+# window.ws = nc.ws
