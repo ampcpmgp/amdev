@@ -5,7 +5,7 @@ sampleCode = ->
   #server
   np.server.start()
   #readline
-  np.readline_func("./package.json", (line) -> console.log(line))
+  np.readlineFunc("./package.json", (line) -> console.log(line))
   #check dir
   np.check_dir_tree("./", /coffee$/, (loc, file) -> console.log(loc))
   #watch dir tree
