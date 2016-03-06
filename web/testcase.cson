@@ -3,4 +3,4 @@ test:
   autoevent:
     test: "?ws&am-autoevent&test"
     global: "?ws&am-autoevent&global"
-  test: "/modules/am-test.html?ws"
+  test: "?ws&am-test&params1"
