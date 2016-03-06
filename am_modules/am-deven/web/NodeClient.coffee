@@ -1,25 +1,23 @@
 Common = require("am-common")
 io = require("socket.io-client/socket.io.js")
 
-module.exports = class NodeClient extends Common
+module.exports = class NodeClient
   ###modules###
   ws: null
   ###websocket required variables###
   domain: location.host.replace(/:.*/, "")
   params: null
   connectFlag: false
-  constructor: ->
-    @params = @getParams location.href
   start: ->
     if @params.ws then @connect_websocket()
   connect_websocket: ->
-    if @ws_port is 8080
-      @ws_port = 80 unless location.host.match(/^((192|172|10)\.|localhost)/)
+    if Common::ws_port is 8080
+      Common::ws_port = 80 unless location.host.match(/^((192|172|10)\.|localhost)/)
     protocol = if location.href.match(/^https/) then "wss" else "ws"
-    if @ws_port is 80
+    if Common::ws_port is 80
       @ws_url = "#{protocol}://#{@domain}"
     else
-      @ws_url = "#{protocol}://#{@domain}:#{@ws_port}"
+      @ws_url = "#{protocol}://#{@domain}:#{Common::ws_port}"
     @ws = io(@ws_url)
     @ws.on "connect", =>
       return @reload() if @connectFlag
@@ -32,3 +30,5 @@ module.exports = class NodeClient extends Common
       @ws.on("test", (msg) -> console.log msg)
       @ws.on("disconnect", -> console.log("websocket server disconnected"))
   reload: -> location.reload()
+
+NodeClient::params = Common::getParams(location.href)
