@@ -3,6 +3,8 @@ AutoEvent = require("am-autoevent")
 AutoEventNoGen = require("am-autoevent/AutoEvent-no-gen")
 Test = require("am-test")
 
+$("body").append($(require("./tag.html")))
+
 do => #setup
   $("button").click( =>
     console.log 2
