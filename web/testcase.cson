@@ -2,5 +2,5 @@ top: "/?ws"
 test:
   autoevent:
     test: "?ws&am-autoevent&test"
-    global: "/modules/am-autoevent.html?ws&global"
+    global: "?ws&am-autoevent&global"
   test: "/modules/am-test.html?ws"
