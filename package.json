@@ -23,6 +23,7 @@
     "cron": "latest",
     "cson": "latest",
     "cson-loader": "latest",
+    "escape-html": "latest",
     "forever": "latest",
     "fs-extra": "latest",
     "ftp": "latest",

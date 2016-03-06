@@ -1,4 +1,5 @@
 template = require("./src/template.html")
+escape = require("escape-html")
 
 html = ""
 
@@ -12,7 +13,7 @@ generateHtml = (key, value, depth) =>
   html += template
     .replace("{marginLeft}", depth * 8)
     .replace("{type}", key)
-    .replace(/\{link\}/g, value)
+    .replace(/\{link\}/g, escape(value))
 
 
 module.exports = (obj) =>
