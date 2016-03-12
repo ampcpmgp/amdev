@@ -36,7 +36,6 @@
     "pouchdb": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
-    "superagent": "latest",
     "underscore": "latest",
     "webpack": "2.0.2-beta"
   },
