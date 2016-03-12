@@ -1,4 +1,9 @@
-require('crash-reporter').start()
+require('crash-reporter').start(
+  productName: 'Akira Hayatake'
+  companyName: 'Gozen To Gogo'
+  # submitURL: 'https://your-domain.com/url-to-submit'  # config
+  autoSubmit: true
+)
 fse = require("fs-extra")
 chokidar = require("chokidar")
 cson = require("cson")
@@ -57,7 +62,7 @@ module.exports = class Browser
       mainWindow = @mainWindow = new BrowserWindow(option)
       mainWindow.setAlwaysOnTop(true)
       @url = "file://#{process.cwd()}#{@url}" unless @url.match(/^(http|\/\/)/)
-      mainWindow.loadUrl(@url)
+      mainWindow.loadURL(@url)
       mainWindow.openDevTools()
       mainWindow.webContents.on("did-finish-load", =>
         mainWindow?.setAlwaysOnTop(false) unless @option["always-on-top"]
