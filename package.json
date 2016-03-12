@@ -23,6 +23,7 @@
     "cron": "latest",
     "cson": "latest",
     "cson-loader": "latest",
+    "electron-prebuilt": "latest",
     "escape-html": "latest",
     "forever": "latest",
     "fs-extra": "latest",
@@ -33,11 +34,12 @@
     "json-loader": "latest",
     "mime": "latest",
     "mkdirp": "latest",
+    "node-fetch": "latest",
     "pouchdb": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
     "underscore": "latest",
-    "webpack": "2.0.2-beta"
+    "webpack": "latest"
   },
   "devDependencies": {
     "electron-prebuilt": "latest"
