@@ -5,9 +5,9 @@
   "main": "./app/server.js",
   "scripts": {
     "init": "npm run install && npm run compile",
-    "cl": "forever start node_modules/am-deven/app/ci.js",
     "start": "npm run watch",
     "start:server": "npm run compile && node app/.build/server.js",
+    "start:forever": "nvm install stable && npm install -g forever && forever start node_modules/am-deven/app/ci.js",
     "TODO:消して良いかも？:": "template:set->template:undoの順で行わないとバグ,ファイルロックは解除",
     "template:set": "node node_modules/am-deven/test/setTemplate.js && npm run electron",
     "template:undo": "node node_modules/am-deven/test/undoTemplate.js",
