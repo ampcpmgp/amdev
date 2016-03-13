@@ -1,5 +1,5 @@
 cronJob = require("cron")
-PouchDB = root.PouchDB
-PouchDB = require("pouchdb") unless PouchDB
+PouchDB = require("pouchdb/dist/pouchdb.js")
+db = new PouchDB('dbname')
 
 module.exports = class GitHubAPI
