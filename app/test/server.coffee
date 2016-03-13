@@ -1,1 +1,2 @@
-require("../server")
+Server = require("../src/Server").prototype
+Server.start()
