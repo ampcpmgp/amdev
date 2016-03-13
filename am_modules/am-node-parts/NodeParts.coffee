@@ -6,7 +6,7 @@ http = require("http")
 sio = require('socket.io')
 mime = require('mime')
 
-module.exports = class Server extends Common
+module.exports = class NodeParts extends Common
   #config
   web_dir:  [
     "./web"
