@@ -23,7 +23,7 @@ do -> #upload npm
       $fragment.append($button)
     $box.append($fragment)
   window.npmPublish = (uploadModules = modules) ->
-    command = "coffee -c ./ &&"
+    command = "coffee -c ./"
     console.log "npm upload start - #{uploadModules}"
     for module in uploadModules
       dir = "./am_modules/#{module}"
