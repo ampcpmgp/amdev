@@ -14,5 +14,5 @@ Funcs.checkDirTree("./api/", /.*/,
         message: json.results.errMsg
     console.log file, json, newJson
 
-    # fs.writeFile(loc, JSON.stringify(newJson, null, "  ") + "\n", {encoding: "utf-8"})
+    fs.writeFileSync(loc, JSON.stringify(newJson, null, "  ") + "\n", {encoding: "utf-8"})
 )
