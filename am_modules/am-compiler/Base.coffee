@@ -62,6 +62,7 @@ module.exports = class Base
       "web/.build/client": "./web/test/client.coffee"
   compileModule: (dir, callback) =>
     @config()
+    # TODO: バグっぽいので検証
     modulesDirectories = JSON.parse(JSON.stringify(@browserOption.resolve.modulesDirectories))
     moduleDir = "am_modules/#{dir}"
     modulesDirectories.unshift("#{moduleDir}/node_modules")
