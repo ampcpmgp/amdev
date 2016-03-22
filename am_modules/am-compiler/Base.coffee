@@ -2,7 +2,7 @@ fs =require("fs")
 fse = require("fs-extra")
 path = require("path")
 webpack = require("webpack")
-_ = require("underscore")
+_ = require("lodash")
 
 module.exports = class Base
   nodeModules: {}
@@ -62,16 +62,15 @@ module.exports = class Base
       "web/.build/client": "./web/test/client.coffee"
   compileModule: (dir, callback) =>
     @config()
-    # TODO: バグっぽいので検証
-    modulesDirectories = JSON.parse(JSON.stringify(@browserOption.resolve.modulesDirectories))
+    option = _.cloneDeep(@browserOption)
     moduleDir = "am_modules/#{dir}"
-    modulesDirectories.unshift("#{moduleDir}/node_modules")
-    @browserOption.resolve.modulesDirectories = modulesDirectories
+    option.resolve.modulesDirectories.unshift("#{moduleDir}/node_modules")
     files = fs.readdirSync("#{moduleDir}")
-    @browserOption.entry = {}
+    option.entry = {}
     coffeeFiles = (file for file in files when file.match(/\.coffee$/))
-    @browserOption.entry["#{moduleDir}/#{coffeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeFile}" for coffeFile in coffeeFiles
-    webpack(@browserOption).run(=> callback())
+    option.entry["#{moduleDir}/#{coffeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeFile}" for coffeFile in coffeeFiles
+    delete option.devtool
+    webpack(option).run(=> callback())
   electronStart: =>
     cmd = fse.readJsonSync("package.json").scripts.electron
     require("child_process").exec(cmd)

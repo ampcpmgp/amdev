@@ -39,7 +39,7 @@
     "pouchdb": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
-    "underscore": "latest",
+    "lodash": "latest",
     "webpack": "latest"
   },
   "devDependencies": {
