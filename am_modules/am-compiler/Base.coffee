@@ -30,6 +30,23 @@ module.exports = class Base
         ).forEach((mod) =>
           @nodeModules[mod] = 'commonjs ' + mod
           )
+  config: =>
+    @electronOption = _.clone(@baseOption)
+    @electronOption.target = "atom"
+    @electronOption.externals = @nodeModules
+    @electronOption.entry =
+    "browser/.build/start": "./browser/test/start.coffee"
+    "app/.build/preload": "./app/test/preload.coffee"
+    "app/.build/electron": "./app/test/electron.coffee"
+    @nodeOption = _.clone(@baseOption)
+    @nodeOption.target = "node"
+    @nodeOption.externals = @nodeModules
+    @nodeOption.entry =
+    "app/.build/server": "./app/test/server.coffee"
+    @browserOption = _.clone(@baseOption)
+    @browserOption.target = "web"
+    @browserOption.entry =
+    "web/.build/client": "./web/test/client.coffee"
   compile: =>
     @electronStart = =>
     @init()
@@ -43,24 +60,7 @@ module.exports = class Base
     @electronCompiler = webpack(@electronOption).watch({}, (err, stats) => @callback(err,stats))
     @nodeCompiler = webpack(@nodeOption).watch({}, (err, stats) => @callback(err,stats))
     @browserCompiler = webpack(@browserOption).watch({}, (err, stats) => @callback(err,stats))
-  config: => #am-devenでの設定
-    @electronOption = _.clone(@baseOption)
-    @electronOption.target = "atom"
-    @electronOption.externals = @nodeModules
-    @electronOption.entry =
-      "browser/.build/start": "./browser/test/start.coffee"
-      "app/.build/preload": "./app/test/preload.coffee"
-      "app/.build/electron": "./app/test/electron.coffee"
-    @nodeOption = _.clone(@baseOption)
-    @nodeOption.target = "node"
-    @nodeOption.externals = @nodeModules
-    @nodeOption.entry =
-      "app/.build/server": "./app/test/server.coffee"
-    @browserOption = _.clone(@baseOption)
-    @browserOption.target = "web"
-    @browserOption.entry =
-      "web/.build/client": "./web/test/client.coffee"
-  compileModule: (dir, callback) =>
+  compileModule: (dir, callback) => #am-devenでの設定
     @config()
     option = _.cloneDeep(@browserOption)
     moduleDir = "am_modules/#{dir}"
