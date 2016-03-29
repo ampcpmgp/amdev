@@ -14,7 +14,7 @@ module.exports = class Base
     module:
       loaders: [
         {test: /\.coffee$/, loader: "coffee"}
-        {test: /\.cson$/, loader: "cson"}
+        {test: /\.cson$/, loader: "cson-loader"}
         {test: /\.html$/, loader: "html"}
         {test: /\.json$/, loader: "json"}
       ]
