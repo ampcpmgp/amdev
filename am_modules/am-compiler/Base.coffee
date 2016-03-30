@@ -31,19 +31,19 @@ module.exports = class Base
           @nodeModules[mod] = 'commonjs ' + mod
           )
   config: =>
-    @electronOption = _.clone(@baseOption)
+    @electronOption = _.cloneDeep(@baseOption)
     @electronOption.target = "atom"
     @electronOption.externals = @nodeModules
     @electronOption.entry =
     "browser/.build/start": "./browser/test/start.coffee"
     "app/.build/preload": "./app/test/preload.coffee"
     "app/.build/electron": "./app/test/electron.coffee"
-    @nodeOption = _.clone(@baseOption)
+    @nodeOption = _.cloneDeep(@baseOption)
     @nodeOption.target = "node"
     @nodeOption.externals = @nodeModules
     @nodeOption.entry =
     "app/.build/server": "./app/test/server.coffee"
-    @browserOption = _.clone(@baseOption)
+    @browserOption = _.cloneDeep(@baseOption)
     @browserOption.target = "web"
     @browserOption.entry =
     "web/.build/client": "./web/test/client.coffee"
