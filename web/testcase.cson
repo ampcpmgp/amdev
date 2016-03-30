@@ -3,4 +3,4 @@ test:
   autoevent:
     test: "?ws&am-autoevent&test"
     global: "?ws&am-autoevent&global"
-  test: "?ws&am-test&params1"
+  test: "?ws&am-lunch-test&params1"

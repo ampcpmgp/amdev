@@ -1,7 +1,7 @@
 $ = require("jquery")
 AutoEvent = require("am-autoevent")
 AutoEventNoGen = require("am-autoevent/AutoEvent-no-gen")
-Test = require("am-test")
+Test = require("am-lunch-test")
 
 $("body").append($(require("./tag.html")))
 

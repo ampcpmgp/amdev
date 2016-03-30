@@ -9,7 +9,7 @@ $(restart).on("click", (e) -> require("ipc").send("restart"))
 do -> #upload npm
   browserModules =
     "am-autoevent": true
-    "am-test": true
+    "am-lunch-test": true
   modules = fs.readdirSync("./am_modules/")
   $box = $(".npm-update-box")
   $button = $(npmUpdateButton.content).find("button")

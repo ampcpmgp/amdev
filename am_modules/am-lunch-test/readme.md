@@ -3,7 +3,7 @@
 ## 工事中
 ## sample
 ```js
-import Test from 'am-test';
+import Test from 'am-lunch-test';
 class NewTest extends Test {
   params1(params1Val) {
     console.log(params1Val);
@@ -13,7 +13,7 @@ window.nt = new NewTest();
 nt.preStart();
 ```
 ```coffee
-Test = require("am-test")
+Test = require("am-lunch-test")
 class SampleTest extends Test
   params1: (params1Val) =>
     console.log(params1Val)
