@@ -35,18 +35,18 @@ module.exports = class Base
     @electronOption.target = "atom"
     @electronOption.externals = @nodeModules
     @electronOption.entry =
-    "browser/.build/start": "./browser/test/start.coffee"
-    "app/.build/preload": "./app/test/preload.coffee"
-    "app/.build/electron": "./app/test/electron.coffee"
+      "browser/.build/start": "./browser/test/start.coffee"
+      "app/.build/preload": "./app/test/preload.coffee"
+      "app/.build/electron": "./app/test/electron.coffee"
     @nodeOption = _.cloneDeep(@baseOption)
     @nodeOption.target = "node"
     @nodeOption.externals = @nodeModules
     @nodeOption.entry =
-    "app/.build/server": "./app/test/server.coffee"
+      "app/.build/server": "./app/test/server.coffee"
     @browserOption = _.cloneDeep(@baseOption)
     @browserOption.target = "web"
     @browserOption.entry =
-    "web/.build/client": "./web/test/client.coffee"
+      "web/.build/client": "./web/test/client.coffee"
   compile: =>
     @electronStart = =>
     @init()
