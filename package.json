@@ -18,6 +18,9 @@
     "electron": "electron ./browser/.build/start.js"
   },
   "dependencies": {
+    "babel": "latest",
+    "babel-core": "latest",
+    "babel-loader": "latest",
     "chokidar": "latest",
     "coffee-loader": "latest",
     "coffee-script": "latest",
@@ -33,13 +36,15 @@
     "is_js": "latest",
     "jquery": "latest",
     "json-loader": "latest",
+    "lodash": "latest",
     "mime": "latest",
     "mkdirp": "latest",
     "node-fetch": "latest",
     "pouchdb": "latest",
+    "riot": "latest",
+    "riotjs-loader": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
-    "lodash": "latest",
     "webpack": "latest"
   },
   "devDependencies": {

@@ -45,6 +45,14 @@ module.exports = class Base
       "app/.build/server": "./app/test/server.coffee"
     @browserOption = _.cloneDeep(@baseOption)
     @browserOption.target = "web"
+    @browserOption.module.preLoaders = []
+    @browserOption.module.preLoaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
+    @browserOption.module.loaders.push({test: /\.js$|\.tag$/, exclude: /node_modules/, loader: 'babel-loader' })
+    @browserOption.plugins = [
+      new webpack.ProvidePlugin(
+        riot: 'riot'
+      )
+    ]
     @browserOption.entry =
       "web/.build/client": "./web/test/client.coffee"
   compile: =>
