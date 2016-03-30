@@ -1,5 +1,6 @@
-template = require("./src/template.html")
 escape = require("escape-html")
+template = require("./src/template.html")
+listTag = require("./src/list.tag")
 
 html = ""
 
@@ -8,6 +9,7 @@ recursive = (key, value, depth) =>
     recursive(key, "", depth)
     recursive(key2, value2, depth + 1) for key2, value2 of value
   else
+
     generateHtml(key, value, depth)
 generateHtml = (key, value, depth) =>
   html += template
@@ -21,3 +23,5 @@ module.exports = (obj) =>
   box = document.createElement("div")
   box.innerHTML = html
   document.querySelector("body").appendChild(box)
+  riot.mount(listTag)
+  
