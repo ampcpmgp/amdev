@@ -1,7 +1,7 @@
 escape = require("escape-html")
 template = require("./src/template.html")
 listTag = require("./src/list.tag")
-
+testCase = []
 html = ""
 
 recursive = (key, value, depth) =>
@@ -9,7 +9,7 @@ recursive = (key, value, depth) =>
     recursive(key, "", depth)
     recursive(key2, value2, depth + 1) for key2, value2 of value
   else
-
+    testCase.push({key, value, depth})
     generateHtml(key, value, depth)
 generateHtml = (key, value, depth) =>
   html += template
@@ -17,11 +17,11 @@ generateHtml = (key, value, depth) =>
     .replace("{type}", key)
     .replace(/\{link\}/g, escape(value))
 
-
 module.exports = (obj) =>
   recursive(key, value, 0)  for key, value of obj
   box = document.createElement("div")
   box.innerHTML = html
   document.querySelector("body").appendChild(box)
-  riot.mount(listTag)
-  
+  riot.mount('list', {
+    testCase
+  })
