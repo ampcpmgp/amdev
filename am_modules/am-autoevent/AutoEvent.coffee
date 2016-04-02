@@ -1,6 +1,4 @@
-doc = document
-doc.$ = doc.querySelector
-$ = doc.$
+$ = (selector) => document.querySelector(selector)
 
 module.exports = class AutoEvent
   register: =>
@@ -14,11 +12,11 @@ module.exports = class AutoEvent
     innerFunc.push(callback)
     @
   setValue: (selector, value) =>
-    @addEvent(=> doc.$(selector)?.value = value)
+    @addEvent(=> $(selector)?.value = value)
   setHtml: (selector, value) =>
-    @addEvent(=> doc.$(selector)?.innerHTML = value)
+    @addEvent(=> $(selector)?.innerHTML = value)
   click: (selector) =>
-    @addEvent(=> doc.$(selector)?.click())
+    @addEvent(=> $(selector)?.click())
   waitEvent: (callback) =>
     @funcs.push(callback)
     @
@@ -34,9 +32,9 @@ module.exports = class AutoEvent
     @waitEvent( =>
       testTimer = setInterval( =>
         if exists
-          if doc.$(selector)? then stopTimer()
+          if $(selector)? then stopTimer()
         else
-          unless doc.$(selector)? then stopTimer()
+          unless $(selector)? then stopTimer()
       , 100)
       )
   _createFuncInWait: () =>
