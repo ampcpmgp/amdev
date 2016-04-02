@@ -1,4 +1,8 @@
 $ = (selector) => document.querySelector(selector)
+trigger = ($dom, eventType) =>
+  event = document.createEvent("HTMLEvents")
+  event.initEvent(eventType, false, true)
+  $dom.dispatchEvent(event)
 
 module.exports = class AutoEvent
   register: =>
@@ -11,8 +15,14 @@ module.exports = class AutoEvent
     innerFunc = @innerFuncs[@funcNum]
     innerFunc.push(callback)
     @
+  selectValue: (selector, value) => #未実装
   setValue: (selector, value) =>
-    @addEvent(=> $(selector)?.value = value)
+    @addEvent(=>
+      $this = $(selector)
+      return unless $this
+      $this.value = value
+      trigger($this, "input")
+    )
   setHtml: (selector, value) =>
     @addEvent(=> $(selector)?.innerHTML = value)
   click: (selector) =>
