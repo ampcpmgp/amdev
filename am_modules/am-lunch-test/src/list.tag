@@ -6,7 +6,7 @@
     <span class="step {bold: !depth}" style="margin-left: {depth * 8}px;">
       {key}:
     </span>
-    <a href="{value}">{value}</a>
+    <a href={value}>{value}</a>
   </div>
   <style>
     .button {
