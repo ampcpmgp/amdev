@@ -1,6 +1,4 @@
-top: "/?ws"
-test:
-  autoevent:
-    test: "?ws&am-autoevent&test"
-    global: "?ws&am-autoevent&global"
-  lunchTest: "?ws&am-lunch-test&params1"
+autoevent:
+  test: "?ws&am-autoevent&test"
+  global: "?ws&am-autoevent&global"
+lunchTest: "?ws&am-lunch-test&params1"
