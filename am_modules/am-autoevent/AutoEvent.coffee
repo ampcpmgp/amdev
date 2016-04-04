@@ -5,6 +5,7 @@ trigger = ($dom, eventType) =>
   $dom.dispatchEvent(event)
 
 module.exports = class AutoEvent
+  timeoutMsec: 10000
   register: =>
     @funcs = []
     @innerFuncs = []
@@ -38,13 +39,19 @@ module.exports = class AutoEvent
     testTimer = null
     stopTimer = =>
       clearInterval(testTimer)
+    executeFunc = =>
+      stopTimer()
       func()
     @waitEvent( =>
+      now = Date.now()
       testTimer = setInterval( =>
+        withInTimeFlg = Date.now() - now < @timeoutMsec
+        console.assert(withInTimeFlg, """timeout for "#{selector}" selector""")
+        return stopTimer() unless withInTimeFlg
         if exists
-          if $(selector)? then stopTimer()
+          if $(selector) then executeFunc()
         else
-          unless $(selector)? then stopTimer()
+          unless $(selector) then executeFunc()
       , 100)
       )
   _createFuncInWait: () =>

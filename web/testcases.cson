@@ -2,4 +2,6 @@ autoevent:
   test: "?am-autoevent&test"
   testNoGen: "?am-autoevent&testNoGen"
   global: "?am-autoevent&global"
+  timeoutErrorIsOK: "?am-autoevent&timeout=1000"
+  timeout: "?am-autoevent&timeout=5000"
 lunchTest: "?am-lunch-test&params1"

@@ -30,5 +30,12 @@ class SampleTest extends Test
     require("am-autoevent/amAutoevent")
     console.assert(window.amAutoEvent)
     console.info("finished")
+  timeout: (ms) =>
+    AutoEvent = AutoEvent::
+    AutoEvent.timeoutMsec = parseInt(ms)
+    AutoEvent.register().waitSelector("box").start()
+    createTimeoutBox = =>
+      $("body").append("<box>box</box>")
+    setTimeout(createTimeoutBox, 3000)
 
 SampleTest::preStart()
