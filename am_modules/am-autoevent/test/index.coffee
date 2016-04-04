@@ -13,11 +13,11 @@ func = (Klass) =>
   ae = new Klass()
   ae.register()
     .click("#test").click("#test")
-    .wait(1500).click("#test").setValue("#input",Date.now())
+    .wait(500).click("#test").setValue("#input",Date.now())
     .wait(200).click("#test2").setValue("#input2",Date.now())
     .wait("300").addEvent(=> console.log("hello"))
     .waitSelector("#test").setHtml("#test", Date.now())
-    .start(3, =>
+    .start(2, =>
       console.log "finished!"
     )
 
@@ -28,6 +28,7 @@ class SampleTest extends Test
     func(AutoEventNoGen)
   global: =>
     require("am-autoevent/amAutoevent")
-    console.log amAutoEvent
+    console.assert(window.amAutoEvent)
+    console.info("finished")
 
 SampleTest::preStart()
