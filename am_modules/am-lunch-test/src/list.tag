@@ -23,13 +23,18 @@
     }
   </style>
   <script type="coffee">
-    openWindowAndTest = ($$a, num) =>
-      url = $$a[num].href
-      testWindow = window.open(url)
-      testWindow.console.assert = (flg, msg) =>
-        console.log flg, msg
+    currentNum = -1
+    openWindow = ($$a, prevWindow) =>
+      prevWindow.close() if prevWindow
+      url = $$a[++currentNum].href
+      return unless url
+      currentWindow = window.open(url)
+      currentWindow.console.assert = (flg, msg) =>
+        openWindow($$a, currentWindow) unless flg
+      currentWindow.console.info = (msg) =>
+        openWindow($$a, currentWindow) if msg is "finished"
     @execute = (e) =>
       $$a = @root.querySelectorAll("a")
-      openWindowAndTest($$a, 0)
+      openWindow($$a)
   </script>
 </list>
