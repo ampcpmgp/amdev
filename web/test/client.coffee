@@ -7,3 +7,5 @@ else
   generate = require("am-lunch-test/generate")
   testcases = require("../testcases.cson")
   generate(testcases)
+  require("./pre-info.tag")
+  riot.mount("pre-info")
