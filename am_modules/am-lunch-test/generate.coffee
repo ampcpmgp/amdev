@@ -1,6 +1,6 @@
 escape = require("escape-html")
 listTag = require("./src/list.tag")
-testCase = []
+testCases = []
 html = ""
 
 recursive = (key, value, depth) =>
@@ -8,7 +8,7 @@ recursive = (key, value, depth) =>
     recursive(key, "", depth)
     recursive(key2, value2, depth + 1) for key2, value2 of value
   else
-    testCase.push({key, value, depth})
+    testCases.push({key, value, depth})
 
 module.exports = (obj) =>
   recursive(key, value, 0)  for key, value of obj
@@ -16,5 +16,5 @@ module.exports = (obj) =>
   box.innerHTML = html
   document.querySelector("body").appendChild(box)
   riot.mount('list', {
-    testCase
+    testCases
   })

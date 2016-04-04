@@ -2,7 +2,7 @@
   <div class="button" onclick="{execute}">
     test
   </div>
-  <div each={opts.testCase}>
+  <div each={opts.testCases}>
     <span class="step {bold: !depth}" style="margin-left: {depth * 8}px;">
       {key}:
     </span>
