@@ -17,6 +17,7 @@
       border-radius: 2px;
       background-color: #eee;
       display: inline-block;
+      cursor: pointer;
     }
     .success { color: blue; }
     .error { color: red; }
