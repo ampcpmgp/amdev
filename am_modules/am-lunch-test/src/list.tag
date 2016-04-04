@@ -1,8 +1,11 @@
 <list>
-  <div class="button" onclick="{execute}">
+  <div class="button" onclick={execute}>
     test
   </div>
   <div each={opts.testCases}>
+    <span class="bold" style="color: {_passedNum/_sum === 1 ? 'blue': 'red'}" if={_passedNum&&_sum}>
+      {_passedNum}/{_sum}
+    </span>
     <span class="step {bold: !depth}" style="margin-left: {depth * 8}px;">
       {key}:
     </span>
@@ -24,17 +27,17 @@
   </style>
   <script type="coffee">
     currentNum = -1
-    openWindow = ($$a, prevWindow) =>
+    @openWindow = (prevWindow) =>
       prevWindow.close() if prevWindow
-      url = $$a[++currentNum].href
-      return unless url
+      return if opts.testCases.length <= ++currentNum
+      currentCase = opts.testCases[currentNum]
+      url = currentCase.value
+      return @openWindow() unless url
       currentWindow = window.open(url)
       currentWindow.console.assert = (flg, msg) =>
-        openWindow($$a, currentWindow) unless flg
+        @openWindow(currentWindow) unless flg
       currentWindow.console.info = (msg) =>
-        openWindow($$a, currentWindow) if msg is "finished"
-    @execute = (e) =>
-      $$a = @root.querySelectorAll("a")
-      openWindow($$a)
+        @openWindow(currentWindow) if msg is "finished"
+    @execute = => @openWindow()
   </script>
 </list>
