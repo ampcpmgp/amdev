@@ -49,7 +49,9 @@
         if msg is "finished"
           currentCase.success = true unless currentCase.error
           openWindow(currentWindow)
-    @execute = => openWindow()
+    @execute = =>
+      currentNum = -1
+      openWindow()
     setTimeout(@execute, 0) if params.test
   </script>
 </list>
