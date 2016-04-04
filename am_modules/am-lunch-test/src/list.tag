@@ -8,7 +8,7 @@
     </span>
     <a href={value}>{value}</a>
   </div>
-  <style>
+  <style scoped>
     .button {
       border: 1px #333 solid;
       border-radius: 2px;
