@@ -25,6 +25,7 @@
   </style>
   <script type="coffee">
     common = require("am-common")
+    params = common::getParams()
     currentNum = -1
     finished = =>
       @update()
@@ -48,5 +49,6 @@
           currentCase.success = true unless currentCase.error
           openWindow(currentWindow)
     @execute = => openWindow()
+    setTimeout(@execute, 0) if params.test
   </script>
 </list>
