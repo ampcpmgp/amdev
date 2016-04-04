@@ -34,6 +34,10 @@
       currentCase = opts.testCases[currentNum]
       url = currentCase.value
       return openWindow() unless url
+      #init
+      delete currentCase.error
+      delete currentCase.success
+      #execute
       currentWindow = window.open(url)
       currentWindow.console.assert = (flg, msg) =>
         unless flg
@@ -41,7 +45,7 @@
           currentCase.error = true
       currentWindow.console.info = (msg) =>
         if msg is "finished"
-          currentCase.success = true
+          currentCase.success = true unless currentCase.error
           openWindow(currentWindow)
     @execute = => openWindow()
   </script>
