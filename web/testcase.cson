@@ -1,4 +1,4 @@
 autoevent:
-  test: "?ws&am-autoevent&test"
-  global: "?ws&am-autoevent&global"
-lunchTest: "?ws&am-lunch-test&params1"
+  test: "?am-autoevent&test"
+  global: "?am-autoevent&global"
+lunchTest: "?am-lunch-test&params1"

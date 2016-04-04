@@ -9,7 +9,7 @@ module.exports = class NodeClient
   params: null
   connectFlag: false
   start: ->
-    if @params.ws then @connect_websocket()
+    @connect_websocket() unless @params._noWs
   connect_websocket: ->
     if Common::ws_port is 8080
       Common::ws_port = 80 unless location.host.match(/^((192|172|10)\.|localhost)/)
