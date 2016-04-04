@@ -1,4 +1,5 @@
 autoevent:
   test: "?am-autoevent&test"
+  testNoGen: "?am-autoevent&testNoGen"
   global: "?am-autoevent&global"
 lunchTest: "?am-lunch-test&params1"
