@@ -18,9 +18,6 @@
     "electron": "electron ./browser/.build/start.js"
   },
   "dependencies": {
-    "babel": "latest",
-    "babel-core": "latest",
-    "babel-loader": "latest",
     "chokidar": "latest",
     "coffee-loader": "latest",
     "coffee-script": "latest",

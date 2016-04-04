@@ -46,8 +46,7 @@ module.exports = class Base
     @browserOption = _.cloneDeep(@baseOption)
     @browserOption.target = "web"
     @browserOption.module.preLoaders = []
-    @browserOption.module.preLoaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
-    @browserOption.module.loaders.push({test: /\.js$|\.tag$/, exclude: /node_modules/, loader: 'babel-loader' })
+    @browserOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
     @browserOption.plugins = [
       new webpack.ProvidePlugin(
         riot: 'riot'
