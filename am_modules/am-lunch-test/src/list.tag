@@ -24,8 +24,8 @@
     .step { margin-right: 10px; }
   </style>
   <script type="coffee">
+    common = require("am-common")
     currentNum = -1
-    console.log @
     finished = =>
       @update()
     openWindow = (prevWindow) =>
@@ -42,7 +42,6 @@
       currentWindow.console.info = (msg) =>
         if msg is "finished"
           currentCase.success = true
-          console.log currentCase
           openWindow(currentWindow)
     @execute = => openWindow()
   </script>

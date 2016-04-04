@@ -1,12 +1,13 @@
 module.exports = class Common
   http_port: 8080
   ws_port: 8080 #50000
-  getParams: (url) ->
-    params = {}
+  params: null
+  getParams: (url = location.href) =>
+    return @params if @params
     url = decodeURI(url) if decodeURI
     query = url.replace(/.*\?(.*)$/, "$1")
-    if url is query then return params
-    else
+    @params = {}
+    unless url is query
       for val in query.split("&")
         param = val.split("=")
         val = param[1]
@@ -14,5 +15,5 @@ module.exports = class Common
           if val.match "," then val = val.split ","
         else
           val = true
-        params[param[0]] = val
-      params
+        @params[param[0]] = val
+    @params
