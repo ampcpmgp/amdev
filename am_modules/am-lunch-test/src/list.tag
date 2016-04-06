@@ -43,6 +43,8 @@
       currentWindow = window.open(url)
       currentWindow.console.assert = (flg, msg) =>
         unless flg
+          # TODO: UIに組み込む
+          console.error(msg) if msg
           openWindow(currentWindow)
           currentCase.error = true
       currentWindow.console.info = (msg) =>
