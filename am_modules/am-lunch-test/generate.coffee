@@ -1,5 +1,6 @@
 escape = require("escape-html")
-listTag = require("./src/list.tag")
+require("./src/list.tag")
+require("./src/test-iframe.tag")
 testCases = []
 html = ""
 
@@ -15,6 +16,5 @@ module.exports = (obj) =>
   box = document.createElement("div")
   box.innerHTML = html
   document.querySelector("body").appendChild(box)
-  riot.mount('list', {
-    testCases
-  })
+  riot.mount("list", {testCases})
+  riot.mount("test-iframe")

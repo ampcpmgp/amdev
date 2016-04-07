@@ -11,6 +11,7 @@
     </span>
     <a if={value} href={value}>{value}</a>
   </div>
+  <test-iframe if={onExecute}></test-iframe>
   <style scoped>
     .button {
       border: 1px #333 solid;
@@ -26,34 +27,40 @@
   </style>
   <script type="coffee">
     common = require("am-common")
+    @onExecute = false
+    testIFrame = this.tags["test-iframe"]
     params = common::getParams()
     currentNum = -1
     finished = =>
       @update()
-    openWindow = (prevWindow) =>
-      prevWindow.close() if prevWindow
+    openIframe = (prevIframeWindow) =>
+      if prevIframeWindow
+        @onExecute = false
+        @update()
       return finished() if opts.testCases.length <= ++currentNum
       currentCase = opts.testCases[currentNum]
       url = currentCase.value
-      return openWindow() unless url
+      return openIframe() unless url
       #init
       delete currentCase.error
       delete currentCase.success
       #execute
-      currentWindow = window.open(url)
-      currentWindow.console.assert = (flg, msg) =>
+      @onExecute = true
+      testIFrame.url = url
+      @update()
+      currentIFrameWindow = testIFrame.root.querySelector("iframe").contentWindow
+      currentIFrameWindow.console.assert = (flg, msg) =>
         unless flg
           # TODO: UIに組み込む
-          console.error(msg) if msg
-          openWindow(currentWindow)
+          openIframe(currentIFrameWindow)
           currentCase.error = true
-      currentWindow.console.info = (msg) =>
+      currentIFrameWindow.console.info = (msg) =>
         if msg is "finished"
           currentCase.success = true unless currentCase.error
-          openWindow(currentWindow)
+          openIframe(currentIFrameWindow)
     @execute = =>
       currentNum = -1
-      openWindow()
+      openIframe()
     setTimeout(@execute, 0) if params.test
   </script>
 </list>
