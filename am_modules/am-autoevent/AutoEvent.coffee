@@ -16,18 +16,19 @@ module.exports = class AutoEvent
     innerFunc = @innerFuncs[@funcNum]
     innerFunc.push(callback)
     @
+  addSelectorEvent: ($this, msg, callback) =>
+    return console.assert($this, msg) unless $this
+    @addEvent(callback)
   selectValue: (selector, value) => #未実装
   setValue: (selector, value) =>
-    @addEvent(=>
-      $this = $(selector)
-      return unless $this
+    @addSelectorEvent($this = $(selector), "#{selector} can't set value", =>
       $this.value = value
       trigger($this, "input")
     )
-  setHtml: (selector, value) =>
-    @addEvent(=> $(selector)?.innerHTML = value)
+  setHtml: (selector, html) =>
+    @addSelectorEvent($this = $(selector), "#{selector} can't set html", => $this.innerHTML = html)
   click: (selector) =>
-    @addEvent(=> $(selector)?.click())
+    @addSelectorEvent($this = $(selector), "#{selector} can't click", => $this.click())
   waitEvent: (callback) =>
     @funcs.push(callback)
     @
