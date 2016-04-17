@@ -1,0 +1,12 @@
+{
+  "name": "am-module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "module name",
+  "scripts": {
+    "test": "echo error?"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}
