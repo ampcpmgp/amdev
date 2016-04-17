@@ -7,7 +7,7 @@ mime = require('mime')
 
 module.exports = class NodeParts extends Common
   #config
-  web_dir:  [
+  webDir:  [
     "./web"
     "./node_modules"
     "./node_modules/am-deven/web"
@@ -23,7 +23,7 @@ module.exports = class NodeParts extends Common
     setTimeout(listen, 0)
     @wsStart()
   _checkExistsFile: (file) ->
-    for dir in @web_dir
+    for dir in @webDir
       path = "#{dir}#{file}"
       if  fs.existsSync(path)
         return path if fs.lstatSync(path).isFile()
