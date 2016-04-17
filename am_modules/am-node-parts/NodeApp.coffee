@@ -6,7 +6,6 @@ https = require("https")
 fs = require("fs")
 Client = require('ftp')
 readline = require("readline")
-isjs = require("is_js")
 
 module.exports = class @NodeApp extends Funcs
   ### class ###

@@ -30,7 +30,6 @@
     "fs-extra": "latest",
     "ftp": "latest",
     "html-loader": "latest",
-    "is_js": "latest",
     "jquery": "latest",
     "json-loader": "latest",
     "lodash": "latest",

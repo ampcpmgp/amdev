@@ -1,5 +1,4 @@
 fs = require("fs")
-isjs = require("is_js")
 
 module.exports = class Funcs
   #about dir tree event
