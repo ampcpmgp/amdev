@@ -8,16 +8,16 @@ module.exports = class NodeClient
   domain: location.host.replace(/:.*/, "")
   params: null
   connectFlag: false
-  start: ->
+  start: (@wsPort = 8080) ->
     @connect_websocket() unless @params._noWs
   connect_websocket: ->
-    if Common::ws_port is 8080
-      Common::ws_port = 80 unless location.host.match(/^((192|172|10)\.|localhost)/)
+    if @wsPort is 8080
+      @wsPort = 80 unless location.host.match(/^((192|172|10)\.|localhost)/)
     protocol = if location.href.match(/^https/) then "wss" else "ws"
-    if Common::ws_port is 80
+    if @wsPort is 80
       @ws_url = "#{protocol}://#{@domain}"
     else
-      @ws_url = "#{protocol}://#{@domain}:#{Common::ws_port}"
+      @ws_url = "#{protocol}://#{@domain}:#{@wsPort}"
     @ws = io(@ws_url)
     @ws.on "connect", =>
       return @reload() if @connectFlag

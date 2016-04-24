@@ -1,6 +1,4 @@
 module.exports = class Common
-  http_port: 8080
-  ws_port: 8080 #50000
   params: null
   getParams: (url = location.href) =>
     return @params if @params

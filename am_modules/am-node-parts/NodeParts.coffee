@@ -1,11 +1,11 @@
-Common = require("am-common/Common")
+Common = require("am-common")
 
 fs = require("fs")
 http = require("http")
 sio = require('socket.io')
 mime = require('mime')
 
-module.exports = class NodeParts extends Common
+module.exports = class NodeParts
   #config
   webDir:  [
     "./web"
@@ -16,9 +16,9 @@ module.exports = class NodeParts extends Common
   #module
   #info
   reload_list: []
-  start: ->
+  start: (@httpPort = 8080, @wsPort = @httpPort) ->
     @app = http.createServer((req, res) => @httpServerAction(req, res))
-    listen = => @app.listen(@http_port)
+    listen = => @app.listen(@httpPort)
     # TODO: reload時に前プロセスが残りportエラーで引っかかったのを解消。よりスマートに
     setTimeout(listen, 0)
     @wsStart()
@@ -39,7 +39,7 @@ module.exports = class NodeParts extends Common
   httpServerAction: (req, res) ->
     #initial
     url = req.url.replace(/\/{2,}/, "/")
-    params = @getParams url
+    params = Common::getParams(url)
     url = url.replace(/\?.*$/, "")
     if url[url.length-1] is "/" then url += "index.html"
     ###get file###
@@ -58,10 +58,10 @@ module.exports = class NodeParts extends Common
       date = new Date().toLocaleTimeString()
       console.log "#{date} #{ip} #{path}"
   wsStart: ->
-    if @ws_port is @http_port
+    if @wsPort is @httpPort
       @websocket = sio(@app)
     else
-      @websocket = sio(@ws_port)
+      @websocket = sio(@wsPort)
     @websocket.on("connection", (socket) =>
       @reload_list.push(socket)
       socket.on("test", @wsEventTest)
