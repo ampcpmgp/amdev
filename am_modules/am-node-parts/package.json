@@ -1,6 +1,6 @@
 {
   "name": "am-node-parts",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "node parts",
   "main": "NodeParts",
   "scripts": {
