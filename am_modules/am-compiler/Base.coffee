@@ -38,6 +38,7 @@ module.exports = class Base
       "browser/.build/start": "./browser/test/start.coffee"
       "app/.build/preload": "./app/test/preload.coffee"
       "app/.build/electron": "./app/test/electron.coffee"
+    @electronOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
     @nodeOption = _.cloneDeep(@baseOption)
     @nodeOption.target = "node"
     @nodeOption.externals = @nodeModules
