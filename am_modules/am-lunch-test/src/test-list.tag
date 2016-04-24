@@ -1,4 +1,4 @@
-<list>
+<test-list>
   <div class="button" onclick={execute}>
     test
   </div>
@@ -63,4 +63,4 @@
       openIframe()
     setTimeout(@execute, 0) if params.test
   </script>
-</list>
+</test-list>

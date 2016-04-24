@@ -5,7 +5,7 @@ Test development using the parameters
 
 testListPage.html
 ```html
-<list></list>
+<test-list></test-list>
 <script src="./testListPage.js">
 ```
 
