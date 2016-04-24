@@ -47,11 +47,6 @@ module.exports = class Base
     @browserOption.target = "web"
     @browserOption.module.preLoaders = []
     @browserOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
-    @browserOption.plugins = [
-      new webpack.ProvidePlugin(
-        riot: 'riot'
-      )
-    ]
     @browserOption.entry =
       "web/.build/client": "./web/test/client.coffee"
   compile: =>

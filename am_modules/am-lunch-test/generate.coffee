@@ -1,3 +1,4 @@
+window.riot = require("riot")
 escape = require("escape-html")
 require("./src/list.tag")
 require("./src/test-iframe.tag")
