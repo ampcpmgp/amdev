@@ -9,9 +9,6 @@ module.exports = class NodeParts
   #config
   webDir:  [
     "./web"
-    "./node_modules"
-    "./node_modules/am-deven/web"
-    "./node_modules/am-deven/node_modules"
   ]
   #module
   #info
