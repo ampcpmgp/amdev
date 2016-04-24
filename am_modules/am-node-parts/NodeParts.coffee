@@ -15,7 +15,7 @@ module.exports = class NodeParts
   ]
   #module
   #info
-  reload_list: []
+  reloadList: []
   start: (@httpPort = 8080, @wsPort = @httpPort) ->
     @app = http.createServer((req, res) => @httpServerAction(req, res))
     listen = => @app.listen(@httpPort)
@@ -63,7 +63,7 @@ module.exports = class NodeParts
     else
       @websocket = sio(@wsPort)
     @websocket.on("connection", (socket) =>
-      @reload_list.push(socket)
+      @reloadList.push(socket)
       socket.on("test", @wsEventTest)
     )
     @wsEventReload()
@@ -72,7 +72,7 @@ module.exports = class NodeParts
   wsEventReload: =>
     _watcherCallback = =>
       @checkReloadList()
-      @sendReloadEvent(socket) for socket in @reload_list
+      @sendReloadEvent(socket) for socket in @reloadList
     fs.watch("./web/index.html", (event, name) ->
       _watcherCallback()
       )
@@ -83,7 +83,7 @@ module.exports = class NodeParts
   sendCssReloadEvent: (socket,filepath) -> socket.emit("css reload", fs.readFileSync(filepath, {encoding:"utf-8"}))
   checkReloadList: =>
     arr = []
-    for socket, i in @reload_list
+    for socket, i in @reloadList
       if socket.disconnected then arr.unshift(i)
     for num in arr
-      @reload_list.splice(num, 1)
+      @reloadList.splice(num, 1)
