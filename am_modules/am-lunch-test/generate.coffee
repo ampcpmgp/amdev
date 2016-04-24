@@ -14,8 +14,5 @@ recursive = (key, value, depth) =>
 
 module.exports = (obj) =>
   recursive(key, value, 0)  for key, value of obj
-  box = document.createElement("div")
-  box.innerHTML = html
-  document.querySelector("body").appendChild(box)
   riot.mount("list", {testCases})
   riot.mount("test-iframe")
