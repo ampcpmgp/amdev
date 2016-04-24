@@ -9,21 +9,21 @@ module.exports = class ElectronApp
   constructor: ->
   start: ->
     @init()
-    @live_reload()
+    @liveReload()
   ### 信頼しているメソッドなるべくフロー順 ###
   init: ->
-    if @_inspector then @auto_inspector()
+    if @_inspector then @autoInspector()
     ipcRenderer.on("browser send msg",(event, msg) ->
       console.log("%cfrom Browser, %c#{msg}", "color: gray", "color: blue")
     )
-  auto_inspector: ->
+  autoInspector: ->
     $(document).on "mousedown", (e) ->
       if e.button is 2
         obj =
           x: e.clientX
           y: e.clientY
         ipcRenderer.send('inspect element', obj, "mainWindow")
-  live_reload: ->
+  liveReload: ->
     chokidar
       .watch(["./app/.build/", "./app/index.html"])
       .on("change", (path) =>
