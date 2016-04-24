@@ -4,6 +4,7 @@ fs = require("fs")
 http = require("http")
 sio = require('socket.io')
 mime = require('mime')
+chokidar = require('chokidar')
 
 module.exports = class NodeParts
   #config
@@ -70,10 +71,7 @@ module.exports = class NodeParts
     _watcherCallback = =>
       @checkReloadList()
       @sendReloadEvent(socket) for socket in @reloadList
-    fs.watch("./web/index.html", (event, name) ->
-      _watcherCallback()
-      )
-    fs.watch("./web/.build/client.js", (event, name) ->
+    chokidar.watch(["./web/index.html", "./web/.build/client.js"]).on("change", (path) ->
       _watcherCallback()
       )
   sendReloadEvent: (socket) -> socket.emit("reload")

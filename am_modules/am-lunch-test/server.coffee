@@ -1,1 +1,2 @@
-Common = require("am-node-parts")
+SimpleServer = require("am-simple-server")
+# SimpleServer::start(8081)
