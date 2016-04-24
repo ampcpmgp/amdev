@@ -1,0 +1,14 @@
+{
+  "name": "am-simple-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "SimpleServer",
+  "scripts": {
+    "test": "echo error?"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mime": "latest"
+  }
+}

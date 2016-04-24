@@ -5,7 +5,7 @@ http = require("http")
 sio = require('socket.io')
 mime = require('mime')
 
-module.exports = class SimpleServer
+module.exports = class NodeParts
   #config
   webDir:  [
     "./web"
