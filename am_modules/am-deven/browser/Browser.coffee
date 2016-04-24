@@ -82,6 +82,12 @@ module.exports = class Browser
         fs.writeFileSync(@configCson, csonString)
         mainWindow = null
       )
+      mainWindow.on('app-command', (e, cmd) =>
+        if (cmd is 'browser-backward' and mainWindow.webContents.canGoBack())
+          mainWindow.webContents.goBack()
+        else if (cmd is 'browser-forward' and mainWindow.webContents.canGoForward())
+          mainWindow.webContents.goForward()
+        )
       # TODO: コンパイラはelectronに寄せたい
       # @startCompiler()
     )
