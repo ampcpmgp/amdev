@@ -9,8 +9,8 @@ module.exports = class WSClient
   domain: location.hostname.replace(/:.*/, "")
   connectFlag: false
   start: (@wsPort = 8080) ->
-    @connect_websocket() unless @params._noWs
-  connect_websocket: ->
+    @connectWebsocket() unless @params._noWs
+  connectWebsocket: ->
     if @wsPort is 8080
       @wsPort = 80 unless location.host.match(/^((192|172|10)\.|localhost)/)
     protocol = if location.protocol.match(/https:/) then "wss" else "ws"
