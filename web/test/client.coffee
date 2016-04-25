@@ -1,5 +1,4 @@
 WSClient = require("am-simple-server/WSClient")
-require("../client")
 
 if WSClient::params["am-autoevent"] then require("am-autoevent/test")
 else if WSClient::params["am-lunch-test"] then require("am-lunch-test/test/index")
@@ -10,3 +9,5 @@ else
   generate(testcases)
   require("./pre-info.tag")
   riot.mount("pre-info")
+
+require("../client")

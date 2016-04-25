@@ -8,6 +8,8 @@ module.exports = class WSClient
   params: Common::getParams(location.href)
   domain: location.hostname.replace(/:.*/, "")
   connectFlag: false
+  constructor: ->
+    @connectFlag = false
   start: (@wsPort = 8080) ->
     @connectWebsocket() unless @params._noWs
   connectWebsocket: ->
