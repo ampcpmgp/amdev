@@ -1,2 +1,1 @@
-WSClient = require("am-simple-server/WSClient")
-WSClient::start()
+require("am-template/coffee/web/client.coffee")
