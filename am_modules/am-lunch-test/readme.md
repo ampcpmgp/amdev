@@ -42,16 +42,15 @@ else location.search is "?click2"
 ```
 
 #### use am-autoevent
-```js
+```coffee
 Test = require("am-lunch-test")
 class NewTest extends Test
   api2: =>
     console.assert("api successed")
   newApi: (numStr) =>
-    let num = parseInt(numStr)
+    num = parseInt(numStr)
     console.assert(num)
     console.info("finished")
 
-nt = new NewTest()
-nt.preStart();
+NewTest::preStart()
 ```
