@@ -1,4 +1,2 @@
-NodeClient = require("am-deven/web/NodeClient")
-NodeClient::start()
-
-# window.nc = nc
+WSClient = require("am-simple-server/WSClient")
+WSClient::start()
