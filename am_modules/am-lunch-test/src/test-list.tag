@@ -52,8 +52,8 @@
       currentIFrameWindow.console.assert = (flg, msg) =>
         unless flg
           # TODO: UIに組み込む
-          openIframe(currentIFrameWindow)
           currentCase.error = true
+          openIframe(currentIFrameWindow)
       currentIFrameWindow.console.info = (msg) =>
         if msg is "finished"
           currentCase.success = true unless currentCase.error
