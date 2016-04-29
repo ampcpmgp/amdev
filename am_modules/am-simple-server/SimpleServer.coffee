@@ -23,16 +23,7 @@ module.exports = class NodeParts
   _checkExistsFile: (file) ->
     for dir in @webDir
       path = "#{dir}#{file}"
-      if  fs.existsSync(path)
-        return path if fs.lstatSync(path).isFile()
-        #node modules directory
-        json = fs.readFileSync(path + "/package.json", {encoding: "utf-8"})
-        obj = JSON.parse(json)
-        file = obj.main
-        file = file + "index.js" if file.match(/\/$/)
-        file.replace(/^\.\//, "")
-        file += ".js" unless file.match(/\.js$/)
-        return path + "/" + file
+      return path if fs.existsSync(path) and fs.lstatSync(path).isFile()
     return false
   httpServerAction: (req, res) ->
     #initial
