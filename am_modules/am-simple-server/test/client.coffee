@@ -9,6 +9,6 @@ class NewTest extends Test
       console.info("finished")
     )
     timeout = => console.assert(false, "websocket timeout")
-    setTimeout(timeout, 10000)
+    setTimeout(timeout, 5000)
 
 NewTest::preStart()
