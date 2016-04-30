@@ -22,15 +22,14 @@ module.exports = class WSClient
       @wsUrl = "#{protocol}://#{@domain}:#{@wsPort}"
     @ws = io(@wsUrl)
     @ws.on "connect", =>
-      # TODO: クラ/サバ同時リロードの時に、サーバー起動前に再読み込みするケースを回避。よりスマートな方法を。
-      reload = => @reload()
-      return setTimeout(reload, 10) if @connectFlag
+      return @reload() if @connectFlag
       @connectFlag = true
       console.info("websocket connected")
       if @params.g then @ws.emit("g", (if typeof(@params.g) is "object" then @params.g else [@params.g]))
       if @params.all then @ws.emit("all")
       @ws.on("reload", => @reload())
-      @ws.on("css reload", (css) -> $("body").append("<style type=\"text/css\">#{css}</style>"))
-      @ws.on("test", (msg) -> console.log msg)
-      @ws.on("disconnect", -> console.info("websocket server disconnected"))
-  reload: -> location.reload()
+      @ws.on("css reload", (css) => $("body").append("<style type=\"text/css\">#{css}</style>"))
+      @ws.on("test", (msg) => console.log msg)
+      @ws.on("disconnect", => console.info("websocket server disconnected"))
+  reload: =>
+    location.reload()
