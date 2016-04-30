@@ -1,6 +1,6 @@
 {
   "name": "am-common",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "for use server and client",
   "main": "Common",
   "scripts": {
