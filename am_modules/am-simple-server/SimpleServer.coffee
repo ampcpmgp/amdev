@@ -57,11 +57,9 @@ module.exports = class NodeParts
       @websocket = sio(@wsPort)
     @websocket.on("connection", (socket) =>
       @reloadList.push(socket)
-      socket.on("test", @wsEventTest)
+      socket.on("test", (msg) => console.log msg)
     )
     @wsEventReload()
-  wsEventTest: (msg) =>
-    console.log msg
   wsEventReload: =>
     _watcherCallback = =>
       @checkReloadList()
