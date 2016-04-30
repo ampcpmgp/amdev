@@ -22,7 +22,9 @@ module.exports = class WSClient
       @wsUrl = "#{protocol}://#{@domain}:#{@wsPort}"
     @ws = io(@wsUrl)
     @ws.on "connect", =>
-      return @reload() if @connectFlag
+      # TODO: クラ/サバ同時リロードの時に、サーバー起動前に再読み込みするケースを回避。よりスマートな方法を。
+      reload = => @reload()
+      return setTimeout(reload, 10) if @connectFlag
       @connectFlag = true
       console.info("websocket connected")
       if @params.g then @ws.emit("g", (if typeof(@params.g) is "object" then @params.g else [@params.g]))
