@@ -1,28 +1,27 @@
 fs = require("fs")
-isjs = require("is_js")
 
 module.exports = class Funcs
   #about dir tree event
-  ignore_regexp: /(\/node_modules\/(?!am-).+\/node_modules\/)|(\/\.[^\/]+\/)/
-  check_dir_tree: (dir, pattern, callback) =>
+  ignoreRegexp: /(\/node_modules\/(?!am-).+\/node_modules\/)|(\/\.[^\/]+\/)/
+  checkDirTree: (dir, pattern, callback) =>
     files = fs.readdirSync(dir)
     for file in files
       loc = "#{dir}#{file}"
-      if loc.match(@ignore_regexp) then continue
+      if loc.match(@ignoreRegexp) then continue
       if fs.lstatSync(loc).isDirectory()
-        @check_dir_tree("#{loc}/", pattern, callback)
+        @checkDirTree("#{loc}/", pattern, callback)
       else
         unless loc.match(pattern) then continue
         callback(loc, file)
-  watch_dir_tree: (dir, pattern, callback) =>
+  watchDirTree: (dir, pattern, callback) =>
     files = fs.readdirSync(dir)
     for file in files
       loc = "#{dir}#{file}"
-      if loc.match(@ignore_regexp) then continue
+      if loc.match(@ignoreRegexp) then continue
       if fs.lstatSync(loc).isDirectory()
         do (dir = "#{loc}/" ) =>
-          @watch_dir_tree(dir, pattern, callback)
-          if @_pattern_check(dir, pattern)
+          @watchDirTree(dir, pattern, callback)
+          if @_patternCheck(dir, pattern)
             __eventname = ""
             __filename = ""
             __time = 0
@@ -35,7 +34,7 @@ module.exports = class Funcs
               __filename = filename
               callback(dir, eventname, filename)
               )
-  _pattern_check: (word, pattern) ->
+  _patternCheck: (word, pattern) ->
     if isjs.array(pattern)
       return true for regex in pattern when word.match(regex)
     else

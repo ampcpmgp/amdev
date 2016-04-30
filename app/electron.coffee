@@ -9,7 +9,7 @@ $(restart).on("click", (e) -> require("ipc").send("restart"))
 do -> #upload npm
   browserModules =
     "am-autoevent": true
-    "am-test": true
+    "am-lunch-test": true
   modules = fs.readdirSync("./am_modules/")
   $box = $(".npm-update-box")
   $button = $(npmUpdateButton.content).find("button")
@@ -23,7 +23,7 @@ do -> #upload npm
       $fragment.append($button)
     $box.append($fragment)
   window.npmPublish = (uploadModules = modules) ->
-    command = "coffee -c ./ &&"
+    command = "coffee -c ./"
     console.log "npm upload start - #{uploadModules}"
     for module in uploadModules
       dir = "./am_modules/#{module}"

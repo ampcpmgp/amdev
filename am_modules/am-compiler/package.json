@@ -1,6 +1,6 @@
 {
   "name": "am-compiler",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "compiler",
   "main": "Base",
   "scripts": {
@@ -12,6 +12,7 @@
     "coffee-loader": "latest",
     "cson-loader": "latest",
     "html-loader": "latest",
+    "json-loader": "latest",
     "webpack": "2.0.2-beta"
   }
 }

@@ -1,8 +1,0 @@
-top: "/?ws"
-test:
-  default: "/test"
-  autoevent:
-    default: "am-autoevent.html?ws"
-    test: "&test"
-    global: "&global"
-  test: "am-test.html?ws"

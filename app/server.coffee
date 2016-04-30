@@ -1,4 +1,3 @@
-np = new (require("am-node-parts"))
-np.start()
-
-GitHubAPI = require("./src/GitHubAPI")
+require("am-template/coffee/app/server")
+# TODO: am_modulesにやっぱり移す
+# GitHubAPI = require("./src/GitHubAPI").prototype

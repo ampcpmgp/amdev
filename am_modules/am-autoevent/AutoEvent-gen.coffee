@@ -8,7 +8,7 @@ module.exports = class AutoEvent extends AutoEventBase
       i = -1
       while (@funcs[++i])
         yield @funcs[i]()
-    callback() if typeof callback is "function"
+    callback()
   start: (loopNum = 1, callback) =>
-    @gen = @contoller(loopNum, callback)
+    @gen = @contoller(loopNum, @setCallback(callback))
     @gen.next()

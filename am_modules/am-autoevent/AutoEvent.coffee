@@ -1,8 +1,11 @@
-doc = document
-doc.$ = doc.querySelector
-$ = doc.$
+$ = (selector) => document.querySelector(selector)
+trigger = ($dom, eventType) =>
+  event = document.createEvent("HTMLEvents")
+  event.initEvent(eventType, false, true)
+  $dom.dispatchEvent(event)
 
 module.exports = class AutoEvent
+  timeoutMsec: 10000
   register: =>
     @funcs = []
     @innerFuncs = []
@@ -13,12 +16,19 @@ module.exports = class AutoEvent
     innerFunc = @innerFuncs[@funcNum]
     innerFunc.push(callback)
     @
+  addSelectorEvent: ($this, msg, callback) =>
+    return console.assert($this, msg) unless $this
+    @addEvent(callback)
+  selectValue: (selector, value) => #未実装
   setValue: (selector, value) =>
-    @addEvent(=> doc.$(selector)?.value = value)
-  setHtml: (selector, value) =>
-    @addEvent(=> doc.$(selector)?.innerHTML = value)
+    @addSelectorEvent($this = $(selector), "#{selector} can't set value", =>
+      $this.value = value
+      trigger($this, "input")
+    )
+  setHtml: (selector, html) =>
+    @addSelectorEvent($this = $(selector), "#{selector} can't set html", => $this.innerHTML = html)
   click: (selector) =>
-    @addEvent(=> doc.$(selector)?.click())
+    @addSelectorEvent($this = $(selector), "#{selector} can't click", => $this.click())
   waitEvent: (callback) =>
     @funcs.push(callback)
     @
@@ -30,16 +40,28 @@ module.exports = class AutoEvent
     testTimer = null
     stopTimer = =>
       clearInterval(testTimer)
+    executeFunc = =>
+      stopTimer()
       func()
     @waitEvent( =>
+      now = Date.now()
       testTimer = setInterval( =>
+        withInTimeFlg = Date.now() - now < @timeoutMsec
+        console.assert(withInTimeFlg, """timeout for "#{selector}" selector""")
+        return stopTimer() unless withInTimeFlg
         if exists
-          if doc.$(selector)? then stopTimer()
+          if $(selector) then executeFunc()
         else
-          unless doc.$(selector)? then stopTimer()
+          unless $(selector) then executeFunc()
       , 100)
       )
   _createFuncInWait: () =>
     funcNum = ++@funcNum
     innerFunc = @innerFuncs[funcNum] = []
     => func() for func in innerFunc
+  setCallback: (callback) =>
+    func = =>
+      callback() if typeof callback is "function"
+      @end()
+  end: =>
+    console.info("finished")

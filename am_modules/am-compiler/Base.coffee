@@ -2,7 +2,7 @@ fs =require("fs")
 fse = require("fs-extra")
 path = require("path")
 webpack = require("webpack")
-_ = require("underscore")
+_ = require("lodash")
 
 module.exports = class Base
   nodeModules: {}
@@ -14,8 +14,9 @@ module.exports = class Base
     module:
       loaders: [
         {test: /\.coffee$/, loader: "coffee"}
-        {test: /\.cson$/, loader: "cson"}
+        {test: /\.cson$/, loader: "cson-loader"}
         {test: /\.html$/, loader: "html"}
+        {test: /\.json$/, loader: "json"}
       ]
     devtool: "cheap-module-eval-source-map"
     resolve:
@@ -29,6 +30,26 @@ module.exports = class Base
         ).forEach((mod) =>
           @nodeModules[mod] = 'commonjs ' + mod
           )
+  config: =>
+    @electronOption = _.cloneDeep(@baseOption)
+    @electronOption.target = "atom"
+    @electronOption.externals = @nodeModules
+    @electronOption.entry =
+      "browser/.build/start": "./browser/test/start.coffee"
+      "app/.build/preload": "./app/test/preload.coffee"
+      "app/.build/electron": "./app/test/electron.coffee"
+    @electronOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
+    @nodeOption = _.cloneDeep(@baseOption)
+    @nodeOption.target = "node"
+    @nodeOption.externals = @nodeModules
+    @nodeOption.entry =
+      "app/.build/server": "./app/test/server.coffee"
+    @browserOption = _.cloneDeep(@baseOption)
+    @browserOption.target = "web"
+    @browserOption.module.preLoaders = []
+    @browserOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
+    @browserOption.entry =
+      "web/.build/client": "./web/test/client.coffee"
   compile: =>
     @electronStart = =>
     @init()
@@ -42,34 +63,17 @@ module.exports = class Base
     @electronCompiler = webpack(@electronOption).watch({}, (err, stats) => @callback(err,stats))
     @nodeCompiler = webpack(@nodeOption).watch({}, (err, stats) => @callback(err,stats))
     @browserCompiler = webpack(@browserOption).watch({}, (err, stats) => @callback(err,stats))
-  config: => #am-devenでの設定
-    @electronOption = _.clone(@baseOption)
-    @electronOption.target = "atom"
-    @electronOption.externals = @nodeModules
-    @electronOption.entry =
-      "browser/.build/start": "./browser/start.coffee"
-      "app/.build/preload": "./app/preload.coffee"
-      "app/.build/electron": "./app/electron.coffee"
-    @nodeOption = _.clone(@baseOption)
-    @nodeOption.target = "node"
-    @nodeOption.externals = @nodeModules
-    @nodeOption.entry =
-      "app/.build/server": "./app/server.coffee"
-    @browserOption = _.clone(@baseOption)
-    @browserOption.target = "web"
-    @browserOption.entry =
-      "web/.build/client": "./web/client.coffee"
-  compileModule: (dir, callback) =>
+  compileModule: (dir, callback) => #am-devenでの設定
     @config()
-    modulesDirectories = JSON.parse(JSON.stringify(@browserOption.resolve.modulesDirectories))
+    option = _.cloneDeep(@browserOption)
     moduleDir = "am_modules/#{dir}"
-    modulesDirectories.unshift("#{moduleDir}/node_modules")
-    @browserOption.resolve.modulesDirectories = modulesDirectories
+    option.resolve.modulesDirectories.unshift("#{moduleDir}/node_modules")
     files = fs.readdirSync("#{moduleDir}")
-    @browserOption.entry = {}
+    option.entry = {}
     coffeeFiles = (file for file in files when file.match(/\.coffee$/))
-    @browserOption.entry["#{moduleDir}/#{coffeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeFile}" for coffeFile in coffeeFiles
-    webpack(@browserOption).run(=> callback())
+    option.entry["#{moduleDir}/#{coffeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeFile}" for coffeFile in coffeeFiles
+    delete option.devtool
+    webpack(option).run(=> callback())
   electronStart: =>
     cmd = fse.readJsonSync("package.json").scripts.electron
     require("child_process").exec(cmd)

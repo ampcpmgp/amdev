@@ -1,8 +1,8 @@
 {
   "name": "am-node-parts",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "node parts",
-  "main": "NodeApp",
+  "main": "NodeParts",
   "scripts": {
     "test": "echo error?"
   },
@@ -11,7 +11,6 @@
   "dependencies": {
     "ftp": "latest",
     "mime": "latest",
-    "is_js": "latest",
     "socket.io": "latest"
   }
 }
