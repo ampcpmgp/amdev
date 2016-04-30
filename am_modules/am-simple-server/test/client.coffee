@@ -12,6 +12,6 @@ class NewTest extends Test
       console.info("finished")
     )
     timeout = => console.assert(false, "websocket timeout") unless connectFlag
-    setTimeout(timeout, 5000)
+    setTimeout(timeout, 1500)
 
 NewTest::preStart()

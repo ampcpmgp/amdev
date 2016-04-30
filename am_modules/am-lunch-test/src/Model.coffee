@@ -6,7 +6,12 @@ module.exports = class Model
     execute = () => @execute()
     setTimeout(execute, 0) if @params.auto or location.hash
   execute: =>
+    @hashRegex = location.hash.replace(/^#/, "")
+    @hashRegex = "^#{@hashRegex}(\/|$)" if @hashRegex
     @currentNum = -1
+    for testCase in @opts.testCases
+      testCase.error = null
+      testCase.success = null
     @openIframe()
   openIframe: (prevIframeWindow) =>
     if prevIframeWindow
@@ -16,10 +21,7 @@ module.exports = class Model
     currentCase = @opts.testCases[@currentNum]
     #
     url = currentCase.value
-    return @openIframe() unless url
-    #init
-    delete currentCase.error
-    delete currentCase.success
+    return @openIframe() if not url or not (new RegExp(@hashRegex)).test(currentCase.pageLink)
     #execute
     @me.onExecute = true
     @iframe.url = url

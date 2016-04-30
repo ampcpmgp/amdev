@@ -33,5 +33,7 @@
     @execute = => @Model.execute()
     #mount
     @on("mount", => @Model.check())
+    riot.route("..", => @Model.execute())
+    riot.route.start()
   </script>
 </test-list>
