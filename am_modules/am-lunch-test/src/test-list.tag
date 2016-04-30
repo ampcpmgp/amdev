@@ -1,29 +1,24 @@
 <test-list>
-  <div class="button" onclick={execute}>
+  <button onclick={execute}>
     test
-  </div>
+  </button>
   <div each={opts.testCases}>
-    <span class="step {bold: !depth}" style="margin-left: {depth * 8}px;">
+    <a href={"#"+ pageLink} class="step {bold: !depth}" style="margin-left: {depth * 8}px;">
       <span class="bold {success: success, error: error}" if={success||error}>
         {success ? "〇" : error ? "×" : ""}
       </span>
       {key}:
-    </span>
+    </a>
     <a if={value} href={value}>{value}</a>
   </div>
   <test-iframe if={onExecute}></test-iframe>
   <style scoped>
-    .button {
-      border: 1px #333 solid;
-      border-radius: 2px;
-      background-color: #eee;
-      display: inline-block;
-      cursor: pointer;
-    }
+    a { color: blue; text-decoration: none; }
+    a:hover { opacity: 0.6;}
     .success { color: blue; }
     .error { color: red; }
     .bold { font-weight: bold; }
-    .step { margin-right: 10px; }
+    .step { color: #333; margin-right: 10px; }
   </style>
   <script type="coffee">
     common = require("am-common")
