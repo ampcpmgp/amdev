@@ -2,6 +2,7 @@
   <button onclick={execute}>
     test
   </button>
+  <a href="./">./</a>
   <div each={opts.testCases}>
     <a href={"#"+ pageLink} class="step {bold: !depth}" style="margin-left: {depth * 8}px;">
       <span class="bold {success: success, error: error}" if={success||error}>
@@ -21,10 +22,10 @@
     .step { color: #333; margin-right: 10px; }
   </style>
   <script type="coffee">
-    common = require("am-common")
+    Common = require("am-common")
     @onExecute = false
     testIFrame = this.tags["test-iframe"]
-    params = common::getParams()
+    params = Common::getParams()
     currentNum = -1
     finished = =>
       @update()
