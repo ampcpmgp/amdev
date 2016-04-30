@@ -2,8 +2,6 @@ fs = require("fs")
 np = new (require("am-node-parts"))
 
 sampleCode = ->
-  #server
-  np.server.start()
   #readline
   np.readlineFunc("./package.json", (line) -> console.log(line))
   #check dir

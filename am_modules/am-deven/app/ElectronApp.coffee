@@ -2,7 +2,6 @@ $ = require("jquery")
 chokidar = require("chokidar")
 fs = require("fs")
 ipcRenderer = require('electron').ipcRenderer
-np = new (require("am-node-parts"))
 
 module.exports = class ElectronApp
   _inspector: 1

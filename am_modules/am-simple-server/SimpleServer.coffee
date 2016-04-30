@@ -11,6 +11,10 @@ module.exports = class NodeParts
   webDir:  [
     "./web"
   ]
+  watchDir: [
+    "./web/index.html"
+    "./web/.build/client.js"
+  ]
   #module
   #info
   reloadList: []
@@ -62,7 +66,7 @@ module.exports = class NodeParts
     _watcherCallback = =>
       @checkReloadList()
       @sendReloadEvent(socket) for socket in @reloadList
-    chokidar.watch(["./web/index.html", "./web/.build/client.js"]).on("change", (path) ->
+    chokidar.watch(@watchDir).on("change", (path) ->
       _watcherCallback()
       )
   sendReloadEvent: (socket) -> socket.emit("reload")

@@ -11,7 +11,7 @@
   "dependencies": {
     "am-autoevent": "latest",
     "am-common": "latest",
-    "am-node-parts": "latest",
+    "am-simple-server": "latest",
     "escape-html": "latest",
     "jquery": "latest"
   }
