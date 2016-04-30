@@ -1,6 +1,6 @@
 module.exports = class Common
   params: null
-  getParams: (url = location.href) =>
+  getParams: (url = location.search) =>
     return @params if @params
     url = decodeURI(url) if decodeURI
     query = url.replace(/.*\?(.*)$/, "$1")
