@@ -2,7 +2,7 @@
   <button onclick={Model.execute}>
     test
   </button>
-  <a href="./">./</a>
+  <a href="?">root</a>
   <a href="?auto">auto</a>
   <div each={opts.testCases}>
     <a href={"#"+ pageLink} class="step {bold: !depth}" style="margin-left: {depth * 8}px;">
@@ -29,6 +29,7 @@
     @Model.me = @
     @Model.iframe = @tags["test-iframe"]
     @Model.opts = opts
+    #mount
     @on("mount", => @Model.check())
   </script>
 </test-list>
