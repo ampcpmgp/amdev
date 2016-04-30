@@ -1,5 +1,5 @@
 <test-list>
-  <button onclick={Model.execute}>
+  <button onclick={execute}>
     test
   </button>
   <a href="?">root</a>
@@ -29,6 +29,8 @@
     @Model.me = @
     @Model.iframe = @tags["test-iframe"]
     @Model.opts = opts
+    #me
+    @execute = => @Model.execute()
     #mount
     @on("mount", => @Model.check())
   </script>
