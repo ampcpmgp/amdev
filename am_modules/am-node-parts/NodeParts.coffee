@@ -39,7 +39,7 @@ module.exports = class SimpleServer
   httpServerAction: (req, res) ->
     #initial
     url = req.url.replace(/\/{2,}/, "/")
-    params = Common::getParams(url)
+    params = Common::getParams()
     url = url.replace(/\?.*$/, "")
     if url[url.length-1] is "/" then url += "index.html"
     ###get file###

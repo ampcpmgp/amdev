@@ -5,7 +5,7 @@ module.exports = class WSClient
   ###modules###
   ws: null
   ###websocket required variables###
-  params: Common::getParams(location.href)
+  params: Common::getParams()
   domain: location.hostname.replace(/:.*/, "")
   connectFlag: false
   constructor: ->
