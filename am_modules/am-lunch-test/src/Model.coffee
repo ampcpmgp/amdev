@@ -4,6 +4,9 @@ module.exports = class Model
   params: Common::getParams()
   check: =>
     execute = () => @execute()
+    Common::params = null
+    @params = Common::getParams()
+    @deleteIframe()
     setTimeout(execute, 0) if @params.auto or location.hash
   execute: =>
     @hashRegex = location.hash.replace(/^#/, "")
@@ -12,11 +15,10 @@ module.exports = class Model
     for testCase in @opts.testCases
       testCase.error = null
       testCase.success = null
-    @openIframe()
-  openIframe: (prevIframeWindow) =>
-    if prevIframeWindow
-      @me.onExecute = false
       @me.update()
+    @openIframe()
+  openIframe: (@currentIFrameWindow) =>
+    @deleteIframe()
     return @me.update() if @opts.testCases.length <= ++@currentNum
     currentCase = @opts.testCases[@currentNum]
     #
@@ -26,13 +28,17 @@ module.exports = class Model
     @me.onExecute = true
     @iframe.url = url
     @me.update()
-    currentIFrameWindow = @iframe.root.querySelector("iframe").contentWindow
-    currentIFrameWindow.console.assert = (flg, msg) =>
+    @currentIFrameWindow = @iframe.root.querySelector("iframe").contentWindow
+    @currentIFrameWindow.console.assert = (flg, msg) =>
       unless flg
         # TODO: UIに組み込む
         currentCase.error = true
-        @openIframe(currentIFrameWindow)
-    currentIFrameWindow.console.info = (msg) =>
+        @openIframe(@currentIFrameWindow)
+    @currentIFrameWindow.console.info = (msg) =>
       if msg is "finished"
         currentCase.success = true unless currentCase.error
-        @openIframe(currentIFrameWindow)
+        @openIframe(@currentIFrameWindow)
+  deleteIframe: =>
+    return unless @currentIFrameWindow
+    @me.onExecute = false
+    @me.update()

@@ -31,9 +31,10 @@
     @Model.opts = opts
     #me
     @execute = => @Model.execute()
+    check = => @Model.check()
     #mount
-    @on("mount", => @Model.check())
-    riot.route("..", => @Model.execute())
+    @on("mount", check)
+    riot.route("..", check)
     riot.route.start()
   </script>
 </test-list>
