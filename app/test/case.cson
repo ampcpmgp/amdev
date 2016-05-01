@@ -1,2 +1,5 @@
 SimpleServer:
   test: "?am-simple-server"
+LunchTest:
+  default: "?am-lunch-test&default"
+  port変更: "?am-lunch-test&http=8180&ws=50001"
