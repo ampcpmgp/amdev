@@ -1,5 +1,7 @@
-class Server extends require("am-lunch-test/Server")
-  default: =>
+LunchServer = require("../Server")
 
+class Test extends require("am-lunch-test")
+  port: ([httpPort, wsPort]) =>
+    LunchServer::start(httpPort, wsPort)
 
-Server::preStart()
+Test::preStart()

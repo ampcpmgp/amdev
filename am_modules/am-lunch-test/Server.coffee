@@ -1,2 +1,6 @@
 SimpleServer = require("am-simple-server")
-# SimpleServer::start(8081)
+
+module.exports = class LunchServer extends SimpleServer
+
+
+console.log LunchServer
