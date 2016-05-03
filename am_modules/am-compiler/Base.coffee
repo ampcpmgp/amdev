@@ -71,7 +71,7 @@ module.exports = class Base
     files = fs.readdirSync("#{moduleDir}")
     option.entry = {}
     coffeeFiles = (file for file in files when file.match(/\.coffee$/))
-    option.entry["#{moduleDir}/#{coffeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeFile}" for coffeFile in coffeeFiles
+    option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeeFile}" for coffeeFile in coffeeFiles
     delete option.devtool
     webpack(option).run(=> callback())
   electronStart: =>
