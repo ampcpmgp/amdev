@@ -88,5 +88,4 @@ module.exports = class Base
       timings: false
       chunkModules: false
       )
-    return if(jsonStats.errors.length > 0)
     @electronStart() if (++@checkNum is 3)
