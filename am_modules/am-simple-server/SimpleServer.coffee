@@ -6,7 +6,7 @@ sio = require('socket.io')
 mime = require('mime')
 chokidar = require('chokidar')
 
-module.exports = class NodeParts
+module.exports = class SimpleServer
   #config
   webDir:  [
     "./web"
