@@ -68,7 +68,7 @@ module.exports = class Base
     option = _.cloneDeep(@browserOption)
     moduleDir = "am_modules/#{dir}"
     option.resolve.modulesDirectories.unshift("#{moduleDir}/node_modules")
-    files = fs.readdirSync("#{moduleDir}")
+    files = fs.readdirSync(moduleDir)
     option.entry = {}
     coffeeFiles = (file for file in files when file.match(/\.coffee$/))
     option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeeFile}" for coffeeFile in coffeeFiles
