@@ -48,16 +48,6 @@ module.exports = class Base
     webpack(@electronOption).watch({}, (err, stats) => @callback(err,stats)) if @electronOption.entry
     webpack(@nodeOption).watch({}, (err, stats) => @callback(err,stats)) if @nodeOption.entry
     webpack(@browserOption).watch({}, (err, stats) => @callback(err,stats)) if @browserOption.entry
-  compileModule: (dir, callback) => #am-devenでの設定
-    option = _.cloneDeep(@browserOption)
-    moduleDir = "am_modules/#{dir}"
-    option.resolve.modulesDirectories.unshift("#{moduleDir}/node_modules")
-    files = fs.readdirSync(moduleDir)
-    option.entry = {}
-    coffeeFiles = (file for file in files when file.match(/\.coffee$/))
-    option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeeFile}" for coffeeFile in coffeeFiles
-    delete option.devtool
-    webpack(option).run(=> callback())
   callback: (err, stats) =>
     return console.log(err) if (err)
     jsonStats = stats.toJson()

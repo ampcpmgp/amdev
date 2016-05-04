@@ -4,6 +4,16 @@ Compiler = require("am-compiler")
 exec = require("child_process").exec
 
 class ModuleCompiler extends Compiler
+  compileModule: (dir, callback) =>
+    option = _.cloneDeep(@browserOption)
+    moduleDir = "am_modules/#{dir}"
+    option.resolve.modulesDirectories.unshift("#{moduleDir}/node_modules")
+    files = fs.readdirSync(moduleDir)
+    option.entry = {}
+    coffeeFiles = (file for file in files when file.match(/\.coffee$/))
+    option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeeFile}" for coffeeFile in coffeeFiles
+    delete option.devtool
+    webpack(option).run(=> callback())
 
 $(restart).on("click", (e) -> require("ipc").send("restart"))
 do -> #upload npm
