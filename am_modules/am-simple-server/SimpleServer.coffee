@@ -18,7 +18,8 @@ module.exports = class SimpleServer
   reloadList: []
   start: (@httpPort = 8080, @wsPort = @httpPort) ->
     @app = http.createServer((req, res) => @httpServerAction(req, res))
-    listen = => @app.listen(@httpPort)
+    lastArg = arguments[arguments.length-1]
+    listen = => @app.listen(@httpPort, lastArg if typeof lastArg is "function")
     # TODO: reload時に前プロセスが残りportエラーで引っかかったのを解消。よりスマートに
     setTimeout(listen, 0)
     @wsStart()
