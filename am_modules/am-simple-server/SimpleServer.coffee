@@ -1,5 +1,3 @@
-Common = require("am-common")
-
 fs = require("fs")
 http = require("http")
 sio = require('socket.io')
@@ -31,9 +29,7 @@ module.exports = class SimpleServer
     return false
   httpServerAction: (req, res) ->
     #initial
-    url = req.url.replace(/\/{2,}/, "/")
-    params = Common::getParams()
-    url = url.replace(/\?.*$/, "")
+    url = req.url.replace(/\/{2,}/, "/").replace(/\?.*$/, "")
     if url[url.length-1] is "/" then url += "index.html"
     ###get file###
     path = @_checkExistsFile(url)
