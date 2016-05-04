@@ -41,14 +41,13 @@ module.exports = class Base
     @browserOption.module.preLoaders = []
     @browserOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
   compile: =>
-    @electronStart = =>
-    @electronCompiler = webpack(@electronOption).run((err, stats) => @callback(err,stats))
-    @nodeCompiler = webpack(@nodeOption).run((err, stats) => @callback(err,stats))
-    @browserCompiler = webpack(@browserOption).run((err, stats) => @callback(err,stats))
+    webpack(@electronOption).run((err, stats) => @callback(err,stats)) if @electronOption.entry
+    webpack(@nodeOption).run((err, stats) => @callback(err,stats)) if @nodeOption.entry
+    webpack(@browserOption).run((err, stats) => @callback(err,stats)) if @browserOption.entry
   start: =>
-    @electronCompiler = webpack(@electronOption).watch({}, (err, stats) => @callback(err,stats))
-    @nodeCompiler = webpack(@nodeOption).watch({}, (err, stats) => @callback(err,stats))
-    @browserCompiler = webpack(@browserOption).watch({}, (err, stats) => @callback(err,stats))
+    webpack(@electronOption).watch({}, (err, stats) => @callback(err,stats)) if @electronOption.entry
+    webpack(@nodeOption).watch({}, (err, stats) => @callback(err,stats)) if @nodeOption.entry
+    webpack(@browserOption).watch({}, (err, stats) => @callback(err,stats)) if @browserOption.entry
   compileModule: (dir, callback) => #am-devenでの設定
     option = _.cloneDeep(@browserOption)
     moduleDir = "am_modules/#{dir}"
