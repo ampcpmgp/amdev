@@ -8,7 +8,7 @@
     "cl": "npm run compile && node node_modules/am-deven/app/cl",
     "start": "npm run watch",
     "start:server": "npm run compile && node app/server.js",
-    "watch": "coffee -e \"(require('./am_modules/am-compiler'))::start()\"",
+    "watch": "coffee watch.coffee",
     "serverStart": "npm i && node app/server",
     "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./"
   },
