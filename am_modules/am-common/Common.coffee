@@ -3,7 +3,6 @@ module.exports = class Common
   hashs: null
   hashSeparator: "/"
   getParams: (url = location.search) =>
-    return @params if @params
     url = decodeURI(url) if decodeURI
     query = url.replace(/.*\?([^#]*)$/, "$1")
     @params = {}
