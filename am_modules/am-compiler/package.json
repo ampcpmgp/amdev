@@ -13,6 +13,7 @@
     "cson-loader": "latest",
     "html-loader": "latest",
     "json-loader": "latest",
+    "riotjs-loader": "latest",
     "webpack": "2.0.2-beta"
   }
 }
