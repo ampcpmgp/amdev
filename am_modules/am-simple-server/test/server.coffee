@@ -4,7 +4,7 @@ SimpleServer::webDir = [
   "./web"
   "./test"
 ]
-SimpleServer::watchDir = [
+SimpleServer::watchPath = [
   "./package.json"
 ]
 SimpleServer::start()

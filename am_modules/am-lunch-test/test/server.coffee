@@ -9,7 +9,7 @@ LunchServer::webDir.push(
   "./am_modules/am-lunch-test/test/web/"
 )
 
-LunchServer::watchDir = [
+LunchServer::watchPath = [
   "./am_modules/am-lunch-test/test/web/"
 ]
 

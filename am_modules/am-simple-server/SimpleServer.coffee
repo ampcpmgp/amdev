@@ -9,7 +9,7 @@ module.exports = class SimpleServer
   webDir:  [
     "./web"
   ]
-  watchDir: [
+  watchPath: [
     "./web/index.html"
     "./web/.build/client.js"
   ]
@@ -61,7 +61,7 @@ module.exports = class SimpleServer
     _watcherCallback = =>
       @checkReloadList()
       @sendReloadEvent(socket) for socket in @reloadList
-    chokidar.watch(@watchDir).on("change", (path) ->
+    chokidar.watch(@watchPath).on("change", (path) ->
       _watcherCallback()
       )
   sendReloadEvent: (socket) -> socket.emit("reload")
