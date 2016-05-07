@@ -1,37 +1,54 @@
 <test-list>
+  <a href="#">base</a>
   <button onclick={execute}>
     test
   </button>
-  <a href="?">root</a>
-  <a href="?auto">auto</a>
-  <div each={opts.testCases}>
-    <a href={"#"+ pageLink} class="step {bold: !depth}" style="margin-left: {depth * 8}px;">
-      <span class="bold {success: success, error: error}" if={success||error}>
-        {success ? "〇" : error ? "×" : ""}
+  <button onclick={changeTestMode}>
+    <span class={bold: iframeMode}>iframe</span>
+    <span class="bold">/</span>
+    <span class={bold: !iframeMode}>new window</span>
+  </button>
+  <div each={testCase, i in opts.testCases}>
+    <a onclick={router} href={testCase.pageLink} class="step {bold: !testCase.depth}" style="margin-left: {testCase.depth * 8}px;">
+      <span class="bold {success: testCase.success, error: testCase.error}" if={testCase.success||testCase.error}>
+        {testCase.success ? "〇" : testCase.error ? "×" : ""}
       </span>
-      {key}:
+      {testCase.key}:
     </a>
-    <a if={value} href={value}>{value}</a>
+    <a onclick={router} if={testCase.value} href={testCase.value} data-case-num={i}>{testCase.value}</a>
   </div>
-  <test-iframe if={onExecute}></test-iframe>
+  <test-iframe if={onExecute&&iframeMode}></test-iframe>
   <style scoped>
+    :scope {display: block; background-color: white;}
+    :scope * {font-size: 14px;}
     a { color: blue; text-decoration: none; }
-    a:hover { opacity: 0.6;}
+    a:hover { opacity: 0.4;}
     .success { color: blue; }
     .error { color: red; }
     .bold { font-weight: bold; }
     .step { color: #333; margin-right: 10px; }
   </style>
   <script type="coffee">
+    #
     @Model = require("./Model").prototype
     @onExecute = false
+    @iframeMode = localStorage.testMode is "iframe"or not localStorage.testMode
     #init Model
     @Model.me = @
     @Model.iframe = @tags["test-iframe"]
     @Model.opts = opts
+    #settings
+    check = => @Model.check()
     #me
     @execute = => @Model.execute()
-    check = => @Model.check()
+    @router = (e) => riot.route(e.target.getAttribute("href"))
+    @changeTestMode = =>
+      if localStorage.testMode is "iframe"
+        localStorage.testMode = "newWindow"
+        @iframeMode = false
+      else
+        localStorage.testMode = "iframe"
+        @iframeMode = true
     #mount
     @on("mount", check)
     riot.route("..", check)

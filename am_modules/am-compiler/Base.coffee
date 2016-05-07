@@ -15,6 +15,9 @@ module.exports = class Base
         {test: /\.html$/, loader: "html"}
         {test: /\.json$/, loader: "json"}
       ]
+      postLoaders: [
+        {test: /\.src\.coffee$/, loader: "raw"}
+      ]
     devtool: "cheap-module-eval-source-map"
     resolve:
       modulesDirectories: ["am_modules", "node_modules"]

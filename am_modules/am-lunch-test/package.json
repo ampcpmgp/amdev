@@ -8,11 +8,17 @@
   },
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "am-compiler": "latest"
+  },
   "dependencies": {
     "am-autoevent": "latest",
     "am-common": "latest",
     "am-simple-server": "latest",
+    "chokidar": "latest",
+    "cson": "latest",
     "escape-html": "latest",
+    "escape-string-regexp": "latest",
     "jquery": "latest"
   }
 }

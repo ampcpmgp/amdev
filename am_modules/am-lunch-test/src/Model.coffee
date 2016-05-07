@@ -1,44 +1,65 @@
+escapeRegexp = require("escape-string-regexp")
 Common = require("am-common")
 
+class TestWindow
+  constructor: (@url) ->
+    @window = window.open(@url)
+  setConsoleEvent: (callbackObj) =>
+    @window.console.assert = (flg, msg) => callbackObj.assert(flg, msg)
+    @window.console.info = (msg) => callbackObj.info(msg)
+  close: =>
+    @window.close()
+
 module.exports = class Model
-  params: Common::getParams()
   check: =>
-    execute = () => @execute()
-    Common::params = null
-    @params = Common::getParams()
+    @init()
     @deleteIframe()
-    setTimeout(execute, 0) if @params.auto or location.hash
-  execute: =>
-    @hashRegex = location.hash.replace(/^#/, "")
-    @hashRegex = "^#{@hashRegex}(\/|$)" if @hashRegex
-    @currentNum = -1
+    return unless @hashWord
+    return setTimeout((=> @executeOnce(testCase)), 0) for testCase in @opts.testCases when testCase.value is @hashWord
+    setTimeout((=> @execute()), 0)
+  init: =>
+    @params = Common::getParams()
+    @hashWord = location.hash.replace(/^#+/, "")
     for testCase in @opts.testCases
       testCase.error = null
       testCase.success = null
       @me.update()
-    @openIframe()
-  openIframe: (@currentIFrameWindow) =>
+  executeOnce: (testCase) =>
+    @init()
+    @open(testCase)
+  execute: () =>
+    @init()
+    @hashRegex = if @hashWord then "^#{escapeRegexp(@hashWord)}(\/|$)" else ""
+    @currentNum = -1
+    @openContinuously()
+  open: (currentCase, callback = =>) =>
+    @me.onExecute = true
+    @curWindow = if @me.iframeMode
+      @iframe.url = currentCase.value
+      @me.update()
+      @iframe
+    else
+      new TestWindow(currentCase.value)
+    @curWindow.setConsoleEvent(
+      assert: (flg, msg) =>
+        unless flg
+          # TODO: UIにも組み込む
+          console.error(msg)
+          currentCase.error = true
+          callback()
+      info: (msg) =>
+        if msg is "finished"
+          console.info(msg)
+          currentCase.success = true unless currentCase.error
+          callback()
+    )
+  openContinuously: =>
     @deleteIframe()
     return @me.update() if @opts.testCases.length <= ++@currentNum
     currentCase = @opts.testCases[@currentNum]
-    #
-    url = currentCase.value
-    return @openIframe() if not url or not (new RegExp(@hashRegex)).test(currentCase.pageLink)
-    #execute
-    @me.onExecute = true
-    @iframe.url = url
-    @me.update()
-    @currentIFrameWindow = @iframe.root.querySelector("iframe").contentWindow
-    @currentIFrameWindow.console.assert = (flg, msg) =>
-      unless flg
-        # TODO: UIに組み込む
-        currentCase.error = true
-        @openIframe(@currentIFrameWindow)
-    @currentIFrameWindow.console.info = (msg) =>
-      if msg is "finished"
-        currentCase.success = true unless currentCase.error
-        @openIframe(@currentIFrameWindow)
+    return @openContinuously() if not currentCase.value or not (new RegExp(@hashRegex)).test(currentCase.pageLink)
+    @open(currentCase, => @openContinuously())
   deleteIframe: =>
-    return unless @currentIFrameWindow
+    @curWindow?.close?()
     @me.onExecute = false
     @me.update()
