@@ -1,8 +1,8 @@
 {
   "name": "am-lunch-test",
-  "version": "0.1.8",
+  "version": "0.1.17",
   "description": "test",
-  "main": "Test",
+  "main": "browser/Test",
   "scripts": {
     "test": "echo error?"
   },

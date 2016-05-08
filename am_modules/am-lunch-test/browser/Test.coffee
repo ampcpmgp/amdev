@@ -2,7 +2,7 @@ $ = require("jquery")
 
 module.exports = class Test
   params: require("am-common")::getParams(location.href)
-  AutoEvent: require("am-autoevent/AutoEvent-no-gen")
+  AutoEvent: require("am-autoevent/browser/AutoEvent-no-gen")
   preStart: =>
     @[key](@params[key]) for key, value of @params when typeof @[key] is "function"
     $( => @start())

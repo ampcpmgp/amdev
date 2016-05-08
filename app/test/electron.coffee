@@ -9,6 +9,6 @@ do =>
   if params["am-simple-server"] then require("am-simple-server/test/server")
   else if params["am-lunch-test"] then require("am-lunch-test/test/server")
   else
-    generate = require("am-lunch-test/generate")
+    generate = require("am-lunch-test/browser/generate")
     testcases = require("./case.cson")
     generate(testcases)

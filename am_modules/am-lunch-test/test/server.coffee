@@ -6,7 +6,7 @@ class TestLunch extends LunchServer
   watchPath: "./am_modules/am-lunch-test/test/web/test.js"
   patternFile:"./am_modules/am-lunch-test/test/web/case.cson"
 
-class Test extends require("am-lunch-test")
+class Test extends require("am-lunch-test/browser/Test")
   port: ([httpPort, wsPort]) =>
     TestLunch::start(httpPort, wsPort)
 

@@ -1,6 +1,6 @@
 exec = require("child_process").exec
 module.exports = class CmdExe
-  constructor: (@directory, @path = "browser") ->
+  constructor: (@directory, @path = "electron") ->
   start: ->
     command = "start #{@directory}\\electron.exe #{@path}"
     proc = exec(command, (e, out, err) =>

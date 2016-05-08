@@ -1,5 +1,5 @@
 <test-list>
-  <a href="#">base</a>
+  <a onclick={toRouteHash} href="#">base</a>
   <button onclick={execute}>
     test
   </button>
@@ -17,7 +17,7 @@
     </a>
     <a onclick={router} if={testCase.value} href={testCase.value} data-case-num={i}>{testCase.value}</a>
   </div>
-  <test-iframe if={onExecute&&iframeMode}></test-iframe>
+  <test-iframe if={onExecute&&iframeMode} ext-file={extFile}></test-iframe>
   <style scoped>
     :scope {display: block; background-color: white;}
     :scope * {font-size: 14px;}
@@ -32,7 +32,9 @@
     #
     @Model = require("./Model").prototype
     @onExecute = false
-    @iframeMode = localStorage.testMode is "iframe"or not localStorage.testMode
+    window.localStorage.testMode = "iframe" unless window.localStorage.testMode
+    @iframeMode = localStorage.testMode is "iframe"
+    @extFile = null
     #init Model
     @Model.me = @
     @Model.iframe = @tags["test-iframe"]
@@ -42,6 +44,7 @@
     #me
     @execute = => @Model.execute()
     @router = (e) => riot.route(e.target.getAttribute("href"))
+    @toRouteHash = (e) => location.href = e.target.getAttribute("href")
     @changeTestMode = =>
       if localStorage.testMode is "iframe"
         localStorage.testMode = "newWindow"

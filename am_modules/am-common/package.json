@@ -1,8 +1,8 @@
 {
   "name": "am-common",
-  "version": "1.0.25",
+  "version": "1.0.30",
   "description": "for use server and client",
-  "main": "Common",
+  "main": "browser/Common",
   "scripts": {
     "test": "echo error?"
   },

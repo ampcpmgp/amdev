@@ -28,7 +28,7 @@ class Watcher
     setTimeout(app.quit, 0)
   start: =>
     chokidar
-      .watch(["./browser/.build/"])
+      .watch(["./electron/.build/"])
       .on("change", (path) =>
         return unless path.match(/\.js$/)
         @restart()
@@ -98,4 +98,4 @@ module.exports = class Browser
   startCompiler: ->
     exec(fse.readJsonSync("package.json").scripts.watch).stdout.on("data", @sendMsg)
   sendMsg: (msg) =>
-    mainWindow?.webContents.send("browser send msg", msg)
+    mainWindow?.webContents.send("electron send msg", msg)

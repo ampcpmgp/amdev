@@ -9,10 +9,11 @@ module.exports = (Compiler) =>
     callback: (err, stats) =>
       super(err, stats)
       return console.log(err) if (err)
+      # TODO: コンパイル数をチェックする以外の方法にしたい
       @electronStart() if (++@checkNum is 3)
     start: =>
       @electronOption.entry =
-        "browser/.build/start": "./browser/test/start.coffee"
+        "electron/.build/start": "./electron/test/start.coffee"
         "app/.build/preload": "./app/test/preload.coffee"
         "app/.build/electron": "./app/test/electron.coffee"
       @nodeOption.entry =

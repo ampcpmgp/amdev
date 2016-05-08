@@ -1,4 +1,5 @@
 AutoEventBase = require("./AutoEvent")
+
 module.exports = class AutoEvent extends AutoEventBase
   contoller:  (loopNum, callback) =>
     curFuncNum = 0

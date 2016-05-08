@@ -48,7 +48,7 @@ module.exports = class Model
           currentCase.error = true
           callback()
       info: (msg) =>
-        if msg is "finished"
+        if msg is "finished" and not currentCase.error
           console.info(msg)
           currentCase.success = true unless currentCase.error
           callback()

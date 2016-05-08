@@ -1,8 +1,9 @@
 window.riot = require("riot")
 escape = require("escape-html")
-require("./src/test-list.tag")
-require("./src/test-iframe.tag")
+require("../src/test-list.tag")
+require("../src/test-iframe.tag")
 testCases = null
+iframeObj = {}
 
 recursive = (key, value, pageLink, depth) =>
   if typeof value is "object"
@@ -14,5 +15,7 @@ recursive = (key, value, pageLink, depth) =>
 module.exports = (obj) =>
   testCases = []
   recursive(key, value, key, 0)  for key, value of obj
-  riot.mount("test-list", {testCases})
-  riot.mount("test-iframe")
+  {
+    list: riot.mount("test-list", {testCases})
+    iframe: riot.mount("test-iframe", iframeObj)
+  }

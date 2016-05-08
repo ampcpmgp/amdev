@@ -1,7 +1,7 @@
 $ = require("jquery")
 AutoEvent = require("am-autoevent")
-AutoEventNoGen = require("am-autoevent/AutoEvent-no-gen")
-Test = require("am-lunch-test")
+AutoEventNoGen = require("am-autoevent/browser/AutoEvent-no-gen")
+Test = require("am-lunch-test/browser/Test")
 
 $("body").append($(require("./tag.html")))
 
@@ -27,7 +27,7 @@ class SampleTest extends Test
   testNoGen:  =>
     func(AutoEventNoGen)
   global: =>
-    require("am-autoevent/amAutoevent")
+    require("am-autoevent/browser/amAutoevent")
     console.assert(window.amAutoEvent)
     console.info("finished")
   timeout: (ms) =>

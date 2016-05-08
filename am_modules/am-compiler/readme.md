@@ -13,7 +13,7 @@ class AmCompiler extends Compiler
     @electronStart() if (++@checkNum is 3)
   start: =>
     @electronOption.entry =
-      "browser/.build/start": "./browser/test/start.coffee"
+      "electron/.build/start": "./electron/test/start.coffee"
       "app/.build/preload": "./app/test/preload.coffee"
       "app/.build/electron": "./app/test/electron.coffee"
     @nodeOption.entry =

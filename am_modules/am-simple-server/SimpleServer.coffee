@@ -1,8 +1,9 @@
-fs = require("fs")
-http = require("http")
 sio = require('socket.io')
 mime = require('mime')
 chokidar = require('chokidar')
+#
+fs = require("fs")
+http = require("http")
 
 module.exports = class SimpleServer
   #config

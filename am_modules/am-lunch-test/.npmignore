@@ -1,4 +1,5 @@
 *.coffee
+*.src.js
 .*/
 src/
 test/
