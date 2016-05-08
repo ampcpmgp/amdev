@@ -1,8 +1,9 @@
-fs = require("fs")
-http = require("http")
 sio = require('socket.io')
 mime = require('mime')
 chokidar = require('chokidar')
+#
+fs = require("fs")
+http = require("http")
 
 module.exports = class SimpleServer
   #config
@@ -13,6 +14,7 @@ module.exports = class SimpleServer
     "./web/index.html"
     "./web/.build/client.js"
   ]
+  sioOption: {}
   #module
   #info
   reloadList: []
@@ -24,7 +26,8 @@ module.exports = class SimpleServer
     setTimeout(listen, 0)
     @wsStart()
   _checkExistsFile: (file) ->
-    for dir in @webDir
+    webDir = if typeof @webDir isnt "object" then [@webDir] else @webDir
+    for dir in webDir
       path = "#{dir}#{file}"
       return path if fs.existsSync(path) and fs.lstatSync(path).isFile()
     return false
@@ -47,23 +50,19 @@ module.exports = class SimpleServer
       ip = req.connection.remoteAddress.replace(/.*[^\d](\d+\.\d+\.\d+\.\d+$)/, "$1")
       date = new Date().toLocaleTimeString()
       console.log "#{date} #{ip} #{path}"
-  wsStart: ->
-    if @wsPort is @httpPort
-      @websocket = sio(@app)
-    else
-      @websocket = sio(@wsPort)
+  wsStart: =>
+    server = if @wsPort is @httpPort then @app else @wsPort
+    @websocket = sio(server, @sioOption)
     @websocket.on("connection", (socket) =>
       @reloadList.push(socket)
       socket.on("test", (msg) => console.log msg)
     )
     @wsEventReload()
   wsEventReload: =>
-    _watcherCallback = =>
+    chokidar.watch(@watchPath).on("change", (path) =>
       @checkReloadList()
       @sendReloadEvent(socket) for socket in @reloadList
-    chokidar.watch(@watchPath).on("change", (path) ->
-      _watcherCallback()
-      )
+    )
   sendReloadEvent: (socket) -> socket.emit("reload")
   sendCssReloadEvent: (socket,filepath) -> socket.emit("css reload", fs.readFileSync(filepath, {encoding:"utf-8"}))
   checkReloadList: =>

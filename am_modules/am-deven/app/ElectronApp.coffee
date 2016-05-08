@@ -12,7 +12,7 @@ module.exports = class ElectronApp
   ### 信頼しているメソッドなるべくフロー順 ###
   init: ->
     if @_inspector then @autoInspector()
-    ipcRenderer.on("browser send msg",(event, msg) ->
+    ipcRenderer.on("electron send msg",(event, msg) ->
       console.log("%cfrom Browser, %c#{msg}", "color: gray", "color: blue")
     )
   autoInspector: ->

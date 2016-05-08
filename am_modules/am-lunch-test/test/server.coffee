@@ -1,18 +1,13 @@
+fse = require("fs-extra")
 LunchServer = require("../Server")
 
-class Test extends require("am-lunch-test")
+class TestLunch extends LunchServer
+  webDir: "./am_modules/am-lunch-test/test/web/"
+  watchPath: "./am_modules/am-lunch-test/test/web/test.js"
+  patternFile:"./am_modules/am-lunch-test/test/web/case.cson"
+
+class Test extends require("am-lunch-test/browser/Test")
   port: ([httpPort, wsPort]) =>
-    LunchServer::start(httpPort, wsPort)
-
-
-LunchServer::webDir.push(
-  "./am_modules/am-lunch-test/test/web/"
-)
-
-LunchServer::watchPath = [
-  "./am_modules/am-lunch-test/test/web/"
-]
-
-LunchServer::watchObj = "./am_modules/am-lunch-test/test/web/case.cson"
+    TestLunch::start(httpPort, wsPort)
 
 Test::preStart()

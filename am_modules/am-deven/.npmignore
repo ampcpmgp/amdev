@@ -1,6 +1,6 @@
 *.map
 .*/
 app/*.coffee
-browser/*.coffee
+electron/*.coffee
 web/*.coffee
 test/

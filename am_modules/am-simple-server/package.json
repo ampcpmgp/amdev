@@ -1,6 +1,6 @@
 {
   "name": "am-simple-server",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "",
   "main": "SimpleServer",
   "scripts": {
@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "chokidar": "latest",
-    "mime": "latest"
+    "mime": "latest",
+    "socket.io": "latest"
   }
 }

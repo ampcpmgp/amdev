@@ -11,7 +11,7 @@ testListPage.html
 
 testListPage.coffee
 ```coffee
-generate = require("am-lunch-test/generate")
+generate = require("am-lunch-test/browser/generate")
 testcases =
   clickTest:
     click1: "?click1"

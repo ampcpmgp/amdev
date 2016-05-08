@@ -2,7 +2,7 @@
   "name": "amdeven-project",
   "version": "0.0.0",
   "description": "project on am development environment",
-  "main": "browser/.build/start.js",
+  "main": "electron/.build/start.js",
   "scripts": {
     "init": "npm i && npm run compile",
     "cl": "npm run compile && node node_modules/am-deven/app/cl",

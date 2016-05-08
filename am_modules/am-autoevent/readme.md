@@ -8,7 +8,7 @@ https://github.com/ampcpmgp/amdeven/tree/master/am_modules/am-autoevent
 # generator
 AutoEvent = require("am-autoevent")
 # or no-generator
-AutoEvent = require("am-autoevent/AutoEvent-no-gen")
+AutoEvent = require("am-autoevent/browser/AutoEvent-no-gen")
 amAutoEvent = new AutoEvent()
 # or cdn(bookmarklet)
 # common

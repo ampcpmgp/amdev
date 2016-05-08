@@ -1,4 +1,6 @@
-google:
+css_panic:
   test1: "?search=test1"
   test2: "?search=test2"
   test3: "?search=test3"
+  test4: "?search=test4"
+  test5: "?search=test5"

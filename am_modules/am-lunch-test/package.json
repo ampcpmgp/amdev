@@ -1,18 +1,24 @@
 {
   "name": "am-lunch-test",
-  "version": "0.1.8",
+  "version": "0.1.17",
   "description": "test",
-  "main": "Test",
+  "main": "browser/Test",
   "scripts": {
     "test": "echo error?"
   },
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "am-compiler": "latest"
+  },
   "dependencies": {
     "am-autoevent": "latest",
     "am-common": "latest",
     "am-simple-server": "latest",
+    "chokidar": "latest",
+    "cson": "latest",
     "escape-html": "latest",
+    "escape-string-regexp": "latest",
     "jquery": "latest"
   }
 }

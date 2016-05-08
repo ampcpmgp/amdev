@@ -15,17 +15,20 @@
     "_install": "npm i --prune && coffee test/init.coffee",
     "watch": "coffee ./watch.coffee",
     "compile": "coffee -e \"(require('./am_modules/am-compiler/Base.coffee'))::compile()\"",
-    "electron": "electron ./browser/.build/start.js"
+    "electron": "electron ./electron/.build/start.js"
   },
   "dependencies": {
     "chokidar": "latest",
     "coffee-loader": "latest",
     "coffee-script": "latest",
+    "copy-webpack-plugin": "^2.1.3",
     "cron": "latest",
     "cson": "latest",
     "cson-loader": "latest",
     "electron-prebuilt": "latest",
     "escape-html": "latest",
+    "escape-string-regexp": "latest",
+    "file-loader": "^0.8.5",
     "forever": "latest",
     "fs-extra": "latest",
     "ftp": "latest",
@@ -33,15 +36,18 @@
     "jquery": "latest",
     "json-loader": "latest",
     "lodash": "latest",
+    "memory-fs": "^0.3.0",
     "mime": "latest",
     "mkdirp": "latest",
     "node-fetch": "latest",
     "pouchdb": "latest",
+    "raw-loader": "latest",
     "riot": "latest",
     "riotjs-loader": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
-    "webpack": "latest"
+    "webpack": "latest",
+    "webpack-to-memory": "^1.0.0-beta"
   },
   "devDependencies": {
     "electron-prebuilt": "latest"
