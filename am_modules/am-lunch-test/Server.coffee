@@ -12,10 +12,10 @@ module.exports = class LunchServer extends SimpleServer
     super(@httpPort, @wsPort, => console.log("server start, on port:#{@httpPort}"))
     devJs = devJs.replace("{__WSPORT__}", @wsPort)
     chokidar.watch(@patternFile).on("change", (path) =>
-      @sendReloadEvent(socket) for socket in @reloadList
+      @sendTestCase(socket) for socket in @reloadList
     )
     @websocket.on "connection", (socket) =>
-      @sendReloadEvent(socket)
+      @sendTestCase(socket)
   httpServerAction: (req, res) =>
     url = req.url.replace(/\/{2,}/, "/").replace(/\?.*$/, "")
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -27,7 +27,8 @@ module.exports = class LunchServer extends SimpleServer
       res.writeHead(200, "Content-Type": "text/javascript")
       return res.end(devJs.replace("{__DOMAIN__}", req.headers.host))
     super(req, res)
-  sendReloadEvent: (socket, pattern) =>
+  sendTestCase: (socket, pattern) =>
     ext = @patternFile.match(/\.([^\.]+)$/)[1]
     obj = cson.parseFile(@patternFile, {format: ext})
+    console.log socket, ext, obj
     socket.emit("pattern", obj)
