@@ -1,8 +1,5 @@
 <test-list>
   <a onclick={toRouteHash} href="#">base</a>
-  <button onclick={execute}>
-    test
-  </button>
   <button onclick={changeTestMode}>
     <span class={bold: iframeMode}>iframe</span>
     <span class="bold">/</span>
@@ -45,7 +42,6 @@
     #settings
     check = => @Model.check()
     #me
-    @execute = => @Model.execute()
     @router = (e) => riot.route(e.target.getAttribute("href"))
     @toRouteHash = (e) => location.href = "#"
     @changeTestMode = =>
