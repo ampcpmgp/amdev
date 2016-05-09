@@ -44,7 +44,7 @@
     #me
     @execute = => @Model.execute()
     @router = (e) => riot.route(e.target.getAttribute("href"))
-    @toRouteHash = (e) => location.href = e.target.getAttribute("href")
+    @toRouteHash = (e) => location.href = "#"
     @changeTestMode = =>
       if localStorage.testMode is "iframe"
         localStorage.testMode = "newWindow"
@@ -52,6 +52,7 @@
       else
         localStorage.testMode = "iframe"
         @iframeMode = true
+      @toRouteHash()
     #mount
     @on("mount", check)
     riot.route("..", check)
