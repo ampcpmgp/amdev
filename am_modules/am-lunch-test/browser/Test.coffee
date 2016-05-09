@@ -10,7 +10,6 @@ module.exports = class Test
     @_color(@params.color) if @params._color?
     @_hide(@params.hide) if @params._hide?
     @_border(@params.border) if @params._border?
-    @_replace()
     @_auto(@params.auto) if @params._auto?
   _getRandomColor: (opacity = 1) =>
     getRandomNum = => Math.floor(Math.random() * 256)
@@ -33,12 +32,5 @@ module.exports = class Test
   _hide: (selector) =>
     selector = selector.join(",") if typeof selector is "object"
     $(selector).hide()
-  _replace: =>
-    for selector, value of @params when typeof value is "string"
-      [type, value] = value.split(":") if value.match(":")
-      if type is "value"
-        $(selector).val(value)
-      else
-        $(selector).text(value)
   _auto: =>
     # TODO: autoevent連携
