@@ -1,5 +1,6 @@
 <pre-info>
   <a href="/?_noWs">/?_noWs(no websocket)</a>
+  <a href="/?">/?(websocket)</a>
   <style scoped>
     :scope {
       display: block;

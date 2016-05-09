@@ -21,7 +21,7 @@ class ModuleCompiler extends Compiler
       option.entry = {}
       coffeeFiles = (file for file in files when file.match(/\.coffee$/))
       option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeeFile}" for coffeeFile in coffeeFiles
-      # delete option.devtool
+      delete option.devtool
       webpack(option).run(=> @callback(callback))
     catch error
       @callback(callback)
