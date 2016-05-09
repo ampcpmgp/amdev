@@ -5,4 +5,4 @@ class SamplTest extends require("am-lunch-test")
     console.assert(num < 3, "数値エラー")
     console.info("finished")
 
-SamplTest::preStart()
+SamplTest::start()

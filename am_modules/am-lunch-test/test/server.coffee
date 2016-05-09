@@ -10,4 +10,4 @@ class Test extends require("am-lunch-test/browser/Test")
   port: ([httpPort, wsPort]) =>
     TestLunch::start(httpPort, wsPort)
 
-Test::preStart()
+Test::start()

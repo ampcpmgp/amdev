@@ -52,5 +52,5 @@ class NewTest extends Test
     console.assert(num)
     console.info("finished")
 
-NewTest::preStart()
+NewTest::start()
 ```

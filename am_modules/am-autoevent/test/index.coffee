@@ -38,4 +38,4 @@ class SampleTest extends Test
       $("body").append("<box>box</box>")
     setTimeout(createTimeoutBox, 3000)
 
-SampleTest::preStart()
+SampleTest::start()

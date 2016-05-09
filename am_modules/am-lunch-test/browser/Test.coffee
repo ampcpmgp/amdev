@@ -3,14 +3,12 @@ $ = require("jquery")
 module.exports = class Test
   params: require("am-common")::getParams(location.href)
   AutoEvent: require("am-autoevent/browser/AutoEvent-no-gen")
-  preStart: =>
-    @[key](@params[key]) for key, value of @params when typeof @[key] is "function"
-    $( => @start())
   start: =>
-    @_color(@params.color) if @params._color?
-    @_hide(@params.hide) if @params._hide?
-    @_border(@params.border) if @params._border?
-    @_auto(@params.auto) if @params._auto?
+    @[key](@params[key]) for key, value of @params when typeof @[key] is "function"
+    @_color(@params._color) if @params._color?
+    @_hide(@params._hide) if @params._hide?
+    @_border(@params._border) if @params._border?
+    @_auto(@params._auto) if @params._auto?
   _getRandomColor: (opacity = 1) =>
     getRandomNum = => Math.floor(Math.random() * 256)
     "rgba(#{getRandomNum()},#{getRandomNum()},#{getRandomNum()}, #{opacity})"
