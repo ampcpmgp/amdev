@@ -29,10 +29,10 @@
         iframeWindow = @root.querySelector("iframe").contentWindow
         iframeWindow.console.assert = (flg, msg) => callbackObj.assert(flg, msg)
         iframeWindow.console.info = (msg) => callbackObj.info(msg)
-        return unless @opts.extFile
+        return unless @opts.config.extFile
         iframeWindow.addEventListener("load", =>
           script = iframeWindow.document.createElement('script')
-          script.src = "#{@opts.extFile}?#{Date.now()}"
+          script.src = "#{@opts.config.extFile}?#{Date.now()}"
           iframeWindow.document.body.appendChild(script)
         )
   </script>

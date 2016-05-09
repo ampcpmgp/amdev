@@ -17,7 +17,7 @@
     </a>
     <a onclick={router} if={testCase.value} href={testCase.value} data-case-num={i}>{testCase.value}</a>
   </div>
-  <test-iframe if={onExecute&&iframeMode} ext-file={extFile}></test-iframe>
+  <test-iframe if={onExecute&&iframeMode} config={config}></test-iframe>
   <style scoped>
     :scope {display: block; background-color: white;}
     :scope * {font-size: 14px;}
@@ -34,7 +34,10 @@
     @onExecute = false
     window.localStorage.testMode = "iframe" unless window.localStorage.testMode
     @iframeMode = localStorage.testMode is "iframe"
-    @extFile = null
+    #from ./dev.coffee
+    @config =
+      extFile: null
+      Test: class ListTest extends require("am-lunch-test/browser/Test")
     #init Model
     @Model.me = @
     @Model.iframe = @tags["test-iframe"]
