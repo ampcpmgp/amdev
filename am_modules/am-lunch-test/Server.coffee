@@ -12,7 +12,6 @@ module.exports = class LunchServer extends SimpleServer
   sioOption: {origins: "*:*"}
   start: (@httpPort = 8080, @wsPort = @httpPort) =>
     super(@httpPort, @wsPort, => console.log("server start, on port:#{@httpPort}"))
-    html = html.replace("{TESTJS}", @watchPath.replace(@webDir, ""))
     devJs = devJs.replace("{__WSPORT__}", @wsPort).replace("{__TESTJS__}", @watchPath.replace(@webDir, ""))
     chokidar.watch(@patternFile).on("change", (path) =>
       @sendTestCase(socket) for socket in @reloadList
