@@ -1,6 +1,6 @@
 css_panic:
-  cheatPlay: "?css_panic&cheat"
-  test2: "?search=test2"
-  test3: "?search=test3"
-  test4: "?search=test4"
-  test5: "?search=test5"
+  default: "?css_panic"
+  cheatPlay: "?チートスコア=10"
+  cheatPlay_isError: "?チートスコア=11"
+  真面目にプレイ:
+    見えたら叩く: "?真面目プレイ"
