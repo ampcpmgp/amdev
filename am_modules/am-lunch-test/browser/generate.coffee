@@ -7,8 +7,8 @@ iframeObj = {}
 
 recursive = (key, value, pageLink, depth) =>
   if typeof value is "object"
-    recursive(key, "", key, depth)
-    recursive(key2, value2, "#{key}/#{key2}", depth + 1) for key2, value2 of value
+    recursive(key, "", pageLink, depth)
+    recursive(key2, value2, "#{pageLink}/#{key2}", depth + 1) for key2, value2 of value
   else
     testCases.push({key, value, pageLink, depth})
 

@@ -2,5 +2,5 @@ css_panic:
   default: "?css_panic"
   cheatPlay: "?チートスコア=10"
   cheatPlay_isError: "?チートスコア=11"
-  真面目にプレイ:
-    見えたら叩く: "?真面目プレイ"
+  seriousPlay:
+    attackShow: "?真面目プレイ"
