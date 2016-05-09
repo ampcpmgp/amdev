@@ -7,7 +7,7 @@ html = require("./src/index.html")
 devJs = require("raw!./browser/dev.js")
 
 module.exports = class LunchServer extends SimpleServer
-  watchPath: "./web/client.js"
+  watchPath: "./web/test.js"
   patternFile:  "./web/case.cson"
   sioOption: {origins: "*:*"}
   start: (@httpPort = 8080, @wsPort = @httpPort) =>
