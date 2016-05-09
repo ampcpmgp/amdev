@@ -2,8 +2,9 @@ escapeRegexp = require("escape-string-regexp")
 Common = require("am-common")
 
 class TestWindow
-  constructor: (@url) ->
+  constructor: (@url, Test) ->
     @window = window.open(@url)
+    @window.Test = Test
   setConsoleEvent: (callbackObj) =>
     @window.console.assert = (flg, msg) => callbackObj.assert(flg, msg)
     @window.console.info = (msg) => callbackObj.info(msg)
@@ -39,7 +40,7 @@ module.exports = class Model
       @me.update()
       @iframe
     else
-      new TestWindow(currentCase.value)
+      new TestWindow(currentCase.value, @me.config.Test)
     @curWindow.setConsoleEvent(
       assert: (flg, msg) =>
         unless flg
