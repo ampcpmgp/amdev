@@ -45,7 +45,7 @@ module.exports = class Model
       assert: (flg, msg) =>
         unless flg
           # TODO: UIにも組み込む
-          console.error(msg)
+          console.error(msg) if msg
           currentCase.error = true
           callback()
       info: (msg) =>
