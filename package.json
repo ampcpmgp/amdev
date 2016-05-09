@@ -43,7 +43,7 @@
     "riotjs-loader": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
-    "webpack": "latest",
+    "webpack": "latest"
   },
   "devDependencies": {
     "electron-prebuilt": "latest"
