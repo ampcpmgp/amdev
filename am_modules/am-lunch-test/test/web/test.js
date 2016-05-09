@@ -12,12 +12,17 @@ Test.prototype.start({
       for (var i = 0; i < $enemy.length; i++) {
         $enemy[i].click()
       }
+      setTimeout(finalCheck, 2000)
+    }
+    var finalCheck = () => {
       $scores = $(".score[name]")
-      setTimeout(() => {
-        console.assert($scores.length === score-0.0, `実際のスコアは${$scores.length}、判定のスコアは${score}`)
-        console.info("finished")
-      }, 2000)
+      console.assert($scores.length === score-0.0, `実際のスコアは${$scores.length}、判定のスコアは${score}`)
+      console.info("finished")
     }
     setTimeout(allClick, 2000)
+  },
+  真面目プレイ: () => {
+    $enemy = $(".enemys")
+    console.info("finished");
   }
 })
