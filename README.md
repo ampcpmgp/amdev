@@ -50,7 +50,7 @@ TODO: cliborを含んだ開発環境を作る
 clibor - http://www.amunsnet.com/
 
 # atom package
-apm install pigments highlight-selected highlight-column save-session editorconfig linter linter-coffeelint script atom-terminal file-icons atom-beautify pretty-json quantum-shell autocomplete-python language-riot-tag
+apm install pigments highlight-selected highlight-column save-session editorconfig linter linter-coffeelint script atom-terminal file-icons atom-beautify pretty-json quantum-shell autocomplete-python language-riot-tag linter-eslint
 ## styesheet
 atom-text-editor {
     font-family: "Avenir Next",Verdana, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "游ゴシック", "Yu Gothic", "メイリオ", Meiryo, Osaka, sans-serif;

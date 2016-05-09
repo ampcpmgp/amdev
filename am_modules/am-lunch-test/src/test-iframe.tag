@@ -31,9 +31,10 @@
         iframeWindow.console.info = (msg) => callbackObj.info(msg)
         return unless @opts.config.extFile
         iframeWindow.addEventListener("load", =>
-          iframeWindow.Test = @opts.config.Test
           script = iframeWindow.document.createElement('script')
           script.src = "#{@opts.config.extFile}?#{Date.now()}"
+          Test = iframeWindow.Test = @opts.config.Test
+          Test::params = require("am-common")::getParams(iframeWindow.location.href)
           iframeWindow.document.body.appendChild(script)
         )
   </script>

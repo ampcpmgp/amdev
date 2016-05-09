@@ -21,4 +21,3 @@ class Client extends require("am-simple-server/WSClient")
         @listTag.Model.check()
       )
 Client::start(Client::wsPort)
-1
