@@ -7,12 +7,12 @@ getRandomColor = (opacity = 1) =>
 module.exports = class Test
   params: require("am-common")::getParams(location.href)
   AutoEvent: require("am-autoevent/browser/AutoEvent-no-gen")
-  start: =>
-    @[key](@params[key]) for key, value of @params when typeof @[key] is "function"
-    @_color(@params._color) if @params._color?
-    @_hide(@params._hide) if @params._hide?
-    @_border(@params._border) if @params._border?
-    @_auto(@params._auto) if @params._auto?
+  start: (testObj = @) =>
+    testObj[key](@params[key]) for key, value of @params when typeof testObj[key] is "function"
+    @._color(@params._color) if @params._color?
+    @._hide(@params._hide) if @params._hide?
+    @._border(@params._border) if @params._border?
+    @._auto(@params._auto) if @params._auto?
   _border: (selector) =>
     selector = if selector is true or not selector then "*" else selector
     selector = selector.join(",") if (typeof selector is "object")
