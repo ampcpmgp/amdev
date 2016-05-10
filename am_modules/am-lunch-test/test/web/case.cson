@@ -1,6 +1,6 @@
 css_panic:
   default: "?css_panic"
-  cheatPlay: "?チートスコア=10"
-  cheatPlay_isError: "?チートスコア=11"
+  cheatPlay: "?チートプレイ=10"
+  cheatPlay_isError: "?チートプレイ=11"
   seriousPlay:
-    attackShow: "?真面目プレイ"
+    attackShow: "?適切な位置に来たワニを叩く=8,10000"
