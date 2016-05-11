@@ -3,4 +3,5 @@ css_panic:
   cheatPlay: "?チートプレイ=10"
   cheatPlay_isError: "?チートプレイ=11"
   seriousPlay:
-    attackShow: "?適切な位置に来たワニを叩く=8,10000"
+    attackShow: "?適切な位置に来たワニを叩く=4,10000"
+    attackShow2: "?適切な位置に来たワニを叩く=11,10000"
