@@ -1,7 +1,7 @@
-# require('crash-reporter').start(
-#   productName: 'Akira Hayatake'
-#   companyName: 'Gozen To Gogo'
-#   submitURL: 'https://your-domain.com/url-to-submit'  # config
+# require("crash-reporter").start(
+#   productName: "Akira Hayatake"
+#   companyName: "Gozen To Gogo"
+#   submitURL: "https://your-domain.com/url-to-submit"  # config
 #   autoSubmit: true
 # )
 fse = require("fs-extra")
@@ -12,9 +12,9 @@ fs = require("fs")
 exec = require("child_process").exec
 fork = require("child_process").fork
 # path = require("path")
-app = require('app')
-BrowserWindow = require('browser-window')
-ipc = require('electron').ipcMain
+app = require("app")
+BrowserWindow = require("browser-window")
+ipc = require("electron").ipcMain
 
 mainWindow = null
 
@@ -52,10 +52,10 @@ module.exports = class Browser
     #ipc
     @ipcEvent()
     #renderer
-    app.on('window-all-closed', () =>
-      if process.platform isnt 'darwin' then app.quit()
+    app.on("window-all-closed", () =>
+      if process.platform isnt "darwin" then app.quit()
     )
-    app.on('ready', () =>
+    app.on("ready", () =>
       #make renderer
       option = JSON.parse(JSON.stringify(@option))
       option.webPreferences.preload = "#{process.cwd()}#{@option.webPreferences.preload}"
@@ -67,7 +67,7 @@ module.exports = class Browser
       mainWindow.webContents.on("did-finish-load", =>
         mainWindow?.setAlwaysOnTop(false) unless @option["always-on-top"]
         )
-      mainWindow.on('closed', =>
+      mainWindow.on("closed", =>
         mainWindow = null
       )
       mainWindow.on("close", (e) =>
@@ -82,10 +82,10 @@ module.exports = class Browser
         fs.writeFileSync(@configCson, csonString)
         mainWindow = null
       )
-      mainWindow.on('app-command', (e, cmd) =>
-        if (cmd is 'browser-backward' and mainWindow.webContents.canGoBack())
+      mainWindow.on("app-command", (e, cmd) =>
+        if (cmd is "browser-backward" and mainWindow.webContents.canGoBack())
           mainWindow.webContents.goBack()
-        else if (cmd is 'browser-forward' and mainWindow.webContents.canGoForward())
+        else if (cmd is "browser-forward" and mainWindow.webContents.canGoForward())
           mainWindow.webContents.goForward()
         )
       # TODO: コンパイラはelectronに寄せたい
@@ -93,7 +93,7 @@ module.exports = class Browser
     )
   ipcEvent: =>
     ipc
-      .on('inspect element', (e, arg, renderer) => @[renderer].inspectElement(arg.x, arg.y))
+      .on("inspect element", (e, arg, renderer) => @[renderer].inspectElement(arg.x, arg.y))
       .on("restart", @watcher.restart)
   startCompiler: ->
     exec(fse.readJsonSync("package.json").scripts.watch).stdout.on("data", @sendMsg)
