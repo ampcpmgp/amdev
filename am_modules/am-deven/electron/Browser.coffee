@@ -12,9 +12,7 @@ fs = require("fs")
 exec = require("child_process").exec
 fork = require("child_process").fork
 # path = require("path")
-app = require("app")
-BrowserWindow = require("browser-window")
-ipc = require("electron").ipcMain
+{ipcMain, app, BrowserWindow} = require("electron")
 
 mainWindow = null
 
@@ -92,7 +90,7 @@ module.exports = class Browser
       # @startCompiler()
     )
   ipcEvent: =>
-    ipc
+    ipcMain
       .on("inspect element", (e, arg, renderer) => @[renderer].inspectElement(arg.x, arg.y))
       .on("restart", @watcher.restart)
   startCompiler: ->
