@@ -30,6 +30,14 @@ class ModuleCompiler extends Compiler
     @compileNum = 2
     @compile(@browserOption, "am_modules/#{dir}/browser", callback) #browser
     @compile(@nodeOption, "am_modules/#{dir}", callback) #node
+  _config: =>
+    @browserOption.plugins = @nodeOption.plugins = [
+      new webpack.optimize.OccurenceOrderPlugin(true)
+      new webpack.optimize.DedupePlugin()
+      new webpack.optimize.UglifyJsPlugin()
+    ]
+
+ModuleCompiler::_config()
 
 $(restart).on("click", (e) -> require("ipc").send("restart"))
 do -> #upload npm
