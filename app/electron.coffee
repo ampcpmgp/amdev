@@ -36,7 +36,13 @@ class ModuleCompiler extends Compiler
       new webpack.optimize.DedupePlugin()
       new webpack.optimize.UglifyJsPlugin()
     ]
-
+    # external modules
+    fs.readdirSync('am_modules')
+      .filter((x) =>
+        ['.bin'].indexOf(x) is -1
+        ).forEach((mod) =>
+          @nodeOption.externals[mod] = 'commonjs ' + mod
+          )
 ModuleCompiler::_config()
 
 $(restart).on("click", (e) -> require("ipc").send("restart"))
