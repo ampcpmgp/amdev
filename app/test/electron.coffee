@@ -1,5 +1,5 @@
 require("../electron")
-root.riot = require("riot")
+global.riot = require("riot")
 
 Common = require("am-common")
 params = Common::getParams(location.href)
