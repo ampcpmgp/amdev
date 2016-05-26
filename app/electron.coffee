@@ -31,7 +31,8 @@ class ModuleCompiler extends Compiler
     @compile(@browserOption, "am_modules/#{dir}/browser", callback) #browser
     @compile(@nodeOption, "am_modules/#{dir}", callback) #node
   _config: =>
-    @browserOption.plugins = @nodeOption.plugins = [
+    #minified
+    false and @browserOption.plugins = @nodeOption.plugins = [
       new webpack.optimize.OccurenceOrderPlugin(true)
       new webpack.optimize.DedupePlugin()
       new webpack.optimize.UglifyJsPlugin()
