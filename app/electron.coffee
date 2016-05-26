@@ -1,6 +1,7 @@
 $ = require("jquery")
 webpack = require("webpack")
 _ = require("lodash")
+
 #
 fs = require("fs")
 #
@@ -46,7 +47,7 @@ class ModuleCompiler extends Compiler
           )
 ModuleCompiler::_config()
 
-$(restart).on("click", (e) -> require("ipc").send("restart"))
+$(restart).on("click", (e) -> require('electron').ipcRenderer.send("restart"))
 do -> #upload npm
   modules = fs.readdirSync("./am_modules/")
   $box = $(".npm-update-box")
