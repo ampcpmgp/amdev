@@ -1,5 +1,7 @@
 fse = require("fs-extra")
 LunchServer = require("../Server")
+#pipeline for reload
+require("raw!../browser/dev.js")
 
 class TestLunch extends LunchServer
   webDir: "./am_modules/am-lunch-test/test/web/"
