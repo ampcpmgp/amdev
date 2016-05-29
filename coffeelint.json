@@ -10,7 +10,7 @@
     "level" : "ignore"
   },
   "max_line_length": {
-    "value" : 150,
+    "value" : 250,
     "level" : "error"
   }
 }

@@ -1,4 +1,4 @@
-generate = require("am-lunch-test/browser/generate")
+generate = require("./generate")
 
 location.href = "#"
 

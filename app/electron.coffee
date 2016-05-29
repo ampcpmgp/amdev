@@ -15,36 +15,32 @@ class ModuleCompiler extends Compiler
   callback: (callback) =>
     callback() unless --@compileNum
   compile: (baseOption, moduleDir, callback) =>
-    option = _._.cloneDeep(baseOption)
+    option = _.cloneDeep(baseOption)
     option.resolve.root = process.cwd()
     try
       files = fs.readdirSync(moduleDir)
-      option.entry = {}
-      coffeeFiles = (file for file in files when file.match(/\.coffee$/))
-      option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeeFile}" for coffeeFile in coffeeFiles
+      coffeeFiles = (file for file in files when file.match(/.coffee$/))
       delete option.devtool
-      webpack(option).run(=> @callback(callback))
+      for coffeeFile in coffeeFiles
+        option.entry = {}
+        option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeeFile}"
+        yield webpack(option).run(=> @compileGen.next())
+      @callback(callback)
     catch error
       @callback(callback)
   compileModules: (dir, callback) =>
     # TODO: コンパイル数チェックをもう少しスマートにしたい
     @compileNum = 2
-    @compile(@browserOption, "am_modules/#{dir}/browser", callback) #browser
-    @compile(@nodeOption, "am_modules/#{dir}", callback) #node
+    @compileGen = @compile(@browserOption, "am_modules/#{dir}/browser", callback) #browser
+    @compileGen.next()
+    exec("coffee -c ./am_modules/#{dir}/*.coffee", => @callback(callback)) #node
   _config: =>
     #minified
-    false and @browserOption.plugins = @nodeOption.plugins = [
+    @browserOption.plugins = [
       new webpack.optimize.OccurenceOrderPlugin(true)
       new webpack.optimize.DedupePlugin()
       new webpack.optimize.UglifyJsPlugin()
     ]
-    # external modules
-    fs.readdirSync('am_modules')
-      .filter((x) =>
-        ['.bin'].indexOf(x) is -1
-        ).forEach((mod) =>
-          @nodeOption.externals[mod] = 'commonjs ' + mod
-          )
 ModuleCompiler::_config()
 
 $(restart).on("click", (e) -> require('electron').ipcRenderer.send("restart"))
@@ -61,7 +57,6 @@ do -> #upload npm
       $fragment.append($button)
     $box.append($fragment)
   window.npmPublish = (uploadModules = modules) ->
-    command = "coffee -c ./"
     console.log "npm upload start - #{uploadModules}"
     ea.liveReloadStopFlg = true
     for module in uploadModules

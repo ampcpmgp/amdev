@@ -3,16 +3,18 @@ mime = require('mime')
 chokidar = require('chokidar')
 cson = require('cson')
 SimpleServer = require("am-simple-server")
-html = require("./src/index.html")
+html = null
 devJs = null
 
 module.exports = class LunchServer extends SimpleServer
   watchPath: "./web/test.js"
   patternFile:  "./web/case.cson"
+  htmlPath: "#{__dirname}/browser/index.html"
   devJsPath: "#{__dirname}/browser/dev.js"
   sioOption: {origins: "*:*"}
   start: (@httpPort = 8080, @wsPort = @httpPort) =>
     super(@httpPort, @wsPort, => console.log("server start, on port:#{@httpPort}"))
+    html = fs.readFileSync(@htmlPath, {encoding: "utf-8"})
     devJs = fs
       .readFileSync(@devJsPath, {encoding: "utf-8"})
       .replace("{__WSPORT__}", @wsPort).replace("{__TESTJS__}", @watchPath.replace(@webDir, ""))
