@@ -4,15 +4,18 @@ chokidar = require('chokidar')
 cson = require('cson')
 SimpleServer = require("am-simple-server")
 html = require("./src/index.html")
-devJs = require("raw!./browser/dev.js")
+devJs = null
 
 module.exports = class LunchServer extends SimpleServer
   watchPath: "./web/test.js"
   patternFile:  "./web/case.cson"
+  devJsPath: "#{__dirname}/browser/dev.js"
   sioOption: {origins: "*:*"}
   start: (@httpPort = 8080, @wsPort = @httpPort) =>
     super(@httpPort, @wsPort, => console.log("server start, on port:#{@httpPort}"))
-    devJs = devJs.replace("{__WSPORT__}", @wsPort).replace("{__TESTJS__}", @watchPath.replace(@webDir, ""))
+    devJs = fs
+      .readFileSync(@devJsPath, {encoding: "utf-8"})
+      .replace("{__WSPORT__}", @wsPort).replace("{__TESTJS__}", @watchPath.replace(@webDir, ""))
     chokidar.watch(@patternFile).on("change", (path) =>
       @sendTestCase(socket) for socket in @reloadList
     )
