@@ -26,5 +26,6 @@ module.exports = class ElectronApp
     chokidar
       .watch(["./app/.build/", "./app/index.html"])
       .on("change", (path) =>
+        return if @liveReloadStopFlg
         location.reload()
       )
