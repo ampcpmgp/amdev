@@ -12,13 +12,16 @@ module.exports = class AutoEvent
     @funcNum = -1
     @wait(0)
     @
-  addEvent: (callback) =>
+  addEvent: (callback, assert) =>
+    assert() if typeof assert is "function"
     innerFunc = @innerFuncs[@funcNum]
     innerFunc.push(callback)
     @
   addSelectorEvent: ($this, msg, callback) =>
-    return console.assert($this, msg) unless $this
-    @addEvent(callback)
+    @addEvent(
+      callback,
+      () => return console.assert($this, msg) unless $this
+    )
   selectValue: (selector, value) => #未実装
   setValue: (selector, value) =>
     @addSelectorEvent($this = $(selector), "#{selector} can't set value", =>

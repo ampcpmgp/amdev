@@ -4,6 +4,7 @@ autoevent:
   global: "?am-autoevent&global"
   timeoutErrorIsOK: "?am-autoevent&timeout=1000"
   timeout: "?am-autoevent&timeout=5000"
+  click時のasssertion（エラーでOK）: "?am-autoevent&clickAssert"
 lunchTest: "?am-lunch-test&params1"
 SimpleServer:
   connectTest: "?am-simple-server&port=8081"
