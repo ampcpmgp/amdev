@@ -12,8 +12,6 @@ exec = require("child_process").exec
 window.electonReadFlg = true
 
 class ModuleCompiler extends Compiler
-  callback: (callback) =>
-    callback() unless --@compileNum
   compile: (baseOption, moduleDir, callback) =>
     option = _.cloneDeep(baseOption)
     option.resolve.root = process.cwd()
@@ -24,16 +22,21 @@ class ModuleCompiler extends Compiler
       for coffeeFile in coffeeFiles
         option.entry = {}
         option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeeFile}"
-        yield webpack(option).run(=> @compileGen.next())
-      @callback(callback)
+        yield webpack(option).run(=>
+          @compileGen.next()
+        )
+      callback()
     catch error
-      @callback(callback)
+      console.log error
+      callback()
   compileModules: (dir, callback) =>
-    # TODO: コンパイル数チェックをもう少しスマートにしたい
-    @compileNum = 2
-    @compileGen = @compile(@browserOption, "am_modules/#{dir}/browser", callback) #browser
-    @compileGen.next()
-    exec("coffee -c ./am_modules/#{dir}/*.coffee", => @callback(callback)) #node
+    compileNodeModule = => #node or electron
+      @compileGen = @compile(@electronOption, "am_modules/#{dir}", callback)
+      @compileGen.next()
+    compileBrowserModule = => #browser
+      @compileGen = @compile(@browserOption, "am_modules/#{dir}/browser", compileNodeModule)
+      @compileGen.next()
+    compileBrowserModule()
   _config: =>
     #minified
     @browserOption.plugins = [

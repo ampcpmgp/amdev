@@ -44,7 +44,7 @@ module.exports = class Base
     @browserOption = _.cloneDeep(@baseOption)
     @browserOption.target = "web"
     @browserOption.module.preLoaders = []
-    @browserOption.output.libraryTarget = "var"
+    @browserOption.output.libraryTarget = "umd"
     @browserOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
   compile: =>
     webpack(@electronOption).run((err, stats) => @callback(err,stats)) if @electronOption.entry
