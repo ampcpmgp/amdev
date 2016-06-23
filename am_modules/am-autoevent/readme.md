@@ -92,13 +92,13 @@ initialize, and enable to set event
 
 ### #Synchronous processing
 
-#### click(selector)
-first selector clicked
+#### click(selector, assertFlg = true)
+first selector clicked, if assertFlg is true and not find selector, stop processing.
 
-#### setValue(selector, value)
-first selector set value
+#### setValue(selector, value, assertFlg = true)
+first selector set value.
 
-#### setHtml(selector, value)
+#### setHtml(selector, value, assertFlg = true)
 first selector set html
 
 #### addEvent(callback)
