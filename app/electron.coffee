@@ -61,14 +61,12 @@ do -> #upload npm
     $box.append($fragment)
   window.npmPublish = (uploadModules = modules) ->
     console.log "npm upload start - #{uploadModules}"
-    ea.liveReloadStopFlg = true
     for module in uploadModules
       dir = "./am_modules/#{module}"
       callback = =>
         exec("cd #{dir} && npm version patch && npm publish",
           (e, out, err) ->
             console.log out
-            ea.liveReloadStopFlg = false
         )
       ModuleCompiler::compileModules(module, callback)
   window.browserChangeReloadFlg = (e) =>
