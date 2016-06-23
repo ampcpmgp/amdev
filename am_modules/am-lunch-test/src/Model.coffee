@@ -55,6 +55,7 @@ module.exports = class Model
           currentCase.success = true unless currentCase.error
           callback()
     )
+    console.clear()
   openContinuously: =>
     @deleteIframe()
     return @me.update() if @opts.testCases.length <= ++@currentNum
