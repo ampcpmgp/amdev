@@ -35,12 +35,13 @@ module.exports = class Model
     @openContinuously()
   open: (currentCase, callback = =>) =>
     @me.onExecute = true
-    @curWindow = if @me.iframeMode
-      @iframe.url = currentCase.value
-      @me.update()
-      @iframe
-    else
-      new TestWindow(currentCase.value, @me.config.Test)
+    @curWindow =
+      if @me.iframeMode
+        @iframe.url = currentCase.value
+        @me.update()
+        @iframe
+      else
+        new TestWindow(currentCase.value, @me.config.Test)
     @curWindow.setConsoleEvent(
       assert: (flg, msg) =>
         unless flg
