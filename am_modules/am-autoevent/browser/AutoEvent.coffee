@@ -23,11 +23,10 @@ module.exports = class AutoEvent
         if assertionMsg
           callback()
         else
-          () =>
-            try
-              callback()
-            catch error
-              console.error(error)
+          try
+            callback()
+          catch error
+            console.error(error)
       ,
       (() => return console.assert($this, assertionMsg) unless $this) if assertionMsg
     )
