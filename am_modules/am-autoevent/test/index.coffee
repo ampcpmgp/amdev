@@ -38,7 +38,7 @@ class SampleTest extends Test
       $("body").append("<box>box</box>")
     setTimeout(createTimeoutBox, 3000)
   clickAssert: (assertFlg) =>
-    AutoEvent::register().click(".box", assertFlg).start()
+    AutoEvent::register().click(".box", assertFlg is "true").start()
 
 
 SampleTest::start()
