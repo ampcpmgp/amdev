@@ -71,5 +71,8 @@ do -> #upload npm
             ea.liveReloadStopFlg = false
         )
       ModuleCompiler::compileModules(module, callback)
+  window.browserChangeReloadFlg = (e) =>
+    e.target.querySelector("span").innerHTML =
+      ea.liveReloadStopFlg = not ea.liveReloadStopFlg
 # test caseにうつす
 # $("button:contains(am-autoevent)").click()
