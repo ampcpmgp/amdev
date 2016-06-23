@@ -1,3 +1,6 @@
+# 大規模工事中なため以下ただのメモ
+
+
 # amdeven?
 * AM development environment
 * 午前の開発環境
