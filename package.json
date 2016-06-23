@@ -45,9 +45,6 @@
     "socket.io-client": "latest",
     "webpack": "latest"
   },
-  "devDependencies": {
-    "electron-prebuilt": "latest"
-  },
   "author": "",
   "license": "ISC"
 }

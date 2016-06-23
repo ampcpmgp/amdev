@@ -1,6 +1,6 @@
-sio = require('socket.io')
-mime = require('mime')
 chokidar = require('chokidar')
+mime = require('mime')
+sio = require('socket.io')
 #
 fs = require("fs")
 http = require("http")
@@ -60,8 +60,11 @@ module.exports = class SimpleServer
     @wsEventReload()
   wsEventReload: =>
     chokidar.watch(@watchPath).on("change", (path) =>
-      @checkReloadList()
-      @sendReloadEvent(socket) for socket in @reloadList
+      # TODO: async/awaitに切り替えたいが、ストリームの終わりを感知する必要あり
+      setTimeout(=>
+        @checkReloadList()
+        @sendReloadEvent(socket) for socket in @reloadList
+      , 80)
     )
   sendReloadEvent: (socket) -> socket.emit("reload")
   sendCssReloadEvent: (socket,filepath) -> socket.emit("css reload", fs.readFileSync(filepath, {encoding:"utf-8"}))
