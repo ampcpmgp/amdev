@@ -20,7 +20,7 @@ module.exports = class Base
       postLoaders: [
         {test: /\.src\.coffee$/, loader: "raw"}
       ]
-    devtool: "cheap-module-eval-source-map"
+    devtool: "#cheap-module-eval-source-map"
     resolve:
       modulesDirectories: ["am_modules", "node_modules"]
       extensions: [".coffee", ".js", ""]
