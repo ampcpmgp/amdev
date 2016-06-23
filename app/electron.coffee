@@ -59,7 +59,7 @@ do -> #upload npm
         .addClass(module)
       $fragment.append($button)
     $box.append($fragment)
-  window.npmPublish = (uploadModules = modules) ->
+  window.npmPublish = (uploadModules) ->
     console.log "npm upload start - #{uploadModules}"
     for module in uploadModules
       dir = "./am_modules/#{module}"
