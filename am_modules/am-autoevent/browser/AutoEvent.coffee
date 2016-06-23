@@ -17,21 +17,41 @@ module.exports = class AutoEvent
     innerFunc = @innerFuncs[@funcNum]
     innerFunc.push(callback)
     @
-  addSelectorEvent: ($this, msg, callback) =>
+  addSelectorEvent: ($this, assertionMsg, callback) =>
     @addEvent(
-      callback,
-      () => return console.assert($this, msg) unless $this
+      () =>
+        if assertionMsg
+          callback()
+        else
+          () =>
+            try
+              callback()
+            catch error
+              console.error(error)
+      ,
+      (() => return console.assert($this, assertionMsg) unless $this) if assertionMsg
     )
   selectValue: (selector, value) => #未実装
-  setValue: (selector, value) =>
-    @addSelectorEvent($this = $(selector), "#{selector} can't set value", =>
-      $this.value = value
-      trigger($this, "input")
+  setValue: (selector, value, assertFlg = true) =>
+    @addSelectorEvent(
+      $this = $(selector),
+      "#{selector} can't set value" if assertFlg,
+      =>
+        $this.value = value
+        trigger($this, "input")
     )
-  setHtml: (selector, html) =>
-    @addSelectorEvent($this = $(selector), "#{selector} can't set html", => $this.innerHTML = html)
-  click: (selector) =>
-    @addSelectorEvent($this = $(selector), "#{selector} can't click", => $this.click())
+  setHtml: (selector, html, assertFlg = true) =>
+    @addSelectorEvent(
+      $this = $(selector),
+      "#{selector} can't set html" if assertFlg,
+      => $this.innerHTML = html
+    )
+  click: (selector, assertFlg = true) =>
+    @addSelectorEvent(
+      $this = $(selector),
+      "#{selector} can't click" if assertFlg is "true",
+      => $this.click()
+    )
   waitEvent: (callback) =>
     @funcs.push(callback)
     @
