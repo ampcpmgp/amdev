@@ -20,7 +20,6 @@ module.exports = class AutoEvent
     @addEvent(
       () =>
         $this = $(selector)
-        console.log assertFlg
         if assertFlg
           console.assert($this, assertionMsg)
           callback($this)
