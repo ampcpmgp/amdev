@@ -1,8 +1,8 @@
 {
   "name": "am-autoevent",
-  "version": "1.0.49",
+  "version": "1.0.50",
   "description": "web client event",
-  "main": "browser/AutoEvent-gen",
+  "main": "browser/AutoEvent-no-gen",
   "scripts": {
     "test": "echo error?"
   },
