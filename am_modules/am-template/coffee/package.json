@@ -5,7 +5,7 @@
   "main": "electron/.build/start.js",
   "scripts": {
     "init": "npm i && npm run compile",
-    "cl": "npm run compile && node node_modules/am-deven/app/cl",
+    "cl": "npm run compile && node node_modules/am-dev/app/cl",
     "start": "npm run watch",
     "start:server": "npm run compile && node app/server.js",
     "watch": "coffee watch.coffee",
@@ -19,7 +19,7 @@
     "am-autoevent": "latest",
     "am-common": "latest",
     "am-compiler": "latest",
-    "am-deven": "latest",
+    "am-dev": "latest",
     "am-simple-server": "latest",
     "am-template": "latest"
   },

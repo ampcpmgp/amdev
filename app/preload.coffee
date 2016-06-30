@@ -1,6 +1,6 @@
 start = ->
   #Electron
-  window.ea = new (require("am-deven/app/ElectronApp"))
+  window.ea = new (require("am-dev/app/ElectronApp"))
   ea.start()
 
 document.addEventListener("DOMContentLoaded", start)

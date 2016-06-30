@@ -10,8 +10,8 @@ module.exports = class SimpleServer
   webDir:  [
     "./web"
     "./node_modules"
-    "./node_modules/am-deven/web"
-    "./node_modules/am-deven/node_modules"
+    "./node_modules/am-dev/web"
+    "./node_modules/am-dev/node_modules"
   ]
   #module
   #info
