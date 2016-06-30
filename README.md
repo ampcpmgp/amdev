@@ -1,7 +1,7 @@
 # 大規模工事中なため以下ただのメモ
 
 
-# amdeven?
+# amdev?
 * AM development environment
 * 午前の開発環境
 
@@ -24,7 +24,7 @@ sudo apt-get install git curl
 curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install -y nodejs
 # if npm v2, enter [sudo npm install -g npm]
-git clone {https://github.com/ampcpmgp/amdeven}
+git clone {https://github.com/ampcpmgp/amdev}
 sudo npm install -g forever coffee-script
 ```
 
@@ -32,7 +32,7 @@ sudo npm install -g forever coffee-script
 ## this project environment
 ### this build environment
 ```
-git clone github.com/ampcpmgp/amdeven
+git clone github.com/ampcpmgp/amdev
 
 npm i -g coffee-script
 npm run init

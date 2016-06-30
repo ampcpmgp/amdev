@@ -1,7 +1,7 @@
 # am-autoevent
 The event operation of a web page, it can be easily automated.(maybe)
 
-https://github.com/ampcpmgp/amdeven/tree/master/am_modules/am-autoevent
+https://github.com/ampcpmgp/amdev/tree/master/am_modules/am-autoevent
 
 ## sample code(coffeescript, or es2015 syntax)
 ```coffeescript
@@ -30,11 +30,11 @@ npm i am-autoevent
 #### (pattern 2 - recommended) as bookmarklet with chrome
 stability version
 ```js
-javascript:(function()%7Bvar%20page%20%3D%20'https%3A%2F%2Fcdn.rawgit.com%2Fampcpmgp%2Famdeven%2Fd827cc7dc96867580cd8b91cda3530a1ac6c3cf6%2Fam_modules%2Fam-autoevent%2Fbuild%2Fautoevent.js'%3Bvar%20script%20%3D%20document.createElement('script')%3Bscript.src%20%3D%20page%3Bscript.type%3D'text%2Fjavascript'%3Bdocument.body.appendChild(script)%7D)()
+javascript:(function()%7Bvar%20page%20%3D%20'https%3A%2F%2Fcdn.rawgit.com%2Fampcpmgp%2Famdev%2Fd827cc7dc96867580cd8b91cda3530a1ac6c3cf6%2Fam_modules%2Fam-autoevent%2Fbuild%2Fautoevent.js'%3Bvar%20script%20%3D%20document.createElement('script')%3Bscript.src%20%3D%20page%3Bscript.type%3D'text%2Fjavascript'%3Bdocument.body.appendChild(script)%7D)()
 ```
 or latest version
 ```js
-javascript:(function()%7Bvar%20page%20%3D%20'https%3A%2F%2Frawgit.com%2Fampcpmgp%2Famdeven%2Fmaster%2Fam_modules%2Fam-autoevent%2Fbuild%2Fautoevent.js'%3Bvar%20script%20%3D%20document.createElement('script')%3Bscript.src%20%3D%20page%3Bscript.type%3D'text%2Fjavascript'%3Bdocument.body.appendChild(script)%7D)()
+javascript:(function()%7Bvar%20page%20%3D%20'https%3A%2F%2Frawgit.com%2Fampcpmgp%2Famdev%2Fmaster%2Fam_modules%2Fam-autoevent%2Fbuild%2Fautoevent.js'%3Bvar%20script%20%3D%20document.createElement('script')%3Bscript.src%20%3D%20page%3Bscript.type%3D'text%2Fjavascript'%3Bdocument.body.appendChild(script)%7D)()
 ```
 
 1. Copy the code adove
@@ -45,7 +45,7 @@ javascript:(function()%7Bvar%20page%20%3D%20'https%3A%2F%2Frawgit.com%2Fampcpmgp
 #### (pattern 3 - easy) as code in console
 stability version
 ```js
-var page = 'https://cdn.rawgit.com/ampcpmgp/amdeven/d827cc7dc96867580cd8b91cda3530a1ac6c3cf6/am_modules/am-autoevent/build/autoevent.js'
+var page = 'https://cdn.rawgit.com/ampcpmgp/amdev/d827cc7dc96867580cd8b91cda3530a1ac6c3cf6/am_modules/am-autoevent/build/autoevent.js'
 var script = document.createElement('script')
 script.src = page
 script.type='text/javascript'
@@ -53,7 +53,7 @@ document.body.appendChild(script)
 ```
 or latest version
 ```js
-var page = 'https://rawgit.com/ampcpmgp/amdeven/master/am_modules/am-autoevent/build/autoevent.js'
+var page = 'https://rawgit.com/ampcpmgp/amdev/master/am_modules/am-autoevent/build/autoevent.js'
 var script = document.createElement('script')
 script.src = page
 script.type='text/javascript'

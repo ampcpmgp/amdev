@@ -1,5 +1,5 @@
 {
-  "name": "amdeven",
+  "name": "amdev",
   "version": "0.1.1",
   "description": "am development enviroment",
   "main": "./app/server.js",
