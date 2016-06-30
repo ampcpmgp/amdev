@@ -17,6 +17,9 @@ class ModuleCompiler extends Compiler
     option.resolve.root = process.cwd()
     try
       files = fs.readdirSync(moduleDir)
+    catch error
+      return callback()
+    try
       coffeeFiles = (file for file in files when file.match(/.coffee$/))
       delete option.devtool
       for coffeeFile in coffeeFiles
