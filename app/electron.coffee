@@ -53,21 +53,23 @@ $(restart).on("click", (e) -> require('electron').ipcRenderer.send("restart"))
 do -> #upload npm
   modules = fs.readdirSync("./am_modules/")
   $box = $(".npm-update-box")
-  $button = $(npmUpdateButton.content).find("button")
+  $content = $(npmUpdateButton.content)
   for module in modules
     $fragment = $(document.createDocumentFragment())
-    do($button) ->
-      $button = $button
-        .clone().text(module).attr("onclick", $button.attr("onclick").replace(/!val!/, module))
+    do($content) ->
+      $content = $content.clone()
+      $buttons = $content.find("button")
+        .each(-> $(this).attr("onclick", $(this).attr("onclick").replace(/!val!/, module)))
         .addClass(module)
-      $fragment.append($button)
+      $buttons.filter(".patch").text(module)
+      $fragment.append($content)
     $box.append($fragment)
-  window.npmPublish = (uploadModules) ->
+  window.npmPublish = (uploadModules, version) ->
     console.log "npm upload start - #{uploadModules}"
     for module in uploadModules
       dir = "./am_modules/#{module}"
       callback = =>
-        exec("cd #{dir} && npm version patch && npm publish",
+        exec("cd #{dir} && npm version #{version} && npm publish",
           (e, out, err) ->
             console.log out
         )
