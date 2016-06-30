@@ -11,5 +11,6 @@ lunchTest:
   color: "?am-lunch-test&_color"
   color子タグのみ: "?am-lunch-test&_color=.child"
   border: "?am-lunch-test&_border"
+  # 上からparameter変更: "?am-lunch-test&tohash" #TODO: テストケース作成
 SimpleServer:
   connectTest: "?am-simple-server&port=8081"

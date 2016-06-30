@@ -1,6 +1,8 @@
 escapeRegexp = require("escape-string-regexp")
 Common = require("am-common")
 
+oneTimeExecutionSeparator = "?"
+
 class TestWindow
   constructor: (@url, Test) ->
     @window = window.open(@url)
@@ -17,6 +19,7 @@ module.exports = class Model
     @deleteIframe()
     return unless @hashWord
     return setTimeout((=> @executeOnce(testCase)), 0) for testCase in @opts.testCases when testCase.value is @hashWord
+    return setTimeout((=> @open({value: @hashWord})), 0)  unless @hashWord.indexOf(oneTimeExecutionSeparator) is -1
     setTimeout((=> @execute()), 0)
   init: =>
     @params = Common::getParams()
