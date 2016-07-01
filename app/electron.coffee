@@ -45,7 +45,7 @@ class ModuleCompiler extends Compiler
     @browserOption.plugins = [
       new webpack.optimize.OccurenceOrderPlugin(true)
       new webpack.optimize.DedupePlugin()
-      new webpack.optimize.UglifyJsPlugin()
+      # new webpack.optimize.UglifyJsPlugin()
     ]
 ModuleCompiler::_config()
 

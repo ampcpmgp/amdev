@@ -1,6 +1,6 @@
 {
   "name": "am-compiler",
-  "version": "1.0.30",
+  "version": "1.0.31",
   "description": "compiler",
   "main": "Base",
   "scripts": {
