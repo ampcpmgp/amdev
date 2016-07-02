@@ -26,8 +26,6 @@ module.exports = class AutoEvent
         else
           try
             callback($this)
-      ,
-
     )
   selectValue: (selector, value) => #未実装
   setValue: (selector, value, assertFlg = true) =>
