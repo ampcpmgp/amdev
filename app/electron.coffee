@@ -34,10 +34,10 @@ class ModuleCompiler extends Compiler
       callback()
   compileModules: (dir, callback) =>
     compileNodeModule = => #node or electron
-      @compileGen = @compile(@electronOption, "am_modules/#{dir}", callback)
+      @compileGen = @compile(@electronOption, "modules/#{dir}", callback)
       @compileGen.next()
     compileBrowserModule = => #browser
-      @compileGen = @compile(@browserOption, "am_modules/#{dir}/browser", compileNodeModule)
+      @compileGen = @compile(@browserOption, "modules/#{dir}/browser", compileNodeModule)
       @compileGen.next()
     compileBrowserModule()
   _config: =>
@@ -51,7 +51,7 @@ ModuleCompiler::_config()
 
 $(restart).on("click", (e) -> require('electron').ipcRenderer.send("restart"))
 do -> #upload npm
-  modules = fs.readdirSync("./am_modules/")
+  modules = fs.readdirSync("./modules/")
   $box = $(".npm-update-box")
   $content = $(npmUpdateButton.content)
   for module in modules
@@ -67,7 +67,7 @@ do -> #upload npm
   window.npmPublish = (uploadModules, version) ->
     console.log "npm upload start - #{uploadModules}"
     for module in uploadModules
-      dir = "./am_modules/#{module}"
+      dir = "./modules/#{module}"
       callback = =>
         exec("cd #{dir} && npm version #{version} && npm publish",
           (e, out, err) ->

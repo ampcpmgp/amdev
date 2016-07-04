@@ -1,5 +1,5 @@
-class Compiler extends require("./am_modules/am-compiler/Base.coffee")
+class Compiler extends require("./modules/am-compiler/Base.coffee")
   start: =>
-    @browserOption.entry["./am_modules/am-lunch-test/browser/dev"] = "./am_modules/am-lunch-test/browser/dev.coffee"
+    @browserOption.entry["./modules/am-lunch-test/browser/dev"] = "./modules/am-lunch-test/browser/dev.coffee"
     super()
-require("./am_modules/am-template/coffee/compile")(Compiler)
+require("./modules/am-template/coffee/compile")(Compiler)

@@ -22,7 +22,7 @@ module.exports = class Base
       ]
     devtool: "#cheap-module-eval-source-map"
     resolve:
-      modulesDirectories: ["am_modules", "node_modules"]
+      modulesDirectories: ["modules", "node_modules"]
       extensions: [".coffee", ".js", ""]
   nodeModules: do =>
     retObj = {}

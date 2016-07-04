@@ -67,7 +67,7 @@ npm run init
 ## やりたいこと
 ```coffee
 やりたいリスト: [
-  am_modulesのnpm向けビルド方法、要考慮:
+  modulesのnpm向けビルド方法、要考慮:
     要点1:
       内部的にrequireしているpackageのコンパイルについて:
         自分以外知らない: coffeeのまま
