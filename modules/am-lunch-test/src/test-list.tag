@@ -18,7 +18,7 @@
   <style scoped>
     :scope {display: block; background-color: white;}
     :scope * {font-size: 14px;}
-    a { color: blue; text-decoration: none; }
+    a { color: blue; text-decoration: none; display: inline-block; }
     a:hover { opacity: 0.4;}
     .success { color: blue; }
     .error { color: red; }
