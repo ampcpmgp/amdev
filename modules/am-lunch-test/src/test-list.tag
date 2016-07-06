@@ -5,6 +5,7 @@
     <span class="bold">/</span>
     <span class={bold: !iframeMode}>new window</span>
   </button>
+  <div>{successSum}/{executeSum}</div>
   <div each={testCase, i in opts.testCases}>
     <a onclick={router} href={testCase.pageLink} class="step {bold: !testCase.depth}" style="margin-left: {testCase.depth * 8}px;">
       <span class="bold {success: testCase.success, error: testCase.error}" if={testCase.success||testCase.error}>
@@ -26,7 +27,6 @@
     .step { color: #333; margin-right: 10px; }
   </style>
   <script type="coffee">
-    #
     @Model = require("./Model").prototype
     @onExecute = false
     window.localStorage.testMode = "iframe" unless window.localStorage.testMode

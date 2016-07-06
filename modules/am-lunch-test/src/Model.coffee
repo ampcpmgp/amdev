@@ -22,6 +22,8 @@ module.exports = class Model
     return setTimeout((=> @open({value: @hashWord})), 0)  unless @hashWord.indexOf(oneTimeExecutionSeparator) is -1
     setTimeout((=> @execute()), 0)
   init: =>
+    @me.successSum = 0
+    @me.executeSum = 0
     @params = Common::getParams()
     @hashWord = location.hash.replace(/^#+/, "")
     for testCase in @opts.testCases
@@ -55,10 +57,12 @@ module.exports = class Model
       info: (msg) =>
         if msg is "finished" and not currentCase.error
           console.info(msg)
-          currentCase.success = true unless currentCase.error
+          currentCase.success = true
+          ++@me.successSum
           callback()
     )
     console.clear()
+    ++@me.executeSum
   openContinuously: =>
     @deleteIframe()
     return @me.update() if @opts.testCases.length <= ++@currentNum
