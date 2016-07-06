@@ -1,5 +1,6 @@
 # am-lunch-test
-Test development using the parameters
+Test development using parameters.
+
 
 ## sample code
 
@@ -41,16 +42,31 @@ else location.search is "?click2"
   console.info("finished")
 ```
 
-#### use am-autoevent
+#### use Test class with am-autoevent
 ```coffee
 Test = require("am-lunch-test")
 class NewTest extends Test
-  api2: =>
-    console.assert("api successed")
-  newApi: (numStr) =>
-    num = parseInt(numStr)
-    console.assert(num)
-    console.info("finished")
+  init: =>
+    @autoEvent = new @AutoEvent
+    @autoEvent.register()
+  click: (selector) =>
+    @autoEvent.wait(100).click(selector)
+  addEvent: (numStr) =>
+    @autoEvent.wait(100).addEvent(=>
+      num = parseInt(numStr)
+      console.assert(num)
+    )
 
-NewTest::start()
+newTest = new NewTest
+newTest.start()
+newTest.autoEvent.start()
+```
+
+## document
+```coffee
+generate = require("am-lunch-test/browser/generate")
+riotjsTag = generate(
+  pattern1: "?param1"
+  pattern2: "?param2"
+)
 ```
