@@ -3,7 +3,6 @@ escape = require("escape-html")
 require("../src/test-list.tag")
 require("../src/test-iframe.tag")
 testCases = null
-iframeObj = {}
 
 recursive = (key, value, pageLink, depth) =>
   if typeof value is "object"
@@ -17,5 +16,5 @@ module.exports = (obj) =>
   recursive(key, value, key, 0)  for key, value of obj
   {
     list: riot.mount("test-list", {testCases})
-    iframe: riot.mount("test-iframe", iframeObj)
+    iframe: riot.mount("test-iframe")
   }
