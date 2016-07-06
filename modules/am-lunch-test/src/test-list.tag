@@ -42,7 +42,9 @@
     #settings
     check = => @Model.check()
     #me
-    @router = (e) => riot.route(e.target.getAttribute("href"))
+    @router = (e) =>
+      location.href = "#" + (e.target.getAttribute("href"))
+      e.preventDefault()
     @toRouteHash = (e) => location.href = "#"
     @changeTestMode = =>
       if localStorage.testMode is "iframe"
