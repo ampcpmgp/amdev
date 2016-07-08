@@ -3,16 +3,6 @@ Common = require("am-common")
 
 oneTimeExecutionSeparator = "?"
 
-class TestWindow
-  constructor: (@url, Test) ->
-    @window = window.open(@url)
-    @window.Test = Test
-  setConsoleEvent: (callbackObj) =>
-    @window.console.assert = (flg, msg) => callbackObj.assert(flg, msg)
-    @window.console.info = (msg) => callbackObj.info(msg)
-  close: =>
-    @window.close()
-
 module.exports = class Model
   check: =>
     @init()
@@ -40,13 +30,9 @@ module.exports = class Model
     @openContinuously()
   open: (currentCase, callback = =>) =>
     @me.onExecute = true
-    @curWindow =
-      if @me.iframeMode
-        @iframe.url = currentCase.value
-        @me.update()
-        @iframe
-      else
-        new TestWindow(currentCase.value, @me.config.Test)
+    @iframe.url = currentCase.value
+    @me.update()
+    @curWindow = @iframe
     @curWindow.setConsoleEvent(
       assert: (flg, msg) =>
         unless flg
