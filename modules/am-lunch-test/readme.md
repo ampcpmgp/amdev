@@ -46,6 +46,11 @@ else location.search is "?click2"
 ```coffee
 Test = require("am-lunch-test")
 class NewTest extends Test
+
+newTest = new NewTest
+autoEvent = Test::AutoEvent
+
+newTest.start(
   init: =>
     @autoEvent = new @AutoEvent
     @autoEvent.register()
@@ -56,17 +61,10 @@ class NewTest extends Test
       num = parseInt(numStr)
       console.assert(num)
     )
-
-newTest = new NewTest
-newTest.start()
-newTest.autoEvent.start()
-```
-
-## document
-```coffee
-generate = require("am-lunch-test/browser/generate")
-riotjsTag = generate(
-  pattern1: "?param1"
-  pattern2: "?param2"
 )
+
+autoEvent.start()
 ```
+
+## API
+TODO
