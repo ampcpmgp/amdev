@@ -15,4 +15,4 @@ allpattern:
     ルートパス: "/?am-lunch-test"
     # 上からparameter変更: "?am-lunch-test&tohash" #TODO: テストケース作成
   SimpleServer:
-    connectTest: "?am-simple-server&port=8081"
+    connectTest: "?am-simple-server&port=50001"

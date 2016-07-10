@@ -5,7 +5,7 @@ class NewTest extends Test
   port: (number) =>
     wsc = new WSClient
     connectFlag = false
-    wsc.start(8081)
+    wsc.start(number)
     wsc.ws.off("connect")
     wsc.ws.on("connect", =>
       connectFlag = true
