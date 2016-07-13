@@ -27,7 +27,7 @@
     #from ./dev.coffee
     @config =
       extFile: null
-      Test: class ListTest extends require("am-lunch-test/browser/Test")
+      Test: class ListTest extends require("am-lunch-time/browser/Test")
     #init Model
     @Model.me = @
     @Model.iframe = @tags["test-iframe"]

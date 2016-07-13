@@ -1,7 +1,7 @@
 $ = require("jquery")
 $("body").append($(require("./tag.html")))
 
-class SampleTest extends require("am-lunch-test")
+class SampleTest extends require("am-lunch-time")
   params1: (params1Val) =>
     console.assert(params1Val)
   _color: (selector) =>

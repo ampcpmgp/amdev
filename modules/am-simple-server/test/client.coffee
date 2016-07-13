@@ -1,4 +1,4 @@
-Test = require("am-lunch-test")
+Test = require("am-lunch-time")
 WSClient = require("../WSClient")
 
 class NewTest extends Test

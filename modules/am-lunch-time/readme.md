@@ -1,6 +1,6 @@
-# am-lunch-test
-Test development using parameters.
-this is renamed am-lunch-time
+# am-lunch-time
+Test development using parameters.  
+this is renamed from am-lunch-test.
 
 ## sample code
 
@@ -12,7 +12,7 @@ testListPage.html
 
 testListPage.coffee
 ```coffee
-generate = require("am-lunch-test/browser/generate")
+generate = require("am-lunch-time/browser/generate")
 testcases =
   clickTest:
     click1: "?click1"
@@ -44,7 +44,7 @@ else location.search is "?click2"
 
 #### use Test class with am-autoevent
 ```coffee
-Test = require("am-lunch-test")
+Test = require("am-lunch-time")
 class NewTest extends Test
 
 newTest = new NewTest
