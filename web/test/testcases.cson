@@ -8,11 +8,11 @@ allpattern:
     click時のasssertion（エラーでOK）: "?am-autoevent&clickAssert=true"
     click時のasssertion（assert無し）: "?am-autoevent&clickAssert=false"
   lunchTest:
-    logにparam1: "?am-lunch-time&params1"
-    color: "?am-lunch-time&_color"
-    color子タグのみ: "?am-lunch-time&_color=.child"
-    border: "?am-lunch-time&_border"
-    ルートパス: "/?am-lunch-time"
-    # 上からparameter変更: "?am-lunch-time&tohash" #TODO: テストケース作成
+    logにparam1: "?am-lunch-test&params1"
+    color: "?am-lunch-test&_color"
+    color子タグのみ: "?am-lunch-test&_color=.child"
+    border: "?am-lunch-test&_border"
+    ルートパス: "/?am-lunch-test"
+    # 上からparameter変更: "?am-lunch-test&tohash" #TODO: テストケース作成
   SimpleServer:
     connectTest: "?am-simple-server&port=50001"
