@@ -1,6 +1,6 @@
-# am-lunch-test renamed am-lunch-time
+# am-lunch-test
 Test development using parameters.
-
+this is renamed am-lunch-time
 
 ## sample code
 
