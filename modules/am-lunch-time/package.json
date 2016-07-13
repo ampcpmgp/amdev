@@ -1,6 +1,6 @@
 {
-  "name": "am-lunch-test",
-  "version": "1.1.2",
+  "name": "am-lunch-time",
+  "version": "1.0.1",
   "description": "test",
   "main": "browser/Test",
   "scripts": {
