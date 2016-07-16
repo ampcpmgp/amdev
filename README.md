@@ -51,6 +51,7 @@ choco install -yf screentogif -version 1.3
 # download
 TODO: cliborを含んだ開発環境を作る
 clibor - http://www.amunsnet.com/
+gapdebug - ios debug
 
 # atom package
 apm install pigments highlight-selected highlight-column save-session editorconfig linter linter-coffeelint script atom-terminal file-icons atom-beautify pretty-json quantum-shell autocomplete-python language-riot-tag linter-eslint
