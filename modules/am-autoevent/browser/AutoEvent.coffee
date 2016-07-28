@@ -27,12 +27,20 @@ module.exports = class AutoEvent
           try
             callback($this)
     )
-  selectValue: (selector, value) => #未実装
+  selectValue: (selector, value, assertFlg = true) =>
+    @addSelectorEvent(
+      selector,
+      assertFlg,
+      "#{selector} can't select value",
+      ($this) =>
+        $this.value = value
+        trigger($this, "change")
+    )
   setValue: (selector, value, assertFlg = true) =>
     @addSelectorEvent(
       selector,
       assertFlg,
-      "#{selector} can't set value",
+      "#{selector} not find",
       ($this) =>
         $this.value = value
         trigger($this, "input")

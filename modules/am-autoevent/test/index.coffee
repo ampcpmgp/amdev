@@ -9,6 +9,9 @@ do => #setup
   $("button").click( =>
     console.log 2
     )
+  $("select").on("change", (e) =>
+    console.log e.currentTarget.value
+  )
 func = (Klass) =>
   ae = new Klass()
   ae.register()
@@ -40,6 +43,9 @@ class SampleTest extends Test
   clickAssert: (assertFlg) =>
     ae = new AutoEvent
     ae.register().wait(300).click(".box", assertFlg is "true").start()
+  select: =>
+    ae = new AutoEvent
+    ae.register().wait(300).selectValue("select", "5").start()
 
 
 SampleTest::start()

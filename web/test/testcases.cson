@@ -7,6 +7,7 @@ allpattern:
     timeout: "?am-autoevent&timeout=5000"
     click時のasssertion（エラーでOK）: "?am-autoevent&clickAssert=true"
     click時のasssertion（assert無し）: "?am-autoevent&clickAssert=false"
+    select: "?am-autoevent&select"
   lunchTest:
     logにparam1: "?am-lunch-time&params1"
     color: "?am-lunch-time&_color"
