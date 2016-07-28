@@ -66,6 +66,7 @@ do -> #upload npm
     $box.append($fragment)
   window.npmPublish = (uploadModules, version) ->
     console.log "npm upload start - #{uploadModules}"
+    ea.liveReloadStopFlg = false or toggleReloadFlgButton.click()
     for module in uploadModules
       dir = "./modules/#{module}"
       callback = =>
