@@ -5,15 +5,19 @@ require("../../sample/bmp-to-jpeg.coffee")("C:/Users/ggmg7/Pictures/LOM/1", "C:/
 Jimp = require("jimp")
 fs = require("fs")
 
-module.exports = (path, outputPath) =>
-  fs.mkdirSync(outputPath)
-  for file in fs.readdirSync(path) when file.match(/\.bmp$/)
-    changeExt("#{path}/#{file}", "#{outputPath}/#{file.replace(/\.bmp$/, ".jpg")}")
+gen = null
 
-changeExt = (filepath, outputPath) =>
-  Jimp.read(filepath, (err, lenna) =>
-    throw err if err
-    lenna
-      .quality(90)
-      .write(outputPath)
-  )
+module.exports = (path, outputPath) =>
+  try
+    fs.mkdirSync(outputPath)
+  gen = changeExt(path, outputPath)
+  gen.next()
+
+changeExt = (path, outputPath) =>
+  for file in fs.readdirSync(path) when file.match(/\.bmp$/)
+    yield Jimp.read("#{path}/#{file}", (err, lenna) =>
+      throw err if err
+      lenna
+        .quality(90)
+        .write("#{outputPath}/#{file.replace(/\.bmp$/, ".jpg")}", => gen.next())
+    )
