@@ -24,7 +24,7 @@
     "cron": "latest",
     "cson": "latest",
     "cson-loader": "latest",
-    "electron-prebuilt": "latest",
+    "electron": "latest",
     "escape-html": "latest",
     "escape-string-regexp": "latest",
     "forever": "latest",
