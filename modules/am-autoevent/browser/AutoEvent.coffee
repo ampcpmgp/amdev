@@ -16,11 +16,11 @@ module.exports = class AutoEvent
     innerFunc = @innerFuncs[@funcNum]
     innerFunc.push(callback)
     @
-  addSelectorEvent: (selector, assertFlg, assertionMsg, callback) =>
+  addSelectorEvent: ({selector, assertionMsg, callback}) =>
     @addEvent(
       () =>
         $this = $(selector)
-        if assertFlg
+        if assertionMsg
           console.assert($this, assertionMsg)
           callback($this)
         else
@@ -28,40 +28,36 @@ module.exports = class AutoEvent
             callback($this)
     )
   selectValue: (selector, value, assertFlg = true) =>
-    @addSelectorEvent(
-      "#{selector} [value='#{value}']",
-      assertFlg,
-      "#{selector} [value='#{value}'] can't select value",
-      =>
+    @addSelectorEvent({
+      selector: "#{selector} [value='#{value}']"
+      assertionMsg: "can't select value" if assertFlg
+      callback: =>
         $selector = $(selector)
         $selector.value = value
         trigger($selector, "change")
-    )
+    })
   setValue: (selector, value, assertFlg = true) =>
-    @addSelectorEvent(
-      selector,
-      assertFlg,
-      "#{selector} not find",
-      ($this) =>
+    @addSelectorEvent({
+      selector
+      assertionMsg: "not find" if assertFlg
+      callback: ($this) =>
         $this.value = value
         trigger($this, "input")
-    )
+    })
   setHtml: (selector, html, assertFlg = true) =>
-    @addSelectorEvent(
-      selector,
-      assertFlg,
-      "#{selector} can't set html",
-      ($this) =>
+    @addSelectorEvent({
+      selector
+      assertionMsg: "can't set html" if assertFlg
+      callback: ($this) =>
         $this.innerHTML = html
-    )
+    })
   click: (selector, assertFlg = true) =>
-    @addSelectorEvent(
-      selector,
-      assertFlg,
-      "#{selector} can't click",
-      ($this) =>
+    @addSelectorEvent({
+      selector
+      assertionMsg: "can't click" if assertFlg
+      callback: ($this) =>
         $this.click()
-    )
+    })
   waitEvent: (callback) =>
     @funcs.push(callback)
     @
