@@ -29,7 +29,7 @@ module.exports = class AutoEvent
     )
   selectValue: (selector, value, assertFlg = true) =>
     @addSelectorEvent(
-      selector,
+      "selector[value=#{value}]",
       assertFlg,
       "#{selector} can't select value",
       ($this) =>
