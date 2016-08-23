@@ -1,13 +1,16 @@
 allpattern:
   autoevent:
-    test: "?am-autoevent&test"
-    testNoGen: "?am-autoevent&testNoGen"
-    global: "?am-autoevent&global"
-    timeoutErrorIsOK: "?am-autoevent&timeout=1000"
-    timeout: "?am-autoevent&timeout=5000"
-    click時のasssertion（エラーでOK）: "?am-autoevent&clickAssert=true"
-    click時のasssertion（assert無し）: "?am-autoevent&clickAssert=false"
-    select: "?am-autoevent&select"
+    エラーでOK:
+      timeoutErrorIsOK: "?am-autoevent&timeout=1000"
+      click時のasssertion: "?am-autoevent&clickAssert=true"
+      select: "?am-autoevent&select=6"
+    エラーじゃダメ:
+      test: "?am-autoevent&test"
+      testNoGen: "?am-autoevent&testNoGen"
+      global: "?am-autoevent&global"
+      timeout: "?am-autoevent&timeout=5000"
+      click時のasssertion: "?am-autoevent&clickAssert=false"
+      select: "?am-autoevent&select=5"
   lunchTest:
     logにparam1: "?am-lunch-time&params1"
     color: "?am-lunch-time&_color"

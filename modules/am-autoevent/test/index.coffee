@@ -43,9 +43,9 @@ class SampleTest extends Test
   clickAssert: (assertFlg) =>
     ae = new AutoEvent
     ae.register().wait(300).click(".box", assertFlg is "true").start()
-  select: =>
+  select: (value) =>
     ae = new AutoEvent
-    ae.register().wait(300).selectValue("select", "5").start()
+    ae.register().wait(300).selectValue("select", value).start()
 
 
 SampleTest::start()

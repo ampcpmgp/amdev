@@ -29,12 +29,13 @@ module.exports = class AutoEvent
     )
   selectValue: (selector, value, assertFlg = true) =>
     @addSelectorEvent(
-      "selector[value=#{value}]",
+      "#{selector} [value='#{value}']",
       assertFlg,
-      "#{selector} can't select value",
-      ($this) =>
-        $this.value = value
-        trigger($this, "change")
+      "#{selector} [value='#{value}'] can't select value",
+      =>
+        $selector = $(selector)
+        $selector.value = value
+        trigger($selector, "change")
     )
   setValue: (selector, value, assertFlg = true) =>
     @addSelectorEvent(
