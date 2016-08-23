@@ -21,7 +21,7 @@ module.exports = class AutoEvent
       () =>
         $this = $(selector)
         if assertionMsg
-          console.assert($this, assertionMsg)
+          console.assert($this, "#{selector} #{assertionMsg}")
           callback($this)
         else
           try
