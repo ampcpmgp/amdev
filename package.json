@@ -34,6 +34,8 @@
     "jimp": "latest",
     "jquery": "latest",
     "json-loader": "latest",
+    "less": "latest",
+    "less-loader": "latest",
     "lodash": "latest",
     "mime": "latest",
     "mkdirp": "latest",
