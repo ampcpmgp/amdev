@@ -38,7 +38,6 @@
     "mime": "latest",
     "mkdirp": "latest",
     "node-fetch": "latest",
-    "pouchdb": "latest",
     "raw-loader": "latest",
     "request": "latest",
     "riot": "latest",
