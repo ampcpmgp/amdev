@@ -44,7 +44,9 @@ npm start
 
 ```
 # install chocolatey
-choco install -yf githubforwindows atom skype line lhaplus cmder notepadplusplus googlechrome firefox clover autoit crystaldiskinfo greenshot crystaldiskmark libreoffice googlechrome.canarcy win32diskimager.install
+choco install -yf githubforwindows
+choco install -yf atom
+choco install -yf skype line lhaplus cmder notepadplusplus googlechrome firefox clover autoit crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install
 #TODO: chromeがapngに対応したらそっちを探して対応する
 choco install -yf screentogif -version 1.3
 # download
@@ -53,7 +55,7 @@ clibor - http://www.amunsnet.com/
 gapdebug - ios debug
 
 # atom package
-apm install pigments highlight-selected highlight-column save-session editorconfig linter linter-coffeelint script atom-terminal file-icons atom-beautify pretty-json quantum-shell autocomplete-python language-riot-tag linter-eslint
+apm install pigments highlight-selected highlight-column editorconfig linter script atom-terminal file-icons atom-beautify pretty-json quantum-shell language-riot-tag linter-eslint
 ## styesheet
 atom-text-editor {
     font-family: "Avenir Next",Verdana, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "游ゴシック", "Yu Gothic", "メイリオ", Meiryo, Osaka, sans-serif;
