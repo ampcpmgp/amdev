@@ -55,7 +55,7 @@ clibor - http://www.amunsnet.com/
 gapdebug - ios debug
 
 # atom package
-apm install pigments highlight-selected highlight-column editorconfig linter script atom-terminal file-icons atom-beautify pretty-json quantum-shell language-riot-tag linter-eslint
+apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify pretty-json quantum-shell language-riot-tag linter-eslint
 ## styesheet
 atom-text-editor {
     font-family: "Avenir Next",Verdana, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "游ゴシック", "Yu Gothic", "メイリオ", Meiryo, Osaka, sans-serif;
