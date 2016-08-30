@@ -17,7 +17,7 @@ module.exports = class Test
     selector = if selector is true or not selector then "*" else selector
     selector = selector.join(",") if (typeof selector is "object")
     $(selector).each(->
-      $(this).css("border", "solid 1px #{getRandomColor()}")
+      $(this).css("box-shadow", "0px 0px 0px 1px #{getRandomColor()}")
     )
   _color:  (selector) =>
     opacity = if @params.opacity then (@params.opacity - 0.0) else 0.4
