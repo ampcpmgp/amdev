@@ -46,7 +46,7 @@ npm start
 # install chocolatey
 choco install -yf --allow-empty-checksums githubforwindows
 choco install -yf --allow-empty-checksums atom
-choco install -yf --allow-empty-checksums skype line lhaplus cmder notepadplusplus googlechrome firefox clover autoit crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install
+choco install -yf --allow-empty-checksums skype line lhaplus cmder notepadplusplus googlechrome firefox clover autoit crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install virtualbox.extensionpack
 #TODO: chromeがapngに対応したらそっちを探して対応する
 choco install -yf screentogif -version 1.3
 # download
