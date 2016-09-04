@@ -43,25 +43,24 @@ Func setWindow()
 	  $filename = $tmp_file
    EndIf
    Local $data = readFile($filename)
-   ;writeFile("mogura", $data)
-   Local $data_lines = _StringExplode($data, @CR)
+   Local $data_lines = _StringExplode($data, @LF)
 
    Local $aList = WinList()
    For $i = 1 To $aList[0][0]
 	  If $aList[$i][0] <> "" And BitAND(WinGetState($aList[$i][1]), 2) Then
-		 Local $window_name = StringRegExpReplace($aList[$i][0], ".+\s-\s", "")
+		 Local $window_name = StringRegExpReplace($aList[$i][0], ".+\s(-|\?)+\s", "")
 		 Local $i2 = -1
 		 For $element In $data_lines
 			$i2 += 1
 			Local $info = _StringExplode($element, $arrow)
 			If UBound($info) < 2 Then ContinueLoop
 			Local $title = $info[0]
-			Local $pos = _StringExplode($info[8], ",")
+			Local $pos = _StringExplode($info[1], ",")
 			Local $x = $pos[0]
 			Local $y = $pos[1]
 			Local $w = $pos[2]
 			Local $h = $pos[3]
-			If $window_name = $title Then
+			If $window_name = $title Or StringRegExp($window_name, $title&"$") Then
 			   Local $cur_pos = WinGetPos($aList[$i][1])
 			   If $y > -1000 Then
 				  winmove($aList[$i][1], "", $x, $y, $w, $h, 1)
@@ -85,7 +84,7 @@ Func getWindow()
 		 If Not @error Then
 			Local $num = Int($window_pos[1])
 			If $num > -1000 Then
-			   $data &= ($window_name & $arrow & $window_pos[0] & "," & $window_pos[1] & "," & $window_pos[2] & "," & $window_pos[3] & @CR)
+			   $data &= ($window_name & $arrow & $window_pos[0] & "," & $window_pos[1] & "," & $window_pos[2] & "," & $window_pos[3] & @LF)
 			EndIf
 		 EndIf
 	  EndIf
