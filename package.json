@@ -33,6 +33,7 @@
     "html-loader": "latest",
     "jimp": "latest",
     "jquery": "latest",
+    "jquery-stylesheet": "latest",
     "json-loader": "latest",
     "less": "latest",
     "less-loader": "latest",

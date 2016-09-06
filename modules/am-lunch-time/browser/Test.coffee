@@ -1,4 +1,6 @@
 $ = require("jquery")
+jquery_stylesheet = require("jquery-stylesheet")
+jquery_stylesheet($)
 
 getRandomColor = (opacity = 1) =>
   getRandomNum = => Math.floor(Math.random() * 256)
@@ -28,6 +30,7 @@ module.exports = class Test
     )
   _hide: (selector) =>
     selector = selector.join(",") if typeof selector is "object"
-    $(selector).hide()
+    $ss = $.stylesheet(selector)
+    $ss.css('display', 'none !important')
   _auto: =>
     # TODO: autoevent連携

@@ -17,6 +17,7 @@ allpattern:
     color子タグのみ: "?am-lunch-time&_color=.child"
     border: "?am-lunch-time&_border"
     ルートパス: "/?am-lunch-time"
+    hide: "?am-lunch-time&_hide=.child"
     # 上からparameter変更: "?am-lunch-time&tohash" #TODO: テストケース作成
   SimpleServer:
     connectTest: "?am-simple-server&port=50001"
