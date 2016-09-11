@@ -31,6 +31,7 @@
     "fs-extra": "latest",
     "ftp": "latest",
     "html-loader": "latest",
+    "is_js": "latest",
     "jimp": "latest",
     "jquery": "latest",
     "jquery-stylesheet": "latest",
