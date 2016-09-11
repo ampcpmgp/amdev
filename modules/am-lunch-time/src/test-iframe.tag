@@ -1,18 +1,33 @@
 <test-iframe>
-  <iframe if={!isElectron} src={url}></iframe>
-  <webview if={isElectron} src={url} nodeintegration></webview>
+  <span class={isIos ? 'ios' : 'no-ios'}>
+    <iframe if={!isElectron} src={url}></iframe>
+    <webview if={isElectron} src={url} nodeintegration></webview>
+  </span>
   <style scoped>
-    iframe, webview {
-      background-color: white;
-      border: none;
+    .ios {
+      display: block;
+      -webkit-overflow-scrolling: touch;
+      overflow: auto;
       position: fixed;
-      left: 0px;
-      top: 0px;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
     }
+    iframe, webview {
+      background-color: white;
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+    .no-ios iframe, .no-ios webview {
+      position: fixed;
+      left: 0px;
+      top: 0px;
+    }
   </style>
   <script type="coffee">
+    @isIos = require("is_js").ios()
     @isElectron = process?.versions?.electron
     @addScript = =>
     @setConsoleEvent = (callbackObj) =>
