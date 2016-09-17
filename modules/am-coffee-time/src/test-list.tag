@@ -33,13 +33,16 @@
     @Model.iframe = @tags["test-iframe"]
     @Model.opts = opts
     #settings
+    bodyStyle = document.body.style
     check = => @Model.check()
+    update = => bodyStyle.overflowY = if @onExecute then "hidden" else ""
     #me
     @router = (e) =>
       location.href = "#" + (e.target.getAttribute("href"))
       e.preventDefault()
     @toRouteHash = (e) => location.href = "#"
     #mount
+    @on("update", update)
     @on("mount", check)
     riot.route("..", check)
     riot.route.start()
