@@ -12,12 +12,12 @@ allpattern:
       click時のasssertion: "?am-autoevent&clickAssert=false"
       select: "?am-autoevent&select=5"
   lunchTest:
-    logにparam1: "?am-lunch-time&params1"
-    color: "?am-lunch-time&_color"
-    color子タグのみ: "?am-lunch-time&_color=.child"
-    border: "?am-lunch-time&_border"
-    ルートパス: "/?am-lunch-time"
-    hide: "?am-lunch-time&_hide=.child"
-    # 上からparameter変更: "?am-lunch-time&tohash" #TODO: テストケース作成
+    logにparam1: "?am-coffee-time&params1"
+    color: "?am-coffee-time&_color"
+    color子タグのみ: "?am-coffee-time&_color=.child"
+    border: "?am-coffee-time&_border"
+    ルートパス: "/?am-coffee-time"
+    hide: "?am-coffee-time&_hide=.child"
+    # 上からparameter変更: "?am-coffee-time&tohash" #TODO: テストケース作成
   SimpleServer:
     connectTest: "?am-simple-server&port=50001"
