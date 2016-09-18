@@ -1,5 +1,5 @@
 Clover=======>1129,544,796,498
-untitled ? C:\Users\ggmg7\Documents\GitHub\amdev ? Atom=======>932,3,988,1016
+Atom=======>932,3,988,1016
 Electron=======>0,521,960,498
 Google Chrome=======>0,0,960,527
 GitHub=======>450,363,1224,675
