@@ -1,4 +1,6 @@
 allpattern:
+  am-autoevent:
+    timeout=1000: ./
   autoevent:
     エラーでOK:
       timeoutErrorIsOK: "?am-autoevent&timeout=1000"

@@ -8,7 +8,6 @@ getRandomColor = (opacity = 1) =>
 
 module.exports = class Test
   params: require("am-common")::getParams(location.href)
-  AutoEvent: require("am-autoevent/browser/AutoEvent-no-gen")
   start: (testObj = @) =>
     testObj[key](@params[key]) for key, value of @params when typeof testObj[key] is "function"
     @._color(@params._color) if @params._color?
@@ -30,3 +29,4 @@ module.exports = class Test
     $.stylesheet(selector).css("display", "none")
   _auto: =>
     # TODO: autoevent連携
+    AutoEvent: require("am-autoevent/browser/AutoEvent-no-gen")
