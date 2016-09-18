@@ -1,7 +1,7 @@
 AutoEventBase = require("./AutoEvent")
 
 module.exports = class AutoEvent extends AutoEventBase
-  contoller:  (loopNum, callback) =>
+  contoller:  (loopNum) =>
     curFuncNum = 0
     @innerFuncs[@funcs.length] = []
     @funcs.push(=>
@@ -9,11 +9,11 @@ module.exports = class AutoEvent extends AutoEventBase
         curFuncNum = 0
         @funcs[0]()
       else
-        callback()
+        @end()
       )
     i = -1
     while (@funcs[++i])
       @innerFuncs[i].push(=> @funcs[++curFuncNum]?())
     @funcs[0]()
-  start: (loopNum = 1, callback) =>
-    @contoller(loopNum, @setCallback(callback))
+  start: (loopNum = 1) =>
+    @contoller(loopNum)

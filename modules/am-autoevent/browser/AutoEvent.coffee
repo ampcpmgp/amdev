@@ -88,9 +88,5 @@ module.exports = class AutoEvent
     funcNum = ++@funcNum
     innerFunc = @innerFuncs[funcNum] = []
     => func() for func in innerFunc
-  setCallback: (callback) =>
-    func = =>
-      callback() if typeof callback is "function"
-      @end()
   end: =>
     console.info("finished")
