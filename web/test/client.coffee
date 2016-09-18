@@ -5,7 +5,7 @@ else if WSClient::params["am-coffee-time"] then require("am-coffee-time/test/ind
 else if WSClient::params["am-simple-server"] then require("am-simple-server/test/client")
 else
   generate = require("am-coffee-time/browser/generate")
-  testcases = require("./testcases.cson")
+  testcases = require("./testcases.yml")
   generate(testcases)
   require("./pre-info.tag")
   riot.mount("pre-info")

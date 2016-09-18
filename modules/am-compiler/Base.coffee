@@ -16,6 +16,7 @@ module.exports = class Base
         {test: /\.cson$/, loader: "cson-loader"}
         {test: /\.html$/, loader: "html"}
         {test: /\.json$/, loader: "json"}
+        {test: /\.ya?ml$/, loader: "json!yaml"}
       ]
       postLoaders: [
         {test: /\.src\.coffee$/, loader: "raw"}

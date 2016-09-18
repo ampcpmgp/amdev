@@ -48,7 +48,8 @@
     "riotjs-loader": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
-    "webpack": "latest"
+    "webpack": "latest",
+    "yaml-loader": "latest"
   },
   "author": "",
   "license": "ISC"
