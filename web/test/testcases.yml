@@ -1,6 +1,6 @@
 allpattern:
   am-autoevent:
-    timeout=1000: ./
+    timeout=1000: ./index.html
   autoevent:
     エラーでOK:
       timeoutErrorIsOK: "?am-autoevent&timeout=1000"
