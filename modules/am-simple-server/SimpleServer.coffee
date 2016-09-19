@@ -60,11 +60,9 @@ module.exports = class SimpleServer
     @wsEventReload()
   wsEventReload: =>
     chokidar.watch(@watchPath).on("change", (path) =>
-      # TODO: async/awaitに切り替えたいが、ストリームの終わりを感知する必要あり
-      setTimeout(=>
-        @checkReloadList()
-        @sendReloadEvent(socket) for socket in @reloadList
-      , 80)
+      return unless fs.lstatSync(path).size #ほんとはstreamの終わりを検知したい　
+      @checkReloadList()
+      @sendReloadEvent(socket) for socket in @reloadList
     )
   sendReloadEvent: (socket) -> socket.emit("reload")
   sendCssReloadEvent: (socket,filepath) -> socket.emit("css reload", fs.readFileSync(filepath, {encoding:"utf-8"}))
