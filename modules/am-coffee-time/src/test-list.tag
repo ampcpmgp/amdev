@@ -66,11 +66,13 @@ require("./test-iframe.tag")
 </recursive-item>
 
 <list-line>
-  <div class="line">
+  <div class="line{isHover && ' hover'}">
     <span class="bold {success: success, error: error}">
       {success ? "〇" : error ? "×" : ""}
     </span>
-    <a class="tree" href={routing} name="treeTask" onclick={router}>{key}</a>
+    <a
+      class="tree" href={routing} name="treeTask"
+      onclick={router} onmouseover={mouseOn} onmouseout={mouseOut}>{key}</a>
     <recursive-item name="item" if={!url} data={data} routing={routing} />
     <a class="single" if={url} href={routerExecutionPath} name="singleTask" onclick={router}>{url}</a>
   </div>
@@ -87,6 +89,9 @@ require("./test-iframe.tag")
     }
     .line {
       margin-left: 10px;
+    }
+    .line.hover {
+      background: rgba(0, 0, 255, 0.1);
     }
     .success {
       color: blue;
@@ -157,6 +162,8 @@ require("./test-iframe.tag")
       )
     @router = (e) =>
       location.href = WholeStatus.basePath + e.target.getAttribute("href")
+    @mouseOn = => @isHover = true
+    @mouseOut = => @isHover = false
     WholeStatus.on("init", => @init())
     WholeStatus.itemStatuses.push(@status)
     WholeStatus.on("router-event-#{@routing}", () => @multiExecuteTask())
