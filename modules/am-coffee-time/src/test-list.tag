@@ -1,7 +1,7 @@
 require("./test-iframe.tag")
 
 <test-list>
-  <span>{successSum}/{executeSum}</span>
+  <span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span>
   <a onclick={toRouteHash}>base</a>
   <recursive-item data={opts.testPatterns} routing="" />
   <style scoped>
@@ -21,11 +21,9 @@ require("./test-iframe.tag")
     }
   </style>
   <script type="coffee">
-    WholeStatus = require("./Status")
+    @WholeStatus = WholeStatus = require("./Status")
     bodyStyle = document.body.style
     @init = =>
-      @successSum = WholeStatus.successSum = 0
-      @executeSum = WholeStatus.executeSum = 0
       @hash = location.hash
       WholeStatus.trigger("init")
     @check = =>
@@ -39,6 +37,7 @@ require("./test-iframe.tag")
           onExecute = true
           break
       bodyStyle.overflowY = if onExecute then "hidden" else ""
+      this.update()
     )
     @on("mount", () =>
       @check()
@@ -129,14 +128,14 @@ require("./test-iframe.tag")
       this.update()
       console.clear()
       ++WholeStatus.executeSum
-      WholeStatus.on("item-update")
+      WholeStatus.trigger("item-update")
       @tags.testFrame.setConsoleEvent(
         assert: (flg, msg) =>
           unless flg
             # TODO: UIにも組み込む
             console.error(msg) if msg
             @error = true
-            WholeStatus.on("item-update")
+            WholeStatus.trigger("item-update")
             @update()
             callback and callback()
         info: (msg) =>
@@ -144,7 +143,7 @@ require("./test-iframe.tag")
             console.info(msg)
             @success = true
             ++WholeStatus.successSum
-            WholeStatus.on("item-update")
+            WholeStatus.trigger("item-update")
             @update()
             callback and callback()
       )
