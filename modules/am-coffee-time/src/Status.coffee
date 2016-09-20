@@ -1,6 +1,7 @@
 module.exports = class Status
   @init: =>
     #config
+    @thisBasePath = "#"
     @basePath = "#"
     #settings
     @successSum = 0

@@ -30,7 +30,7 @@ require("./test-iframe.tag")
       WholeStatus.trigger("init")
     @check = =>
       @init()
-      executePath = @hash.replace(WholeStatus.basePath, "")
+      executePath = @hash.replace(WholeStatus.thisBasePath, "")
       return unless executePath
       unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
@@ -38,7 +38,7 @@ require("./test-iframe.tag")
         return
       WholeStatus.trigger("router-event-#{executePath}")
       # element.click()
-    @toRouteHash = => location.href = WholeStatus.basePath
+    @toRouteHash = => location.href = WholeStatus.thisBasePath
     WholeStatus.on("item-update", =>
       for itemStatus in WholeStatus.itemStatuses
         if itemStatus.onExecute
@@ -161,7 +161,7 @@ require("./test-iframe.tag")
             callback and callback()
       )
     @router = (e) =>
-      location.href = WholeStatus.basePath + e.target.getAttribute("href")
+      location.href = WholeStatus.thisBasePath + e.target.getAttribute("href")
     @mouseOn = => @isHover = true
     @mouseOut = => @isHover = false
     WholeStatus.on("init", => @init())
