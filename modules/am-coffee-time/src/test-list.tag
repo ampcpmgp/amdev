@@ -91,7 +91,7 @@ require("./test-iframe.tag")
       margin-left: 10px;
     }
     .line.hover {
-      background: rgba(0, 0, 255, 0.1);
+      background: rgba(0, 0, 255, 0.05);
     }
     .success {
       color: blue;
