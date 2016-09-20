@@ -4,6 +4,7 @@ require("./test-iframe.tag")
   <span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span>
   <a onclick={toRouteHash}>base</a>
   <recursive-item data={opts.testPatterns} routing="" />
+  <test-iframe name="testFrame" if={instanceUrl} url={instanceUrl} config={WholeStatus.config}></test-iframe>
   <style scoped>
     :scope {
       display: block;
@@ -24,13 +25,20 @@ require("./test-iframe.tag")
     @WholeStatus = WholeStatus = require("./Status")
     bodyStyle = document.body.style
     @init = =>
+      @instanceUrl = null
       @hash = location.hash
       WholeStatus.trigger("init")
     @check = =>
       @init()
-      WholeStatus.trigger("router-event-#{@hash.replace(WholeStatus.basePath, "")}")
+      executePath = @hash.replace(WholeStatus.basePath, "")
+      return unless executePath
+      unless WholeStatus.executablePath[executePath]
+        @instanceUrl = executePath
+        @update()
+        return
+      WholeStatus.trigger("router-event-#{executePath}")
       # element.click()
-    @toRouteHash = => location.href = "#"
+    @toRouteHash = => location.href = WholeStatus.basePath
     WholeStatus.on("item-update", =>
       for itemStatus in WholeStatus.itemStatuses
         if itemStatus.onExecute
@@ -98,7 +106,7 @@ require("./test-iframe.tag")
     @data = opts.list.data
     @routing = if opts.routing then "#{opts.routing}/#{@key}" else @key
     @url = if typeof @data is "object" then "" else @data
-    @routerExecutionPath = @url + "#" + @routing
+    @routerExecutionPath = @url + WholeStatus.basePath + @routing
     @status = {onExecute: false}
     @deleteIframe = =>
       @status.onExecute = false
@@ -153,6 +161,8 @@ require("./test-iframe.tag")
     WholeStatus.itemStatuses.push(@status)
     WholeStatus.on("router-event-#{@routing}", () => @multiExecuteTask())
     WholeStatus.on("router-event-#{@routerExecutionPath}", @executeTask) if @routerExecutionPath
+    WholeStatus.executablePath[@routing] = true
+    WholeStatus.executablePath[@routerExecutionPath] = true
     @on("update", => WholeStatus.trigger("item-update"))
     @init()
   </script>

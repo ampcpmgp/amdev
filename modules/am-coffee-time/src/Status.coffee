@@ -8,6 +8,7 @@ module.exports = class Status
     #item
     @itemStatuses = []
     @executeIframe = []
+    @executablePath = {}
     #from browser/dev.coffee
     @config =
       extFile: null
