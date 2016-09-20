@@ -18,7 +18,7 @@ amAutoEvent.register()
   .wait("300").addEvent(() => console.log("hello"))
   .waitSelector("#test").setHtml("#test", 3000)
   .waitSelector("#test2", false).click("#test2")
-  .start(num = 3, () => console.log("finished!"))
+  .start(num = 3)
 ```
 
 

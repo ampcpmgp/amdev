@@ -25,27 +25,27 @@ func = (Klass) =>
     )
 
 class SampleTest extends Test
-  test:  =>
+  @test:  =>
     func(AutoEvent)
-  testNoGen:  =>
+  @testNoGen:  =>
     func(AutoEventNoGen)
-  global: =>
+  @global: =>
     require("am-autoevent/browser/amAutoevent")
     console.assert(window.amAutoEvent)
     console.info("finished")
-  timeout: (ms) =>
+  @timeout: (ms) =>
     AutoEvent = AutoEvent::
     AutoEvent.timeoutMsec = parseInt(ms)
     AutoEvent.register().waitSelector("box").start()
     createTimeoutBox = =>
       $("body").append("<box>box</box>")
     setTimeout(createTimeoutBox, 3000)
-  clickAssert: (assertFlg) =>
+  @clickAssert: (assertFlg) =>
     ae = new AutoEvent
     ae.register().wait(300).click(".box", assertFlg is "true").start()
-  select: (value) =>
+  @select: (value) =>
     ae = new AutoEvent
     ae.register().wait(300).selectValue("select", value).start()
 
 
-SampleTest::start()
+SampleTest.start(SampleTest)

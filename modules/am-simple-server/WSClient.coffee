@@ -25,8 +25,7 @@ module.exports = class WSClient
       return @reload() if @connectFlag
       @connectFlag = true
       console.info("websocket connected")
-    # TODO: サーバー/クライアント同時リロード時の問題解消->よりよくしたい
-    @ws.on("reload", => setTimeout(( => @reload() unless @disconnectedFlg), 10))
+    @ws.on("reload", => @reload() unless @disconnectedFlg)
     @ws.on("css reload", (css) => $("body").append("<style type=\"text/css\">#{css}</style>"))
     @ws.on("test", (msg) => console.log msg)
     @ws.on("disconnect", =>

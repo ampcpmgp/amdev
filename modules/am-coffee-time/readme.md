@@ -1,6 +1,6 @@
 # am-coffee-time
-Test development using parameters.  
-this is renamed from am-lunch-test.
+Testing and development of the mock page using a router.  
+this is renamed from am-lunch-time.
 
 ## sample code
 
@@ -14,14 +14,11 @@ testListPage.coffee
 ```coffee
 generate = require("am-coffee-time/browser/generate")
 testcases =
-  clickTest:
-    click1: "?click1"
-    click2: "?click2"
-  apiTest:
-    api1: "?api1"
-    api2:
-      newApi1: "?api2&newApi=0"
-      newApi2: "?api2&newApi=1"
+  #event: url
+  "click=.config": "/url.html"
+  "click=.edit":
+    "input=name,takasi": "/url.html"
+    "input=age,94": "/url.html"
 generate(testcases)
 ```
 
@@ -30,41 +27,35 @@ This module watch event of console.assert.
 It will end result in an error at the time of console.assert() is false.  
 All passed the test by putting the console.info after it was true ( "finished").
 
-#### sample
-```coffee
-if location.search is "?click1"
-  console.assert(1 + 1)
-  console.assert(1 - 1, "error")
-  console.info("finished")
-else location.search is "?click2"
-  console.assert(1 + 0)
-  console.assert(1 - 0, "error")
-  console.info("finished")
-```
-
-#### use Test class with am-autoevent
+#### sample code
 ```coffee
 Test = require("am-coffee-time")
-class NewTest extends Test
-
-newTest = new NewTest
-autoEvent = Test::AutoEvent
-
-newTest.start(
-  init: =>
-    @autoEvent = new @AutoEvent
-    @autoEvent.register()
-  click: (selector) =>
-    @autoEvent.wait(100).click(selector)
-  addEvent: (numStr) =>
-    @autoEvent.wait(100).addEvent(=>
-      num = parseInt(numStr)
-      console.assert(num)
-    )
+Test.start(
+  click: (type) =>
+    el = document.querySelector(type)
+    console.assert(el)
+    el.click()
+  update: ([type, value]) =>
+    el = document.querySelector("input[name=#{type}]")
+    console.assert(el)
+    el.value = value
 )
-
-autoEvent.start()
+console.info("finished")
 ```
 
-## API
-TODO
+
+#### sample code with autoevent
+```coffee
+AutoEvent = require("am-autoevent")
+Test = require("am-coffee-time")
+
+AutoEvent.register()
+Test.start(
+  click: (type) =>
+    AutoEvent.click(type)
+  update: ([type, value]) =>
+    AutoEvent.setValue("input[name={type}]")
+)
+
+AutoEvent.start()
+```

@@ -2,12 +2,12 @@ $ = require("jquery")
 $("body").append($(require("./tag.html")))
 
 class SampleTest extends require("am-coffee-time")
-  params1: (params1Val) =>
+  @params1: (params1Val) =>
     console.assert(params1Val)
     setTimeout(=>
       $("body").scrollTop(100)
     , 100)
-  _color: (selector) =>
+  @_color: (selector) =>
     super(selector)
     selector = if selector is true then "*" else selector
     $(selector).each(->
@@ -15,7 +15,7 @@ class SampleTest extends require("am-coffee-time")
       tagName =$this.prop("tagName")
       console.assert($this.css("background"), tagName)
     )
-  _border: (selector) =>
+  @_border: (selector) =>
     super(selector)
     selector = if selector is true then "*" else selector
     $(selector).each(->
@@ -23,7 +23,6 @@ class SampleTest extends require("am-coffee-time")
       tagName =$this.prop("tagName")
       console.assert($this.css("border"), tagName)
     )
-window.nt = new SampleTest()
-nt.start()
+SampleTest.start(SampleTest)
 
 console.info("finished")

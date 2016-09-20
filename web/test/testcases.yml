@@ -1,23 +1,22 @@
 allpattern:
-  autoevent:
-    エラーでOK:
-      timeoutErrorIsOK: "?am-autoevent&timeout=1000"
-      click時のasssertion: "?am-autoevent&clickAssert=true"
-      select: "?am-autoevent&select=6"
+  am-autoevent:
+    errorでOK:
+      timeout=1000: ./index.html
+      clickAssert=true: ./index.html
+      select=6: ./index.html
     エラーじゃダメ:
-      test: "?am-autoevent&test"
-      testNoGen: "?am-autoevent&testNoGen"
-      global: "?am-autoevent&global"
-      timeout: "?am-autoevent&timeout=5000"
-      click時のasssertion: "?am-autoevent&clickAssert=false"
-      select: "?am-autoevent&select=5"
-  lunchTest:
-    logにparam1: "?am-coffee-time&params1"
-    color: "?am-coffee-time&_color"
-    color子タグのみ: "?am-coffee-time&_color=.child"
-    border: "?am-coffee-time&_border"
-    ルートパス: "/?am-coffee-time"
-    hide: "?am-coffee-time&_hide=.child"
-    # 上からparameter変更: "?am-coffee-time&tohash" #TODO: テストケース作成
-  SimpleServer:
-    connectTest: "?am-simple-server&port=50001"
+      test: ./index.html
+      testNoGen: ./index.html
+      global: ./index.html
+      timeout=5000: ./index.html
+      clickAssert=false: ./index.html
+      select=5: ./index.html
+  am-coffee-time:
+    params1:  ./index.html
+    _color:  ./index.html
+    _color=.child:  ./index.html
+    _border:  ./index.html
+    root:  ./index.html
+    _hide=.child:  ./index.html
+  am-simple-server:
+    port=50001: ./index.html
