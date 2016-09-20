@@ -1,7 +1,7 @@
 <test-iframe>
   <span class={isIos ? 'ios' : 'no-ios'}>
-    <iframe if={!isElectron} src={url}></iframe>
-    <webview if={isElectron} src={url} nodeintegration></webview>
+    <iframe if={!isElectron} src={opts.url}></iframe>
+    <webview if={isElectron} src={opts.url} nodeintegration></webview>
   </span>
   <style scoped>
     .ios {

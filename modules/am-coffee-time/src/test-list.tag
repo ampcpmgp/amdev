@@ -24,14 +24,13 @@ require("./test-iframe.tag")
     WholeStatus = require("./Status")
     bodyStyle = document.body.style
     @init = =>
-      @successSum = 0
-      @executeSum = 0
+      @successSum = WholeStatus.successSum = 0
+      @executeSum = WholeStatus.executeSum = 0
       @hash = location.hash
+      WholeStatus.trigger("init")
     @check = =>
       @init()
-      return unless @hash
-      element = document.querySelector("[href='#{@hash}']")
-      return unless element
+      WholeStatus.trigger("router-event-#{@hash.replace(WholeStatus.basePath, "")}")
       # element.click()
     @toRouteHash = => location.href = "#"
     WholeStatus.on("item-update", =>
@@ -43,15 +42,14 @@ require("./test-iframe.tag")
     )
     @on("mount", () =>
       @check()
+      riot.route.start()
     )
     riot.route("..", @check)
-    @init()
-    riot.route.start()
   </script>
 </test-list>
 
 <recursive-item>
-  <list-line each={key, data in list} list={this} routing={this.parent.opts.routing} />
+  <list-line name="lines" each={key, data in list} list={this} routing={this.parent.opts.routing} />
   <script type="coffee">
     @list = if typeof opts.data is "object"
       opts.data
@@ -65,16 +63,16 @@ require("./test-iframe.tag")
     <span class="bold {success: success, error: error}">
       {success ? "〇" : error ? "×" : ""}
     </span>
-    <a class="multi" href={WholeStatus.basePath + routing} data-type="multi">{key}</a>
-    <recursive-item data={data} routing={routing} />
-    <a class="single" if={url} href={href} data-type="single">{url}</a>
+    <a class="tree" href={routing} name="treeTask" onclick={router}>{key}</a>
+    <recursive-item name="item" if={!url} data={data} routing={routing} />
+    <a class="single" if={url} href={routerExecutionPath} name="singleTask" onclick={router}>{url}</a>
   </div>
-  <test-iframe if={status.onExecute} config={WholeStatus.config}></test-iframe>
+  <test-iframe name="testFrame" if={url && status.onExecute} url={routerExecutionPath} config={WholeStatus.config}></test-iframe>
   <style scope>
     .bold {
       font-weight: bold;
     }
-    .multi {
+    .tree {
       color: #333;
     }
     .single {
@@ -95,22 +93,67 @@ require("./test-iframe.tag")
   </style>
   <script type="coffee">
     WholeStatus = @WholeStatus = require("./Status")
+    executeIframe = =>
+      WholeStatus.executeIframe.shift()?()
     @key = opts.list.key
     @data = opts.list.data
-    @routing = "#{opts.routing}/#{@key}"
+    @routing = if opts.routing then "#{opts.routing}/#{@key}" else @key
     @url = if typeof @data is "object" then "" else @data
-    @href = WholeStatus.basePath + @url + "#" + @routing
+    @routerExecutionPath = @url + "#" + @routing
     @status = {onExecute: false}
+    @deleteIframe = =>
+      @status.onExecute = false
+      @update()
     @init = =>
       @error = null
       @success = null
-      @status.onExecute = false
-      @update()
-    @execute = (href) =>
-      console.log e.target.getAttribute("href")
-      return true
+      @deleteIframe()
+    @recursivelyExecuteTask = =>
+      lines = @tags.item.tags.lines
+      if lines.length
+        for line in lines
+          trueLine = line.tags.lines
+          trueLine.recursivelyExecuteTask()
+      else
+        WholeStatus.executeIframe.push(=> @executeTask( =>
+          @deleteIframe()
+          executeIframe()
+        ))
+    @multiExecuteTask = =>
+      WholeStatus.executeIframe.length = 0
+      @recursivelyExecuteTask()
+      executeIframe()
+    @executeTask = (callback) =>
+      console.info @key, @routing
+      @status.onExecute = true
+      this.update()
+      console.clear()
+      ++WholeStatus.executeSum
+      WholeStatus.on("item-update")
+      @tags.testFrame.setConsoleEvent(
+        assert: (flg, msg) =>
+          unless flg
+            # TODO: UIにも組み込む
+            console.error(msg) if msg
+            @error = true
+            WholeStatus.on("item-update")
+            @update()
+            callback and callback()
+        info: (msg) =>
+          if msg is "finished" and not @error
+            console.info(msg)
+            @success = true
+            ++WholeStatus.successSum
+            WholeStatus.on("item-update")
+            @update()
+            callback and callback()
+      )
+    @router = (e) =>
+      location.href = WholeStatus.basePath + e.target.getAttribute("href")
     WholeStatus.on("init", => @init())
     WholeStatus.itemStatuses.push(@status)
+    WholeStatus.on("router-event-#{@routing}", () => @multiExecuteTask())
+    WholeStatus.on("router-event-#{@routerExecutionPath}", @executeTask) if @routerExecutionPath
     @on("update", => WholeStatus.trigger("item-update"))
     @init()
   </script>

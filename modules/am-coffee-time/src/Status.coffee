@@ -2,8 +2,12 @@ module.exports = class Status
   @init: =>
     #config
     @basePath = "#"
+    #settings
+    @successSum = 0
+    @executeSum = 0
     #item
     @itemStatuses = []
+    @executeIframe = []
     #from browser/dev.coffee
     @config =
       extFile: null

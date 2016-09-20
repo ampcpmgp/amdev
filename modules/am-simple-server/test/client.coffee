@@ -2,7 +2,7 @@ Test = require("am-coffee-time")
 WSClient = require("../WSClient")
 
 class NewTest extends Test
-  port: (number) =>
+  @port: (number) =>
     wsc = new WSClient
     connectFlag = false
     wsc.start(number)
@@ -14,4 +14,4 @@ class NewTest extends Test
     timeout = => console.assert(false, "websocket timeout") unless connectFlag
     setTimeout(timeout, 1500)
 
-NewTest::start()
+NewTest.start()
