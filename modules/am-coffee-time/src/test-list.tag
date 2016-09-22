@@ -30,6 +30,7 @@ require("./test-iframe.tag")
       WholeStatus.trigger("init")
     @check = =>
       @init()
+      WholeStatus.sumInit()
       executePath = @hash.replace(WholeStatus.thisBasePath, "")
       return unless executePath
       unless WholeStatus.executablePath[executePath]

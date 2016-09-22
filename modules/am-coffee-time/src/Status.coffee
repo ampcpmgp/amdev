@@ -1,11 +1,11 @@
 module.exports = class Status
+  @sumInit: =>
+    @successSum = 0
+    @executeSum = 0
   @init: =>
     #config
     @thisBasePath = "#"
     @basePath = "#"
-    #settings
-    @successSum = 0
-    @executeSum = 0
     #item
     @itemStatuses = []
     @executeIframe = []
@@ -14,6 +14,7 @@ module.exports = class Status
     @config =
       extFile: null
       Test: class ListTest extends require("am-coffee-time/browser/Test")
+    @sumInit()
     #observable
     riot.observable(@)
 
