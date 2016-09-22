@@ -8,7 +8,6 @@ fs = require("fs")
 Compiler = require("am-compiler")
 exec = require("child_process").exec
 
-# TODO: コンパイラの順番前後対策/保障をしたい。
 window.electonReadFlg = true
 
 class ModuleCompiler extends Compiler
@@ -78,5 +77,3 @@ do -> #upload npm
   window.browserChangeReloadFlg = (e) =>
     e.target.querySelector("span").innerHTML =
       ea.liveReloadStopFlg = not ea.liveReloadStopFlg
-# test caseにうつす
-# $("button:contains(am-autoevent)").click()
