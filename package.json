@@ -41,6 +41,7 @@
     "lodash": "latest",
     "mime": "latest",
     "mkdirp": "latest",
+    "nightmare": "^2.7.0",
     "node-fetch": "latest",
     "raw-loader": "latest",
     "request": "latest",
@@ -48,7 +49,7 @@
     "riotjs-loader": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest",
-    "webpack": "latest",
+    "webpack": "^1.5.3",
     "yaml-loader": "latest"
   },
   "author": "",

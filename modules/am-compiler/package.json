@@ -14,6 +14,6 @@
     "html-loader": "latest",
     "json-loader": "latest",
     "riotjs-loader": "latest",
-    "webpack": "2.0.2-beta"
+    "webpack": "^1.5.3"
   }
 }
