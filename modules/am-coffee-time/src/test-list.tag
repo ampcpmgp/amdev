@@ -110,7 +110,7 @@ require("./test-iframe.tag")
       WholeStatus.executeIframe.shift()?()
     @key = opts.list.key
     @data = opts.list.data
-    @routing = if opts.routing then "#{opts.routing}/#{@key}" else @key
+    @routing = "#{opts.routing}/#{@key}"
     @url = if typeof @data is "object" then "" else @data
     @routerExecutionPath = @url + WholeStatus.basePath + @routing
     @status = {onExecute: false}
