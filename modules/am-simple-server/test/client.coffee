@@ -11,7 +11,7 @@ class NewTest extends Test
       connectFlag = true
       console.info("finished")
     )
-    @timeout = => console.assert(false, "websocket timeout") unless connectFlag
+    timeout = => console.assert(false, "websocket timeout") unless connectFlag
     setTimeout(timeout, 1500)
 
 
