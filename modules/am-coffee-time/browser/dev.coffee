@@ -14,10 +14,10 @@ class Client extends require("am-simple-server/WSClient")
         document.body.innerHTML = "<test-list></test-list>"
         @tags = generate(obj)
         @listTag = @tags.list[0]
-        @listTag.config.extFile = "#{@domain.replace(/^(?!http|\/\/)/, "//")}/#{@jsFile}"
+        @listTag.WholeStatus.config.extFile = "#{@domain.replace(/^(?!http|\/\/)/, "//")}/#{@jsFile}"
       )
       .off("reload")
       .on("reload", =>
-        @listTag.Model.check()
+        @listTag.check()
       )
 Client::start(Client::wsPort)
