@@ -63,6 +63,11 @@ require("./test-iframe.tag")
 
 <recursive-item>
   <list-line name="lines" each={key, data in list} list={this} routing={this.parent.opts.routing} />
+  <style scope>
+    :scope {
+      display: block;
+    }
+  </style>
   <script type="coffee">
     @list = if typeof opts.data is "object"
       opts.data
@@ -73,14 +78,14 @@ require("./test-iframe.tag")
 
 <list-line>
   <div class="line{isHover && ' hover'}">
-    <span class="bold {success: success, error: error}">
-      {success ? "〇" : error ? "×" : ""}
-    </span>
-    <a
-      class="tree" href={routing} name="treeTask"
-      onclick={router} onmouseover={mouseOn} onmouseout={mouseOut}>{key}</a>
+    <div class="" onclick={router} onmouseover={mouseOn} onmouseout={mouseOut}>
+      <span class="bold {success: success, error: error}">
+        {success ? "〇" : error ? "×" : ""}
+      </span>
+      <a class="tree" href={routing} name="treeTask" onclick={router}>{key}</a>
+      <a class="single" if={url} href={routerExecutionPath} name="singleTask" onclick={router}>{url}</a>
+    </div>
     <recursive-item name="item" if={!url} data={data} routing={routing} />
-    <a class="single" if={url} href={routerExecutionPath} name="singleTask" onclick={router}>{url}</a>
   </div>
   <test-iframe name="testFrame" if={url && status.onExecute} url={routerExecutionPath} config={WholeStatus.config}></test-iframe>
   <style scope>
