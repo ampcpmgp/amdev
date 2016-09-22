@@ -8,11 +8,11 @@ http = require("http")
 module.exports = class SimpleServer
   #config
   webDir:  [
-    "./web"
+    "./"
   ]
   watchPath: [
     "./web/index.html"
-    "./web/.build/client.js"
+    "./web/.build/"
   ]
   sioOption: {}
   #module
