@@ -4,7 +4,7 @@ module.exports = class Status
     @executeSum = 0
   @init: =>
     #config
-    @thisBasePath = "#"
+    @thisBasePath = "?"
     @basePath = "#"
     #item
     @itemStatuses = []

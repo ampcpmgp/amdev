@@ -26,20 +26,24 @@ require("./test-iframe.tag")
     bodyStyle = document.body.style
     @init = =>
       @instanceUrl = null
-      @hash = location.hash
+      try
+        @routerStr = location.href.match(new RegExp("\\#{WholeStatus.thisBasePath}(.*)"))[1]
+      catch error
+        return @routerStr = ""
       WholeStatus.trigger("init")
     @check = =>
       @init()
       WholeStatus.sumInit()
-      executePath = @hash.replace(WholeStatus.thisBasePath, "")
+      executePath = @routerStr.replace(WholeStatus.thisBasePath, "")
       return unless executePath
+      executePath = decodeURI(executePath)
       unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
         @update()
         return
       WholeStatus.trigger("router-event-#{executePath}")
       # element.click()
-    @toRouteHash = => location.href = WholeStatus.thisBasePath
+    @toRouteHash = => riot.route("")
     WholeStatus.on("item-update", =>
       for itemStatus in WholeStatus.itemStatuses
         if itemStatus.onExecute
@@ -52,6 +56,7 @@ require("./test-iframe.tag")
       @check()
       riot.route.start()
     )
+    riot.route.base(WholeStatus.thisBasePath)
     riot.route("..", @check)
   </script>
 </test-list>
@@ -110,7 +115,7 @@ require("./test-iframe.tag")
       WholeStatus.executeIframe.shift()?()
     @key = opts.list.key
     @data = opts.list.data
-    @routing = "#{opts.routing}/#{@key}"
+    @routing = if opts.routing then "#{opts.routing}/#{@key}" else @key
     @url = if typeof @data is "object" then "" else @data
     @routerExecutionPath = @url + WholeStatus.basePath + @routing
     @status = {onExecute: false}
@@ -137,7 +142,6 @@ require("./test-iframe.tag")
       @recursivelyExecuteTask()
       executeIframe()
     @executeTask = (callback) =>
-      console.info @key, @routing
       @status.onExecute = true
       this.update()
       console.clear()
@@ -161,14 +165,13 @@ require("./test-iframe.tag")
             @update()
             callback and callback()
       )
-    @router = (e) =>
-      location.href = WholeStatus.thisBasePath + e.target.getAttribute("href")
+    @router = (e) => riot.route(e.target.getAttribute("href"))
     @mouseOn = => @isHover = true
     @mouseOut = => @isHover = false
     WholeStatus.on("init", => @init())
     WholeStatus.itemStatuses.push(@status)
     WholeStatus.on("router-event-#{@routing}", () => @multiExecuteTask())
-    WholeStatus.on("router-event-#{@routerExecutionPath}", @executeTask) if @routerExecutionPath
+    WholeStatus.on("router-event-#{@routerExecutionPath}", @executeTask) if @url
     WholeStatus.executablePath[@routing] = true
     WholeStatus.executablePath[@routerExecutionPath] = true
     @on("update", => WholeStatus.trigger("item-update"))
