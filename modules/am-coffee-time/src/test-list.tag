@@ -78,7 +78,7 @@ require("./test-iframe.tag")
 
 <list-line>
   <div class="line{isHover && ' hover'}">
-    <div class="" onclick={router} onmouseover={mouseOn} onmouseout={mouseOut}>
+    <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error}">
         {success ? "〇" : error ? "×" : ""}
       </span>
