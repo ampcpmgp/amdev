@@ -58,6 +58,11 @@ require("./test-iframe.tag")
     )
     riot.route.base(WholeStatus.thisBasePath)
     riot.route("..", @check)
+    # riot.route機能はpathがないと動かないため無いときはつける必要がある
+    window.addEventListener("popstate", =>
+      unless location.href.match("\\" + WholeStatus.thisBasePath)
+        history.replaceState("", null, WholeStatus.thisBasePath)
+    )
   </script>
 </test-list>
 
