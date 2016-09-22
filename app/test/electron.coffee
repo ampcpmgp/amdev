@@ -10,5 +10,5 @@ do =>
   else if params["am-coffee-time"] then require("am-coffee-time/test/server")
   else
     generate = require("am-coffee-time/browser/generate")
-    testcases = require("./case.cson")
+    testcases = require("./case.yml")
     generate(testcases)

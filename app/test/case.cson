@@ -1,4 +1,0 @@
-SimpleServer:
-  test: "?am-simple-server"
-LunchTest:
-  port変更: "?am-coffee-time&port=50001,50001"
