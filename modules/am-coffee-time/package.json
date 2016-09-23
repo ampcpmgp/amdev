@@ -1,6 +1,6 @@
 {
   "name": "am-coffee-time",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "test",
   "main": "browser/Test",
   "scripts": {
