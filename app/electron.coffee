@@ -69,6 +69,7 @@ do -> #upload npm
     for module in uploadModules
       dir = "./modules/#{module}"
       callback = =>
+        # TODO: 初めてのバージョンならnpm publishをかける。
         exec("cd #{dir} && npm version #{version} && npm publish",
           (e, out, err) ->
             console.log out
