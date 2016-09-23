@@ -36,12 +36,12 @@ require("./test-iframe.tag")
       WholeStatus.sumInit()
       executePath = @routerStr.replace(WholeStatus.thisBasePath, "")
       return unless executePath
-      executePath = encodeURI(executePath)
-      unless WholeStatus.executablePath[executePath]
+      encodePath = encodeURI(executePath)
+      unless WholeStatus.executablePath[encodePath]
         @instanceUrl = executePath
         @update()
         return
-      WholeStatus.trigger("router-event-#{executePath}")
+      WholeStatus.trigger("router-event-#{encodePath}")
       # element.click()
     @toRouteHash = => riot.route("")
     WholeStatus.on("item-update", =>
