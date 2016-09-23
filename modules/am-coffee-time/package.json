@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "am-autoevent": "latest",
-    "am-common": "latest",
     "am-simple-server": "latest",
     "chokidar": "latest",
     "cson": "latest",
