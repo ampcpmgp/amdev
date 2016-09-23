@@ -181,7 +181,7 @@ require("./test-iframe.tag")
     WholeStatus.on("init", => @init())
     WholeStatus.itemStatuses.push(@status)
     WholeStatus.on("router-event-#{@routing}", () => @multiExecuteTask())
-    WholeStatus.on("router-event-#{@routerExecutionPath}", @executeTask) if @url
+    WholeStatus.on("router-event-#{@routerExecutionPath}", => @executeTask()) if @url
     WholeStatus.executablePath[@routing] = true
     WholeStatus.executablePath[@routerExecutionPath] = true
     @on("update", => WholeStatus.trigger("item-update"))
