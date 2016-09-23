@@ -36,12 +36,11 @@ require("./test-iframe.tag")
       WholeStatus.sumInit()
       executePath = @routerStr.replace(WholeStatus.thisBasePath, "")
       return unless executePath
-      encodePath = encodeURI(executePath)
-      unless WholeStatus.executablePath[encodePath]
+      unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
         @update()
         return
-      WholeStatus.trigger("router-event-#{encodePath}")
+      WholeStatus.executablePath[executePath]()
       # element.click()
     @toRouteHash = => riot.route("")
     WholeStatus.on("item-update", =>
@@ -180,10 +179,8 @@ require("./test-iframe.tag")
     @mouseOut = => @isHover = false
     WholeStatus.on("init", => @init())
     WholeStatus.itemStatuses.push(@status)
-    WholeStatus.on("router-event-#{encodeURI(@routing)}", () => @multiExecuteTask())
-    WholeStatus.on("router-event-#{encodeURI(@routerExecutionPath)}", => @executeTask()) if @url
-    WholeStatus.executablePath[encodeURI(@routing)] = true
-    WholeStatus.executablePath[encodeURI(@routerExecutionPath)] = true
+    WholeStatus.executablePath[encodeURI(@routing)] =  () => @multiExecuteTask()
+    WholeStatus.executablePath[encodeURI(@routerExecutionPath)] = () => @executeTask() if @url
     @on("update", => WholeStatus.trigger("item-update"))
     @init()
   </script>
