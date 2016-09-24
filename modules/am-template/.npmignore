@@ -1,5 +1,5 @@
-*.map
+*.coffee
+*.src.js
 .*/
-src/
+web/
 test/
-template/coffee/**/*.js
