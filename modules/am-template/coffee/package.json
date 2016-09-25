@@ -2,14 +2,14 @@
   "name": "amdev-project",
   "version": "0.0.0",
   "description": "project on am development environment",
-  "main": "electron/.build/start.js",
+  "main": "electron/start.js",
   "scripts": {
     "init": "npm i && npm run compile",
     "cl": "npm run compile && node node_modules/am-dev/app/cl",
     "start": "npm run watch",
-    "start:server": "npm run compile && node app/server.js",
+    "start:server": "npm run compile && node node/server.js",
     "watch": "coffee watch.coffee",
-    "serverStart": "npm i && node app/server",
+    "serverStart": "npm i && node node/server",
     "electron": "start ../electron-v0.36.0-win32-x64/electron.exe ./"
   },
   "devDependencies": {

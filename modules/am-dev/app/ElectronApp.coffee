@@ -24,7 +24,7 @@ module.exports = class ElectronApp
         ipcRenderer.send('inspect element', obj, "mainWindow")
   liveReload: ->
     chokidar
-      .watch(["./app/.build/", "./app/index.html"])
+      .watch(["./app/", "./app/index.html"])
       .on("change", (path) =>
         return if @liveReloadStopFlg
         location.reload()

@@ -76,7 +76,7 @@ module.exports = class SimpleServer
     fs.watch("./web/index.html", (event, name) ->
       _watcherCallback()
       )
-    fs.watch("./web/.build/client.js", (event, name) ->
+    fs.watch("./web/client.js", (event, name) ->
       _watcherCallback()
       )
   sendReloadEvent: (socket) -> socket.emit("reload")

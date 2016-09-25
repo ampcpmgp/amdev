@@ -66,4 +66,5 @@ module.exports = class Base
       timings: false
       chunkModules: false
       )
+
 Base::_config()

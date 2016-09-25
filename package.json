@@ -2,14 +2,14 @@
   "name": "amdev",
   "version": "0.1.2",
   "description": "am development enviroment",
-  "main": "./app/server.js",
+  "main": "./node/server.js",
   "scripts": {
     "start": "npm run watch",
-    "start:server": "npm run compile && node app/.build/server.js",
+    "start:server": "npm run compile && node node/server.js",
     "start:forever": "forever start -c coffee modules/am-dev/app/ci.coffee",
     "watch": "coffee ./watch.coffee",
     "compile": "coffee -e \"(require('./modules/am-compiler/Base.coffee'))::compile()\"",
-    "electron": "electron ./electron/.build/start.js"
+    "electron": "electron ./electron/start.js"
   },
   "dependencies": {
     "chokidar": "latest",

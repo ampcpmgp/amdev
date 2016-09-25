@@ -5,7 +5,7 @@ SimpleServer::webDir = [ #default is "./web"
   "./web"
   "./test"
 ]
-SimpleServer::watchPath = [ #default is "./web/index.html, ./web/.build/client.js"
+SimpleServer::watchPath = [ #default is "./web/index.html, ./web/client.js"
   "./web/*.html"
   "./test/"
 ]

@@ -12,7 +12,7 @@ module.exports = class SimpleServer
   ]
   watchPath: [
     "./web/index.html"
-    "./web/.build/"
+    "./web/"
   ]
   sioOption: {}
   #module

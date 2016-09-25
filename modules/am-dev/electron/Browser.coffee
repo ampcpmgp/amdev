@@ -26,7 +26,7 @@ class Watcher
     setTimeout(app.quit, 0)
   start: =>
     chokidar
-      .watch(["./electron/.build/"])
+      .watch(["./electron/"])
       .on("change", (path) =>
         return unless path.match(/\.js$/)
         @restart()

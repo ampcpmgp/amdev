@@ -13,13 +13,13 @@ module.exports = (Compiler) =>
       @electronStart() if (++@checkNum is 3)
     start: =>
       @electronOption.entry =
-        "electron/.build/start": "./electron/test/start.coffee"
-        "app/.build/preload": "./app/test/preload.coffee"
-        "app/.build/electron": "./app/test/electron.coffee"
+        "electron/start": "./electron/test/start.coffee"
+        "app/preload": "./app/test/preload.coffee"
+        "app/electron": "./app/test/electron.coffee"
       @nodeOption.entry =
-        "app/.build/server": "./app/test/server.coffee"
+        "node/server": "./node/test/server.coffee"
       @browserOption.entry =
-        "web/.build/client": "./web/test/client.coffee"
+        "web/client": "./web/test/client.coffee"
       super()
 
   AmCompiler::start()
