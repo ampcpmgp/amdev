@@ -26,22 +26,17 @@ require("./test-iframe.tag")
     bodyStyle = document.body.style
     @init = =>
       @instanceUrl = null
-      try
-        @routerStr = location.href.match(new RegExp("\\#{WholeStatus.thisBasePath}(.*)"))[1]
-      catch error
-        return @routerStr = ""
       WholeStatus.trigger("init")
     @check = =>
       @init()
       WholeStatus.sumInit()
-      executePath = @routerStr.replace(WholeStatus.thisBasePath, "")
+      executePath = riot.route.query().path
       return unless executePath
       unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
         @update()
         return
       WholeStatus.executablePath[executePath]()
-      # element.click()
     @toRouteHash = => riot.route("")
     WholeStatus.on("item-update", =>
       for itemStatus in WholeStatus.itemStatuses
@@ -174,7 +169,7 @@ require("./test-iframe.tag")
             @update()
             callback and callback()
       )
-    @router = (e) => riot.route(e.target.getAttribute("href"))
+    @router = (e) => riot.route("path=" + e.target.getAttribute("href"))
     @mouseOn = => @isHover = true
     @mouseOut = => @isHover = false
     WholeStatus.on("init", => @init())
