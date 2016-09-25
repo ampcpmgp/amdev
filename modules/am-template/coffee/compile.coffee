@@ -15,6 +15,7 @@ module.exports = (Compiler) =>
       @electronOption.entry = {}
       @nodeOption.entry = {}
       @browserOption.entry = {}
+      # TODO: 開発に必要なファイル軍だけをコンパイルする方針に変えたい
       require("glob").sync(
         "./**/@(electron|app)/test/*.coffee"
         , {ignore: "**/node_modules/**"}
