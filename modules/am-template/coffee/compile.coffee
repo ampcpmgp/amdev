@@ -19,15 +19,21 @@ module.exports = (Compiler) =>
       require("glob").sync(
         "./**/@(electron|app)/test/*.coffee"
         , {ignore: "**/node_modules/**"}
-      ).forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
+      )
+      .filter((filepath) => not filepath.match(/\/am\-template\//))
+      .forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
       require("glob").sync(
         "./**/node/test/*.coffee"
         , {ignore: "**/node_modules/**"}
-      ).forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
+      )
+      .filter((filepath) => not filepath.match(/\/am\-template\//))
+      .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
       require("glob").sync(
         "./**/web/test/*.coffee"
         , {ignore: "**/node_modules/**"}
-      ).forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
+      )
+      .filter((filepath) => not filepath.match(/\/am\-template\//))
+      .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
       super()
 
   AmCompiler::start()

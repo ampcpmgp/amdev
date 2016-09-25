@@ -9,7 +9,7 @@
     "start:forever": "forever start -c coffee modules/am-dev/app/ci.coffee",
     "watch": "coffee ./watch.coffee",
     "compile": "coffee -e \"(require('./modules/am-compiler/Base.coffee'))::compile()\"",
-    "electron": "electron ./electron/start.js"
+    "electron": "electron ./electron/test/start.js"
   },
   "dependencies": {
     "chokidar": "latest",
