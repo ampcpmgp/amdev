@@ -24,6 +24,7 @@
     "forever": "latest",
     "fs-extra": "latest",
     "ftp": "latest",
+    "glob": "latest",
     "html-loader": "latest",
     "is_js": "latest",
     "jimp": "latest",

@@ -12,14 +12,22 @@ module.exports = (Compiler) =>
       # TODO: コンパイル数をチェックする以外の方法にしたい
       @electronStart() if (++@checkNum is 3)
     start: =>
-      @electronOption.entry =
-        "electron/start": "./electron/test/start.coffee"
-        "app/preload": "./app/test/preload.coffee"
-        "app/electron": "./app/test/electron.coffee"
-      @nodeOption.entry =
-        "node/server": "./node/test/server.coffee"
-      @browserOption.entry =
-        "web/client": "./web/test/client.coffee"
+      @electronOption.entry = {}
+      @nodeOption.entry = {}
+      @browserOption.entry = {}
+      require("glob").sync(
+        "./@(electron|app)/test/*.coffee"
+        , {ignore: "**/node_modules/**"}
+      ).forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "").replace(/\/test\//, "/")] = filepath)
+      require("glob").sync(
+        "./node/test/*.coffee"
+        , {ignore: "**/node_modules/**"}
+      ).forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "").replace(/\/test\//, "/")] = filepath)
+      require("glob").sync(
+        "./web/test/*.coffee"
+        , {ignore: "**/node_modules/**"}
+      ).forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "").replace(/\/test\//, "/")] = filepath)
+
       super()
 
   AmCompiler::start()

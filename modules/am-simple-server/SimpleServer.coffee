@@ -1,19 +1,17 @@
+fs = require("fs")
+http = require("http")
+#
 chokidar = require('chokidar')
 mime = require('mime')
 sio = require('socket.io')
-#
-fs = require("fs")
-http = require("http")
+glob = require("glob")
 
 module.exports = class SimpleServer
   #config
   webDir:  [
     "./"
   ]
-  watchPath: [
-    "./web/index.html"
-    "./web/"
-  ]
+  watchPath: glob.sync("./web/*.@(html|js)", {ignore: "**/node_modules/**"})
   sioOption: {}
   #module
   #info

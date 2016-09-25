@@ -1,7 +1,9 @@
+ipcRenderer = require('electron').ipcRenderer
+fs = require("fs")
+
 $ = require("jquery")
 chokidar = require("chokidar")
-fs = require("fs")
-ipcRenderer = require('electron').ipcRenderer
+glob = require("glob")
 
 module.exports = class ElectronApp
   _inspector: 1
@@ -24,7 +26,7 @@ module.exports = class ElectronApp
         ipcRenderer.send('inspect element', obj, "mainWindow")
   liveReload: ->
     chokidar
-      .watch(["./app/", "./app/index.html"])
+      .watch(glob.sync("./@(app|node)/*.@(html|js)", {ignore: "**/node_modules/**"}))
       .on("change", (path) =>
         return if @liveReloadStopFlg
         location.reload()
