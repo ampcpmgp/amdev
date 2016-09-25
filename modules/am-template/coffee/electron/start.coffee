@@ -1,3 +1,3 @@
-Browser = require("am-dev/browser/Browser")
+Browser = require("am-dev/electron/Browser")
 browser = new Browser()
-browser.init().start("/app/index.html")
+browser.init().start()

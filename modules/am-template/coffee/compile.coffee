@@ -16,18 +16,17 @@ module.exports = (Compiler) =>
       @nodeOption.entry = {}
       @browserOption.entry = {}
       require("glob").sync(
-        "./@(electron|app)/test/*.coffee"
+        "./**/@(electron|app)/test/*.coffee"
         , {ignore: "**/node_modules/**"}
-      ).forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "").replace(/\/test\//, "/")] = filepath)
+      ).forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
       require("glob").sync(
-        "./node/test/*.coffee"
+        "./**/node/test/*.coffee"
         , {ignore: "**/node_modules/**"}
-      ).forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "").replace(/\/test\//, "/")] = filepath)
+      ).forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
       require("glob").sync(
-        "./web/test/*.coffee"
+        "./**/web/test/*.coffee"
         , {ignore: "**/node_modules/**"}
-      ).forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "").replace(/\/test\//, "/")] = filepath)
-
+      ).forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
       super()
 
   AmCompiler::start()
