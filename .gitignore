@@ -1,7 +1,8 @@
 #common
 logs
 *.log
-.*
+.*/
+.config.cson
 node_modules
 #my config
 *.map
