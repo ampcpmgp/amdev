@@ -1,6 +1,6 @@
 <app>
-  <before-login if={!isLogin} />
-  <after-login if={isLogin} />
+  <before-login if={!Status.isLogin} />
+  <after-login if={Status.isLogin} />
   <style scoped type="less">
     :scope {
       display: flex;
@@ -10,7 +10,8 @@
     }
   </style>
   <script type="coffee">
-    @isLogin = false
+    Status = @Status = require("./Status")
+    Status.on("update", => @update())
   </script>
 </app>
 
@@ -50,12 +51,15 @@
     }
   </style>
   <script type="coffee">
+    Status = require("./Status")
     @errorMsg = ""
     @check = =>
       id = @id.value
       pw = @pw.value
       return @errorMsg = "ID/PWを入力してください" unless id or pw
       return @errorMsg = "PWが正しくないです" unless pw.match(/^(apple|google)$/)
+      Status.isLogin = true
+      Status.trigger("update")
       @errorMsg = ""
   </script>
 </before-login>
