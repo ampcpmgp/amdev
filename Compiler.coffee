@@ -48,11 +48,12 @@ module.exports = class Compiler
     @browserOption.module.preLoaders = []
     @browserOption.output.libraryTarget = "umd"
     @browserOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
-  @setOption: (option) =>
-    @baseOption.devtool = option.devltool if option.devltool?
   @run: () =>
     @setFilePath()
-    delete @baseOption.devtool
+    delete @electronOption.devtool
+    delete @nodeOption.devtool
+    delete @browserOption.devtool
+    @electronStart = =>
     webpack(@electronOption).run((err, stats) => @callback(err,stats)) if @electronOption.entry
     webpack(@nodeOption).run((err, stats) => @callback(err,stats)) if @nodeOption.entry
     webpack(@browserOption).run((err, stats) => @callback(err,stats)) if @browserOption.entry

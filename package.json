@@ -8,7 +8,7 @@
     "start:server": "npm run compile && node node/server.js",
     "start:forever": "forever start -c coffee modules/am-dev/app/ci.coffee",
     "TODO:": "electron内実行に寄せる",
-    "compile:ghpage": "coffee -e \"(require('./modules/am-compiler/Base.coffee'))::compile({devtool: false})\"",
+    "compile:gh-pages": "coffee -e \"(require('./Compiler').run())\"",
     "electron": "electron ./electron/test/start.js"
   },
   "dependencies": {
