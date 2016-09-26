@@ -6,6 +6,4 @@ logs
 node_modules
 #my config
 *.map
-*.js
-*.css
 *.exe
