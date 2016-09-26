@@ -11,7 +11,8 @@ module.exports = class SimpleServer
   webDir:  [
     "./"
   ]
-  watchPath: glob.sync("./web/*.@(html|js)", {ignore: "**/node_modules/**"})
+  # TODO: watchパスと、テスト/本番用パスは整理したい。（その場にjsを出す方式ならその2点のみ）
+  watchPath: glob.sync("./**/web/**/*.@(html|js)", {ignore: "./**/node_modules/**"})
   sioOption: {}
   #module
   #info

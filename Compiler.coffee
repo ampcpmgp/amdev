@@ -69,19 +69,19 @@ module.exports = class Compiler
     # TODO: 開発に必要なファイル軍だけをコンパイルする方針に変えたい
     require("glob").sync(
       "./**/@(electron|app)/test/*.coffee"
-      , {ignore: "**/node_modules/**"}
+      , {ignore: "./**/node_modules/**"}
     )
     .filter((filepath) => not filepath.match(/\/am\-template\//))
     .forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
     require("glob").sync(
       "./**/node/test/*.coffee"
-      , {ignore: "**/node_modules/**"}
+      , {ignore: "./**/node_modules/**"}
     )
     .filter((filepath) => not filepath.match(/\/am\-template\//))
     .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
     require("glob").sync(
       "./**/web/test/*.coffee"
-      , {ignore: "**/node_modules/**"}
+      , {ignore: "./**/node_modules/**"}
     )
     .filter((filepath) => not filepath.match(/\/am\-template\//))
     .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
