@@ -1,17 +1,14 @@
+fs = require("fs")
+exec = require("child_process").exec
 $ = require("jquery")
 webpack = require("webpack")
 _ = require("lodash")
-
-#
-fs = require("fs")
-#
-Compiler = require("am-compiler")
-exec = require("child_process").exec
+Compiler = require("../Compiler")
 
 window.electonReadFlg = true
 
 class ModuleCompiler extends Compiler
-  compile: (baseOption, moduleDir, callback) =>
+  @compile: (baseOption, moduleDir, callback) =>
     option = _.cloneDeep(baseOption)
     option.resolve.root = process.cwd()
     try
@@ -31,7 +28,7 @@ class ModuleCompiler extends Compiler
     catch error
       console.log error
       callback()
-  compileModules: (dir, callback) =>
+  @compileModules: (dir, callback) =>
     compileNodeModule = => #node or electron
       @compileGen = @compile(@electronOption, "modules/#{dir}", callback)
       @compileGen.next()
@@ -39,14 +36,15 @@ class ModuleCompiler extends Compiler
       @compileGen = @compile(@browserOption, "modules/#{dir}/browser", compileNodeModule)
       @compileGen.next()
     compileBrowserModule()
-  _config: =>
+  @config: =>
     #minified
     @browserOption.plugins = [
       new webpack.optimize.OccurenceOrderPlugin(true)
       new webpack.optimize.DedupePlugin()
       # new webpack.optimize.UglifyJsPlugin()
     ]
-ModuleCompiler::_config()
+
+ModuleCompiler.config()
 
 $(restart).on("click", (e) -> require('electron').ipcRenderer.send("restart"))
 do -> #upload npm
@@ -74,7 +72,7 @@ do -> #upload npm
           (e, out, err) ->
             console.log out
         )
-      ModuleCompiler::compileModules(module, callback)
+      ModuleCompiler.compileModules(module, callback)
   window.browserChangeReloadFlg = (e) =>
     e.target.querySelector("span").innerHTML =
       ea.liveReloadStopFlg = not ea.liveReloadStopFlg

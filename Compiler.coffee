@@ -1,11 +1,11 @@
-path = require("path")
-webpack = require("webpack")
-_ = require("lodash")
-#
 fs =require("fs")
+path = require("path")
+fse = require("fs-extra")
+_ = require("lodash")
+webpack = require("webpack")
 
-module.exports = class Base
-  baseOption:
+module.exports = class Compiler
+  @baseOption:
     output:
       path: path.resolve()
       filename: "[name].js"
@@ -25,7 +25,7 @@ module.exports = class Base
     resolve:
       modulesDirectories: ["modules", "node_modules"]
       extensions: [".coffee", ".js", ""]
-  nodeModules: do =>
+  @nodeModules: do =>
     retObj = {}
     fs.readdirSync('node_modules')
       .filter((x) =>
@@ -34,7 +34,8 @@ module.exports = class Base
           retObj[mod] = 'commonjs ' + mod
           )
     retObj
-  _config: =>
+  @checkNum: 0
+  @_config: =>
     @electronOption = _.cloneDeep(@baseOption)
     @electronOption.target = "atom"
     @electronOption.externals = @nodeModules
@@ -47,15 +48,43 @@ module.exports = class Base
     @browserOption.module.preLoaders = []
     @browserOption.output.libraryTarget = "umd"
     @browserOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
-  compile: =>
+  @setOption: (option) =>
+    @baseOption.devtool = option.devltool if option.devltool?
+  @run: () =>
+    @setFilePath()
+    delete @baseOption.devtool
     webpack(@electronOption).run((err, stats) => @callback(err,stats)) if @electronOption.entry
     webpack(@nodeOption).run((err, stats) => @callback(err,stats)) if @nodeOption.entry
     webpack(@browserOption).run((err, stats) => @callback(err,stats)) if @browserOption.entry
-  start: =>
+  @start: () =>
+    @setFilePath()
     webpack(@electronOption).watch({}, (err, stats) => @callback(err,stats)) if @electronOption.entry
     webpack(@nodeOption).watch({}, (err, stats) => @callback(err,stats)) if @nodeOption.entry
     webpack(@browserOption).watch({}, (err, stats) => @callback(err,stats)) if @browserOption.entry
-  callback: (err, stats) =>
+  @setFilePath: =>
+    @electronOption.entry = {}
+    @nodeOption.entry = {}
+    @browserOption.entry = {}
+    # TODO: 開発に必要なファイル軍だけをコンパイルする方針に変えたい
+    require("glob").sync(
+      "./**/@(electron|app)/test/*.coffee"
+      , {ignore: "**/node_modules/**"}
+    )
+    .filter((filepath) => not filepath.match(/\/am\-template\//))
+    .forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
+    require("glob").sync(
+      "./**/node/test/*.coffee"
+      , {ignore: "**/node_modules/**"}
+    )
+    .filter((filepath) => not filepath.match(/\/am\-template\//))
+    .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
+    require("glob").sync(
+      "./**/web/test/*.coffee"
+      , {ignore: "**/node_modules/**"}
+    )
+    .filter((filepath) => not filepath.match(/\/am\-template\//))
+    .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
+  @callback: (err, stats) =>
     return console.log(err) if (err)
     jsonStats = stats.toJson()
     console.log stats.toString(
@@ -66,5 +95,10 @@ module.exports = class Base
       timings: false
       chunkModules: false
       )
+    # TODO: コンパイル数をチェックする以外の方法にしたい
+    @electronStart() if (++@checkNum is 3)
+  @electronStart: =>
+    cmd = fse.readJsonSync("package.json").scripts.electron
+    require("child_process").exec(cmd)
 
-Base::_config()
+Compiler._config()
