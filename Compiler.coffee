@@ -24,7 +24,7 @@ module.exports = class Compiler
     devtool: "#cheap-module-eval-source-map"
     resolve:
       modulesDirectories: ["modules", "node_modules"]
-      extensions: [".coffee", ".js", ""]
+      extensions: [".coffee", ".tag", ".js", ""]
   @nodeModules: do =>
     retObj = {}
     fs.readdirSync('node_modules')

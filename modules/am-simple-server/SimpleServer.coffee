@@ -58,8 +58,12 @@ module.exports = class SimpleServer
     )
     @wsEventReload()
   wsEventReload: =>
-    chokidar.watch(@watchPath).on("change", (path) =>
-      return unless fs.lstatSync(path).size #ほんとはstreamの終わりを検知したい　
+    chokidar.watch(@watchPath,
+      persistent: true
+      awaitWriteFinish:
+        stabilityThreshold: 10
+        pollInterval: 10
+    ).on("change", (path) =>
       @checkReloadList()
       @sendReloadEvent(socket) for socket in @reloadList
     )
