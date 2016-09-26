@@ -1,1 +1,4 @@
-console.log "hello"
+window.riot = require("riot")
+require("./src/app")
+
+riot.mount("*")
