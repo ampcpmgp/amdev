@@ -22,10 +22,10 @@
 
 
 '.text.html.riot':
-  'style scoped':
-    'prefix': 'scope'
+  'less':
+    'prefix': 'less'
     'body': """
-      <style scope type="less">
+      <style scoped type="less">
         :scope {
           $1
         }
