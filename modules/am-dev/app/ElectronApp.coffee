@@ -7,6 +7,8 @@ glob = require("glob")
 
 module.exports = class ElectronApp
   _inspector: 1
+  publishFlg: true
+  liveReloadStopFlg: false
   constructor: ->
   start: ->
     @init()

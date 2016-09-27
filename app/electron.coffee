@@ -67,11 +67,13 @@ do -> #upload npm
     for module in uploadModules
       dir = "./modules/#{module}"
       callback = =>
+        return console.log "compile finished" unless ea.publishFlg
         exec("cd #{dir} && npm version #{version} && npm publish",
           (e, out, err) ->
             console.log out
         )
       ModuleCompiler.compileModules(module, callback)
   window.browserChangeReloadFlg = (e) =>
-    e.target.querySelector("span").innerHTML =
-      ea.liveReloadStopFlg = not ea.liveReloadStopFlg
+    e.currentTarget.querySelector("span").innerHTML = ea.liveReloadStopFlg = not ea.liveReloadStopFlg
+  window.browserPublishFlg = (e) =>
+    e.currentTarget.querySelector("span").innerHTML = ea.publishFlg = not ea.publishFlg
