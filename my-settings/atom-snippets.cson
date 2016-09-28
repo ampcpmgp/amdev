@@ -25,9 +25,9 @@
   'less':
     'prefix': 'less'
     'body': """
-      <style scoped type="less">
-        :scope {
-          $1
+      <style type="less">
+        $1 {
+          $2
         }
       </style>
     """
