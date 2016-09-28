@@ -46,6 +46,7 @@ module.exports = class Compiler
     @browserOption = _.cloneDeep(@baseOption)
     @browserOption.target = "web"
     @browserOption.module.preLoaders = []
+    @browserOption.output.library = "[name]"
     @browserOption.output.libraryTarget = "umd"
     @browserOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
   @run: () =>
@@ -69,21 +70,18 @@ module.exports = class Compiler
     # TODO: 開発に必要なファイル軍だけをコンパイルする方針に変えたい
     require("glob").sync(
       "./**/@(electron|app)/test/*.coffee"
-      , {ignore: "./**/node_modules/**"}
+      , {ignore: "./**/@(node_modules|am-template)/**"}
     )
-    .filter((filepath) => not filepath.match(/\/am\-template\//))
     .forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
     require("glob").sync(
       "./**/node/test/*.coffee"
-      , {ignore: "./**/node_modules/**"}
+      , {ignore: "./**/@(node_modules|am-template)/**"}
     )
-    .filter((filepath) => not filepath.match(/\/am\-template\//))
     .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
     require("glob").sync(
       "./**/web/test/*.coffee"
-      , {ignore: "./**/node_modules/**"}
+      , {ignore: "./**/@(node_modules|am-template)/**"}
     )
-    .filter((filepath) => not filepath.match(/\/am\-template\//))
     .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
   @callback: (err, stats) =>
     return console.log(err) if (err)
