@@ -2,7 +2,7 @@ generate = require("./generate")
 
 location.href = "#"
 
-class Client extends require("am-simple-server/WSClient")
+class Client extends require("am-simple-server/browser/WSClient")
   domain: "{__DOMAIN__}"
   wsPort: "{__WSPORT__}"
   jsFile: "{__TESTJS__}"

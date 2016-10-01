@@ -1,5 +1,5 @@
 Test = require("am-coffee-time")
-WSClient = require("../WSClient")
+WSClient = require("../browser/WSClient")
 
 class NewTest extends Test
   @port: (number) =>

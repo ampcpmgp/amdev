@@ -1,5 +1,3 @@
-WSClient = require("am-simple-server/WSClient")
-
 if window is parent
   generate = require("am-coffee-time/browser/generate")
   testcases = require("./testcases.yml")

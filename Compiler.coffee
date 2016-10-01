@@ -21,7 +21,7 @@ module.exports = class Compiler
       postLoaders: [
         {test: /\.src\.coffee$/, loader: "raw"}
       ]
-    devtool: "#cheap-module-eval-source-map"
+    devtool: false
     resolve:
       modulesDirectories: ["modules", "node_modules"]
       extensions: [".coffee", ".tag", ".js", ""]
@@ -79,7 +79,7 @@ module.exports = class Compiler
     )
     .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
     require("glob").sync(
-      "./**/web/test/*.coffee"
+      "./**/@(browser|web)/test/*.coffee"
       , {ignore: "./**/@(node_modules|am-template)/**"}
     )
     .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)

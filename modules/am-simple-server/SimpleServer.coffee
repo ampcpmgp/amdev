@@ -5,9 +5,12 @@ chokidar = require('chokidar')
 mime = require('mime')
 sio = require('socket.io')
 glob = require("glob")
+lodash = require("lodash")
 
 module.exports = class SimpleServer
   #config
+  livereloadJs:  __dirname + "/browser/livereload.js"
+  livereloadPath: "/__livereload.js"
   webDir:  [
     "./"
   ]
@@ -18,6 +21,12 @@ module.exports = class SimpleServer
   #info
   reloadList: []
   start: (@httpPort = 8080, @wsPort = @httpPort) ->
+    try
+      path = "./modules/am-simple-server/browser/test/livereload.js"
+      fs.statSync(path)
+      @livereloadJs = path
+    catch error
+      0
     @app = http.createServer((req, res) => @httpServerAction(req, res))
     lastArg = arguments[arguments.length-1]
     listen = => @app.listen(@httpPort, lastArg if typeof lastArg is "function")
@@ -40,6 +49,14 @@ module.exports = class SimpleServer
       data = fs.readFileSync(path)
       type = mime.lookup(path)
       res.writeHead(200, "Content-Type": type)
+      if type is "text/html"
+        data = data.toString("utf8") + "<script src='#{@livereloadPath}'></script>"
+        data = Buffer.from(data)
+      res.end(data)
+    else if url is @livereloadPath
+      data = fs.readFileSync(@livereloadJs)
+      type = mime.lookup(@livereloadJs)
+      res.writeHead(200, "Content-Type": type)
       res.end(data)
     else
       res.writeHead(404)
@@ -61,11 +78,12 @@ module.exports = class SimpleServer
     chokidar.watch(@watchPath,
       persistent: true
       awaitWriteFinish:
-        stabilityThreshold: 10
-        pollInterval: 10
-    ).on("change", (path) =>
+        stabilityThreshold: 100
+        pollInterval: 100
+    ).on("change", lodash.throttle((path) =>
       @checkReloadList()
       @sendReloadEvent(socket) for socket in @reloadList
+    , 100)
     )
   sendReloadEvent: (socket) -> socket.emit("reload")
   sendCssReloadEvent: (socket,filepath) -> socket.emit("css reload", fs.readFileSync(filepath, {encoding:"utf-8"}))
