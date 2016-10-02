@@ -12,7 +12,6 @@ allpattern:
       clickAssert=false: ./index.html
       select=5: ./index.html
   am-coffee-time:
-    login: /modules/am-coffee-time/web/index.html
     params1:  ./index.html
     _color:  ./index.html
     _color=.child:  ./index.html

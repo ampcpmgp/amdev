@@ -48,8 +48,6 @@
         iframeWindow.addEventListener("load", =>
           script = iframeWindow.document.createElement('script')
           script.src = "#{@opts.config.extFile}?#{Date.now()}"
-          Test = iframeWindow.Test = @opts.config.Test
-          Test::params = require("am-common")::getParams(iframeWindow.location.href)
           iframeWindow.document.body.appendChild(script)
         )
   </script>
