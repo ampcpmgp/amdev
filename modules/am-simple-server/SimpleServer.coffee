@@ -78,12 +78,11 @@ module.exports = class SimpleServer
     chokidar.watch(@watchPath,
       persistent: true
       awaitWriteFinish:
-        stabilityThreshold: 100
-        pollInterval: 100
-    ).on("change", lodash.throttle((path) =>
+        stabilityThreshold: 10
+        pollInterval: 10
+    ).on("change", (path, stat) =>
       @checkReloadList()
       @sendReloadEvent(socket) for socket in @reloadList
-    , 100)
     )
   sendReloadEvent: (socket) -> socket.emit("reload")
   sendCssReloadEvent: (socket,filepath) -> socket.emit("css reload", fs.readFileSync(filepath, {encoding:"utf-8"}))

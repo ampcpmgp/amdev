@@ -21,7 +21,7 @@ module.exports = class Compiler
       postLoaders: [
         {test: /\.src\.coffee$/, loader: "raw"}
       ]
-    devtool: false
+    devtool: "cheap-module-eval-source-map"
     resolve:
       modulesDirectories: ["modules", "node_modules"]
       extensions: [".coffee", ".tag", ".js", ""]
@@ -72,17 +72,22 @@ module.exports = class Compiler
       "./**/@(electron|app)/test/*.coffee"
       , {ignore: "./**/@(node_modules|am-template)/**"}
     )
-    .forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
+    .forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
       "./**/node/test/*.coffee"
       , {ignore: "./**/@(node_modules|am-template)/**"}
     )
-    .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
+    .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
-      "./**/@(browser|web)/test/*.coffee"
+      "./**/web/test/*.coffee"
       , {ignore: "./**/@(node_modules|am-template)/**"}
+    ).concat(
+      require("glob").sync(
+        "./**/browser/*.coffee"
+        , {ignore: "./**/@(node_modules|am-template)/**"}
+      )
     )
-    .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath)
+    .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
   @callback: (err, stats) =>
     return console.log(err) if (err)
     jsonStats = stats.toJson()
