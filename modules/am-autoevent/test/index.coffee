@@ -29,10 +29,6 @@ class SampleTest extends Test
     func(AutoEvent)
   @testNoGen:  =>
     func(AutoEventNoGen)
-  @global: =>
-    require("am-autoevent/browser/amAutoevent")
-    console.assert(window.amAutoEvent)
-    console.info("finished")
   @timeout: (ms) =>
     AutoEvent = AutoEvent::
     AutoEvent.timeoutMsec = parseInt(ms)

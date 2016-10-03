@@ -7,7 +7,6 @@ allpattern:
     エラーじゃダメ:
       test: ./index.html
       testNoGen: ./index.html
-      global: ./index.html
       timeout=5000: ./index.html
       clickAssert=false: ./index.html
       select=5: ./index.html
