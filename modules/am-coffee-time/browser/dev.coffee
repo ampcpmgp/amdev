@@ -14,7 +14,6 @@ class Client extends require("am-simple-server/browser/WSClient")
         document.body.innerHTML = "<test-list></test-list>"
         @tags = generate(obj)
         @listTag = @tags.list[0]
-        @listTag.WholeStatus.config.extFile = "#{@domain.replace(/^(?!http|\/\/)/, "//")}/#{@jsFile}"
       )
       .off("reload")
       .on("reload", =>

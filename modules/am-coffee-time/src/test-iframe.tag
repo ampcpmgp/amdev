@@ -27,6 +27,8 @@
     }
   </style>
   <script type="coffee">
+    WholeStatus = require("./Status")
+    Test = require("../browser/Test")
     @isIos = require("is_js").ios()
     @isElectron = process?.versions?.electron
     @addScript = =>
@@ -44,11 +46,9 @@
         iframeWindow = @root.querySelector("iframe").contentWindow
         iframeWindow.console.assert = (flg, msg) => callbackObj.assert(flg, msg)
         iframeWindow.console.info = (msg) => callbackObj.info(msg)
-        return unless @opts.config.extFile
+        return unless WholeStatus.actions
         iframeWindow.addEventListener("load", =>
-          script = iframeWindow.document.createElement('script')
-          script.src = "#{@opts.config.extFile}?#{Date.now()}"
-          iframeWindow.document.body.appendChild(script)
+          Test.start(WholeStatus.actions)
         )
   </script>
 </test-iframe>

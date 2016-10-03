@@ -10,9 +10,21 @@
     </style>
   </head>
   <body>
+    <test-list></test-list>
     <script src="../browser/generate.js" charset="utf-8"></script>
     <script type="text/javascript">
-      let generate =  this["modules/am-coffee-time/browser/generate"]
+      if (true) {
+        const generate = this["modules/am-coffee-time/browser/generate"]
+        let patterns = {
+          ログイン: "./index.html"
+        }
+        let actions = {
+          ログイン() {
+            console.log(23);
+          }
+        }
+        generate(patterns, actions)
+      }
     </script>
   </body>
 </html>
