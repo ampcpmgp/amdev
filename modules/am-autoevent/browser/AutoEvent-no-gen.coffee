@@ -8,8 +8,6 @@ module.exports = class AutoEvent extends AutoEventBase
       if --loopNum
         curFuncNum = 0
         @funcs[0]()
-      else
-        @end()
       )
     i = -1
     while (@funcs[++i])

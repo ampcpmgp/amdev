@@ -32,7 +32,7 @@ require("./test-iframe.tag")
       WholeStatus.sumInit()
       executePath = riot.route.query().path
       return unless executePath
-      executePath = encodeURI(executePath)
+      executePath = encodeURI(executePath) unless (/%[0-9a-f]{2}/i).test(executePath)
       unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
         @update()

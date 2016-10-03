@@ -28,7 +28,6 @@
   </style>
   <script type="coffee">
     WholeStatus = require("./Status")
-    Test = require("../browser/Test")
     @isIos = require("is_js").ios()
     @isElectron = process?.versions?.electron
     @addScript = =>
@@ -46,9 +45,14 @@
         iframeWindow = @root.querySelector("iframe").contentWindow
         iframeWindow.console.assert = (flg, msg) => callbackObj.assert(flg, msg)
         iframeWindow.console.info = (msg) => callbackObj.info(msg)
-        return unless WholeStatus.actions
+        return unless WholeStatus.opts.files
         iframeWindow.addEventListener("load", =>
-          Test.start(WholeStatus.actions)
+          for file in WholeStatus.opts.files
+            script = iframeWindow.document.createElement("script")
+            script.src = file
+            script.type = "text/javascript"
+            script.async = false
+            iframeWindow.document.head.appendChild(script)
         )
   </script>
 </test-iframe>

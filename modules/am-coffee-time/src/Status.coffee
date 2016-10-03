@@ -14,7 +14,7 @@ module.exports = class Status
     #observable
     riot.observable(@)
   @firstTimeInit: =>
-    @actions = null
+    @opts = {}
 
 Status.init()
 Status.firstTimeInit()

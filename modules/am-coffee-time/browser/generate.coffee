@@ -2,8 +2,8 @@ window.riot = require("riot")
 WholeStatus = require("../src/Status")
 require("../src/test-list.tag")
 
-module.exports = (testPatterns, actions = null) =>
-  WholeStatus.actions = actions if actions
+module.exports = (testPatterns, opts = {}) =>
+  WholeStatus.opts = opts
   {
     list: riot.mount("test-list", {testPatterns})
   }

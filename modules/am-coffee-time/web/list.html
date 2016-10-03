@@ -11,19 +11,27 @@
   </head>
   <body>
     <test-list></test-list>
-    <script src="../browser/generate.js" charset="utf-8"></script>
+    <script src="/modules/am-coffee-time/browser/generate.js" charset="utf-8"></script>
+    <script src="/modules/am-coffee-time/browser/Test.js" charset="utf-8"></script>
+    <script src="/modules/am-autoevent/browser/AutoEvent-no-gen.js" charset="utf-8"></script>
     <script type="text/javascript">
       if (true) {
         const generate = this["modules/am-coffee-time/browser/generate"]
         let patterns = {
-          ログイン: "./index.html"
-        }
-        let actions = {
-          ログイン() {
-            console.log(23);
+          全パターン: {
+            "動作フロー確認用=成功": "./index.html",
+            "動作フロー確認用=失敗": "./index.html",
+            ログイン: "./index.html"
           }
         }
-        generate(patterns, actions)
+        let opts = {
+          files: [
+            "/modules/am-coffee-time/browser/Test.js",
+            "/modules/am-autoevent/browser/AutoEvent-no-gen.js",
+            "./test.src.js"
+          ]
+        }
+        generate(patterns, opts)
       }
     </script>
   </body>
