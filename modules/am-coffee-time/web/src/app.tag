@@ -57,7 +57,7 @@
       id = @id.value
       pw = @pw.value
       return @errorMsg = "ID/PWを入力してください" unless id or pw
-      return @errorMsg = "PWが正しくないです" unless pw.match(/^(apple|google)$/)
+      return @errorMsg = "PWが正しくないです" unless pw.match(/^(apple)$/)
       Status.isLogin = true
       Status.trigger("update")
       @errorMsg = ""
