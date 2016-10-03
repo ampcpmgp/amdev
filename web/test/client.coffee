@@ -1,5 +1,5 @@
 if window is parent
-  generate = require("am-coffee-time/browser/generate")
+  generate = require("am-coffee-time")
   testcases = require("./testcases.yml")
   generate(testcases)
   require("./pre-info.tag")
