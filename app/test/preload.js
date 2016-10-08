@@ -46,40 +46,40 @@ module.exports =
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(34);
+	module.exports = __webpack_require__(34);
 
 
 /***/ },
 
-/***/ 2:
+/***/ 3:
 /***/ function(module, exports) {
 
 	module.exports = require("fs");
 
 /***/ },
 
-/***/ 4:
+/***/ 5:
 /***/ function(module, exports) {
 
 	module.exports = require("jquery");
 
 /***/ },
 
-/***/ 10:
+/***/ 11:
 /***/ function(module, exports) {
 
 	module.exports = require("glob");
 
 /***/ },
 
-/***/ 11:
+/***/ 12:
 /***/ function(module, exports) {
 
 	module.exports = require("electron");
 
 /***/ },
 
-/***/ 17:
+/***/ 18:
 /***/ function(module, exports) {
 
 	module.exports = require("chokidar");
@@ -89,10 +89,18 @@ module.exports =
 /***/ 34:
 /***/ function(module, exports, __webpack_require__) {
 
+	__webpack_require__(35);
+
+
+/***/ },
+
+/***/ 35:
+/***/ function(module, exports, __webpack_require__) {
+
 	var start;
 
 	start = function() {
-	  window.ea = new (__webpack_require__(35));
+	  window.ea = new (__webpack_require__(36));
 	  return ea.start();
 	};
 
@@ -101,23 +109,27 @@ module.exports =
 
 /***/ },
 
-/***/ 35:
+/***/ 36:
 /***/ function(module, exports, __webpack_require__) {
 
 	var $, ElectronApp, chokidar, fs, glob, ipcRenderer;
 
-	ipcRenderer = __webpack_require__(11).ipcRenderer;
+	ipcRenderer = __webpack_require__(12).ipcRenderer;
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(3);
 
-	$ = __webpack_require__(4);
+	$ = __webpack_require__(5);
 
-	chokidar = __webpack_require__(17);
+	chokidar = __webpack_require__(18);
 
-	glob = __webpack_require__(10);
+	glob = __webpack_require__(11);
 
 	module.exports = ElectronApp = (function() {
 	  ElectronApp.prototype._inspector = 1;
+
+	  ElectronApp.prototype.publishFlg = true;
+
+	  ElectronApp.prototype.liveReloadStopFlg = false;
 
 	  function ElectronApp() {}
 
@@ -152,9 +164,15 @@ module.exports =
 	  };
 
 	  ElectronApp.prototype.liveReload = function() {
-	    return chokidar.watch(glob.sync("./@(app|node)/**/*.@(html|js)", {
-	      ignore: "**/node_modules/**"
-	    })).on("change", (function(_this) {
+	    return chokidar.watch(glob.sync("./**/@(app|node)/**/*.@(html|js)", {
+	      ignore: "./**/node_modules/**"
+	    }), {
+	      persistent: true,
+	      awaitWriteFinish: {
+	        stabilityThreshold: 10,
+	        pollInterval: 10
+	      }
+	    }).on("change", (function(_this) {
 	      return function(path) {
 	        if (_this.liveReloadStopFlg) {
 	          return;

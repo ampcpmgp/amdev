@@ -45,13 +45,20 @@ module.exports =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__(1);
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var Common, params;
 
-	__webpack_require__(1);
+	__webpack_require__(2);
 
-	global.riot = __webpack_require__(12);
+	global.riot = __webpack_require__(13);
 
-	Common = __webpack_require__(13);
+	Common = __webpack_require__(14);
 
 	params = Common.prototype.getParams(location.href);
 
@@ -59,11 +66,11 @@ module.exports =
 	  return (function() {
 	    var generate, testcases;
 	    if (params["am-simple-server"]) {
-	      return __webpack_require__(14);
+	      return __webpack_require__(15);
 	    } else if (params["am-coffee-time"]) {
-	      return __webpack_require__(20);
+	      return __webpack_require__(21);
 	    } else {
-	      generate = __webpack_require__(27);
+	      generate = __webpack_require__(28);
 	      testcases = __webpack_require__(33);
 	      return generate(testcases);
 	    }
@@ -72,24 +79,24 @@ module.exports =
 
 
 /***/ },
-/* 1 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $, Compiler, ModuleCompiler, _, exec, fs, webpack,
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(3);
 
-	exec = __webpack_require__(3).exec;
+	exec = __webpack_require__(4).exec;
 
-	$ = __webpack_require__(4);
+	$ = __webpack_require__(5);
 
-	webpack = __webpack_require__(5);
+	webpack = __webpack_require__(6);
 
-	_ = __webpack_require__(6);
+	_ = __webpack_require__(7);
 
-	Compiler = __webpack_require__(7);
+	Compiler = __webpack_require__(8);
 
 	window.electonReadFlg = true;
 
@@ -163,7 +170,7 @@ module.exports =
 	ModuleCompiler.config();
 
 	$(restart).on("click", function(e) {
-	  return __webpack_require__(11).ipcRenderer.send("restart");
+	  return __webpack_require__(12).ipcRenderer.send("restart");
 	});
 
 	(function() {
@@ -196,6 +203,9 @@ module.exports =
 	      dir = "./modules/" + module;
 	      callback = (function(_this) {
 	        return function() {
+	          if (!ea.publishFlg) {
+	            return console.log("compile finished");
+	          }
 	          return exec("cd " + dir + " && npm version " + version + " && npm publish", function(e, out, err) {
 	            return console.log(out);
 	          });
@@ -205,59 +215,64 @@ module.exports =
 	    }
 	    return results;
 	  };
-	  return window.browserChangeReloadFlg = (function(_this) {
+	  window.browserChangeReloadFlg = (function(_this) {
 	    return function(e) {
-	      return e.target.querySelector("span").innerHTML = ea.liveReloadStopFlg = !ea.liveReloadStopFlg;
+	      return e.currentTarget.querySelector("span").innerHTML = ea.liveReloadStopFlg = !ea.liveReloadStopFlg;
+	    };
+	  })(this);
+	  return window.browserPublishFlg = (function(_this) {
+	    return function(e) {
+	      return e.currentTarget.querySelector("span").innerHTML = ea.publishFlg = !ea.publishFlg;
 	    };
 	  })(this);
 	})();
 
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports) {
 
 	module.exports = require("fs");
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 	module.exports = require("child_process");
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	module.exports = require("jquery");
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	module.exports = require("webpack");
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	module.exports = require("lodash");
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Compiler, _, fs, fse, path, webpack;
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(3);
 
-	path = __webpack_require__(8);
+	path = __webpack_require__(9);
 
-	fse = __webpack_require__(9);
+	fse = __webpack_require__(10);
 
-	_ = __webpack_require__(6);
+	_ = __webpack_require__(7);
 
-	webpack = __webpack_require__(5);
+	webpack = __webpack_require__(6);
 
 	module.exports = Compiler = (function() {
 	  function Compiler() {}
@@ -294,10 +309,10 @@ module.exports =
 	        }
 	      ]
 	    },
-	    devtool: "#cheap-module-eval-source-map",
+	    devtool: "cheap-module-eval-source-map",
 	    resolve: {
 	      modulesDirectories: ["modules", "node_modules"],
-	      extensions: [".coffee", ".js", ""]
+	      extensions: [".coffee", ".tag", ".js", ""]
 	    }
 	  };
 
@@ -331,6 +346,7 @@ module.exports =
 	    Compiler.browserOption = _.cloneDeep(Compiler.baseOption);
 	    Compiler.browserOption.target = "web";
 	    Compiler.browserOption.module.preLoaders = [];
+	    Compiler.browserOption.output.library = "[name]";
 	    Compiler.browserOption.output.libraryTarget = "umd";
 	    return Compiler.browserOption.module.loaders.push({
 	      test: /\.tag$/,
@@ -387,26 +403,22 @@ module.exports =
 	    Compiler.electronOption.entry = {};
 	    Compiler.nodeOption.entry = {};
 	    Compiler.browserOption.entry = {};
-	    __webpack_require__(10).sync("./**/@(electron|app)/test/*.coffee", {
-	      ignore: "**/node_modules/**"
-	    }).filter(function(filepath) {
-	      return !filepath.match(/\/am\-template\//);
+	    __webpack_require__(11).sync("./**/@(electron|app)/test/*.coffee", {
+	      ignore: "./**/@(node_modules|am-template)/**"
 	    }).forEach(function(filepath) {
-	      return Compiler.electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath;
+	      return Compiler.electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
 	    });
-	    __webpack_require__(10).sync("./**/node/test/*.coffee", {
-	      ignore: "**/node_modules/**"
-	    }).filter(function(filepath) {
-	      return !filepath.match(/\/am\-template\//);
+	    __webpack_require__(11).sync("./**/node/test/*.coffee", {
+	      ignore: "./**/@(node_modules|am-template)/**"
 	    }).forEach(function(filepath) {
-	      return Compiler.nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath;
+	      return Compiler.nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
 	    });
-	    return __webpack_require__(10).sync("./**/web/test/*.coffee", {
-	      ignore: "**/node_modules/**"
-	    }).filter(function(filepath) {
-	      return !filepath.match(/\/am\-template\//);
-	    }).forEach(function(filepath) {
-	      return Compiler.browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = filepath;
+	    return __webpack_require__(11).sync("./**/web/test/*.coffee", {
+	      ignore: "./**/@(node_modules|am-template)/**"
+	    }).concat(__webpack_require__(11).sync("./**/browser/*.coffee", {
+	      ignore: "./**/@(node_modules|am-template)/**"
+	    })).forEach(function(filepath) {
+	      return Compiler.browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
 	    });
 	  };
 
@@ -432,7 +444,7 @@ module.exports =
 	  Compiler.electronStart = function() {
 	    var cmd;
 	    cmd = fse.readJsonSync("package.json").scripts.electron;
-	    return __webpack_require__(3).exec(cmd);
+	    return __webpack_require__(4).exec(cmd);
 	  };
 
 	  return Compiler;
@@ -443,37 +455,37 @@ module.exports =
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = require("path");
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	module.exports = require("fs-extra");
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = require("glob");
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	module.exports = require("electron");
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = require("riot");
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	var Common,
@@ -543,12 +555,12 @@ module.exports =
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var SimpleServer;
 
-	SimpleServer = __webpack_require__(15);
+	SimpleServer = __webpack_require__(16);
 
 	SimpleServer.prototype.webDir = ["./web", "./test"];
 
@@ -560,23 +572,25 @@ module.exports =
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SimpleServer, chokidar, fs, glob, http, mime, sio,
+	/* WEBPACK VAR INJECTION */(function(__dirname) {var SimpleServer, chokidar, fs, glob, http, lodash, mime, sio,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(3);
 
-	http = __webpack_require__(16);
+	http = __webpack_require__(17);
 
-	chokidar = __webpack_require__(17);
+	chokidar = __webpack_require__(18);
 
-	mime = __webpack_require__(18);
+	mime = __webpack_require__(19);
 
-	sio = __webpack_require__(19);
+	sio = __webpack_require__(20);
 
-	glob = __webpack_require__(10);
+	glob = __webpack_require__(11);
+
+	lodash = __webpack_require__(7);
 
 	module.exports = SimpleServer = (function() {
 	  function SimpleServer() {
@@ -585,10 +599,14 @@ module.exports =
 	    this.wsStart = bind(this.wsStart, this);
 	  }
 
+	  SimpleServer.prototype.livereloadJs = __dirname + "/browser/livereload.js";
+
+	  SimpleServer.prototype.livereloadPath = "/__livereload.js";
+
 	  SimpleServer.prototype.webDir = ["./"];
 
-	  SimpleServer.prototype.watchPath = glob.sync("./web/*.@(html|js)", {
-	    ignore: "**/node_modules/**"
+	  SimpleServer.prototype.watchPath = glob.sync("./**/web/**/*.@(html|js)", {
+	    ignore: "./**/node_modules/**"
 	  });
 
 	  SimpleServer.prototype.sioOption = {};
@@ -596,9 +614,17 @@ module.exports =
 	  SimpleServer.prototype.reloadList = [];
 
 	  SimpleServer.prototype.start = function(httpPort, wsPort) {
-	    var lastArg, listen;
+	    var error, error1, lastArg, listen, path;
 	    this.httpPort = httpPort != null ? httpPort : 8080;
 	    this.wsPort = wsPort != null ? wsPort : this.httpPort;
+	    try {
+	      path = "./modules/am-simple-server/browser/test/livereload.js";
+	      fs.statSync(path);
+	      this.livereloadJs = path;
+	    } catch (error1) {
+	      error = error1;
+	      0;
+	    }
 	    this.app = http.createServer((function(_this) {
 	      return function(req, res) {
 	        return _this.httpServerAction(req, res);
@@ -642,6 +668,17 @@ module.exports =
 	      res.writeHead(200, {
 	        "Content-Type": type
 	      });
+	      if (type === "text/html") {
+	        data = data.toString("utf8") + ("<script src='" + this.livereloadPath + "'></script>");
+	        data = Buffer.from(data);
+	      }
+	      res.end(data);
+	    } else if (url === this.livereloadPath) {
+	      data = fs.readFileSync(this.livereloadJs);
+	      type = mime.lookup(this.livereloadJs);
+	      res.writeHead(200, {
+	        "Content-Type": type
+	      });
 	      res.end(data);
 	    } else {
 	      res.writeHead(404);
@@ -672,12 +709,15 @@ module.exports =
 	  };
 
 	  SimpleServer.prototype.wsEventReload = function() {
-	    return chokidar.watch(this.watchPath).on("change", (function(_this) {
-	      return function(path) {
+	    return chokidar.watch(this.watchPath, {
+	      persistent: true,
+	      awaitWriteFinish: {
+	        stabilityThreshold: 10,
+	        pollInterval: 10
+	      }
+	    }).on("change", (function(_this) {
+	      return function(path, stat) {
 	        var j, len, ref, results, socket;
-	        if (!fs.lstatSync(path).size) {
-	          return;
-	        }
 	        _this.checkReloadList();
 	        ref = _this.reloadList;
 	        results = [];
@@ -722,43 +762,43 @@ module.exports =
 
 	})();
 
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	module.exports = require("http");
+	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = require("chokidar");
+	module.exports = require("http");
 
 /***/ },
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = require("mime");
+	module.exports = require("chokidar");
 
 /***/ },
 /* 19 */
 /***/ function(module, exports) {
 
-	module.exports = require("socket.io");
+	module.exports = require("mime");
 
 /***/ },
 /* 20 */
+/***/ function(module, exports) {
+
+	module.exports = require("socket.io");
+
+/***/ },
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var LunchServer, Test, TestLunch, fse,
+	var LunchServer, TestLunch, fse, test,
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty,
-	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+	  hasProp = {}.hasOwnProperty;
 
-	fse = __webpack_require__(9);
+	fse = __webpack_require__(10);
 
-	LunchServer = __webpack_require__(21);
+	LunchServer = __webpack_require__(22);
 
 	TestLunch = (function(superClass) {
 	  extend(TestLunch, superClass);
@@ -781,29 +821,21 @@ module.exports =
 
 	})(LunchServer);
 
-	Test = (function(superClass) {
-	  extend(Test, superClass);
+	test = {
+	  port: (function(_this) {
+	    return function(arg) {
+	      var httpPort, wsPort;
+	      httpPort = arg[0], wsPort = arg[1];
+	      return TestLunch.prototype.start(httpPort, wsPort);
+	    };
+	  })(this)
+	};
 
-	  function Test() {
-	    this.port = bind(this.port, this);
-	    return Test.__super__.constructor.apply(this, arguments);
-	  }
-
-	  Test.prototype.port = function(arg) {
-	    var httpPort, wsPort;
-	    httpPort = arg[0], wsPort = arg[1];
-	    return TestLunch.prototype.start(httpPort, wsPort);
-	  };
-
-	  return Test;
-
-	})(__webpack_require__(23));
-
-	Test.prototype.start();
+	__webpack_require__(24).start(test);
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {var LunchServer, SimpleServer, chokidar, cson, devJs, fs, html, mime,
@@ -811,15 +843,15 @@ module.exports =
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(3);
 
-	mime = __webpack_require__(18);
+	mime = __webpack_require__(19);
 
-	chokidar = __webpack_require__(17);
+	chokidar = __webpack_require__(18);
 
-	cson = __webpack_require__(22);
+	cson = __webpack_require__(23);
 
-	SimpleServer = __webpack_require__(15);
+	SimpleServer = __webpack_require__(16);
 
 	html = null;
 
@@ -915,20 +947,20 @@ module.exports =
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports) {
 
 	module.exports = require("cson");
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $, Test, getRandomColor, jquery_stylesheet;
 
-	$ = __webpack_require__(4);
+	$ = __webpack_require__(5);
 
-	jquery_stylesheet = __webpack_require__(24);
+	jquery_stylesheet = __webpack_require__(25);
 
 	jquery_stylesheet($);
 
@@ -948,23 +980,12 @@ module.exports =
 	module.exports = Test = (function() {
 	  function Test() {}
 
-	  Test.actions = location.hash.replace(/^#+/, "").split("/");
-
 	  Test.start = function(testObj) {
-	    var action, arg, func, i, key, len, ref, ref1, value;
+	    var action, arg, func, i, key, len, ref, ref1, results, value;
 	    if (testObj == null) {
 	      testObj = Test;
 	    }
-	    ref = Test.actions;
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      action = ref[i];
-	      ref1 = action.split("="), key = ref1[0], value = ref1[1];
-	      func = testObj[key] || Test[key];
-	      arg = !value || value.split(",");
-	      if (typeof func === "function") {
-	        func(arg.length === 1 ? arg[0] : arg);
-	      }
-	    }
+	    Test.actions = decodeURI(location.hash.replace(/^#+/, "")).split("/");
 	    if (Test.actions._color != null) {
 	      Test._color(Test.actions._color);
 	    }
@@ -975,8 +996,18 @@ module.exports =
 	      Test._border(Test.actions._border);
 	    }
 	    if (Test.actions._auto != null) {
-	      return Test._auto(Test.actions._auto);
+	      Test._auto(Test.actions._auto);
 	    }
+	    ref = Test.actions;
+	    results = [];
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      action = ref[i];
+	      ref1 = action.split("="), key = ref1[0], value = ref1[1];
+	      func = testObj[key] || Test[key];
+	      arg = !value || value.split(",");
+	      results.push(typeof func === "function" ? func(arg.length === 1 ? arg[0] : arg) : void 0);
+	    }
+	    return results;
 	  };
 
 	  Test._border = function(selector) {
@@ -1006,7 +1037,7 @@ module.exports =
 
 	  Test._auto = function() {
 	    return {
-	      AutoEvent: __webpack_require__(25)
+	      AutoEvent: __webpack_require__(26)
 	    };
 	  };
 
@@ -1016,13 +1047,13 @@ module.exports =
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = require("jquery-stylesheet");
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AutoEvent, AutoEventBase,
@@ -1030,7 +1061,7 @@ module.exports =
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 
-	AutoEventBase = __webpack_require__(26);
+	AutoEventBase = __webpack_require__(27);
 
 	module.exports = AutoEvent = (function(superClass) {
 	  extend(AutoEvent, superClass);
@@ -1050,8 +1081,6 @@ module.exports =
 	        if (--loopNum) {
 	          curFuncNum = 0;
 	          return _this.funcs[0]();
-	        } else {
-	          return _this.end();
 	        }
 	      };
 	    })(this));
@@ -1080,7 +1109,7 @@ module.exports =
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports) {
 
 	var $, AutoEvent, trigger,
@@ -1302,19 +1331,23 @@ module.exports =
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var escape;
+	var WholeStatus;
 
-	window.riot = __webpack_require__(12);
+	window.riot = __webpack_require__(13);
 
-	escape = __webpack_require__(28);
+	WholeStatus = __webpack_require__(29);
 
-	__webpack_require__(29);
+	__webpack_require__(30);
 
 	module.exports = (function(_this) {
-	  return function(testPatterns) {
+	  return function(testPatterns, opts) {
+	    if (opts == null) {
+	      opts = {};
+	    }
+	    WholeStatus.opts = opts;
 	    return {
 	      list: riot.mount("test-list", {
 	        testPatterns: testPatterns
@@ -1325,21 +1358,52 @@ module.exports =
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports) {
 
-	module.exports = require("escape-html");
+	var Status;
+
+	module.exports = Status = (function() {
+	  function Status() {}
+
+	  Status.sumInit = function() {
+	    Status.successSum = 0;
+	    return Status.executeSum = 0;
+	  };
+
+	  Status.init = function() {
+	    Status.thisBasePath = "?";
+	    Status.basePath = "#";
+	    Status.itemStatuses = [];
+	    Status.executeIframe = [];
+	    Status.executablePath = {};
+	    Status.sumInit();
+	    return riot.observable(Status);
+	  };
+
+	  Status.firstTimeInit = function() {
+	    return Status.opts = {};
+	  };
+
+	  return Status;
+
+	})();
+
+	Status.init();
+
+	Status.firstTimeInit();
+
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(30)
+	__webpack_require__(31)
 
 	riot.tag2('test-list', '<span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span> <a onclick="{toRouteHash}">base</a> <recursive-item data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe name="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{WholeStatus.config}"></test-iframe>', 'test-list,[riot-tag="test-list"],[data-is="test-list"]{ display: block; background-color: white; font-size: 14px; } test-list a,[riot-tag="test-list"] a,[data-is="test-list"] a{ color: blue; text-decoration: none; cursor: pointer; display: inline-block; } test-list a:hover,[riot-tag="test-list"] a:hover,[data-is="test-list"] a:hover{ opacity: 0.4; }', '', function(opts) {
 	var WholeStatus, bodyStyle;
 
-	this.WholeStatus = WholeStatus = __webpack_require__(32);
+	this.WholeStatus = WholeStatus = __webpack_require__(29);
 
 	bodyStyle = document.body.style;
 
@@ -1359,6 +1423,9 @@ module.exports =
 	    if (!executePath) {
 	      return;
 	    }
+	    if (!/%[0-9a-f]{2}/i.test(executePath)) {
+	      executePath = encodeURI(executePath);
+	    }
 	    if (!WholeStatus.executablePath[executePath]) {
 	      _this.instanceUrl = executePath;
 	      _this.update();
@@ -1376,6 +1443,12 @@ module.exports =
 
 	WholeStatus.on("item-update", (function(_this) {
 	  return function() {
+	    return _this.update();
+	  };
+	})(this));
+
+	this.on("update", (function(_this) {
+	  return function() {
 	    var i, itemStatus, len, onExecute, ref;
 	    ref = WholeStatus.itemStatuses;
 	    for (i = 0, len = ref.length; i < len; i++) {
@@ -1385,8 +1458,7 @@ module.exports =
 	        break;
 	      }
 	    }
-	    bodyStyle.overflowY = onExecute ? "hidden" : "";
-	    return _this.update();
+	    return bodyStyle.overflowY = onExecute || _this.instanceUrl ? "hidden" : "";
 	  };
 	})(this));
 
@@ -1417,7 +1489,7 @@ module.exports =
 	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error}"> {success ? ⁗〇⁗ : error ? ⁗×⁗ : ⁗⁗} </span> <a class="tree" href="{routing}" name="treeTask" onclick="{router}">{key}</a> <a class="single" if="{url}" href="{routerExecutionPath}" name="singleTask" onclick="{router}">{url}</a> </div> <recursive-item name="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe name="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{WholeStatus.config}"></test-iframe>', '.bold { font-weight: bold; } .tree { color: #333; } .single { padding-left: 6px; } .line { margin-left: 10px; } .line.hover { background: rgba(0, 0, 255, 0.05); } .success { color: blue; } .error { color: red; } .step { color: #333; margin-right: 10px; }', '', function(opts) {
 	var WholeStatus, executeIframe;
 
-	WholeStatus = this.WholeStatus = __webpack_require__(32);
+	WholeStatus = this.WholeStatus = __webpack_require__(29);
 
 	executeIframe = (function(_this) {
 	  return function() {
@@ -1570,13 +1642,15 @@ module.exports =
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	riot.tag2('test-iframe', '<span class="{isIos ? \'ios\' : \'no-ios\'}"> <iframe if="{!isElectron}" riot-src="{opts.url}"></iframe> <webview if="{isElectron}" riot-src="{opts.url}" nodeintegration></webview> </span>', 'test-iframe .ios,[riot-tag="test-iframe"] .ios,[data-is="test-iframe"] .ios{ display: block; -webkit-overflow-scrolling: touch; overflow: auto; position: fixed; top: 0; left: 0; width: 100%; height: 100%; } test-iframe iframe,[riot-tag="test-iframe"] iframe,[data-is="test-iframe"] iframe,test-iframe webview,[riot-tag="test-iframe"] webview,[data-is="test-iframe"] webview{ background-color: white; border: none; width: 100%; height: 100%; } test-iframe .no-ios iframe,[riot-tag="test-iframe"] .no-ios iframe,[data-is="test-iframe"] .no-ios iframe,test-iframe .no-ios webview,[riot-tag="test-iframe"] .no-ios webview,[data-is="test-iframe"] .no-ios webview{ position: fixed; left: 0px; top: 0px; }', '', function(opts) {
-	var ref;
+	var WholeStatus, ref;
 
-	this.isIos = __webpack_require__(31).ios();
+	WholeStatus = __webpack_require__(29);
+
+	this.isIos = __webpack_require__(32).ios();
 
 	this.isElectron = typeof process !== "undefined" && process !== null ? (ref = process.versions) != null ? ref.electron : void 0 : void 0;
 
@@ -1607,16 +1681,22 @@ module.exports =
 	      iframeWindow.console.info = function(msg) {
 	        return callbackObj.info(msg);
 	      };
-	      if (!_this.opts.config.extFile) {
+	      if (!WholeStatus.opts.files) {
 	        return;
 	      }
 	      return iframeWindow.addEventListener("load", function() {
-	        var Test, script;
-	        script = iframeWindow.document.createElement('script');
-	        script.src = _this.opts.config.extFile + "?" + (Date.now());
-	        Test = iframeWindow.Test = _this.opts.config.Test;
-	        Test.prototype.params = __webpack_require__(13).prototype.getParams(iframeWindow.location.href);
-	        return iframeWindow.document.body.appendChild(script);
+	        var file, i, len, ref1, results, script;
+	        ref1 = WholeStatus.opts.files;
+	        results = [];
+	        for (i = 0, len = ref1.length; i < len; i++) {
+	          file = ref1[i];
+	          script = iframeWindow.document.createElement("script");
+	          script.src = file;
+	          script.type = "text/javascript";
+	          script.async = false;
+	          results.push(iframeWindow.document.head.appendChild(script));
+	        }
+	        return results;
 	      });
 	    }
 	  };
@@ -1625,57 +1705,10 @@ module.exports =
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports) {
 
 	module.exports = require("is_js");
-
-/***/ },
-/* 32 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Status,
-	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-	  hasProp = {}.hasOwnProperty;
-
-	module.exports = Status = (function() {
-	  function Status() {}
-
-	  Status.sumInit = function() {
-	    Status.successSum = 0;
-	    return Status.executeSum = 0;
-	  };
-
-	  Status.init = function() {
-	    var ListTest;
-	    Status.thisBasePath = "?";
-	    Status.basePath = "#";
-	    Status.itemStatuses = [];
-	    Status.executeIframe = [];
-	    Status.executablePath = {};
-	    Status.config = {
-	      extFile: null,
-	      Test: ListTest = (function(superClass) {
-	        extend(ListTest, superClass);
-
-	        function ListTest() {
-	          return ListTest.__super__.constructor.apply(this, arguments);
-	        }
-
-	        return ListTest;
-
-	      })(__webpack_require__(23))
-	    };
-	    Status.sumInit();
-	    return riot.observable(Status);
-	  };
-
-	  return Status;
-
-	})();
-
-	Status.init();
-
 
 /***/ },
 /* 33 */

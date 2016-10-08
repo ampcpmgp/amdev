@@ -45,54 +45,20 @@ module.exports =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(1);
-
-
-/***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(2);
-
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(3);
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var NodeParts;
-
-	NodeParts = __webpack_require__(4).prototype;
-
-	NodeParts.start(8091, 8091);
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(__dirname) {var SimpleServer, chokidar, fs, glob, http, lodash, mime, sio,
+	var SimpleServer, chokidar, fs, glob, http, mime, sio,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	fs = __webpack_require__(5);
+	fs = __webpack_require__(1);
 
-	http = __webpack_require__(6);
+	http = __webpack_require__(2);
 
-	chokidar = __webpack_require__(7);
+	chokidar = __webpack_require__(3);
 
-	mime = __webpack_require__(8);
+	mime = __webpack_require__(4);
 
-	sio = __webpack_require__(9);
+	sio = __webpack_require__(5);
 
-	glob = __webpack_require__(10);
-
-	lodash = __webpack_require__(11);
+	glob = __webpack_require__(6);
 
 	module.exports = SimpleServer = (function() {
 	  function SimpleServer() {
@@ -100,10 +66,6 @@ module.exports =
 	    this.wsEventReload = bind(this.wsEventReload, this);
 	    this.wsStart = bind(this.wsStart, this);
 	  }
-
-	  SimpleServer.prototype.livereloadJs = __dirname + "/browser/livereload.js";
-
-	  SimpleServer.prototype.livereloadPath = "/__livereload.js";
 
 	  SimpleServer.prototype.webDir = ["./"];
 
@@ -116,17 +78,9 @@ module.exports =
 	  SimpleServer.prototype.reloadList = [];
 
 	  SimpleServer.prototype.start = function(httpPort, wsPort) {
-	    var error, error1, lastArg, listen, path;
+	    var lastArg, listen;
 	    this.httpPort = httpPort != null ? httpPort : 8080;
 	    this.wsPort = wsPort != null ? wsPort : this.httpPort;
-	    try {
-	      path = "./modules/am-simple-server/browser/test/livereload.js";
-	      fs.statSync(path);
-	      this.livereloadJs = path;
-	    } catch (error1) {
-	      error = error1;
-	      0;
-	    }
 	    this.app = http.createServer((function(_this) {
 	      return function(req, res) {
 	        return _this.httpServerAction(req, res);
@@ -170,17 +124,6 @@ module.exports =
 	      res.writeHead(200, {
 	        "Content-Type": type
 	      });
-	      if (type === "text/html") {
-	        data = data.toString("utf8") + ("<script src='" + this.livereloadPath + "'></script>");
-	        data = Buffer.from(data);
-	      }
-	      res.end(data);
-	    } else if (url === this.livereloadPath) {
-	      data = fs.readFileSync(this.livereloadJs);
-	      type = mime.lookup(this.livereloadJs);
-	      res.writeHead(200, {
-	        "Content-Type": type
-	      });
 	      res.end(data);
 	    } else {
 	      res.writeHead(404);
@@ -218,7 +161,7 @@ module.exports =
 	        pollInterval: 10
 	      }
 	    }).on("change", (function(_this) {
-	      return function(path, stat) {
+	      return function(path) {
 	        var j, len, ref, results, socket;
 	        _this.checkReloadList();
 	        ref = _this.reloadList;
@@ -264,49 +207,42 @@ module.exports =
 
 	})();
 
-	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 5 */
+/* 1 */
 /***/ function(module, exports) {
 
 	module.exports = require("fs");
 
 /***/ },
-/* 6 */
+/* 2 */
 /***/ function(module, exports) {
 
 	module.exports = require("http");
 
 /***/ },
-/* 7 */
+/* 3 */
 /***/ function(module, exports) {
 
 	module.exports = require("chokidar");
 
 /***/ },
-/* 8 */
+/* 4 */
 /***/ function(module, exports) {
 
 	module.exports = require("mime");
 
 /***/ },
-/* 9 */
+/* 5 */
 /***/ function(module, exports) {
 
 	module.exports = require("socket.io");
 
 /***/ },
-/* 10 */
+/* 6 */
 /***/ function(module, exports) {
 
 	module.exports = require("glob");
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	module.exports = require("lodash");
 
 /***/ }
 /******/ ]);

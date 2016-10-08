@@ -46,59 +46,67 @@ module.exports =
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(36);
+	module.exports = __webpack_require__(37);
 
-
-/***/ },
-
-/***/ 2:
-/***/ function(module, exports) {
-
-	module.exports = require("fs");
 
 /***/ },
 
 /***/ 3:
 /***/ function(module, exports) {
 
+	module.exports = require("fs");
+
+/***/ },
+
+/***/ 4:
+/***/ function(module, exports) {
+
 	module.exports = require("child_process");
 
 /***/ },
 
-/***/ 9:
+/***/ 10:
 /***/ function(module, exports) {
 
 	module.exports = require("fs-extra");
 
 /***/ },
 
-/***/ 11:
+/***/ 12:
 /***/ function(module, exports) {
 
 	module.exports = require("electron");
 
 /***/ },
 
-/***/ 17:
+/***/ 18:
 /***/ function(module, exports) {
 
 	module.exports = require("chokidar");
 
 /***/ },
 
-/***/ 22:
+/***/ 23:
 /***/ function(module, exports) {
 
 	module.exports = require("cson");
 
 /***/ },
 
-/***/ 36:
+/***/ 37:
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(38);
+
+
+/***/ },
+
+/***/ 38:
 /***/ function(module, exports, __webpack_require__) {
 
 	var Browser, browser;
 
-	Browser = __webpack_require__(37);
+	Browser = __webpack_require__(39);
 
 	browser = new Browser();
 
@@ -107,25 +115,25 @@ module.exports =
 
 /***/ },
 
-/***/ 37:
+/***/ 39:
 /***/ function(module, exports, __webpack_require__) {
 
 	var Browser, BrowserWindow, Watcher, app, chokidar, cson, exec, fork, fs, fse, ipcMain, mainWindow, ref,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	fse = __webpack_require__(9);
+	fse = __webpack_require__(10);
 
-	chokidar = __webpack_require__(17);
+	chokidar = __webpack_require__(18);
 
-	cson = __webpack_require__(22);
+	cson = __webpack_require__(23);
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(3);
 
-	exec = __webpack_require__(3).exec;
+	exec = __webpack_require__(4).exec;
 
-	fork = __webpack_require__(3).fork;
+	fork = __webpack_require__(4).fork;
 
-	ref = __webpack_require__(11), ipcMain = ref.ipcMain, app = ref.app, BrowserWindow = ref.BrowserWindow;
+	ref = __webpack_require__(12), ipcMain = ref.ipcMain, app = ref.app, BrowserWindow = ref.BrowserWindow;
 
 	mainWindow = null;
 
@@ -175,7 +183,7 @@ module.exports =
 	    try {
 	      this.config = cson.load(this.configCson);
 	    } catch (error) {
-	      this.config = __webpack_require__(38);
+	      this.config = __webpack_require__(40);
 	    }
 	    this.option = this.config.browserWindow;
 	    return this;
@@ -264,7 +272,7 @@ module.exports =
 
 /***/ },
 
-/***/ 38:
+/***/ 40:
 /***/ function(module, exports) {
 
 	module.exports = {"browserWindow":{"x":0,"y":0,"width":1027,"height":968,"icon":"./web/favicon.ico","webPreferences":{"url":"/app/index.html","preload":"/app/test/preload.js"}},"cl":{"intervalMin":5}}
