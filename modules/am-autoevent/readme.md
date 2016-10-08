@@ -8,7 +8,6 @@ https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent
 
 ## sample code(coffeescript, or es2015 syntax)
 ```coffeescript
-# generator
 AutoEvent = require("am-autoevent")
 autoEvent = new AutoEvent()
 
