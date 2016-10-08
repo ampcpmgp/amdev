@@ -10,11 +10,8 @@ https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent
 ```coffeescript
 # generator
 AutoEvent = require("am-autoevent")
-# or no-generator
-AutoEvent = require("am-autoevent/browser/AutoEvent-no-gen")
 autoEvent = new AutoEvent()
-# or cdn(bookmarklet)
-# common
+
 autoEvent.register()
   .click(selector = "#test").click("#test")
   .wait(ms = 1500).click("#test").setValue("#test",300)
