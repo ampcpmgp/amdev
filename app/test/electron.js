@@ -415,7 +415,7 @@ module.exports =
 	    });
 	    return __webpack_require__(11).sync("./**/web/test/*.coffee", {
 	      ignore: "./**/@(node_modules|am-template)/**"
-	    }).concat(__webpack_require__(11).sync("./**/browser/test/*.coffee", {
+	    }).concat(__webpack_require__(11).sync("./**/browser/*.coffee", {
 	      ignore: "./**/@(node_modules|am-template)/**"
 	    })).forEach(function(filepath) {
 	      return Compiler.browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
@@ -618,7 +618,7 @@ module.exports =
 	    this.httpPort = httpPort != null ? httpPort : 8080;
 	    this.wsPort = wsPort != null ? wsPort : this.httpPort;
 	    try {
-	      path = "./modules/am-simple-server/browser/test/livereload.js";
+	      path = "./modules/am-simple-server/browser/livereload.js";
 	      fs.statSync(path);
 	      this.livereloadJs = path;
 	    } catch (error1) {
@@ -1435,6 +1435,7 @@ module.exports =
 	    if (!WholeStatus.executablePath[executePath]) {
 	      _this.instanceUrl = executePath;
 	      _this.update();
+	      _this.tags.testFrame.setConsoleEvent();
 	      return;
 	    }
 	    return WholeStatus.executablePath[executePath]();
@@ -1681,12 +1682,14 @@ module.exports =
 	      return webview.addEventListener("console-message", _this._tmp_Function);
 	    } else {
 	      iframeWindow = _this.root.querySelector("iframe").contentWindow;
-	      iframeWindow.console.assert = function(flg, msg) {
-	        return callbackObj.assert(flg, msg);
-	      };
-	      iframeWindow.console.info = function(msg) {
-	        return callbackObj.info(msg);
-	      };
+	      if (callbackObj) {
+	        iframeWindow.console.assert = function(flg, msg) {
+	          return callbackObj.assert(flg, msg);
+	        };
+	        iframeWindow.console.info = function(msg) {
+	          return callbackObj.info(msg);
+	        };
+	      }
 	      if (!WholeStatus.opts.files) {
 	        return;
 	      }

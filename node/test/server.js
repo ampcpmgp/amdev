@@ -120,7 +120,7 @@ module.exports =
 	    this.httpPort = httpPort != null ? httpPort : 8080;
 	    this.wsPort = wsPort != null ? wsPort : this.httpPort;
 	    try {
-	      path = "./modules/am-simple-server/browser/test/livereload.js";
+	      path = "./modules/am-simple-server/browser/livereload.js";
 	      fs.statSync(path);
 	      this.livereloadJs = path;
 	    } catch (error1) {

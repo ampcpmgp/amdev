@@ -300,7 +300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return AutoEvent.__super__.constructor.apply(this, arguments);
 	  }
 
-	  AutoEvent.prototype.contoller = function(loopNum) {
+	  AutoEvent.prototype.contoller = function(loopNum, callback) {
 	    var curFuncNum, i;
 	    curFuncNum = 0;
 	    this.innerFuncs[this.funcs.length] = [];
@@ -309,6 +309,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (--loopNum) {
 	          curFuncNum = 0;
 	          return _this.funcs[0]();
+	        } else {
+	          if (callback) {
+	            return callback();
+	          } else {
+	            return _this.end();
+	          }
 	        }
 	      };
 	    })(this));
@@ -324,11 +330,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this.funcs[0]();
 	  };
 
-	  AutoEvent.prototype.start = function(loopNum) {
+	  AutoEvent.prototype.start = function(loopNum, callback) {
 	    if (loopNum == null) {
 	      loopNum = 1;
 	    }
-	    return this.contoller(loopNum);
+	    return this.contoller(loopNum, callback);
 	  };
 
 	  return AutoEvent;

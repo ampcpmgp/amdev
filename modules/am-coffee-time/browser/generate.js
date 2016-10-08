@@ -2846,6 +2846,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!WholeStatus.executablePath[executePath]) {
 	      _this.instanceUrl = executePath;
 	      _this.update();
+	      _this.tags.testFrame.setConsoleEvent();
 	      return;
 	    }
 	    return WholeStatus.executablePath[executePath]();
@@ -3092,12 +3093,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return webview.addEventListener("console-message", _this._tmp_Function);
 	    } else {
 	      iframeWindow = _this.root.querySelector("iframe").contentWindow;
-	      iframeWindow.console.assert = function(flg, msg) {
-	        return callbackObj.assert(flg, msg);
-	      };
-	      iframeWindow.console.info = function(msg) {
-	        return callbackObj.info(msg);
-	      };
+	      if (callbackObj) {
+	        iframeWindow.console.assert = function(flg, msg) {
+	          return callbackObj.assert(flg, msg);
+	        };
+	        iframeWindow.console.info = function(msg) {
+	          return callbackObj.info(msg);
+	        };
+	      }
 	      if (!WholeStatus.opts.files) {
 	        return;
 	      }
