@@ -4,7 +4,7 @@ The event operation of a web page, it can be little easily automated.
 https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent
 
 ## how to use
-npm i am-autoevent
+`npm i am-autoevent`
 
 ## sample code(coffeescript, or es2015 syntax)
 ```coffeescript
