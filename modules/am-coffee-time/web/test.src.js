@@ -24,5 +24,5 @@ if (true) {
   }
   autoEvent.register()
   Test.start(actions)
-  autoEvent.addEvent(() => console.info("finished")).start()
+  autoEvent.start(1, () => console.info("finished"))
 }
