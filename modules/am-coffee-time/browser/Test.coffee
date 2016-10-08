@@ -8,7 +8,7 @@ getRandomColor = (opacity = 1) =>
 
 module.exports = class Test
   @start: (testObj = @) =>
-    @actions = location.hash.replace(/^#+/, "").split("/")
+    @actions = decodeURI(location.hash.replace(/^#+/, "")).split("/")
     @._color(@actions._color) if @actions._color?
     @._hide(@actions._hide) if @actions._hide?
     @._border(@actions._border) if @actions._border?
