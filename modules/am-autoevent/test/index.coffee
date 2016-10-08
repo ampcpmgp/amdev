@@ -21,7 +21,7 @@ func = (Klass) =>
     .wait("300").addEvent(=> console.log("hello"))
     .waitSelector("#test").setHtml("#test", Date.now())
     .start(2, =>
-      console.log "finished!"
+      console.info "finished"
     )
 
 test =
