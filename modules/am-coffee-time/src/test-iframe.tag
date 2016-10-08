@@ -43,8 +43,9 @@
         #webview.addEventListener("did-finish-load", @_tmp_Function)
       else # browser
         iframeWindow = @root.querySelector("iframe").contentWindow
-        iframeWindow.console.assert = (flg, msg) => callbackObj.assert(flg, msg)
-        iframeWindow.console.info = (msg) => callbackObj.info(msg)
+        if callbackObj
+          iframeWindow.console.assert = (flg, msg) => callbackObj.assert(flg, msg)
+          iframeWindow.console.info = (msg) => callbackObj.info(msg)
         return unless WholeStatus.opts.files
         iframeWindow.addEventListener("load", =>
           for file in WholeStatus.opts.files

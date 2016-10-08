@@ -1,6 +1,6 @@
 if (true) {
-  const Test = window["modules/am-coffee-time/browser/Test"]
-  const AutoEvent = window["modules/am-autoevent/browser/AutoEvent-no-gen"]
+  const Test = this["modules/am-coffee-time/browser/Test"]
+  const AutoEvent = this["modules/am-autoevent/browser/AutoEvent-no-gen"]
   let autoEvent = new AutoEvent()
   let $ = (selector) => document.querySelector(selector)
   let actions = {
@@ -24,5 +24,5 @@ if (true) {
   }
   autoEvent.register()
   Test.start(actions)
-  autoEvent.addEvent(() => console.info("finished")).start()
+  autoEvent.start(1, () => console.info("finished"))
 }

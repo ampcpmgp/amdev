@@ -22,7 +22,7 @@ module.exports = class SimpleServer
   reloadList: []
   start: (@httpPort = 8080, @wsPort = @httpPort) ->
     try
-      path = "./modules/am-simple-server/browser/test/livereload.js"
+      path = "./modules/am-simple-server/browser/livereload.js"
       fs.statSync(path)
       @livereloadJs = path
     catch error

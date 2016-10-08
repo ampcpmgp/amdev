@@ -36,6 +36,7 @@ require("./test-iframe.tag")
       unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
         @update()
+        @tags.testFrame.setConsoleEvent()
         return
       WholeStatus.executablePath[executePath]()
     @toRouteHash = => riot.route("")
