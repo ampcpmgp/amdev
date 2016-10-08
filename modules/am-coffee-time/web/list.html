@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>coffee-time page</title>
+    <style media="screen">
+      html, body {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <test-list></test-list>
+    <script src="/modules/am-coffee-time/browser/generate.js" charset="utf-8"></script>
+    <script src="/modules/am-coffee-time/browser/Test.js" charset="utf-8"></script>
+    <script src="/modules/am-autoevent/browser/AutoEvent-no-gen.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      if (true) {
+        const generate = this["modules/am-coffee-time/browser/generate"]
+        let patterns = {
+          全パターン: {
+            動作フロー確認用: {
+              "結果=成功": "./index.html",
+              "結果=失敗": "./index.html"
+            },
+            "ID入力=melon": {
+              "PW入力=google": "./index.html",
+              "PW入力=apple": "./index.html"
+            }
+          }
+        }
+        let opts = {
+          files: [
+            "/modules/am-coffee-time/browser/Test.js",
+            "/modules/am-autoevent/browser/AutoEvent-no-gen.js",
+            "./test.src.js"
+          ]
+        }
+        generate(patterns, opts)
+      }
+    </script>
+  </body>
+</html>

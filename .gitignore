@@ -7,3 +7,4 @@ node_modules
 #my config
 *.map
 *.exe
+!*.src.js

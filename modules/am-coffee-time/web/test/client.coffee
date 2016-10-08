@@ -1,1 +1,1 @@
-console.info "finished"
+require("../client")

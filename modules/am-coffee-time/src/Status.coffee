@@ -10,12 +10,11 @@ module.exports = class Status
     @itemStatuses = []
     @executeIframe = []
     @executablePath = {}
-    #from browser/dev.coffee
-    @config =
-      extFile: null
-      Test: class ListTest extends require("am-coffee-time/browser/Test")
     @sumInit()
     #observable
     riot.observable(@)
+  @firstTimeInit: =>
+    @opts = {}
 
 Status.init()
+Status.firstTimeInit()

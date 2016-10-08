@@ -88,5 +88,5 @@ module.exports = class AutoEvent
     funcNum = ++@funcNum
     innerFunc = @innerFuncs[funcNum] = []
     => func() for func in innerFunc
-  end: =>
+  end: => #扱い方を考える、現在未使用
     console.info("finished")

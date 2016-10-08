@@ -1,8 +1,8 @@
-Test = require("am-coffee-time")
-WSClient = require("../WSClient")
+Test = require("am-coffee-time/browser/Test")
+WSClient = require("../browser/WSClient")
 
-class NewTest extends Test
-  @port: (number) =>
+test =
+  port: (number) =>
     wsc = new WSClient
     connectFlag = false
     wsc.start(number)
@@ -15,4 +15,4 @@ class NewTest extends Test
     setTimeout(timeout, 1500)
 
 
-NewTest.start(NewTest)
+Test.start(test)

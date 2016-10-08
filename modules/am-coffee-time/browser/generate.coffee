@@ -1,8 +1,9 @@
 window.riot = require("riot")
-escape = require("escape-html")
+WholeStatus = require("../src/Status")
 require("../src/test-list.tag")
 
-module.exports = (testPatterns) =>
+module.exports = (testPatterns, opts = {}) =>
+  WholeStatus.opts = opts
   {
     list: riot.mount("test-list", {testPatterns})
   }

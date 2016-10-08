@@ -2,7 +2,7 @@ generate = require("./generate")
 
 location.href = "#"
 
-class Client extends require("am-simple-server/WSClient")
+class Client extends require("am-simple-server/browser/WSClient")
   domain: "{__DOMAIN__}"
   wsPort: "{__WSPORT__}"
   jsFile: "{__TESTJS__}"
@@ -14,7 +14,6 @@ class Client extends require("am-simple-server/WSClient")
         document.body.innerHTML = "<test-list></test-list>"
         @tags = generate(obj)
         @listTag = @tags.list[0]
-        @listTag.WholeStatus.config.extFile = "#{@domain.replace(/^(?!http|\/\/)/, "//")}/#{@jsFile}"
       )
       .off("reload")
       .on("reload", =>

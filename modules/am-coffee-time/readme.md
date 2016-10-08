@@ -12,7 +12,7 @@ testListPage.html
 
 testListPage.coffee
 ```coffee
-generate = require("am-coffee-time/browser/generate")
+generate = require("am-coffee-time")
 testcases =
   #event: url
   "click=.config": "/url.html"
@@ -29,7 +29,7 @@ All passed the test by putting the console.info after it was true ( "finished").
 
 #### sample code
 ```coffee
-Test = require("am-coffee-time")
+Test = require("am-coffee-time/browser/Test")
 Test.start(
   click: (type) =>
     el = document.querySelector(type)

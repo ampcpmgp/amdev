@@ -1,7 +1,8 @@
 <!-- dom -->
 <top-section>
+  <button style="display:block;" type="button" name="button" id="restart">Browser restart</button>
   <button type="button" id="toggleReloadFlgButton" onclick="browserChangeReloadFlg(event)">toggle ReloadStopFlg = <span>false</span></button>
-  <button type="button" name="button" id="restart">Browser restart</button>
+  <button type="button" id="publishFlgButton" onclick="browserPublishFlg(event)">toggle PublishFlg = <span>true</span></button>
   <template id="npmUpdateButton">
     <div class="">
       <button class="patch" type="button" name="npm-update" onclick="npmPublish(['!val!'], 'patch')"></button>

@@ -9,10 +9,10 @@ https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent
 AutoEvent = require("am-autoevent")
 # or no-generator
 AutoEvent = require("am-autoevent/browser/AutoEvent-no-gen")
-amAutoEvent = new AutoEvent()
+autoEvent = new AutoEvent()
 # or cdn(bookmarklet)
 # common
-amAutoEvent.register()
+autoEvent.register()
   .click(selector = "#test").click("#test")
   .wait(ms = 1500).click("#test").setValue("#test",300)
   .wait("300").addEvent(() => console.log("hello"))
@@ -64,7 +64,7 @@ document.body.appendChild(script)
 sample with [google page](https://www.google.co.jp/webhp?hl=ja#hl=ja&q=test&btnK=Google+%E6%A4%9C%E7%B4%A2), execute the following code.
 
 ```js
-amAutoEvent.register()
+autoEvent.register()
   .setValue("#lst-ib", "dragonball").wait(100).click("[aria-label='Google 検索']")
   .wait(2000).setValue("#lst-ib", "dragonball Z").wait(100).click("[aria-label='Google 検索']")
   .wait(2000).setValue("#lst-ib", "dragonball GT").wait(100).click("[aria-label='Google 検索']")

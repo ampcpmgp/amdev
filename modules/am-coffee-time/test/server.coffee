@@ -8,8 +8,8 @@ class TestLunch extends LunchServer
   htmlPath: "#{process.cwd()}/modules/am-coffee-time/browser/index.html"
   devJsPath: "#{process.cwd()}/modules/am-coffee-time/browser/dev.js"
 
-class Test extends require("am-coffee-time/browser/Test")
+test =
   port: ([httpPort, wsPort]) =>
     TestLunch::start(httpPort, wsPort)
 
-Test::start()
+require("am-coffee-time/browser/Test").start(test)

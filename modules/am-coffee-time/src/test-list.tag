@@ -32,6 +32,7 @@ require("./test-iframe.tag")
       WholeStatus.sumInit()
       executePath = riot.route.query().path
       return unless executePath
+      executePath = encodeURI(executePath) unless (/%[0-9a-f]{2}/i).test(executePath)
       unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
         @update()
@@ -39,12 +40,14 @@ require("./test-iframe.tag")
       WholeStatus.executablePath[executePath]()
     @toRouteHash = => riot.route("")
     WholeStatus.on("item-update", =>
+      this.update()
+    )
+    @on("update", () =>
       for itemStatus in WholeStatus.itemStatuses
         if itemStatus.onExecute
           onExecute = true
           break
-      bodyStyle.overflowY = if onExecute then "hidden" else ""
-      this.update()
+      bodyStyle.overflowY = if onExecute or @instanceUrl then "hidden" else ""
     )
     @on("mount", () =>
       @check()
