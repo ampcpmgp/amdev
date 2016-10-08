@@ -83,7 +83,7 @@ module.exports = class Compiler
       , {ignore: "./**/@(node_modules|am-template)/**"}
     ).concat(
       require("glob").sync(
-        "./**/browser/test/*.coffee"
+        "./**/browser/*.coffee"
         , {ignore: "./**/@(node_modules|am-template)/**"}
       )
     )
