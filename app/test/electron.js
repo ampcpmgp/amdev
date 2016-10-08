@@ -415,7 +415,7 @@ module.exports =
 	    });
 	    return __webpack_require__(11).sync("./**/web/test/*.coffee", {
 	      ignore: "./**/@(node_modules|am-template)/**"
-	    }).concat(__webpack_require__(11).sync("./**/browser/*.coffee", {
+	    }).concat(__webpack_require__(11).sync("./**/browser/test/*.coffee", {
 	      ignore: "./**/@(node_modules|am-template)/**"
 	    })).forEach(function(filepath) {
 	      return Compiler.browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
@@ -1072,7 +1072,7 @@ module.exports =
 	    return AutoEvent.__super__.constructor.apply(this, arguments);
 	  }
 
-	  AutoEvent.prototype.contoller = function(loopNum) {
+	  AutoEvent.prototype.contoller = function(loopNum, callback) {
 	    var curFuncNum, i;
 	    curFuncNum = 0;
 	    this.innerFuncs[this.funcs.length] = [];
@@ -1081,6 +1081,12 @@ module.exports =
 	        if (--loopNum) {
 	          curFuncNum = 0;
 	          return _this.funcs[0]();
+	        } else {
+	          if (callback) {
+	            return callback();
+	          } else {
+	            return _this.end();
+	          }
 	        }
 	      };
 	    })(this));
@@ -1096,11 +1102,11 @@ module.exports =
 	    return this.funcs[0]();
 	  };
 
-	  AutoEvent.prototype.start = function(loopNum) {
+	  AutoEvent.prototype.start = function(loopNum, callback) {
 	    if (loopNum == null) {
 	      loopNum = 1;
 	    }
-	    return this.contoller(loopNum);
+	    return this.contoller(loopNum, callback);
 	  };
 
 	  return AutoEvent;
