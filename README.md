@@ -6,24 +6,10 @@
 
 ![](data/Animation.gif)
 
-## how to use
-### development
-now only windows 7, 10
-```
-npm install am-template
-node -e require('am-template')('coffee')
-npm install
-npm start
-```
-
 ## this project environment
-### this build environment
 ```
 git clone github.com/ampcpmgp/amdev
-
-npm i -g coffee-script
-npm run init
-(download electron to ../)
+npm i
 npm start
 ```
 
