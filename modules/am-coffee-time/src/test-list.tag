@@ -157,9 +157,11 @@ require("./test-iframe.tag")
       WholeStatus.trigger("item-update")
       @tags.testFrame.setConsoleEvent(
         assert: (flg, msg) =>
+          if msg
+            console.assert(flg, msg)
+          else
+            console.assert(flg)
           unless flg
-            # TODO: UIにも組み込む
-            console.error(msg) if msg
             @error = true
             WholeStatus.trigger("item-update")
             @update()
