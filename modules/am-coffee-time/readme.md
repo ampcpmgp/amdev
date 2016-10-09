@@ -2,6 +2,8 @@
 Testing and development of the mock page using a router.  
 this is renamed from am-lunch-time.
 
+https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time
+
 ## sample code
 
 testListPage.html
@@ -59,3 +61,8 @@ Test.start(
 
 AutoEvent.start()
 ```
+
+### Test Event has some default events.  
+_color=.child   #selector set random background color   
+_border=.child  #selector set random border color  
+_hide=.child  # selector hide  
