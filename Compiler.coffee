@@ -70,21 +70,21 @@ module.exports = class Compiler
     # TODO: 開発に必要なファイル軍だけをコンパイルする方針に変えたい
     require("glob").sync(
       "./**/@(electron|app)/test/*.coffee"
-      , {ignore: "./**/@(node_modules|am-template)/**"}
+      , {ignore: "./**/@(node_modules)/**"}
     )
     .forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
       "./**/node/test/*.coffee"
-      , {ignore: "./**/@(node_modules|am-template)/**"}
+      , {ignore: "./**/@(node_modules)/**"}
     )
     .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
       "./**/web/test/*.coffee"
-      , {ignore: "./**/@(node_modules|am-template)/**"}
+      , {ignore: "./**/@(node_modules)/**"}
     ).concat(
       require("glob").sync(
         "./**/browser/*.coffee"
-        , {ignore: "./**/@(node_modules|am-template)/**"}
+        , {ignore: "./**/@(node_modules)/**"}
       )
     )
     .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
