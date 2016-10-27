@@ -70,6 +70,7 @@ do -> #upload npm
         return console.log "compile finished" unless ea.publishFlg
         exec("cd #{dir} && npm version #{version} && npm publish",
           (e, out, err) ->
+            return console.log err if err
             console.log out
         )
       ModuleCompiler.compileModules(module, callback)
