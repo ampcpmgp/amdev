@@ -26,9 +26,11 @@ actionFuncs =
 module.exports = class Test
   @start: (testObj = @) =>
     @actions = decodeURI(location.hash.replace(/^#+/, "")).split("/")
+    @actionObj = {}
     for action in @actions
       [key, value] = action.split("=")
       func = testObj[key] or @[key]
       arg = !value or value.split(",")
       func?(if arg.length is 1 then arg[0] else arg)
       actionFuncs[key]?(value)
+      @actionObj[key] = value

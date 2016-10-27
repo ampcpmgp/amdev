@@ -42,6 +42,9 @@ Test.start(
     console.assert(el)
     el.value = value
 )
+
+console.log(Test.actions); // action arr
+console.log(Test.actionObj); // action object
 console.info("finished")
 ```
 
