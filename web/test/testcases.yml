@@ -1,7 +1,7 @@
 allpattern:
   am-autoevent:
     エラーでOK:
-      timeout=1000: ./index.html
+      timeout=100: ./index.html
       clickAssert=true: ./index.html
       select=6: ./index.html
     エラーじゃダメ:

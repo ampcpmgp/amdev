@@ -45,6 +45,7 @@
         iframeWindow = @root.querySelector("iframe").contentWindow
         if callbackObj
           iframeWindow.console.assert = (flg, msg) => callbackObj.assert(flg, msg)
+          iframeWindow.onerror = (msg) => callbackObj.error(msg)
           iframeWindow.console.info = (msg) => callbackObj.info(msg)
         return unless WholeStatus.opts.files
         iframeWindow.addEventListener("load", =>

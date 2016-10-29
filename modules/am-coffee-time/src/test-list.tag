@@ -31,7 +31,7 @@ require("./test-iframe.tag")
       @init()
       WholeStatus.sumInit()
       executePath = riot.route.query().path
-      return unless executePath
+      return @update() unless executePath
       executePath = encodeURI(executePath) unless (/%[0-9a-f]{2}/i).test(executePath)
       unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
@@ -89,16 +89,14 @@ require("./test-iframe.tag")
 <list-line>
   <div class="line{isHover && ' hover'}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
-      <span class="bold {success: success, error: error}">
-        {success ? "〇" : error ? "×" : ""}
-      </span>
+      <span class="bold {success: success, error: error, warn: warn}"></span>
       <a class="tree" href={routing} name="treeTask" onclick={router}>{key}</a>
       <a class="single" if={url} href={routerExecutionPath} name="singleTask" onclick={router}>{url}</a>
     </div>
     <recursive-item name="item" if={!url} data={data} routing={routing} />
   </div>
   <test-iframe name="testFrame" if={url && status.onExecute} url={routerExecutionPath} config={WholeStatus.config}></test-iframe>
-  <style scope>
+  <style scoped type="less">
     .bold {
       font-weight: bold;
     }
@@ -116,9 +114,21 @@ require("./test-iframe.tag")
     }
     .success {
       color: blue;
+      &:after {
+        content: "〇";
+      }
+    }
+    .warn {
+      color: gold;
+      &:after {
+        content: "△";
+      }
     }
     .error {
       color: red;
+      &:after {
+        content: "×";
+      }
     }
     .step {
       color: #333; margin-right: 10px;
@@ -139,6 +149,7 @@ require("./test-iframe.tag")
       @update()
     @init = =>
       @error = null
+      @warn = null
       @success = null
       @deleteIframe()
     @recursivelyExecuteTask = =>
@@ -174,10 +185,13 @@ require("./test-iframe.tag")
         info: (msg) =>
           if msg is "finished" and not @error
             console.info(msg)
-            @success = true
+            @success = true unless @warn
             ++WholeStatus.successSum
             @update()
             callback and callback()
+        error: (msg) =>
+          console.warn "error occured: #{msg}"
+          @warn = true
       )
     @router = (e) => riot.route("path=" + e.target.getAttribute("href"))
     @mouseOn = => @isHover = true

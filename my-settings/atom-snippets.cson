@@ -22,6 +22,15 @@
 
 
 '.text.html.riot':
+  'less scope':
+    'prefix': 'lesss'
+    'body': """
+      <style scoped type="less">
+        :scope {
+          $1
+        }
+      </style>
+    """
   'less':
     'prefix': 'less'
     'body': """
