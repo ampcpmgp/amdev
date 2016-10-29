@@ -1,7 +1,7 @@
 require("./test-iframe.tag")
 
 <test-list>
-  <span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span>
+  <test-list-count />
   <a onclick={toRouteHash}>base</a>
   <recursive-item data={opts.testPatterns} routing="" />
   <test-iframe name="testFrame" if={instanceUrl} url={instanceUrl} config={WholeStatus.config}></test-iframe>
@@ -40,9 +40,6 @@ require("./test-iframe.tag")
         return
       WholeStatus.executablePath[executePath]()
     @toRouteHash = => riot.route("")
-    WholeStatus.on("item-update", =>
-      this.update()
-    )
     @on("update", () =>
       for itemStatus in WholeStatus.itemStatuses
         if itemStatus.onExecute
@@ -63,6 +60,16 @@ require("./test-iframe.tag")
     )
   </script>
 </test-list>
+
+<test-list-count>
+  <span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span>
+  <script type="coffee">
+    @WholeStatus = require("./Status")
+    @WholeStatus.on("item-update", =>
+      this.update()
+    )
+  </script>
+</test-list-count>
 
 <recursive-item>
   <list-line name="lines" each={key, data in list} list={this} routing={this.parent.opts.routing} />
@@ -154,7 +161,6 @@ require("./test-iframe.tag")
       this.update()
       console.clear()
       ++WholeStatus.executeSum
-      WholeStatus.trigger("item-update")
       @tags.testFrame.setConsoleEvent(
         assert: (flg, msg) =>
           if msg
@@ -163,7 +169,6 @@ require("./test-iframe.tag")
             console.assert(flg)
           unless flg
             @error = true
-            WholeStatus.trigger("item-update")
             @update()
             callback and callback()
         info: (msg) =>
@@ -171,7 +176,6 @@ require("./test-iframe.tag")
             console.info(msg)
             @success = true
             ++WholeStatus.successSum
-            WholeStatus.trigger("item-update")
             @update()
             callback and callback()
       )
