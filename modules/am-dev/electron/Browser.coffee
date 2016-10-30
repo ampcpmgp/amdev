@@ -1,5 +1,5 @@
 # require("crash-reporter").start(
-#   productName: "Akira Hayatake"
+#   productName: "*"
 #   companyName: "Gozen To Gogo"
 #   submitURL: "https://your-domain.com/url-to-submit"  # config
 #   autoSubmit: true

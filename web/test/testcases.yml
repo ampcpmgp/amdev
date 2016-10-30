@@ -1,7 +1,7 @@
 allpattern:
   am-autoevent:
     エラーでOK:
-      timeout=1000: ./index.html
+      timeout=100: ./index.html
       clickAssert=true: ./index.html
       select=6: ./index.html
     エラーじゃダメ:
@@ -19,3 +19,39 @@ allpattern:
     _hide=.child:  ./index.html
   am-simple-server:
     port=50001: ./index.html
+  zz1:
+    2:
+      3:
+        4:
+          5:
+            6:
+              1:
+                2:
+                  3:
+                    4:
+                      5:
+                        6:
+                          1:
+                            2:
+                              3:
+                                4:
+                                  5:
+                                    6:
+                                      1:
+                                        2:
+                                          3:
+                                            4:
+                                              5:
+                                                6:
+                                                  1:
+                                                    2:
+                                                      3:
+                                                        4:
+                                                          5:
+                                                            6:
+                                                              1:
+                                                                2:
+                                                                  3:
+                                                                    4:
+                                                                      5:
+                                                                        6: 1

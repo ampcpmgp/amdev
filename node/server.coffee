@@ -1,3 +1,2 @@
-require("am-template/coffee/node/server")
-# TODO: modulesにやっぱり移す
-# GitHubAPI = require("./src/GitHubAPI").prototype
+NodeParts = require("am-simple-server").prototype
+NodeParts.start(8091, 8091)

@@ -27,6 +27,7 @@ func = (Klass) =>
 test =
   test:  =>
     func(AutoEvent)
+    $ERROR
   testNoGen:  =>
     func(AutoEventNoGen)
   timeout: (ms) =>
@@ -35,13 +36,14 @@ test =
     AutoEvent.register().waitSelector("box").start()
     createTimeoutBox = =>
       $("body").append("<box>box</box>")
-    setTimeout(createTimeoutBox, 3000)
+    setTimeout(createTimeoutBox, 500)
   clickAssert: (assertFlg) =>
     ae = new AutoEvent
     ae.register().wait(300).click(".box", assertFlg is "true").start()
   select: (value) =>
     ae = new AutoEvent
     ae.register().wait(300).selectValue("select", value).start()
+    $ERROR
 
 
 Test.start(test)

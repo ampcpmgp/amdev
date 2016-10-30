@@ -1,5 +1,0 @@
-*.coffee
-*.src.js
-.*/
-web/
-test/
