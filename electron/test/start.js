@@ -179,7 +179,6 @@ module.exports =
 	  Browser.prototype.configCson = ".config.cson";
 
 	  Browser.prototype.init = function() {
-	    var error;
 	    try {
 	      this.config = cson.load(this.configCson);
 	    } catch (error) {

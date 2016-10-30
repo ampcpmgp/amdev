@@ -108,7 +108,7 @@ module.exports =
 	  }
 
 	  ModuleCompiler.compile = function*(baseOption, moduleDir, callback) {
-	    var coffeeFile, coffeeFiles, error, error1, error2, file, files, i, len, option;
+	    var coffeeFile, coffeeFiles, error, file, files, i, len, option;
 	    option = _.cloneDeep(baseOption);
 	    option.resolve.root = process.cwd();
 	    try {
@@ -134,13 +134,13 @@ module.exports =
 	        coffeeFile = coffeeFiles[i];
 	        option.entry = {};
 	        option.entry[moduleDir + "/" + (coffeeFile.replace(/\.coffee/, ''))] = "./" + moduleDir + "/" + coffeeFile;
-	        (yield webpack(option).run(function() {
+	        yield webpack(option).run(function() {
 	          return ModuleCompiler.compileGen.next();
-	        }));
+	        });
 	      }
 	      return callback();
-	    } catch (error2) {
-	      error = error2;
+	    } catch (error1) {
+	      error = error1;
 	      console.log(error);
 	      return callback();
 	    }
@@ -207,6 +207,9 @@ module.exports =
 	            return console.log("compile finished");
 	          }
 	          return exec("cd " + dir + " && npm version " + version + " && npm publish", function(e, out, err) {
+	            if (err) {
+	              return console.log(err);
+	            }
 	            return console.log(out);
 	          });
 	        };
@@ -404,19 +407,19 @@ module.exports =
 	    Compiler.nodeOption.entry = {};
 	    Compiler.browserOption.entry = {};
 	    __webpack_require__(11).sync("./**/@(electron|app)/test/*.coffee", {
-	      ignore: "./**/@(node_modules|am-template)/**"
+	      ignore: "./**/@(node_modules)/**"
 	    }).forEach(function(filepath) {
 	      return Compiler.electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
 	    });
 	    __webpack_require__(11).sync("./**/node/test/*.coffee", {
-	      ignore: "./**/@(node_modules|am-template)/**"
+	      ignore: "./**/@(node_modules)/**"
 	    }).forEach(function(filepath) {
 	      return Compiler.nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
 	    });
 	    return __webpack_require__(11).sync("./**/web/test/*.coffee", {
-	      ignore: "./**/@(node_modules|am-template)/**"
+	      ignore: "./**/@(node_modules)/**"
 	    }).concat(__webpack_require__(11).sync("./**/browser/*.coffee", {
-	      ignore: "./**/@(node_modules|am-template)/**"
+	      ignore: "./**/@(node_modules)/**"
 	    })).forEach(function(filepath) {
 	      return Compiler.browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
 	    });
@@ -614,7 +617,7 @@ module.exports =
 	  SimpleServer.prototype.reloadList = [];
 
 	  SimpleServer.prototype.start = function(httpPort, wsPort) {
-	    var error, error1, lastArg, listen, path;
+	    var error, lastArg, listen, path;
 	    this.httpPort = httpPort != null ? httpPort : 8080;
 	    this.wsPort = wsPort != null ? wsPort : this.httpPort;
 	    try {
@@ -956,7 +959,7 @@ module.exports =
 /* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, Test, getRandomColor, jquery_stylesheet;
+	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
 
 	$ = __webpack_require__(5);
 
@@ -977,6 +980,42 @@ module.exports =
 	  };
 	})(this);
 
+	actionFuncs = {
+	  _border: (function(_this) {
+	    return function(selector) {
+	      selector = selector === true || !selector ? "*" : selector;
+	      if (typeof selector === "object") {
+	        selector = selector.join(",");
+	      }
+	      return $.stylesheet(selector).css("box-shadow", "0px 0px 0px 1px " + (getRandomColor()));
+	    };
+	  })(this),
+	  _color: (function(_this) {
+	    return function(selector) {
+	      selector = selector === true || !selector ? "*" : selector;
+	      if (typeof selector === "object") {
+	        selector = selector.join(",");
+	      }
+	      return $.stylesheet(selector).css("background", "" + (getRandomColor(0.1)));
+	    };
+	  })(this),
+	  _hide: (function(_this) {
+	    return function(selector) {
+	      if (typeof selector === "object") {
+	        selector = selector.join(",");
+	      }
+	      return $.stylesheet(selector).css("display", "none");
+	    };
+	  })(this),
+	  _auto: (function(_this) {
+	    return function() {
+	      return {
+	        AutoEvent: __webpack_require__(26)
+	      };
+	    };
+	  })(this)
+	};
+
 	module.exports = Test = (function() {
 	  function Test() {}
 
@@ -986,18 +1025,7 @@ module.exports =
 	      testObj = Test;
 	    }
 	    Test.actions = decodeURI(location.hash.replace(/^#+/, "")).split("/");
-	    if (Test.actions._color != null) {
-	      Test._color(Test.actions._color);
-	    }
-	    if (Test.actions._hide != null) {
-	      Test._hide(Test.actions._hide);
-	    }
-	    if (Test.actions._border != null) {
-	      Test._border(Test.actions._border);
-	    }
-	    if (Test.actions._auto != null) {
-	      Test._auto(Test.actions._auto);
-	    }
+	    Test.actionObj = {};
 	    ref = Test.actions;
 	    results = [];
 	    for (i = 0, len = ref.length; i < len; i++) {
@@ -1005,40 +1033,15 @@ module.exports =
 	      ref1 = action.split("="), key = ref1[0], value = ref1[1];
 	      func = testObj[key] || Test[key];
 	      arg = !value || value.split(",");
-	      results.push(typeof func === "function" ? func(arg.length === 1 ? arg[0] : arg) : void 0);
+	      if (typeof func === "function") {
+	        func(arg.length === 1 ? arg[0] : arg);
+	      }
+	      if (typeof actionFuncs[key] === "function") {
+	        actionFuncs[key](value);
+	      }
+	      results.push(Test.actionObj[key] = value);
 	    }
 	    return results;
-	  };
-
-	  Test._border = function(selector) {
-	    selector = selector === true || !selector ? "*" : selector;
-	    if (typeof selector === "object") {
-	      selector = selector.join(",");
-	    }
-	    return $.stylesheet(selector).css("box-shadow", "0px 0px 0px 1px " + (getRandomColor()));
-	  };
-
-	  Test._color = function(selector) {
-	    var opacity;
-	    opacity = Test.actions.opacity ? Test.actions.opacity - 0.0 : 0.1;
-	    selector = selector === true ? "*" : selector;
-	    if (typeof selector === "object") {
-	      selector = selector.join(",");
-	    }
-	    return $.stylesheet(selector).css("background", "" + (getRandomColor(opacity)));
-	  };
-
-	  Test._hide = function(selector) {
-	    if (typeof selector === "object") {
-	      selector = selector.join(",");
-	    }
-	    return $.stylesheet(selector).css("display", "none");
-	  };
-
-	  Test._auto = function() {
-	    return {
-	      AutoEvent: __webpack_require__(26)
-	    };
 	  };
 
 	  return Test;
@@ -1182,7 +1185,7 @@ module.exports =
 	        } else {
 	          try {
 	            return callback($this);
-	          } catch (undefined) {}
+	          } catch (error) {}
 	        }
 	      };
 	    })(this));
@@ -1406,7 +1409,7 @@ module.exports =
 
 	__webpack_require__(31)
 
-	riot.tag2('test-list', '<span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span> <a onclick="{toRouteHash}">base</a> <recursive-item data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe name="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{WholeStatus.config}"></test-iframe>', 'test-list,[riot-tag="test-list"],[data-is="test-list"]{ display: block; background-color: white; font-size: 14px; } test-list a,[riot-tag="test-list"] a,[data-is="test-list"] a{ color: blue; text-decoration: none; cursor: pointer; display: inline-block; } test-list a:hover,[riot-tag="test-list"] a:hover,[data-is="test-list"] a:hover{ opacity: 0.4; }', '', function(opts) {
+	riot.tag2('test-list', '<test-list-count></test-list-count> <a onclick="{toRouteHash}">base</a> <recursive-item data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe name="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{WholeStatus.config}"></test-iframe>', 'test-list,[riot-tag="test-list"],[data-is="test-list"]{ display: block; background-color: white; font-size: 14px; } test-list a,[riot-tag="test-list"] a,[data-is="test-list"] a{ color: blue; text-decoration: none; cursor: pointer; display: inline-block; } test-list a:hover,[riot-tag="test-list"] a:hover,[data-is="test-list"] a:hover{ opacity: 0.4; }', '', function(opts) {
 	var WholeStatus, bodyStyle;
 
 	this.WholeStatus = WholeStatus = __webpack_require__(29);
@@ -1427,7 +1430,7 @@ module.exports =
 	    WholeStatus.sumInit();
 	    executePath = riot.route.query().path;
 	    if (!executePath) {
-	      return;
+	      return _this.update();
 	    }
 	    if (!/%[0-9a-f]{2}/i.test(executePath)) {
 	      executePath = encodeURI(executePath);
@@ -1447,12 +1450,6 @@ module.exports =
 	    return riot.route("");
 	  };
 	})(this);
-
-	WholeStatus.on("item-update", (function(_this) {
-	  return function() {
-	    return _this.update();
-	  };
-	})(this));
 
 	this.on("update", (function(_this) {
 	  return function() {
@@ -1489,11 +1486,21 @@ module.exports =
 	})(this));
 	});
 
+	riot.tag2('test-list-count', '<span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span>', '', '', function(opts) {
+	this.WholeStatus = __webpack_require__(29);
+
+	this.WholeStatus.on("item-update", (function(_this) {
+	  return function() {
+	    return _this.update();
+	  };
+	})(this));
+	});
+
 	riot.tag2('recursive-item', '<list-line name="lines" each="{key, data in list}" list="{this}" routing="{this.parent.opts.routing}"></list-line>', ':scope { display: block; }', '', function(opts) {
 	this.list = typeof opts.data === "object" ? opts.data : {};
 	});
 
-	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error}"> {success ? ⁗〇⁗ : error ? ⁗×⁗ : ⁗⁗} </span> <a class="tree" href="{routing}" name="treeTask" onclick="{router}">{key}</a> <a class="single" if="{url}" href="{routerExecutionPath}" name="singleTask" onclick="{router}">{url}</a> </div> <recursive-item name="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe name="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{WholeStatus.config}"></test-iframe>', '.bold { font-weight: bold; } .tree { color: #333; } .single { padding-left: 6px; } .line { margin-left: 10px; } .line.hover { background: rgba(0, 0, 255, 0.05); } .success { color: blue; } .error { color: red; } .step { color: #333; margin-right: 10px; }', '', function(opts) {
+	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error, warn: warn}"></span> <a class="tree" href="{routing}" name="treeTask" onclick="{router}">{key}</a> <a class="single" if="{url}" href="{routerExecutionPath}" name="singleTask" onclick="{router}">{url}</a> </div> <recursive-item name="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe name="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{WholeStatus.config}"></test-iframe>', 'list-line .bold,[riot-tag="list-line"] .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[riot-tag="list-line"] .tree,[data-is="list-line"] .tree{color:#333} list-line .single,[riot-tag="list-line"] .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[riot-tag="list-line"] .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[riot-tag="list-line"] .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[riot-tag="list-line"] .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[riot-tag="list-line"] .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .warn,[riot-tag="list-line"] .warn,[data-is="list-line"] .warn{color:gold} list-line .warn:after,[riot-tag="list-line"] .warn:after,[data-is="list-line"] .warn:after{content:"△"} list-line .error,[riot-tag="list-line"] .error,[data-is="list-line"] .error{color:red} list-line .error:after,[riot-tag="list-line"] .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[riot-tag="list-line"] .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
 	var WholeStatus, executeIframe;
 
 	WholeStatus = this.WholeStatus = __webpack_require__(29);
@@ -1529,6 +1536,7 @@ module.exports =
 	this.init = (function(_this) {
 	  return function() {
 	    _this.error = null;
+	    _this.warn = null;
 	    _this.success = null;
 	    return _this.deleteIframe();
 	  };
@@ -1571,15 +1579,15 @@ module.exports =
 	    _this.update();
 	    console.clear();
 	    ++WholeStatus.executeSum;
-	    WholeStatus.trigger("item-update");
 	    return _this.tags.testFrame.setConsoleEvent({
 	      assert: function(flg, msg) {
+	        if (msg) {
+	          console.assert(flg, msg);
+	        } else {
+	          console.assert(flg);
+	        }
 	        if (!flg) {
-	          if (msg) {
-	            console.error(msg);
-	          }
 	          _this.error = true;
-	          WholeStatus.trigger("item-update");
 	          _this.update();
 	          return callback && callback();
 	        }
@@ -1587,12 +1595,17 @@ module.exports =
 	      info: function(msg) {
 	        if (msg === "finished" && !_this.error) {
 	          console.info(msg);
-	          _this.success = true;
+	          if (!_this.warn) {
+	            _this.success = true;
+	          }
 	          ++WholeStatus.successSum;
-	          WholeStatus.trigger("item-update");
 	          _this.update();
 	          return callback && callback();
 	        }
+	      },
+	      error: function(msg) {
+	        console.warn("error occured: " + msg);
+	        return _this.warn = true;
 	      }
 	    });
 	  };
@@ -1685,6 +1698,9 @@ module.exports =
 	      if (callbackObj) {
 	        iframeWindow.console.assert = function(flg, msg) {
 	          return callbackObj.assert(flg, msg);
+	        };
+	        iframeWindow.onerror = function(msg) {
+	          return callbackObj.error(msg);
 	        };
 	        iframeWindow.console.info = function(msg) {
 	          return callbackObj.info(msg);

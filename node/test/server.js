@@ -59,40 +59,33 @@ module.exports =
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(3);
+	var NodeParts;
+
+	NodeParts = __webpack_require__(3).prototype;
+
+	NodeParts.start(8091, 8091);
 
 
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var NodeParts;
-
-	NodeParts = __webpack_require__(4).prototype;
-
-	NodeParts.start(8091, 8091);
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/* WEBPACK VAR INJECTION */(function(__dirname) {var SimpleServer, chokidar, fs, glob, http, lodash, mime, sio,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	fs = __webpack_require__(5);
+	fs = __webpack_require__(4);
 
-	http = __webpack_require__(6);
+	http = __webpack_require__(5);
 
-	chokidar = __webpack_require__(7);
+	chokidar = __webpack_require__(6);
 
-	mime = __webpack_require__(8);
+	mime = __webpack_require__(7);
 
-	sio = __webpack_require__(9);
+	sio = __webpack_require__(8);
 
-	glob = __webpack_require__(10);
+	glob = __webpack_require__(9);
 
-	lodash = __webpack_require__(11);
+	lodash = __webpack_require__(10);
 
 	module.exports = SimpleServer = (function() {
 	  function SimpleServer() {
@@ -116,7 +109,7 @@ module.exports =
 	  SimpleServer.prototype.reloadList = [];
 
 	  SimpleServer.prototype.start = function(httpPort, wsPort) {
-	    var error, error1, lastArg, listen, path;
+	    var error, lastArg, listen, path;
 	    this.httpPort = httpPort != null ? httpPort : 8080;
 	    this.wsPort = wsPort != null ? wsPort : this.httpPort;
 	    try {
@@ -267,43 +260,43 @@ module.exports =
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports) {
 
 	module.exports = require("fs");
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports) {
 
 	module.exports = require("http");
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports) {
 
 	module.exports = require("chokidar");
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports) {
 
 	module.exports = require("mime");
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = require("socket.io");
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = require("glob");
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 	module.exports = require("lodash");

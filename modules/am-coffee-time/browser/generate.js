@@ -95,11 +95,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.6.2, @license MIT */
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.6.4, @license MIT */
 
 	;(function(window, undefined) {
 	  'use strict';
-	var riot = { version: 'v2.6.2', settings: {} },
+	var riot = { version: 'v2.6.4', settings: {} },
 	  // be aware, internal usage
 	  // ATTENTION: prefix the global dynamic variables with `__`
 
@@ -630,7 +630,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * The riot template engine
-	 * @version v2.4.1
+	 * @version v2.4.2
 	 */
 	/**
 	 * riot.util.brackets
@@ -887,7 +887,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  var
-	    CH_IDEXPR = '\u2057',
+	    CH_IDEXPR = String.fromCharCode(0x2057),
 	    RE_CSNAME = /^(?:(-?[_A-Za-z\xA0-\xFF][-\w\xA0-\xFF]*)|\u2057(\d+)~):/,
 	    RE_QBLOCK = RegExp(brackets.S_QBLOCKS, 'g'),
 	    RE_DQUOTE = /\u2057/g,
@@ -1003,7 +1003,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // istanbul ignore next: not both
 	  var // eslint-disable-next-line max-len
 	    JS_CONTEXT = '"in this?this:' + (typeof window !== 'object' ? 'global' : 'window') + ').',
-	    JS_VARNAME = /[,{][$\w]+(?=:)|(^ *|[^$\w\.])(?!(?:typeof|true|false|null|undefined|in|instanceof|is(?:Finite|NaN)|void|NaN|new|Date|RegExp|Math)(?![$\w]))([$_A-Za-z][$\w]*)/g,
+	    JS_VARNAME = /[,{][\$\w]+(?=:)|(^ *|[^$\w\.{])(?!(?:typeof|true|false|null|undefined|in|instanceof|is(?:Finite|NaN)|void|NaN|new|Date|RegExp|Math)(?![$\w]))([$_A-Za-z][$\w]*)/g,
 	    JS_NOPROPS = /^(?=(\.[$\w]+))\1(?:[^.[(]|$)/
 
 	  function _wrapExpr (expr, asText, key) {
@@ -1043,7 +1043,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return expr
 	  }
 
-	  _tmpl.version = brackets.version = 'v2.4.1'
+	  _tmpl.version = brackets.version = 'v2.4.2'
 
 	  return _tmpl
 
@@ -2817,7 +2817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	__webpack_require__(13)
 
-	riot.tag2('test-list', '<span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span> <a onclick="{toRouteHash}">base</a> <recursive-item data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe name="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{WholeStatus.config}"></test-iframe>', 'test-list,[riot-tag="test-list"],[data-is="test-list"]{ display: block; background-color: white; font-size: 14px; } test-list a,[riot-tag="test-list"] a,[data-is="test-list"] a{ color: blue; text-decoration: none; cursor: pointer; display: inline-block; } test-list a:hover,[riot-tag="test-list"] a:hover,[data-is="test-list"] a:hover{ opacity: 0.4; }', '', function(opts) {
+	riot.tag2('test-list', '<test-list-count></test-list-count> <a onclick="{toRouteHash}">base</a> <recursive-item data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe name="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{WholeStatus.config}"></test-iframe>', 'test-list,[riot-tag="test-list"],[data-is="test-list"]{ display: block; background-color: white; font-size: 14px; } test-list a,[riot-tag="test-list"] a,[data-is="test-list"] a{ color: blue; text-decoration: none; cursor: pointer; display: inline-block; } test-list a:hover,[riot-tag="test-list"] a:hover,[data-is="test-list"] a:hover{ opacity: 0.4; }', '', function(opts) {
 	var WholeStatus, bodyStyle;
 
 	this.WholeStatus = WholeStatus = __webpack_require__(11);
@@ -2838,7 +2838,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    WholeStatus.sumInit();
 	    executePath = riot.route.query().path;
 	    if (!executePath) {
-	      return;
+	      return _this.update();
 	    }
 	    if (!/%[0-9a-f]{2}/i.test(executePath)) {
 	      executePath = encodeURI(executePath);
@@ -2858,12 +2858,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return riot.route("");
 	  };
 	})(this);
-
-	WholeStatus.on("item-update", (function(_this) {
-	  return function() {
-	    return _this.update();
-	  };
-	})(this));
 
 	this.on("update", (function(_this) {
 	  return function() {
@@ -2900,11 +2894,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(this));
 	});
 
+	riot.tag2('test-list-count', '<span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span>', '', '', function(opts) {
+	this.WholeStatus = __webpack_require__(11);
+
+	this.WholeStatus.on("item-update", (function(_this) {
+	  return function() {
+	    return _this.update();
+	  };
+	})(this));
+	});
+
 	riot.tag2('recursive-item', '<list-line name="lines" each="{key, data in list}" list="{this}" routing="{this.parent.opts.routing}"></list-line>', ':scope { display: block; }', '', function(opts) {
 	this.list = typeof opts.data === "object" ? opts.data : {};
 	});
 
-	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error}"> {success ? ⁗〇⁗ : error ? ⁗×⁗ : ⁗⁗} </span> <a class="tree" href="{routing}" name="treeTask" onclick="{router}">{key}</a> <a class="single" if="{url}" href="{routerExecutionPath}" name="singleTask" onclick="{router}">{url}</a> </div> <recursive-item name="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe name="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{WholeStatus.config}"></test-iframe>', '.bold { font-weight: bold; } .tree { color: #333; } .single { padding-left: 6px; } .line { margin-left: 10px; } .line.hover { background: rgba(0, 0, 255, 0.05); } .success { color: blue; } .error { color: red; } .step { color: #333; margin-right: 10px; }', '', function(opts) {
+	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error, warn: warn}"></span> <a class="tree" href="{routing}" name="treeTask" onclick="{router}">{key}</a> <a class="single" if="{url}" href="{routerExecutionPath}" name="singleTask" onclick="{router}">{url}</a> </div> <recursive-item name="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe name="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{WholeStatus.config}"></test-iframe>', 'list-line .bold,[riot-tag="list-line"] .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[riot-tag="list-line"] .tree,[data-is="list-line"] .tree{color:#333} list-line .single,[riot-tag="list-line"] .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[riot-tag="list-line"] .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[riot-tag="list-line"] .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[riot-tag="list-line"] .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[riot-tag="list-line"] .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .warn,[riot-tag="list-line"] .warn,[data-is="list-line"] .warn{color:gold} list-line .warn:after,[riot-tag="list-line"] .warn:after,[data-is="list-line"] .warn:after{content:"△"} list-line .error,[riot-tag="list-line"] .error,[data-is="list-line"] .error{color:red} list-line .error:after,[riot-tag="list-line"] .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[riot-tag="list-line"] .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
 	var WholeStatus, executeIframe;
 
 	WholeStatus = this.WholeStatus = __webpack_require__(11);
@@ -2940,6 +2944,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	this.init = (function(_this) {
 	  return function() {
 	    _this.error = null;
+	    _this.warn = null;
 	    _this.success = null;
 	    return _this.deleteIframe();
 	  };
@@ -2982,15 +2987,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.update();
 	    console.clear();
 	    ++WholeStatus.executeSum;
-	    WholeStatus.trigger("item-update");
 	    return _this.tags.testFrame.setConsoleEvent({
 	      assert: function(flg, msg) {
+	        if (msg) {
+	          console.assert(flg, msg);
+	        } else {
+	          console.assert(flg);
+	        }
 	        if (!flg) {
-	          if (msg) {
-	            console.error(msg);
-	          }
 	          _this.error = true;
-	          WholeStatus.trigger("item-update");
 	          _this.update();
 	          return callback && callback();
 	        }
@@ -2998,12 +3003,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      info: function(msg) {
 	        if (msg === "finished" && !_this.error) {
 	          console.info(msg);
-	          _this.success = true;
+	          if (!_this.warn) {
+	            _this.success = true;
+	          }
 	          ++WholeStatus.successSum;
-	          WholeStatus.trigger("item-update");
 	          _this.update();
 	          return callback && callback();
 	        }
+	      },
+	      error: function(msg) {
+	        console.warn("error occured: " + msg);
+	        return _this.warn = true;
 	      }
 	    });
 	  };
@@ -3096,6 +3106,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (callbackObj) {
 	        iframeWindow.console.assert = function(flg, msg) {
 	          return callbackObj.assert(flg, msg);
+	        };
+	        iframeWindow.onerror = function(msg) {
+	          return callbackObj.error(msg);
 	        };
 	        iframeWindow.console.info = function(msg) {
 	          return callbackObj.info(msg);

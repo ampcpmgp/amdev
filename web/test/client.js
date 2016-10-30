@@ -54,7 +54,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(69);
+	module.exports = __webpack_require__(70);
 
 
 /***/ },
@@ -125,7 +125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	          try {
 	            return callback($this);
-	          } catch (undefined) {}
+	          } catch (error) {}
 	        }
 	      };
 	    })(this));
@@ -346,7 +346,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, Test, getRandomColor, jquery_stylesheet;
+	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
 
 	$ = __webpack_require__(5);
 
@@ -367,6 +367,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	})(this);
 
+	actionFuncs = {
+	  _border: (function(_this) {
+	    return function(selector) {
+	      selector = selector === true || !selector ? "*" : selector;
+	      if (typeof selector === "object") {
+	        selector = selector.join(",");
+	      }
+	      return $.stylesheet(selector).css("box-shadow", "0px 0px 0px 1px " + (getRandomColor()));
+	    };
+	  })(this),
+	  _color: (function(_this) {
+	    return function(selector) {
+	      selector = selector === true || !selector ? "*" : selector;
+	      if (typeof selector === "object") {
+	        selector = selector.join(",");
+	      }
+	      return $.stylesheet(selector).css("background", "" + (getRandomColor(0.1)));
+	    };
+	  })(this),
+	  _hide: (function(_this) {
+	    return function(selector) {
+	      if (typeof selector === "object") {
+	        selector = selector.join(",");
+	      }
+	      return $.stylesheet(selector).css("display", "none");
+	    };
+	  })(this),
+	  _auto: (function(_this) {
+	    return function() {
+	      return {
+	        AutoEvent: __webpack_require__(3)
+	      };
+	    };
+	  })(this)
+	};
+
 	module.exports = Test = (function() {
 	  function Test() {}
 
@@ -376,18 +412,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      testObj = Test;
 	    }
 	    Test.actions = decodeURI(location.hash.replace(/^#+/, "")).split("/");
-	    if (Test.actions._color != null) {
-	      Test._color(Test.actions._color);
-	    }
-	    if (Test.actions._hide != null) {
-	      Test._hide(Test.actions._hide);
-	    }
-	    if (Test.actions._border != null) {
-	      Test._border(Test.actions._border);
-	    }
-	    if (Test.actions._auto != null) {
-	      Test._auto(Test.actions._auto);
-	    }
+	    Test.actionObj = {};
 	    ref = Test.actions;
 	    results = [];
 	    for (i = 0, len = ref.length; i < len; i++) {
@@ -395,40 +420,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      ref1 = action.split("="), key = ref1[0], value = ref1[1];
 	      func = testObj[key] || Test[key];
 	      arg = !value || value.split(",");
-	      results.push(typeof func === "function" ? func(arg.length === 1 ? arg[0] : arg) : void 0);
+	      if (typeof func === "function") {
+	        func(arg.length === 1 ? arg[0] : arg);
+	      }
+	      if (typeof actionFuncs[key] === "function") {
+	        actionFuncs[key](value);
+	      }
+	      results.push(Test.actionObj[key] = value);
 	    }
 	    return results;
-	  };
-
-	  Test._border = function(selector) {
-	    selector = selector === true || !selector ? "*" : selector;
-	    if (typeof selector === "object") {
-	      selector = selector.join(",");
-	    }
-	    return $.stylesheet(selector).css("box-shadow", "0px 0px 0px 1px " + (getRandomColor()));
-	  };
-
-	  Test._color = function(selector) {
-	    var opacity;
-	    opacity = Test.actions.opacity ? Test.actions.opacity - 0.0 : 0.1;
-	    selector = selector === true ? "*" : selector;
-	    if (typeof selector === "object") {
-	      selector = selector.join(",");
-	    }
-	    return $.stylesheet(selector).css("background", "" + (getRandomColor(opacity)));
-	  };
-
-	  Test._hide = function(selector) {
-	    if (typeof selector === "object") {
-	      selector = selector.join(",");
-	    }
-	    return $.stylesheet(selector).css("display", "none");
-	  };
-
-	  Test._auto = function() {
-	    return {
-	      AutoEvent: __webpack_require__(3)
-	    };
 	  };
 
 	  return Test;
@@ -440,9 +440,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*eslint-disable no-unused-vars*/
-	/*!
-	 * jQuery JavaScript Library v3.1.0
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * jQuery JavaScript Library v3.1.1
 	 * https://jquery.com/
 	 *
 	 * Includes Sizzle.js
@@ -452,7 +451,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Released under the MIT license
 	 * https://jquery.org/license
 	 *
-	 * Date: 2016-07-07T21:44Z
+	 * Date: 2016-09-22T22:30Z
 	 */
 	( function( global, factory ) {
 
@@ -525,13 +524,13 @@ return /******/ (function(modules) { // webpackBootstrap
 			doc.head.appendChild( script ).parentNode.removeChild( script );
 		}
 	/* global Symbol */
-	// Defining this global in .eslintrc would create a danger of using the global
+	// Defining this global in .eslintrc.json would create a danger of using the global
 	// unguarded in another place, it seems safer to define global only for this module
 
 
 
 	var
-		version = "3.1.0",
+		version = "3.1.1",
 
 		// Define a local copy of jQuery
 		jQuery = function( selector, context ) {
@@ -571,13 +570,14 @@ return /******/ (function(modules) { // webpackBootstrap
 		// Get the Nth element in the matched element set OR
 		// Get the whole matched element set as a clean array
 		get: function( num ) {
-			return num != null ?
 
-				// Return just the one element from the set
-				( num < 0 ? this[ num + this.length ] : this[ num ] ) :
+			// Return all the elements in a clean array
+			if ( num == null ) {
+				return slice.call( this );
+			}
 
-				// Return all the elements in a clean array
-				slice.call( this );
+			// Return just the one element from the set
+			return num < 0 ? this[ num + this.length ] : this[ num ];
 		},
 
 		// Take an array of elements and push it onto the stack
@@ -985,14 +985,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	var Sizzle =
 	/*!
-	 * Sizzle CSS Selector Engine v2.3.0
+	 * Sizzle CSS Selector Engine v2.3.3
 	 * https://sizzlejs.com/
 	 *
 	 * Copyright jQuery Foundation and other contributors
 	 * Released under the MIT license
 	 * http://jquery.org/license
 	 *
-	 * Date: 2016-01-04
+	 * Date: 2016-08-08
 	 */
 	(function( window ) {
 
@@ -1138,7 +1138,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		// CSS string/identifier serialization
 		// https://drafts.csswg.org/cssom/#common-serializing-idioms
-		rcssescape = /([\0-\x1f\x7f]|^-?\d)|^-$|[^\x80-\uFFFF\w-]/g,
+		rcssescape = /([\0-\x1f\x7f]|^-?\d)|^-$|[^\0-\x1f\x7f-\uFFFF\w-]/g,
 		fcssescape = function( ch, asCodePoint ) {
 			if ( asCodePoint ) {
 
@@ -1165,7 +1165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		disabledAncestor = addCombinator(
 			function( elem ) {
-				return elem.disabled === true;
+				return elem.disabled === true && ("form" in elem || "label" in elem);
 			},
 			{ dir: "parentNode", next: "legend" }
 		);
@@ -1451,26 +1451,54 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Boolean} disabled true for :disabled; false for :enabled
 	 */
 	function createDisabledPseudo( disabled ) {
-		// Known :disabled false positives:
-		// IE: *[disabled]:not(button, input, select, textarea, optgroup, option, menuitem, fieldset)
-		// not IE: fieldset[disabled] > legend:nth-of-type(n+2) :can-disable
+
+		// Known :disabled false positives: fieldset[disabled] > legend:nth-of-type(n+2) :can-disable
 		return function( elem ) {
 
-			// Check form elements and option elements for explicit disabling
-			return "label" in elem && elem.disabled === disabled ||
-				"form" in elem && elem.disabled === disabled ||
+			// Only certain elements can match :enabled or :disabled
+			// https://html.spec.whatwg.org/multipage/scripting.html#selector-enabled
+			// https://html.spec.whatwg.org/multipage/scripting.html#selector-disabled
+			if ( "form" in elem ) {
 
-				// Check non-disabled form elements for fieldset[disabled] ancestors
-				"form" in elem && elem.disabled === false && (
-					// Support: IE6-11+
-					// Ancestry is covered for us
-					elem.isDisabled === disabled ||
+				// Check for inherited disabledness on relevant non-disabled elements:
+				// * listed form-associated elements in a disabled fieldset
+				//   https://html.spec.whatwg.org/multipage/forms.html#category-listed
+				//   https://html.spec.whatwg.org/multipage/forms.html#concept-fe-disabled
+				// * option elements in a disabled optgroup
+				//   https://html.spec.whatwg.org/multipage/forms.html#concept-option-disabled
+				// All such elements have a "form" property.
+				if ( elem.parentNode && elem.disabled === false ) {
 
-					// Otherwise, assume any non-<option> under fieldset[disabled] is disabled
-					/* jshint -W018 */
-					elem.isDisabled !== !disabled &&
-						("label" in elem || !disabledAncestor( elem )) !== disabled
-				);
+					// Option elements defer to a parent optgroup if present
+					if ( "label" in elem ) {
+						if ( "label" in elem.parentNode ) {
+							return elem.parentNode.disabled === disabled;
+						} else {
+							return elem.disabled === disabled;
+						}
+					}
+
+					// Support: IE 6 - 11
+					// Use the isDisabled shortcut property to check for disabled fieldset ancestors
+					return elem.isDisabled === disabled ||
+
+						// Where there is no isDisabled, check manually
+						/* jshint -W018 */
+						elem.isDisabled !== !disabled &&
+							disabledAncestor( elem ) === disabled;
+				}
+
+				return elem.disabled === disabled;
+
+			// Try to winnow out elements that can't be disabled before trusting the disabled property.
+			// Some victims get caught in our net (label, legend, menu, track), but it shouldn't
+			// even exist on them, let alone have a boolean value.
+			} else if ( "label" in elem ) {
+				return elem.disabled === disabled;
+			}
+
+			// Remaining elements are neither :enabled nor :disabled
+			return false;
 		};
 	}
 
@@ -1586,25 +1614,21 @@ return /******/ (function(modules) { // webpackBootstrap
 			return !document.getElementsByName || !document.getElementsByName( expando ).length;
 		});
 
-		// ID find and filter
+		// ID filter and find
 		if ( support.getById ) {
-			Expr.find["ID"] = function( id, context ) {
-				if ( typeof context.getElementById !== "undefined" && documentIsHTML ) {
-					var m = context.getElementById( id );
-					return m ? [ m ] : [];
-				}
-			};
 			Expr.filter["ID"] = function( id ) {
 				var attrId = id.replace( runescape, funescape );
 				return function( elem ) {
 					return elem.getAttribute("id") === attrId;
 				};
 			};
+			Expr.find["ID"] = function( id, context ) {
+				if ( typeof context.getElementById !== "undefined" && documentIsHTML ) {
+					var elem = context.getElementById( id );
+					return elem ? [ elem ] : [];
+				}
+			};
 		} else {
-			// Support: IE6/7
-			// getElementById is not reliable as a find shortcut
-			delete Expr.find["ID"];
-
 			Expr.filter["ID"] =  function( id ) {
 				var attrId = id.replace( runescape, funescape );
 				return function( elem ) {
@@ -1612,6 +1636,36 @@ return /******/ (function(modules) { // webpackBootstrap
 						elem.getAttributeNode("id");
 					return node && node.value === attrId;
 				};
+			};
+
+			// Support: IE 6 - 7 only
+			// getElementById is not reliable as a find shortcut
+			Expr.find["ID"] = function( id, context ) {
+				if ( typeof context.getElementById !== "undefined" && documentIsHTML ) {
+					var node, i, elems,
+						elem = context.getElementById( id );
+
+					if ( elem ) {
+
+						// Verify the id attribute
+						node = elem.getAttributeNode("id");
+						if ( node && node.value === id ) {
+							return [ elem ];
+						}
+
+						// Fall back on getElementsByName
+						elems = context.getElementsByName( id );
+						i = 0;
+						while ( (elem = elems[i++]) ) {
+							node = elem.getAttributeNode("id");
+							if ( node && node.value === id ) {
+								return [ elem ];
+							}
+						}
+					}
+
+					return [];
+				}
 			};
 		}
 
@@ -2653,6 +2707,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						return matcher( elem, context, xml );
 					}
 				}
+				return false;
 			} :
 
 			// Check against all ancestor/preceding elements
@@ -2697,6 +2752,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						}
 					}
 				}
+				return false;
 			};
 	}
 
@@ -3059,8 +3115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			// Reduce context if the leading compound selector is an ID
 			tokens = match[0] = match[0].slice( 0 );
 			if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
-					support.getById && context.nodeType === 9 && documentIsHTML &&
-					Expr.relative[ tokens[1].type ] ) {
+					context.nodeType === 9 && documentIsHTML && Expr.relative[ tokens[1].type ] ) {
 
 				context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
 				if ( !context ) {
@@ -3242,24 +3297,29 @@ return /******/ (function(modules) { // webpackBootstrap
 			return jQuery.grep( elements, function( elem, i ) {
 				return !!qualifier.call( elem, i, elem ) !== not;
 			} );
-
 		}
 
+		// Single element
 		if ( qualifier.nodeType ) {
 			return jQuery.grep( elements, function( elem ) {
 				return ( elem === qualifier ) !== not;
 			} );
-
 		}
 
-		if ( typeof qualifier === "string" ) {
-			if ( risSimple.test( qualifier ) ) {
-				return jQuery.filter( qualifier, elements, not );
-			}
-
-			qualifier = jQuery.filter( qualifier, elements );
+		// Arraylike of elements (jQuery, arguments, Array)
+		if ( typeof qualifier !== "string" ) {
+			return jQuery.grep( elements, function( elem ) {
+				return ( indexOf.call( qualifier, elem ) > -1 ) !== not;
+			} );
 		}
 
+		// Simple selector that can be filtered directly, removing non-Elements
+		if ( risSimple.test( qualifier ) ) {
+			return jQuery.filter( qualifier, elements, not );
+		}
+
+		// Complex selector, compare the two sets, removing non-Elements
+		qualifier = jQuery.filter( qualifier, elements );
 		return jQuery.grep( elements, function( elem ) {
 			return ( indexOf.call( qualifier, elem ) > -1 ) !== not && elem.nodeType === 1;
 		} );
@@ -3272,11 +3332,13 @@ return /******/ (function(modules) { // webpackBootstrap
 			expr = ":not(" + expr + ")";
 		}
 
-		return elems.length === 1 && elem.nodeType === 1 ?
-			jQuery.find.matchesSelector( elem, expr ) ? [ elem ] : [] :
-			jQuery.find.matches( expr, jQuery.grep( elems, function( elem ) {
-				return elem.nodeType === 1;
-			} ) );
+		if ( elems.length === 1 && elem.nodeType === 1 ) {
+			return jQuery.find.matchesSelector( elem, expr ) ? [ elem ] : [];
+		}
+
+		return jQuery.find.matches( expr, jQuery.grep( elems, function( elem ) {
+			return elem.nodeType === 1;
+		} ) );
 	};
 
 	jQuery.fn.extend( {
@@ -3604,14 +3666,14 @@ return /******/ (function(modules) { // webpackBootstrap
 			return this.pushStack( matched );
 		};
 	} );
-	var rnotwhite = ( /\S+/g );
+	var rnothtmlwhite = ( /[^\x20\t\r\n\f]+/g );
 
 
 
 	// Convert String-formatted options into Object-formatted ones
 	function createOptions( options ) {
 		var object = {};
-		jQuery.each( options.match( rnotwhite ) || [], function( _, flag ) {
+		jQuery.each( options.match( rnothtmlwhite ) || [], function( _, flag ) {
 			object[ flag ] = true;
 		} );
 		return object;
@@ -4376,13 +4438,16 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}
 
-		return chainable ?
-			elems :
+		if ( chainable ) {
+			return elems;
+		}
 
-			// Gets
-			bulk ?
-				fn.call( elems ) :
-				len ? fn( elems[ 0 ], key ) : emptyGet;
+		// Gets
+		if ( bulk ) {
+			return fn.call( elems );
+		}
+
+		return len ? fn( elems[ 0 ], key ) : emptyGet;
 	};
 	var acceptData = function( owner ) {
 
@@ -4519,7 +4584,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					// Otherwise, create an array by matching non-whitespace
 					key = key in cache ?
 						[ key ] :
-						( key.match( rnotwhite ) || [] );
+						( key.match( rnothtmlwhite ) || [] );
 				}
 
 				i = key.length;
@@ -4567,6 +4632,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	var rbrace = /^(?:\{[\w\W]*\}|\[[\w\W]*\])$/,
 		rmultiDash = /[A-Z]/g;
 
+	function getData( data ) {
+		if ( data === "true" ) {
+			return true;
+		}
+
+		if ( data === "false" ) {
+			return false;
+		}
+
+		if ( data === "null" ) {
+			return null;
+		}
+
+		// Only convert to a number if it doesn't change the string
+		if ( data === +data + "" ) {
+			return +data;
+		}
+
+		if ( rbrace.test( data ) ) {
+			return JSON.parse( data );
+		}
+
+		return data;
+	}
+
 	function dataAttr( elem, key, data ) {
 		var name;
 
@@ -4578,14 +4668,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			if ( typeof data === "string" ) {
 				try {
-					data = data === "true" ? true :
-						data === "false" ? false :
-						data === "null" ? null :
-
-						// Only convert to a number if it doesn't change the string
-						+data + "" === data ? +data :
-						rbrace.test( data ) ? JSON.parse( data ) :
-						data;
+					data = getData( data );
 				} catch ( e ) {}
 
 				// Make sure we set the data so it isn't changed later
@@ -4962,7 +5045,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			return display;
 		}
 
-		temp = doc.body.appendChild( doc.createElement( nodeName ) ),
+		temp = doc.body.appendChild( doc.createElement( nodeName ) );
 		display = jQuery.css( temp, "display" );
 
 		temp.parentNode.removeChild( temp );
@@ -5080,15 +5163,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		// Support: IE <=9 - 11 only
 		// Use typeof to avoid zero-argument method invocation on host objects (#15151)
-		var ret = typeof context.getElementsByTagName !== "undefined" ?
-				context.getElementsByTagName( tag || "*" ) :
-				typeof context.querySelectorAll !== "undefined" ?
-					context.querySelectorAll( tag || "*" ) :
-				[];
+		var ret;
 
-		return tag === undefined || tag && jQuery.nodeName( context, tag ) ?
-			jQuery.merge( [ context ], ret ) :
-			ret;
+		if ( typeof context.getElementsByTagName !== "undefined" ) {
+			ret = context.getElementsByTagName( tag || "*" );
+
+		} else if ( typeof context.querySelectorAll !== "undefined" ) {
+			ret = context.querySelectorAll( tag || "*" );
+
+		} else {
+			ret = [];
+		}
+
+		if ( tag === undefined || tag && jQuery.nodeName( context, tag ) ) {
+			return jQuery.merge( [ context ], ret );
+		}
+
+		return ret;
 	}
 
 
@@ -5362,7 +5453,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 
 			// Handle multiple events separated by a space
-			types = ( types || "" ).match( rnotwhite ) || [ "" ];
+			types = ( types || "" ).match( rnothtmlwhite ) || [ "" ];
 			t = types.length;
 			while ( t-- ) {
 				tmp = rtypenamespace.exec( types[ t ] ) || [];
@@ -5444,7 +5535,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 
 			// Once for each type.namespace in types; type may be omitted
-			types = ( types || "" ).match( rnotwhite ) || [ "" ];
+			types = ( types || "" ).match( rnothtmlwhite ) || [ "" ];
 			t = types.length;
 			while ( t-- ) {
 				tmp = rtypenamespace.exec( types[ t ] ) || [];
@@ -5570,51 +5661,58 @@ return /******/ (function(modules) { // webpackBootstrap
 		},
 
 		handlers: function( event, handlers ) {
-			var i, matches, sel, handleObj,
+			var i, handleObj, sel, matchedHandlers, matchedSelectors,
 				handlerQueue = [],
 				delegateCount = handlers.delegateCount,
 				cur = event.target;
 
-			// Support: IE <=9
 			// Find delegate handlers
-			// Black-hole SVG <use> instance trees (#13180)
-			//
-			// Support: Firefox <=42
-			// Avoid non-left-click in FF but don't block IE radio events (#3861, gh-2343)
-			if ( delegateCount && cur.nodeType &&
-				( event.type !== "click" || isNaN( event.button ) || event.button < 1 ) ) {
+			if ( delegateCount &&
+
+				// Support: IE <=9
+				// Black-hole SVG <use> instance trees (trac-13180)
+				cur.nodeType &&
+
+				// Support: Firefox <=42
+				// Suppress spec-violating clicks indicating a non-primary pointer button (trac-3861)
+				// https://www.w3.org/TR/DOM-Level-3-Events/#event-type-click
+				// Support: IE 11 only
+				// ...but not arrow key "clicks" of radio inputs, which can have `button` -1 (gh-2343)
+				!( event.type === "click" && event.button >= 1 ) ) {
 
 				for ( ; cur !== this; cur = cur.parentNode || this ) {
 
 					// Don't check non-elements (#13208)
 					// Don't process clicks on disabled elements (#6911, #8165, #11382, #11764)
-					if ( cur.nodeType === 1 && ( cur.disabled !== true || event.type !== "click" ) ) {
-						matches = [];
+					if ( cur.nodeType === 1 && !( event.type === "click" && cur.disabled === true ) ) {
+						matchedHandlers = [];
+						matchedSelectors = {};
 						for ( i = 0; i < delegateCount; i++ ) {
 							handleObj = handlers[ i ];
 
 							// Don't conflict with Object.prototype properties (#13203)
 							sel = handleObj.selector + " ";
 
-							if ( matches[ sel ] === undefined ) {
-								matches[ sel ] = handleObj.needsContext ?
+							if ( matchedSelectors[ sel ] === undefined ) {
+								matchedSelectors[ sel ] = handleObj.needsContext ?
 									jQuery( sel, this ).index( cur ) > -1 :
 									jQuery.find( sel, this, null, [ cur ] ).length;
 							}
-							if ( matches[ sel ] ) {
-								matches.push( handleObj );
+							if ( matchedSelectors[ sel ] ) {
+								matchedHandlers.push( handleObj );
 							}
 						}
-						if ( matches.length ) {
-							handlerQueue.push( { elem: cur, handlers: matches } );
+						if ( matchedHandlers.length ) {
+							handlerQueue.push( { elem: cur, handlers: matchedHandlers } );
 						}
 					}
 				}
 			}
 
 			// Add the remaining (directly-bound) handlers
+			cur = this;
 			if ( delegateCount < handlers.length ) {
-				handlerQueue.push( { elem: this, handlers: handlers.slice( delegateCount ) } );
+				handlerQueue.push( { elem: cur, handlers: handlers.slice( delegateCount ) } );
 			}
 
 			return handlerQueue;
@@ -5848,7 +5946,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			// Add which for click: 1 === left; 2 === middle; 3 === right
 			if ( !event.which && button !== undefined && rmouseEvent.test( event.type ) ) {
-				return ( button & 1 ? 1 : ( button & 2 ? 3 : ( button & 4 ? 2 : 0 ) ) );
+				if ( button & 1 ) {
+					return 1;
+				}
+
+				if ( button & 2 ) {
+					return 3;
+				}
+
+				if ( button & 4 ) {
+					return 2;
+				}
+
+				return 0;
 			}
 
 			return event.which;
@@ -6604,15 +6714,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function augmentWidthOrHeight( elem, name, extra, isBorderBox, styles ) {
-		var i = extra === ( isBorderBox ? "border" : "content" ) ?
-
-			// If we already have the right measurement, avoid augmentation
-			4 :
-
-			// Otherwise initialize for horizontal or vertical properties
-			name === "width" ? 1 : 0,
-
+		var i,
 			val = 0;
+
+		// If we already have the right measurement, avoid augmentation
+		if ( extra === ( isBorderBox ? "border" : "content" ) ) {
+			i = 4;
+
+		// Otherwise initialize for horizontal or vertical properties
+		} else {
+			i = name === "width" ? 1 : 0;
+		}
 
 		for ( ; i < 4; i += 2 ) {
 
@@ -7466,7 +7578,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				callback = props;
 				props = [ "*" ];
 			} else {
-				props = props.match( rnotwhite );
+				props = props.match( rnothtmlwhite );
 			}
 
 			var prop,
@@ -7504,9 +7616,14 @@ return /******/ (function(modules) { // webpackBootstrap
 			opt.duration = 0;
 
 		} else {
-			opt.duration = typeof opt.duration === "number" ?
-				opt.duration : opt.duration in jQuery.fx.speeds ?
-					jQuery.fx.speeds[ opt.duration ] : jQuery.fx.speeds._default;
+			if ( typeof opt.duration !== "number" ) {
+				if ( opt.duration in jQuery.fx.speeds ) {
+					opt.duration = jQuery.fx.speeds[ opt.duration ];
+
+				} else {
+					opt.duration = jQuery.fx.speeds._default;
+				}
+			}
 		}
 
 		// Normalize opt.queue - true/undefined/null -> "fx"
@@ -7856,7 +7973,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		removeAttr: function( elem, value ) {
 			var name,
 				i = 0,
-				attrNames = value && value.match( rnotwhite );
+
+				// Attribute names can contain non-HTML whitespace characters
+				// https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
+				attrNames = value && value.match( rnothtmlwhite );
 
 			if ( attrNames && elem.nodeType === 1 ) {
 				while ( ( name = attrNames[ i++ ] ) ) {
@@ -7963,12 +8083,19 @@ return /******/ (function(modules) { // webpackBootstrap
 					// Use proper attribute retrieval(#12072)
 					var tabindex = jQuery.find.attr( elem, "tabindex" );
 
-					return tabindex ?
-						parseInt( tabindex, 10 ) :
+					if ( tabindex ) {
+						return parseInt( tabindex, 10 );
+					}
+
+					if (
 						rfocusable.test( elem.nodeName ) ||
-							rclickable.test( elem.nodeName ) && elem.href ?
-								0 :
-								-1;
+						rclickable.test( elem.nodeName ) &&
+						elem.href
+					) {
+						return 0;
+					}
+
+					return -1;
 				}
 			}
 		},
@@ -7985,9 +8112,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	// on the option
 	// The getter ensures a default option is selected
 	// when in an optgroup
+	// eslint rule "no-unused-expressions" is disabled for this code
+	// since it considers such accessions noop
 	if ( !support.optSelected ) {
 		jQuery.propHooks.selected = {
 			get: function( elem ) {
+
+				/* eslint no-unused-expressions: "off" */
+
 				var parent = elem.parentNode;
 				if ( parent && parent.parentNode ) {
 					parent.parentNode.selectedIndex;
@@ -7995,6 +8127,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				return null;
 			},
 			set: function( elem ) {
+
+				/* eslint no-unused-expressions: "off" */
+
 				var parent = elem.parentNode;
 				if ( parent ) {
 					parent.selectedIndex;
@@ -8025,7 +8160,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-	var rclass = /[\t\r\n\f]/g;
+		// Strip and collapse whitespace according to HTML spec
+		// https://html.spec.whatwg.org/multipage/infrastructure.html#strip-and-collapse-whitespace
+		function stripAndCollapse( value ) {
+			var tokens = value.match( rnothtmlwhite ) || [];
+			return tokens.join( " " );
+		}
+
 
 	function getClass( elem ) {
 		return elem.getAttribute && elem.getAttribute( "class" ) || "";
@@ -8043,12 +8184,11 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 
 			if ( typeof value === "string" && value ) {
-				classes = value.match( rnotwhite ) || [];
+				classes = value.match( rnothtmlwhite ) || [];
 
 				while ( ( elem = this[ i++ ] ) ) {
 					curValue = getClass( elem );
-					cur = elem.nodeType === 1 &&
-						( " " + curValue + " " ).replace( rclass, " " );
+					cur = elem.nodeType === 1 && ( " " + stripAndCollapse( curValue ) + " " );
 
 					if ( cur ) {
 						j = 0;
@@ -8059,7 +8199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						}
 
 						// Only assign if different to avoid unneeded rendering.
-						finalValue = jQuery.trim( cur );
+						finalValue = stripAndCollapse( cur );
 						if ( curValue !== finalValue ) {
 							elem.setAttribute( "class", finalValue );
 						}
@@ -8085,14 +8225,13 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 
 			if ( typeof value === "string" && value ) {
-				classes = value.match( rnotwhite ) || [];
+				classes = value.match( rnothtmlwhite ) || [];
 
 				while ( ( elem = this[ i++ ] ) ) {
 					curValue = getClass( elem );
 
 					// This expression is here for better compressibility (see addClass)
-					cur = elem.nodeType === 1 &&
-						( " " + curValue + " " ).replace( rclass, " " );
+					cur = elem.nodeType === 1 && ( " " + stripAndCollapse( curValue ) + " " );
 
 					if ( cur ) {
 						j = 0;
@@ -8105,7 +8244,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						}
 
 						// Only assign if different to avoid unneeded rendering.
-						finalValue = jQuery.trim( cur );
+						finalValue = stripAndCollapse( cur );
 						if ( curValue !== finalValue ) {
 							elem.setAttribute( "class", finalValue );
 						}
@@ -8140,7 +8279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					// Toggle individual class names
 					i = 0;
 					self = jQuery( this );
-					classNames = value.match( rnotwhite ) || [];
+					classNames = value.match( rnothtmlwhite ) || [];
 
 					while ( ( className = classNames[ i++ ] ) ) {
 
@@ -8183,10 +8322,8 @@ return /******/ (function(modules) { // webpackBootstrap
 			className = " " + selector + " ";
 			while ( ( elem = this[ i++ ] ) ) {
 				if ( elem.nodeType === 1 &&
-					( " " + getClass( elem ) + " " ).replace( rclass, " " )
-						.indexOf( className ) > -1
-				) {
-					return true;
+					( " " + stripAndCollapse( getClass( elem ) ) + " " ).indexOf( className ) > -1 ) {
+						return true;
 				}
 			}
 
@@ -8197,8 +8334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-	var rreturn = /\r/g,
-		rspaces = /[\x20\t\r\n\f]+/g;
+	var rreturn = /\r/g;
 
 	jQuery.fn.extend( {
 		val: function( value ) {
@@ -8219,13 +8355,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 					ret = elem.value;
 
-					return typeof ret === "string" ?
+					// Handle most common string cases
+					if ( typeof ret === "string" ) {
+						return ret.replace( rreturn, "" );
+					}
 
-						// Handle most common string cases
-						ret.replace( rreturn, "" ) :
-
-						// Handle cases where value is null/undef or number
-						ret == null ? "" : ret;
+					// Handle cases where value is null/undef or number
+					return ret == null ? "" : ret;
 				}
 
 				return;
@@ -8282,20 +8418,24 @@ return /******/ (function(modules) { // webpackBootstrap
 						// option.text throws exceptions (#14686, #14858)
 						// Strip and collapse whitespace
 						// https://html.spec.whatwg.org/#strip-and-collapse-whitespace
-						jQuery.trim( jQuery.text( elem ) ).replace( rspaces, " " );
+						stripAndCollapse( jQuery.text( elem ) );
 				}
 			},
 			select: {
 				get: function( elem ) {
-					var value, option,
+					var value, option, i,
 						options = elem.options,
 						index = elem.selectedIndex,
 						one = elem.type === "select-one",
 						values = one ? null : [],
-						max = one ? index + 1 : options.length,
-						i = index < 0 ?
-							max :
-							one ? index : 0;
+						max = one ? index + 1 : options.length;
+
+					if ( index < 0 ) {
+						i = max;
+
+					} else {
+						i = one ? index : 0;
+					}
 
 					// Loop through all the selected options
 					for ( ; i < max; i++ ) {
@@ -8749,13 +8889,17 @@ return /******/ (function(modules) { // webpackBootstrap
 			.map( function( i, elem ) {
 				var val = jQuery( this ).val();
 
-				return val == null ?
-					null :
-					jQuery.isArray( val ) ?
-						jQuery.map( val, function( val ) {
-							return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
-						} ) :
-						{ name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
+				if ( val == null ) {
+					return null;
+				}
+
+				if ( jQuery.isArray( val ) ) {
+					return jQuery.map( val, function( val ) {
+						return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
+					} );
+				}
+
+				return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
 			} ).get();
 		}
 	} );
@@ -8764,7 +8908,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var
 		r20 = /%20/g,
 		rhash = /#.*$/,
-		rts = /([?&])_=[^&]*/,
+		rantiCache = /([?&])_=[^&]*/,
 		rheaders = /^(.*?):[ \t]*([^\r\n]*)$/mg,
 
 		// #7653, #8125, #8152: local protocol detection
@@ -8810,7 +8954,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			var dataType,
 				i = 0,
-				dataTypes = dataTypeExpression.toLowerCase().match( rnotwhite ) || [];
+				dataTypes = dataTypeExpression.toLowerCase().match( rnothtmlwhite ) || [];
 
 			if ( jQuery.isFunction( func ) ) {
 
@@ -9278,7 +9422,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			s.type = options.method || options.type || s.method || s.type;
 
 			// Extract dataTypes list
-			s.dataTypes = ( s.dataType || "*" ).toLowerCase().match( rnotwhite ) || [ "" ];
+			s.dataTypes = ( s.dataType || "*" ).toLowerCase().match( rnothtmlwhite ) || [ "" ];
 
 			// A cross-domain request is in order when the origin doesn't match the current origin.
 			if ( s.crossDomain == null ) {
@@ -9350,9 +9494,9 @@ return /******/ (function(modules) { // webpackBootstrap
 					delete s.data;
 				}
 
-				// Add anti-cache in uncached url if needed
+				// Add or update anti-cache param if needed
 				if ( s.cache === false ) {
-					cacheURL = cacheURL.replace( rts, "" );
+					cacheURL = cacheURL.replace( rantiCache, "$1" );
 					uncached = ( rquery.test( cacheURL ) ? "&" : "?" ) + "_=" + ( nonce++ ) + uncached;
 				}
 
@@ -10091,7 +10235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			off = url.indexOf( " " );
 
 		if ( off > -1 ) {
-			selector = jQuery.trim( url.slice( off ) );
+			selector = stripAndCollapse( url.slice( off ) );
 			url = url.slice( 0, off );
 		}
 
@@ -10483,7 +10627,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-
 	var
 
 		// Map over jQuery in case of overwrite
@@ -10510,6 +10653,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	if ( !noGlobal ) {
 		window.jQuery = window.$ = jQuery;
 	}
+
+
+
 
 
 	return jQuery;
@@ -10980,11 +11126,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.6.2, @license MIT */
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.6.4, @license MIT */
 
 	;(function(window, undefined) {
 	  'use strict';
-	var riot = { version: 'v2.6.2', settings: {} },
+	var riot = { version: 'v2.6.4', settings: {} },
 	  // be aware, internal usage
 	  // ATTENTION: prefix the global dynamic variables with `__`
 
@@ -11515,7 +11661,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * The riot template engine
-	 * @version v2.4.1
+	 * @version v2.4.2
 	 */
 	/**
 	 * riot.util.brackets
@@ -11772,7 +11918,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  var
-	    CH_IDEXPR = '\u2057',
+	    CH_IDEXPR = String.fromCharCode(0x2057),
 	    RE_CSNAME = /^(?:(-?[_A-Za-z\xA0-\xFF][-\w\xA0-\xFF]*)|\u2057(\d+)~):/,
 	    RE_QBLOCK = RegExp(brackets.S_QBLOCKS, 'g'),
 	    RE_DQUOTE = /\u2057/g,
@@ -11888,7 +12034,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // istanbul ignore next: not both
 	  var // eslint-disable-next-line max-len
 	    JS_CONTEXT = '"in this?this:' + (typeof window !== 'object' ? 'global' : 'window') + ').',
-	    JS_VARNAME = /[,{][$\w]+(?=:)|(^ *|[^$\w\.])(?!(?:typeof|true|false|null|undefined|in|instanceof|is(?:Finite|NaN)|void|NaN|new|Date|RegExp|Math)(?![$\w]))([$_A-Za-z][$\w]*)/g,
+	    JS_VARNAME = /[,{][\$\w]+(?=:)|(^ *|[^$\w\.{])(?!(?:typeof|true|false|null|undefined|in|instanceof|is(?:Finite|NaN)|void|NaN|new|Date|RegExp|Math)(?![$\w]))([$_A-Za-z][$\w]*)/g,
 	    JS_NOPROPS = /^(?=(\.[$\w]+))\1(?:[^.[(]|$)/
 
 	  function _wrapExpr (expr, asText, key) {
@@ -11928,7 +12074,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return expr
 	  }
 
-	  _tmpl.version = brackets.version = 'v2.4.1'
+	  _tmpl.version = brackets.version = 'v2.4.2'
 
 	  return _tmpl
 
@@ -13702,7 +13848,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	__webpack_require__(13)
 
-	riot.tag2('test-list', '<span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span> <a onclick="{toRouteHash}">base</a> <recursive-item data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe name="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{WholeStatus.config}"></test-iframe>', 'test-list,[riot-tag="test-list"],[data-is="test-list"]{ display: block; background-color: white; font-size: 14px; } test-list a,[riot-tag="test-list"] a,[data-is="test-list"] a{ color: blue; text-decoration: none; cursor: pointer; display: inline-block; } test-list a:hover,[riot-tag="test-list"] a:hover,[data-is="test-list"] a:hover{ opacity: 0.4; }', '', function(opts) {
+	riot.tag2('test-list', '<test-list-count></test-list-count> <a onclick="{toRouteHash}">base</a> <recursive-item data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe name="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{WholeStatus.config}"></test-iframe>', 'test-list,[riot-tag="test-list"],[data-is="test-list"]{ display: block; background-color: white; font-size: 14px; } test-list a,[riot-tag="test-list"] a,[data-is="test-list"] a{ color: blue; text-decoration: none; cursor: pointer; display: inline-block; } test-list a:hover,[riot-tag="test-list"] a:hover,[data-is="test-list"] a:hover{ opacity: 0.4; }', '', function(opts) {
 	var WholeStatus, bodyStyle;
 
 	this.WholeStatus = WholeStatus = __webpack_require__(11);
@@ -13723,7 +13869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    WholeStatus.sumInit();
 	    executePath = riot.route.query().path;
 	    if (!executePath) {
-	      return;
+	      return _this.update();
 	    }
 	    if (!/%[0-9a-f]{2}/i.test(executePath)) {
 	      executePath = encodeURI(executePath);
@@ -13743,12 +13889,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return riot.route("");
 	  };
 	})(this);
-
-	WholeStatus.on("item-update", (function(_this) {
-	  return function() {
-	    return _this.update();
-	  };
-	})(this));
 
 	this.on("update", (function(_this) {
 	  return function() {
@@ -13785,11 +13925,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(this));
 	});
 
+	riot.tag2('test-list-count', '<span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span>', '', '', function(opts) {
+	this.WholeStatus = __webpack_require__(11);
+
+	this.WholeStatus.on("item-update", (function(_this) {
+	  return function() {
+	    return _this.update();
+	  };
+	})(this));
+	});
+
 	riot.tag2('recursive-item', '<list-line name="lines" each="{key, data in list}" list="{this}" routing="{this.parent.opts.routing}"></list-line>', ':scope { display: block; }', '', function(opts) {
 	this.list = typeof opts.data === "object" ? opts.data : {};
 	});
 
-	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error}"> {success ? ⁗〇⁗ : error ? ⁗×⁗ : ⁗⁗} </span> <a class="tree" href="{routing}" name="treeTask" onclick="{router}">{key}</a> <a class="single" if="{url}" href="{routerExecutionPath}" name="singleTask" onclick="{router}">{url}</a> </div> <recursive-item name="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe name="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{WholeStatus.config}"></test-iframe>', '.bold { font-weight: bold; } .tree { color: #333; } .single { padding-left: 6px; } .line { margin-left: 10px; } .line.hover { background: rgba(0, 0, 255, 0.05); } .success { color: blue; } .error { color: red; } .step { color: #333; margin-right: 10px; }', '', function(opts) {
+	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error, warn: warn}"></span> <a class="tree" href="{routing}" name="treeTask" onclick="{router}">{key}</a> <a class="single" if="{url}" href="{routerExecutionPath}" name="singleTask" onclick="{router}">{url}</a> </div> <recursive-item name="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe name="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{WholeStatus.config}"></test-iframe>', 'list-line .bold,[riot-tag="list-line"] .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[riot-tag="list-line"] .tree,[data-is="list-line"] .tree{color:#333} list-line .single,[riot-tag="list-line"] .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[riot-tag="list-line"] .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[riot-tag="list-line"] .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[riot-tag="list-line"] .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[riot-tag="list-line"] .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .warn,[riot-tag="list-line"] .warn,[data-is="list-line"] .warn{color:gold} list-line .warn:after,[riot-tag="list-line"] .warn:after,[data-is="list-line"] .warn:after{content:"△"} list-line .error,[riot-tag="list-line"] .error,[data-is="list-line"] .error{color:red} list-line .error:after,[riot-tag="list-line"] .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[riot-tag="list-line"] .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
 	var WholeStatus, executeIframe;
 
 	WholeStatus = this.WholeStatus = __webpack_require__(11);
@@ -13825,6 +13975,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	this.init = (function(_this) {
 	  return function() {
 	    _this.error = null;
+	    _this.warn = null;
 	    _this.success = null;
 	    return _this.deleteIframe();
 	  };
@@ -13867,15 +14018,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.update();
 	    console.clear();
 	    ++WholeStatus.executeSum;
-	    WholeStatus.trigger("item-update");
 	    return _this.tags.testFrame.setConsoleEvent({
 	      assert: function(flg, msg) {
+	        if (msg) {
+	          console.assert(flg, msg);
+	        } else {
+	          console.assert(flg);
+	        }
 	        if (!flg) {
-	          if (msg) {
-	            console.error(msg);
-	          }
 	          _this.error = true;
-	          WholeStatus.trigger("item-update");
 	          _this.update();
 	          return callback && callback();
 	        }
@@ -13883,12 +14034,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      info: function(msg) {
 	        if (msg === "finished" && !_this.error) {
 	          console.info(msg);
-	          _this.success = true;
+	          if (!_this.warn) {
+	            _this.success = true;
+	          }
 	          ++WholeStatus.successSum;
-	          WholeStatus.trigger("item-update");
 	          _this.update();
 	          return callback && callback();
 	        }
+	      },
+	      error: function(msg) {
+	        console.warn("error occured: " + msg);
+	        return _this.warn = true;
 	      }
 	    });
 	  };
@@ -13981,6 +14137,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (callbackObj) {
 	        iframeWindow.console.assert = function(flg, msg) {
 	          return callbackObj.assert(flg, msg);
+	        };
+	        iframeWindow.onerror = function(msg) {
+	          return callbackObj.error(msg);
 	        };
 	        iframeWindow.console.info = function(msg) {
 	          return callbackObj.info(msg);
@@ -15312,8 +15471,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	function lookup(uri, opts) {
-	  if (typeof uri == 'object') {
+	function lookup (uri, opts) {
+	  if (typeof uri === 'object') {
 	    opts = uri;
 	    uri = undefined;
 	  }
@@ -15340,10 +15499,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    io = cache[id];
 	  }
-
-	  return io.socket(parsed.path);
+	  if (parsed.query && !opts.query) {
+	    opts.query = parsed.query;
+	  } else if (opts && 'object' === typeof opts.query) {
+	    opts.query = encodeQueryString(opts.query);
+	  }
+	  return io.socket(parsed.path, opts);
 	}
-
+	/**
+	 *  Helper method to parse query objects to string.
+	 * @param {object} query
+	 * @returns {string}
+	 */
+	function encodeQueryString (obj) {
+	  var str = [];
+	  for (var p in obj) {
+	    if (obj.hasOwnProperty(p)) {
+	      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+	    }
+	  }
+	  return str.join('&');
+	}
 	/**
 	 * Protocol version.
 	 *
@@ -15368,7 +15544,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	exports.Manager = __webpack_require__(31);
-	exports.Socket = __webpack_require__(57);
+	exports.Socket = __webpack_require__(58);
 
 
 /***/ },
@@ -15398,17 +15574,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	function url(uri, loc){
+	function url (uri, loc) {
 	  var obj = uri;
 
 	  // default to window.location
-	  var loc = loc || global.location;
+	  loc = loc || global.location;
 	  if (null == uri) uri = loc.protocol + '//' + loc.host;
 
 	  // relative path support
-	  if ('string' == typeof uri) {
-	    if ('/' == uri.charAt(0)) {
-	      if ('/' == uri.charAt(1)) {
+	  if ('string' === typeof uri) {
+	    if ('/' === uri.charAt(0)) {
+	      if ('/' === uri.charAt(1)) {
 	        uri = loc.protocol + uri;
 	      } else {
 	        uri = loc.host + uri;
@@ -15417,7 +15593,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (!/^(https?|wss?):\/\//.test(uri)) {
 	      debug('protocol-less url %s', uri);
-	      if ('undefined' != typeof loc) {
+	      if ('undefined' !== typeof loc) {
 	        uri = loc.protocol + '//' + uri;
 	      } else {
 	        uri = 'https://' + uri;
@@ -15433,8 +15609,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!obj.port) {
 	    if (/^(http|ws)$/.test(obj.protocol)) {
 	      obj.port = '80';
-	    }
-	    else if (/^(http|ws)s$/.test(obj.protocol)) {
+	    } else if (/^(http|ws)s$/.test(obj.protocol)) {
 	      obj.port = '443';
 	    }
 	  }
@@ -15447,7 +15622,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // define unique id
 	  obj.id = obj.protocol + '://' + host + ':' + obj.port;
 	  // define href
-	  obj.href = obj.protocol + '://' + host + (loc && loc.port == obj.port ? '' : (':' + obj.port));
+	  obj.href = obj.protocol + '://' + host + (loc && loc.port === obj.port ? '' : (':' + obj.port));
 
 	  return obj;
 	}
@@ -17695,14 +17870,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var eio = __webpack_require__(32);
-	var Socket = __webpack_require__(57);
-	var Emitter = __webpack_require__(58);
+	var Socket = __webpack_require__(58);
+	var Emitter = __webpack_require__(59);
 	var parser = __webpack_require__(24);
-	var on = __webpack_require__(60);
-	var bind = __webpack_require__(61);
+	var on = __webpack_require__(61);
+	var bind = __webpack_require__(62);
 	var debug = __webpack_require__(21)('socket.io-client:manager');
-	var indexOf = __webpack_require__(55);
-	var Backoff = __webpack_require__(63);
+	var indexOf = __webpack_require__(56);
+	var Backoff = __webpack_require__(64);
 
 	/**
 	 * IE6+ hasOwnProperty
@@ -17724,9 +17899,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	function Manager(uri, opts){
+	function Manager (uri, opts) {
 	  if (!(this instanceof Manager)) return new Manager(uri, opts);
-	  if (uri && ('object' == typeof uri)) {
+	  if (uri && ('object' === typeof uri)) {
 	    opts = uri;
 	    uri = undefined;
 	  }
@@ -17765,7 +17940,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.emitAll = function() {
+	Manager.prototype.emitAll = function () {
 	  this.emit.apply(this, arguments);
 	  for (var nsp in this.nsps) {
 	    if (has.call(this.nsps, nsp)) {
@@ -17780,7 +17955,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.updateSocketIds = function(){
+	Manager.prototype.updateSocketIds = function () {
 	  for (var nsp in this.nsps) {
 	    if (has.call(this.nsps, nsp)) {
 	      this.nsps[nsp].id = this.engine.id;
@@ -17802,7 +17977,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Manager.prototype.reconnection = function(v){
+	Manager.prototype.reconnection = function (v) {
 	  if (!arguments.length) return this._reconnection;
 	  this._reconnection = !!v;
 	  return this;
@@ -17816,7 +17991,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Manager.prototype.reconnectionAttempts = function(v){
+	Manager.prototype.reconnectionAttempts = function (v) {
 	  if (!arguments.length) return this._reconnectionAttempts;
 	  this._reconnectionAttempts = v;
 	  return this;
@@ -17830,14 +18005,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Manager.prototype.reconnectionDelay = function(v){
+	Manager.prototype.reconnectionDelay = function (v) {
 	  if (!arguments.length) return this._reconnectionDelay;
 	  this._reconnectionDelay = v;
 	  this.backoff && this.backoff.setMin(v);
 	  return this;
 	};
 
-	Manager.prototype.randomizationFactor = function(v){
+	Manager.prototype.randomizationFactor = function (v) {
 	  if (!arguments.length) return this._randomizationFactor;
 	  this._randomizationFactor = v;
 	  this.backoff && this.backoff.setJitter(v);
@@ -17852,7 +18027,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Manager.prototype.reconnectionDelayMax = function(v){
+	Manager.prototype.reconnectionDelayMax = function (v) {
 	  if (!arguments.length) return this._reconnectionDelayMax;
 	  this._reconnectionDelayMax = v;
 	  this.backoff && this.backoff.setMax(v);
@@ -17866,7 +18041,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Manager.prototype.timeout = function(v){
+	Manager.prototype.timeout = function (v) {
 	  if (!arguments.length) return this._timeout;
 	  this._timeout = v;
 	  return this;
@@ -17879,14 +18054,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.maybeReconnectOnOpen = function() {
+	Manager.prototype.maybeReconnectOnOpen = function () {
 	  // Only try to reconnect if it's the first time we're connecting
 	  if (!this.reconnecting && this._reconnection && this.backoff.attempts === 0) {
 	    // keeps reconnection from firing twice for the same reconnection loop
 	    this.reconnect();
 	  }
 	};
-
 
 	/**
 	 * Sets the current transport `socket`.
@@ -17897,7 +18071,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Manager.prototype.open =
-	Manager.prototype.connect = function(fn){
+	Manager.prototype.connect = function (fn, opts) {
 	  debug('readyState %s', this.readyState);
 	  if (~this.readyState.indexOf('open')) return this;
 
@@ -17909,13 +18083,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.skipReconnect = false;
 
 	  // emit `open`
-	  var openSub = on(socket, 'open', function() {
+	  var openSub = on(socket, 'open', function () {
 	    self.onopen();
 	    fn && fn();
 	  });
 
 	  // emit `connect_error`
-	  var errorSub = on(socket, 'error', function(data){
+	  var errorSub = on(socket, 'error', function (data) {
 	    debug('connect_error');
 	    self.cleanup();
 	    self.readyState = 'closed';
@@ -17936,7 +18110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    debug('connect attempt will timeout after %d', timeout);
 
 	    // set timer
-	    var timer = setTimeout(function(){
+	    var timer = setTimeout(function () {
 	      debug('connect attempt timed out after %d', timeout);
 	      openSub.destroy();
 	      socket.close();
@@ -17945,7 +18119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, timeout);
 
 	    this.subs.push({
-	      destroy: function(){
+	      destroy: function () {
 	        clearTimeout(timer);
 	      }
 	    });
@@ -17963,7 +18137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.onopen = function(){
+	Manager.prototype.onopen = function () {
 	  debug('open');
 
 	  // clear old subs
@@ -17989,8 +18163,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.onping = function(){
-	  this.lastPing = new Date;
+	Manager.prototype.onping = function () {
+	  this.lastPing = new Date();
 	  this.emitAll('ping');
 	};
 
@@ -18000,8 +18174,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.onpong = function(){
-	  this.emitAll('pong', new Date - this.lastPing);
+	Manager.prototype.onpong = function () {
+	  this.emitAll('pong', new Date() - this.lastPing);
 	};
 
 	/**
@@ -18010,7 +18184,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.ondata = function(data){
+	Manager.prototype.ondata = function (data) {
 	  this.decoder.add(data);
 	};
 
@@ -18020,7 +18194,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.ondecoded = function(packet) {
+	Manager.prototype.ondecoded = function (packet) {
 	  this.emit('packet', packet);
 	};
 
@@ -18030,7 +18204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.onerror = function(err){
+	Manager.prototype.onerror = function (err) {
 	  debug('error', err);
 	  this.emitAll('error', err);
 	};
@@ -18042,14 +18216,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Manager.prototype.socket = function(nsp){
+	Manager.prototype.socket = function (nsp, opts) {
 	  var socket = this.nsps[nsp];
 	  if (!socket) {
-	    socket = new Socket(this, nsp);
+	    socket = new Socket(this, nsp, opts);
 	    this.nsps[nsp] = socket;
 	    var self = this;
 	    socket.on('connecting', onConnecting);
-	    socket.on('connect', function(){
+	    socket.on('connect', function () {
 	      socket.id = self.engine.id;
 	    });
 
@@ -18059,7 +18233,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 
-	  function onConnecting() {
+	  function onConnecting () {
 	    if (!~indexOf(self.connecting, socket)) {
 	      self.connecting.push(socket);
 	    }
@@ -18074,7 +18248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Socket} socket
 	 */
 
-	Manager.prototype.destroy = function(socket){
+	Manager.prototype.destroy = function (socket) {
 	  var index = indexOf(this.connecting, socket);
 	  if (~index) this.connecting.splice(index, 1);
 	  if (this.connecting.length) return;
@@ -18089,14 +18263,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.packet = function(packet){
+	Manager.prototype.packet = function (packet) {
 	  debug('writing packet %j', packet);
 	  var self = this;
+	  if (packet.query && packet.type === 0) packet.nsp += '?' + packet.query;
 
 	  if (!self.encoding) {
 	    // encode, then write to engine with result
 	    self.encoding = true;
-	    this.encoder.encode(packet, function(encodedPackets) {
+	    this.encoder.encode(packet, function (encodedPackets) {
 	      for (var i = 0; i < encodedPackets.length; i++) {
 	        self.engine.write(encodedPackets[i], packet.options);
 	      }
@@ -18115,7 +18290,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.processPacketQueue = function() {
+	Manager.prototype.processPacketQueue = function () {
 	  if (this.packetBuffer.length > 0 && !this.encoding) {
 	    var pack = this.packetBuffer.shift();
 	    this.packet(pack);
@@ -18128,11 +18303,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.cleanup = function(){
+	Manager.prototype.cleanup = function () {
 	  debug('cleanup');
 
-	  var sub;
-	  while (sub = this.subs.shift()) sub.destroy();
+	  var subsLength = this.subs.length;
+	  for (var i = 0; i < subsLength; i++) {
+	    var sub = this.subs.shift();
+	    sub.destroy();
+	  }
 
 	  this.packetBuffer = [];
 	  this.encoding = false;
@@ -18148,11 +18326,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Manager.prototype.close =
-	Manager.prototype.disconnect = function(){
+	Manager.prototype.disconnect = function () {
 	  debug('disconnect');
 	  this.skipReconnect = true;
 	  this.reconnecting = false;
-	  if ('opening' == this.readyState) {
+	  if ('opening' === this.readyState) {
 	    // `onclose` will not fire because
 	    // an open event never happened
 	    this.cleanup();
@@ -18168,7 +18346,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.onclose = function(reason){
+	Manager.prototype.onclose = function (reason) {
 	  debug('onclose');
 
 	  this.cleanup();
@@ -18187,7 +18365,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.reconnect = function(){
+	Manager.prototype.reconnect = function () {
 	  if (this.reconnecting || this.skipReconnect) return this;
 
 	  var self = this;
@@ -18202,7 +18380,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    debug('will wait %dms before reconnect attempt', delay);
 
 	    this.reconnecting = true;
-	    var timer = setTimeout(function(){
+	    var timer = setTimeout(function () {
 	      if (self.skipReconnect) return;
 
 	      debug('attempting reconnect');
@@ -18212,7 +18390,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // check again for the case socket closed in above events
 	      if (self.skipReconnect) return;
 
-	      self.open(function(err){
+	      self.open(function (err) {
 	        if (err) {
 	          debug('reconnect attempt error');
 	          self.reconnecting = false;
@@ -18226,7 +18404,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, delay);
 
 	    this.subs.push({
-	      destroy: function(){
+	      destroy: function () {
 	        clearTimeout(timer);
 	      }
 	    });
@@ -18239,7 +18417,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Manager.prototype.onreconnect = function(){
+	Manager.prototype.onreconnect = function () {
 	  var attempt = this.backoff.attempts;
 	  this.reconnecting = false;
 	  this.backoff.reset();
@@ -18253,7 +18431,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports =  __webpack_require__(33);
+	module.exports = __webpack_require__(33);
 
 
 /***/ },
@@ -18281,27 +18459,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var transports = __webpack_require__(35);
-	var Emitter = __webpack_require__(28);
+	var Emitter = __webpack_require__(49);
 	var debug = __webpack_require__(21)('engine.io-client:socket');
-	var index = __webpack_require__(55);
+	var index = __webpack_require__(56);
 	var parser = __webpack_require__(41);
 	var parseuri = __webpack_require__(20);
-	var parsejson = __webpack_require__(56);
-	var parseqs = __webpack_require__(49);
+	var parsejson = __webpack_require__(57);
+	var parseqs = __webpack_require__(50);
 
 	/**
 	 * Module exports.
 	 */
 
 	module.exports = Socket;
-
-	/**
-	 * Noop function.
-	 *
-	 * @api private
-	 */
-
-	function noop(){}
 
 	/**
 	 * Socket constructor.
@@ -18311,12 +18481,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	function Socket(uri, opts){
+	function Socket (uri, opts) {
 	  if (!(this instanceof Socket)) return new Socket(uri, opts);
 
 	  opts = opts || {};
 
-	  if (uri && 'object' == typeof uri) {
+	  if (uri && 'object' === typeof uri) {
 	    opts = uri;
 	    uri = null;
 	  }
@@ -18324,15 +18494,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (uri) {
 	    uri = parseuri(uri);
 	    opts.hostname = uri.host;
-	    opts.secure = uri.protocol == 'https' || uri.protocol == 'wss';
+	    opts.secure = uri.protocol === 'https' || uri.protocol === 'wss';
 	    opts.port = uri.port;
 	    if (uri.query) opts.query = uri.query;
 	  } else if (opts.host) {
 	    opts.hostname = parseuri(opts.host).host;
 	  }
 
-	  this.secure = null != opts.secure ? opts.secure :
-	    (global.location && 'https:' == location.protocol);
+	  this.secure = null != opts.secure ? opts.secure
+	    : (global.location && 'https:' === location.protocol);
 
 	  if (opts.hostname && !opts.port) {
 	    // if no port is specified manually, use the protocol default
@@ -18342,11 +18512,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.agent = opts.agent || false;
 	  this.hostname = opts.hostname ||
 	    (global.location ? location.hostname : 'localhost');
-	  this.port = opts.port || (global.location && location.port ?
-	       location.port :
-	       (this.secure ? 443 : 80));
+	  this.port = opts.port || (global.location && location.port
+	      ? location.port
+	      : (this.secure ? 443 : 80));
 	  this.query = opts.query || {};
-	  if ('string' == typeof this.query) this.query = parseqs.decode(this.query);
+	  if ('string' === typeof this.query) this.query = parseqs.decode(this.query);
 	  this.upgrade = false !== opts.upgrade;
 	  this.path = (opts.path || '/engine.io').replace(/\/$/, '') + '/';
 	  this.forceJSONP = !!opts.forceJSONP;
@@ -18376,10 +18546,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.cert = opts.cert || null;
 	  this.ca = opts.ca || null;
 	  this.ciphers = opts.ciphers || null;
-	  this.rejectUnauthorized = opts.rejectUnauthorized === undefined ? true : opts.rejectUnauthorized;
+	  this.rejectUnauthorized = opts.rejectUnauthorized === undefined ? null : opts.rejectUnauthorized;
 
 	  // other options for Node.js client
-	  var freeGlobal = typeof global == 'object' && global;
+	  var freeGlobal = typeof global === 'object' && global;
 	  if (freeGlobal.global === freeGlobal) {
 	    if (opts.extraHeaders && Object.keys(opts.extraHeaders).length > 0) {
 	      this.extraHeaders = opts.extraHeaders;
@@ -18482,12 +18652,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	Socket.prototype.open = function () {
 	  var transport;
-	  if (this.rememberUpgrade && Socket.priorWebsocketSuccess && this.transports.indexOf('websocket') != -1) {
+	  if (this.rememberUpgrade && Socket.priorWebsocketSuccess && this.transports.indexOf('websocket') !== -1) {
 	    transport = 'websocket';
 	  } else if (0 === this.transports.length) {
 	    // Emit error on next tick so it can be listened to
 	    var self = this;
-	    setTimeout(function() {
+	    setTimeout(function () {
 	      self.emit('error', 'No transports available');
 	    }, 0);
 	    return;
@@ -18515,7 +18685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.setTransport = function(transport){
+	Socket.prototype.setTransport = function (transport) {
 	  debug('setting transport %s', transport.name);
 	  var self = this;
 
@@ -18529,16 +18699,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // set up transport listeners
 	  transport
-	  .on('drain', function(){
+	  .on('drain', function () {
 	    self.onDrain();
 	  })
-	  .on('packet', function(packet){
+	  .on('packet', function (packet) {
 	    self.onPacket(packet);
 	  })
-	  .on('error', function(e){
+	  .on('error', function (e) {
 	    self.onError(e);
 	  })
-	  .on('close', function(){
+	  .on('close', function () {
 	    self.onClose('transport close');
 	  });
 	};
@@ -18552,13 +18722,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Socket.prototype.probe = function (name) {
 	  debug('probing transport "%s"', name);
-	  var transport = this.createTransport(name, { probe: 1 })
-	    , failed = false
-	    , self = this;
+	  var transport = this.createTransport(name, { probe: 1 });
+	  var failed = false;
+	  var self = this;
 
 	  Socket.priorWebsocketSuccess = false;
 
-	  function onTransportOpen(){
+	  function onTransportOpen () {
 	    if (self.onlyBinaryUpgrades) {
 	      var upgradeLosesBinary = !this.supportsBinary && self.transport.supportsBinary;
 	      failed = failed || upgradeLosesBinary;
@@ -18569,17 +18739,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    transport.send([{ type: 'ping', data: 'probe' }]);
 	    transport.once('packet', function (msg) {
 	      if (failed) return;
-	      if ('pong' == msg.type && 'probe' == msg.data) {
+	      if ('pong' === msg.type && 'probe' === msg.data) {
 	        debug('probe transport "%s" pong', name);
 	        self.upgrading = true;
 	        self.emit('upgrading', transport);
 	        if (!transport) return;
-	        Socket.priorWebsocketSuccess = 'websocket' == transport.name;
+	        Socket.priorWebsocketSuccess = 'websocket' === transport.name;
 
 	        debug('pausing current transport "%s"', self.transport.name);
 	        self.transport.pause(function () {
 	          if (failed) return;
-	          if ('closed' == self.readyState) return;
+	          if ('closed' === self.readyState) return;
 	          debug('changing transport and sending upgrade packet');
 
 	          cleanup();
@@ -18600,7 +18770,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	  }
 
-	  function freezeTransport() {
+	  function freezeTransport () {
 	    if (failed) return;
 
 	    // Any callback called by transport should be ignored since now
@@ -18612,8 +18782,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    transport = null;
 	  }
 
-	  //Handle any error that happens while probing
-	  function onerror(err) {
+	  // Handle any error that happens while probing
+	  function onerror (err) {
 	    var error = new Error('probe error: ' + err);
 	    error.transport = transport.name;
 
@@ -18624,25 +18794,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    self.emit('upgradeError', error);
 	  }
 
-	  function onTransportClose(){
-	    onerror("transport closed");
+	  function onTransportClose () {
+	    onerror('transport closed');
 	  }
 
-	  //When the socket is closed while we're probing
-	  function onclose(){
-	    onerror("socket closed");
+	  // When the socket is closed while we're probing
+	  function onclose () {
+	    onerror('socket closed');
 	  }
 
-	  //When the socket is upgraded while we're probing
-	  function onupgrade(to){
-	    if (transport && to.name != transport.name) {
+	  // When the socket is upgraded while we're probing
+	  function onupgrade (to) {
+	    if (transport && to.name !== transport.name) {
 	      debug('"%s" works - aborting "%s"', to.name, transport.name);
 	      freezeTransport();
 	    }
 	  }
 
-	  //Remove all listeners on the transport and on self
-	  function cleanup(){
+	  // Remove all listeners on the transport and on self
+	  function cleanup () {
 	    transport.removeListener('open', onTransportOpen);
 	    transport.removeListener('error', onerror);
 	    transport.removeListener('close', onTransportClose);
@@ -18658,7 +18828,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.once('upgrading', onupgrade);
 
 	  transport.open();
-
 	};
 
 	/**
@@ -18670,13 +18839,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	Socket.prototype.onOpen = function () {
 	  debug('socket open');
 	  this.readyState = 'open';
-	  Socket.priorWebsocketSuccess = 'websocket' == this.transport.name;
+	  Socket.priorWebsocketSuccess = 'websocket' === this.transport.name;
 	  this.emit('open');
 	  this.flush();
 
 	  // we check for `readyState` in case an `open`
 	  // listener already closed the socket
-	  if ('open' == this.readyState && this.upgrade && this.transport.pause) {
+	  if ('open' === this.readyState && this.upgrade && this.transport.pause) {
 	    debug('starting upgrade probes');
 	    for (var i = 0, l = this.upgrades.length; i < l; i++) {
 	      this.probe(this.upgrades[i]);
@@ -18691,7 +18860,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Socket.prototype.onPacket = function (packet) {
-	  if ('opening' == this.readyState || 'open' == this.readyState) {
+	  if ('opening' === this.readyState || 'open' === this.readyState) {
 	    debug('socket receive: type "%s", data "%s"', packet.type, packet.data);
 
 	    this.emit('packet', packet);
@@ -18741,7 +18910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.pingTimeout = data.pingTimeout;
 	  this.onOpen();
 	  // In case open handler closes socket
-	  if  ('closed' == this.readyState) return;
+	  if ('closed' === this.readyState) return;
 	  this.setPing();
 
 	  // Prolong liveness of socket on heartbeat
@@ -18759,7 +18928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  clearTimeout(this.pingTimeoutTimer);
 	  var self = this;
 	  self.pingTimeoutTimer = setTimeout(function () {
-	    if ('closed' == self.readyState) return;
+	    if ('closed' === self.readyState) return;
 	    self.onClose('ping timeout');
 	  }, timeout || (self.pingInterval + self.pingTimeout));
 	};
@@ -18789,7 +18958,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Socket.prototype.ping = function () {
 	  var self = this;
-	  this.sendPacket('ping', function(){
+	  this.sendPacket('ping', function () {
 	    self.emit('ping');
 	  });
 	};
@@ -18800,7 +18969,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.onDrain = function() {
+	Socket.prototype.onDrain = function () {
 	  this.writeBuffer.splice(0, this.prevBufferLen);
 
 	  // setting prevBufferLen = 0 is very important
@@ -18822,7 +18991,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Socket.prototype.flush = function () {
-	  if ('closed' != this.readyState && this.transport.writable &&
+	  if ('closed' !== this.readyState && this.transport.writable &&
 	    !this.upgrading && this.writeBuffer.length) {
 	    debug('flushing %d packets in socket', this.writeBuffer.length);
 	    this.transport.send(this.writeBuffer);
@@ -18860,17 +19029,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Socket.prototype.sendPacket = function (type, data, options, fn) {
-	  if('function' == typeof data) {
+	  if ('function' === typeof data) {
 	    fn = data;
 	    data = undefined;
 	  }
 
-	  if ('function' == typeof options) {
+	  if ('function' === typeof options) {
 	    fn = options;
 	    options = null;
 	  }
 
-	  if ('closing' == this.readyState || 'closed' == this.readyState) {
+	  if ('closing' === this.readyState || 'closed' === this.readyState) {
 	    return;
 	  }
 
@@ -18895,13 +19064,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Socket.prototype.close = function () {
-	  if ('opening' == this.readyState || 'open' == this.readyState) {
+	  if ('opening' === this.readyState || 'open' === this.readyState) {
 	    this.readyState = 'closing';
 
 	    var self = this;
 
 	    if (this.writeBuffer.length) {
-	      this.once('drain', function() {
+	      this.once('drain', function () {
 	        if (this.upgrading) {
 	          waitForUpgrade();
 	        } else {
@@ -18915,19 +19084,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 
-	  function close() {
+	  function close () {
 	    self.onClose('forced close');
 	    debug('socket closing - telling transport to close');
 	    self.transport.close();
 	  }
 
-	  function cleanupAndClose() {
+	  function cleanupAndClose () {
 	    self.removeListener('upgrade', cleanupAndClose);
 	    self.removeListener('upgradeError', cleanupAndClose);
 	    close();
 	  }
 
-	  function waitForUpgrade() {
+	  function waitForUpgrade () {
 	    // wait for upgrade to finish since we can't send packets while pausing a transport
 	    self.once('upgrade', cleanupAndClose);
 	    self.once('upgradeError', cleanupAndClose);
@@ -18956,7 +19125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Socket.prototype.onClose = function (reason, desc) {
-	  if ('opening' == this.readyState || 'open' == this.readyState || 'closing' == this.readyState) {
+	  if ('opening' === this.readyState || 'open' === this.readyState || 'closing' === this.readyState) {
 	    debug('socket close with reason: "%s"', reason);
 	    var self = this;
 
@@ -18999,7 +19168,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Socket.prototype.filterUpgrades = function (upgrades) {
 	  var filteredUpgrades = [];
-	  for (var i = 0, j = upgrades.length; i<j; i++) {
+	  for (var i = 0, j = upgrades.length; i < j; i++) {
 	    if (~index(this.transports, upgrades[i])) filteredUpgrades.push(upgrades[i]);
 	  }
 	  return filteredUpgrades;
@@ -19017,8 +19186,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var XMLHttpRequest = __webpack_require__(36);
 	var XHR = __webpack_require__(38);
-	var JSONP = __webpack_require__(52);
-	var websocket = __webpack_require__(53);
+	var JSONP = __webpack_require__(53);
+	var websocket = __webpack_require__(54);
 
 	/**
 	 * Export transports.
@@ -19034,14 +19203,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	function polling(opts){
+	function polling (opts) {
 	  var xhr;
 	  var xd = false;
 	  var xs = false;
 	  var jsonp = false !== opts.jsonp;
 
 	  if (global.location) {
-	    var isSSL = 'https:' == location.protocol;
+	    var isSSL = 'https:' === location.protocol;
 	    var port = location.port;
 
 	    // some user agents have empty `location.port`
@@ -19049,8 +19218,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      port = isSSL ? 443 : 80;
 	    }
 
-	    xd = opts.hostname != location.hostname || port != opts.port;
-	    xs = opts.secure != isSSL;
+	    xd = opts.hostname !== location.hostname || port !== opts.port;
+	    xs = opts.secure !== isSSL;
 	  }
 
 	  opts.xdomain = xd;
@@ -19072,9 +19241,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	// browser shim for xmlhttprequest module
+
+	// Indicate to eslint that ActiveXObject is global
+	/* global ActiveXObject */
+
 	var hasCORS = __webpack_require__(37);
 
-	module.exports = function(opts) {
+	module.exports = function (opts) {
 	  var xdomain = opts.xdomain;
 
 	  // scheme must be same when usign XDomainRequest
@@ -19087,7 +19260,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // XMLHttpRequest can be disabled on IE
 	  try {
-	    if ('undefined' != typeof XMLHttpRequest && (!xdomain || hasCORS)) {
+	    if ('undefined' !== typeof XMLHttpRequest && (!xdomain || hasCORS)) {
 	      return new XMLHttpRequest();
 	    }
 	  } catch (e) { }
@@ -19096,7 +19269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // because loading bar keeps flashing when using jsonp-polling
 	  // https://github.com/yujiosaka/socke.io-ie8-loading-example
 	  try {
-	    if ('undefined' != typeof XDomainRequest && !xscheme && enablesXDR) {
+	    if ('undefined' !== typeof XDomainRequest && !xscheme && enablesXDR) {
 	      return new XDomainRequest();
 	    }
 	  } catch (e) { }
@@ -19104,9 +19277,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!xdomain) {
 	    try {
 	      return new ActiveXObject('Microsoft.XMLHTTP');
-	    } catch(e) { }
+	    } catch (e) { }
 	  }
-	}
+	};
 
 
 /***/ },
@@ -19142,8 +19315,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var XMLHttpRequest = __webpack_require__(36);
 	var Polling = __webpack_require__(39);
-	var Emitter = __webpack_require__(28);
-	var inherit = __webpack_require__(50);
+	var Emitter = __webpack_require__(49);
+	var inherit = __webpack_require__(51);
 	var debug = __webpack_require__(21)('engine.io-client:polling-xhr');
 
 	/**
@@ -19157,7 +19330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Empty function
 	 */
 
-	function empty(){}
+	function empty () {}
 
 	/**
 	 * XHR Polling constructor.
@@ -19166,11 +19339,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	function XHR(opts){
+	function XHR (opts) {
 	  Polling.call(this, opts);
 
 	  if (global.location) {
-	    var isSSL = 'https:' == location.protocol;
+	    var isSSL = 'https:' === location.protocol;
 	    var port = location.port;
 
 	    // some user agents have empty `location.port`
@@ -19178,9 +19351,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      port = isSSL ? 443 : 80;
 	    }
 
-	    this.xd = opts.hostname != global.location.hostname ||
-	      port != opts.port;
-	    this.xs = opts.secure != isSSL;
+	    this.xd = opts.hostname !== global.location.hostname ||
+	      port !== opts.port;
+	    this.xs = opts.secure !== isSSL;
 	  } else {
 	    this.extraHeaders = opts.extraHeaders;
 	  }
@@ -19205,7 +19378,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	XHR.prototype.request = function(opts){
+	XHR.prototype.request = function (opts) {
 	  opts = opts || {};
 	  opts.uri = this.uri();
 	  opts.xd = this.xd;
@@ -19237,12 +19410,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	XHR.prototype.doWrite = function(data, fn){
+	XHR.prototype.doWrite = function (data, fn) {
 	  var isBinary = typeof data !== 'string' && data !== undefined;
 	  var req = this.request({ method: 'POST', data: data, isBinary: isBinary });
 	  var self = this;
 	  req.on('success', fn);
-	  req.on('error', function(err){
+	  req.on('error', function (err) {
 	    self.onError('xhr post error', err);
 	  });
 	  this.sendXhr = req;
@@ -19254,14 +19427,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	XHR.prototype.doPoll = function(){
+	XHR.prototype.doPoll = function () {
 	  debug('xhr poll');
 	  var req = this.request();
 	  var self = this;
-	  req.on('data', function(data){
+	  req.on('data', function (data) {
 	    self.onData(data);
 	  });
-	  req.on('error', function(err){
+	  req.on('error', function (err) {
 	    self.onError('xhr poll error', err);
 	  });
 	  this.pollXhr = req;
@@ -19274,13 +19447,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	function Request(opts){
+	function Request (opts) {
 	  this.method = opts.method || 'GET';
 	  this.uri = opts.uri;
 	  this.xd = !!opts.xd;
 	  this.xs = !!opts.xs;
 	  this.async = false !== opts.async;
-	  this.data = undefined != opts.data ? opts.data : null;
+	  this.data = undefined !== opts.data ? opts.data : null;
 	  this.agent = opts.agent;
 	  this.isBinary = opts.isBinary;
 	  this.supportsBinary = opts.supportsBinary;
@@ -19313,7 +19486,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Request.prototype.create = function(){
+	Request.prototype.create = function () {
 	  var opts = { agent: this.agent, xdomain: this.xd, xscheme: this.xs, enablesXDR: this.enablesXDR };
 
 	  // SSL options for Node.js client
@@ -19347,7 +19520,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      xhr.responseType = 'arraybuffer';
 	    }
 
-	    if ('POST' == this.method) {
+	    if ('POST' === this.method) {
 	      try {
 	        if (this.isBinary) {
 	          xhr.setRequestHeader('Content-type', 'application/octet-stream');
@@ -19363,21 +19536,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    if (this.hasXDR()) {
-	      xhr.onload = function(){
+	      xhr.onload = function () {
 	        self.onLoad();
 	      };
-	      xhr.onerror = function(){
+	      xhr.onerror = function () {
 	        self.onError(xhr.responseText);
 	      };
 	    } else {
-	      xhr.onreadystatechange = function(){
-	        if (4 != xhr.readyState) return;
-	        if (200 == xhr.status || 1223 == xhr.status) {
+	      xhr.onreadystatechange = function () {
+	        if (4 !== xhr.readyState) return;
+	        if (200 === xhr.status || 1223 === xhr.status) {
 	          self.onLoad();
 	        } else {
 	          // make sure the `error` event handler that's user-set
 	          // does not throw in the same tick and gets caught here
-	          setTimeout(function(){
+	          setTimeout(function () {
 	            self.onError(xhr.status);
 	          }, 0);
 	        }
@@ -19390,7 +19563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Need to defer since .create() is called directly fhrom the constructor
 	    // and thus the 'error' event can only be only bound *after* this exception
 	    // occurs.  Therefore, also, we cannot throw here at all.
-	    setTimeout(function() {
+	    setTimeout(function () {
 	      self.onError(e);
 	    }, 0);
 	    return;
@@ -19408,7 +19581,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Request.prototype.onSuccess = function(){
+	Request.prototype.onSuccess = function () {
 	  this.emit('success');
 	  this.cleanup();
 	};
@@ -19419,7 +19592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Request.prototype.onData = function(data){
+	Request.prototype.onData = function (data) {
 	  this.emit('data', data);
 	  this.onSuccess();
 	};
@@ -19430,7 +19603,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Request.prototype.onError = function(err){
+	Request.prototype.onError = function (err) {
 	  this.emit('error', err);
 	  this.cleanup(true);
 	};
@@ -19441,8 +19614,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Request.prototype.cleanup = function(fromError){
-	  if ('undefined' == typeof this.xhr || null === this.xhr) {
+	Request.prototype.cleanup = function (fromError) {
+	  if ('undefined' === typeof this.xhr || null === this.xhr) {
 	    return;
 	  }
 	  // xmlhttprequest
@@ -19455,7 +19628,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (fromError) {
 	    try {
 	      this.xhr.abort();
-	    } catch(e) {}
+	    } catch (e) {}
 	  }
 
 	  if (global.document) {
@@ -19471,7 +19644,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Request.prototype.onLoad = function(){
+	Request.prototype.onLoad = function () {
 	  var data;
 	  try {
 	    var contentType;
@@ -19479,7 +19652,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      contentType = this.xhr.getResponseHeader('Content-Type').split(';')[0];
 	    } catch (e) {}
 	    if (contentType === 'application/octet-stream') {
-	      data = this.xhr.response;
+	      data = this.xhr.response || this.xhr.responseText;
 	    } else {
 	      if (!this.supportsBinary) {
 	        data = this.xhr.responseText;
@@ -19511,7 +19684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Request.prototype.hasXDR = function(){
+	Request.prototype.hasXDR = function () {
 	  return 'undefined' !== typeof global.XDomainRequest && !this.xs && this.enablesXDR;
 	};
 
@@ -19521,7 +19694,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Request.prototype.abort = function(){
+	Request.prototype.abort = function () {
 	  this.cleanup();
 	};
 
@@ -19541,7 +19714,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-	function unloadHandler() {
+	function unloadHandler () {
 	  for (var i in Request.requests) {
 	    if (Request.requests.hasOwnProperty(i)) {
 	      Request.requests[i].abort();
@@ -19560,10 +19733,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var Transport = __webpack_require__(40);
-	var parseqs = __webpack_require__(49);
+	var parseqs = __webpack_require__(50);
 	var parser = __webpack_require__(41);
-	var inherit = __webpack_require__(50);
-	var yeast = __webpack_require__(51);
+	var inherit = __webpack_require__(51);
+	var yeast = __webpack_require__(52);
 	var debug = __webpack_require__(21)('engine.io-client:polling');
 
 	/**
@@ -19576,7 +19749,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Is XHR2 supported?
 	 */
 
-	var hasXHR2 = (function() {
+	var hasXHR2 = (function () {
 	  var XMLHttpRequest = __webpack_require__(36);
 	  var xhr = new XMLHttpRequest({ xdomain: false });
 	  return null != xhr.responseType;
@@ -19589,7 +19762,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	function Polling(opts){
+	function Polling (opts) {
 	  var forceBase64 = (opts && opts.forceBase64);
 	  if (!hasXHR2 || forceBase64) {
 	    this.supportsBinary = false;
@@ -19616,7 +19789,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Polling.prototype.doOpen = function(){
+	Polling.prototype.doOpen = function () {
 	  this.poll();
 	};
 
@@ -19627,13 +19800,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Polling.prototype.pause = function(onPause){
-	  var pending = 0;
+	Polling.prototype.pause = function (onPause) {
 	  var self = this;
 
 	  this.readyState = 'pausing';
 
-	  function pause(){
+	  function pause () {
 	    debug('paused');
 	    self.readyState = 'paused';
 	    onPause();
@@ -19645,7 +19817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (this.polling) {
 	      debug('we are currently polling - waiting to pause');
 	      total++;
-	      this.once('pollComplete', function(){
+	      this.once('pollComplete', function () {
 	        debug('pre-pause polling complete');
 	        --total || pause();
 	      });
@@ -19654,7 +19826,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!this.writable) {
 	      debug('we are currently writing - waiting to pause');
 	      total++;
-	      this.once('drain', function(){
+	      this.once('drain', function () {
 	        debug('pre-pause writing complete');
 	        --total || pause();
 	      });
@@ -19670,7 +19842,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Polling.prototype.poll = function(){
+	Polling.prototype.poll = function () {
 	  debug('polling');
 	  this.polling = true;
 	  this.doPoll();
@@ -19683,17 +19855,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Polling.prototype.onData = function(data){
+	Polling.prototype.onData = function (data) {
 	  var self = this;
 	  debug('polling got data %s', data);
-	  var callback = function(packet, index, total) {
+	  var callback = function (packet, index, total) {
 	    // if its the first message we consider the transport open
-	    if ('opening' == self.readyState) {
+	    if ('opening' === self.readyState) {
 	      self.onOpen();
 	    }
 
 	    // if its a close packet, we close the ongoing requests
-	    if ('close' == packet.type) {
+	    if ('close' === packet.type) {
 	      self.onClose();
 	      return false;
 	    }
@@ -19706,12 +19878,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  parser.decodePayload(data, this.socket.binaryType, callback);
 
 	  // if an event did not trigger closing
-	  if ('closed' != this.readyState) {
+	  if ('closed' !== this.readyState) {
 	    // if we got data we're not polling
 	    this.polling = false;
 	    this.emit('pollComplete');
 
-	    if ('open' == this.readyState) {
+	    if ('open' === this.readyState) {
 	      this.poll();
 	    } else {
 	      debug('ignoring poll - transport state "%s"', this.readyState);
@@ -19725,15 +19897,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Polling.prototype.doClose = function(){
+	Polling.prototype.doClose = function () {
 	  var self = this;
 
-	  function close(){
+	  function close () {
 	    debug('writing close packet');
 	    self.write([{ type: 'close' }]);
 	  }
 
-	  if ('open' == this.readyState) {
+	  if ('open' === this.readyState) {
 	    debug('transport open - closing');
 	    close();
 	  } else {
@@ -19752,16 +19924,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Polling.prototype.write = function(packets){
+	Polling.prototype.write = function (packets) {
 	  var self = this;
 	  this.writable = false;
-	  var callbackfn = function() {
+	  var callbackfn = function () {
 	    self.writable = true;
 	    self.emit('drain');
 	  };
 
-	  var self = this;
-	  parser.encodePayload(packets, this.supportsBinary, function(data) {
+	  parser.encodePayload(packets, this.supportsBinary, function (data) {
 	    self.doWrite(data, callbackfn);
 	  });
 	};
@@ -19772,7 +19943,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Polling.prototype.uri = function(){
+	Polling.prototype.uri = function () {
 	  var query = this.query || {};
 	  var schema = this.secure ? 'https' : 'http';
 	  var port = '';
@@ -19789,8 +19960,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  query = parseqs.encode(query);
 
 	  // avoid port if default for schema
-	  if (this.port && (('https' == schema && this.port != 443) ||
-	     ('http' == schema && this.port != 80))) {
+	  if (this.port && (('https' === schema && this.port !== 443) ||
+	     ('http' === schema && this.port !== 80))) {
 	    port = ':' + this.port;
 	  }
 
@@ -19813,7 +19984,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var parser = __webpack_require__(41);
-	var Emitter = __webpack_require__(28);
+	var Emitter = __webpack_require__(49);
 
 	/**
 	 * Module exports.
@@ -19883,7 +20054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Transport.prototype.open = function () {
-	  if ('closed' == this.readyState || '' == this.readyState) {
+	  if ('closed' === this.readyState || '' === this.readyState) {
 	    this.readyState = 'opening';
 	    this.doOpen();
 	  }
@@ -19898,7 +20069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Transport.prototype.close = function () {
-	  if ('opening' == this.readyState || 'open' == this.readyState) {
+	  if ('opening' === this.readyState || 'open' === this.readyState) {
 	    this.doClose();
 	    this.onClose();
 	  }
@@ -19913,8 +20084,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Transport.prototype.send = function(packets){
-	  if ('open' == this.readyState) {
+	Transport.prototype.send = function (packets) {
+	  if ('open' === this.readyState) {
 	    this.write(packets);
 	  } else {
 	    throw new Error('Transport not open');
@@ -19940,7 +20111,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Transport.prototype.onData = function(data){
+	Transport.prototype.onData = function (data) {
 	  var packet = parser.decodePacket(data, this.socket.binaryType);
 	  this.onPacket(packet);
 	};
@@ -19976,9 +20147,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var keys = __webpack_require__(42);
 	var hasBinary = __webpack_require__(43);
 	var sliceBuffer = __webpack_require__(44);
-	var base64encoder = __webpack_require__(45);
-	var after = __webpack_require__(46);
-	var utf8 = __webpack_require__(47);
+	var after = __webpack_require__(45);
+	var utf8 = __webpack_require__(46);
+
+	var base64encoder;
+	if (global.ArrayBuffer) {
+	  base64encoder = __webpack_require__(47);
+	}
 
 	/**
 	 * Check if we are running an android browser. That requires us to use
@@ -19987,7 +20162,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * http://ghinda.net/jpeg-blob-ajax-android/
 	 */
 
-	var isAndroid = navigator.userAgent.match(/Android/i);
+	var isAndroid = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
 
 	/**
 	 * Check if we are running in PhantomJS.
@@ -19995,7 +20170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * https://github.com/ariya/phantomjs/issues/11395
 	 * @type boolean
 	 */
-	var isPhantomJS = /PhantomJS/i.test(navigator.userAgent);
+	var isPhantomJS = typeof navigator !== 'undefined' && /PhantomJS/i.test(navigator.userAgent);
 
 	/**
 	 * When true, avoids using Blobs to encode payloads.
@@ -20196,9 +20371,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    if (utf8decode) {
-	      try {
-	        data = utf8.decode(data);
-	      } catch (e) {
+	      data = tryDecode(data);
+	      if (data === false) {
 	        return err;
 	      }
 	    }
@@ -20224,6 +20398,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return { type: packetslist[type], data: rest };
 	};
 
+	function tryDecode(data) {
+	  try {
+	    data = utf8.decode(data);
+	  } catch (e) {
+	    return false;
+	  }
+	  return data;
+	}
+
 	/**
 	 * Decodes a packet encoded in a base64 string
 	 *
@@ -20233,7 +20416,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.decodeBase64Packet = function(msg, binaryType) {
 	  var type = packetslist[msg.charAt(0)];
-	  if (!global.ArrayBuffer) {
+	  if (!base64encoder) {
 	    return { type: type, data: { base64: true, data: msg.substr(1) } };
 	  }
 
@@ -20695,71 +20878,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 45 */
 /***/ function(module, exports) {
 
-	/*
-	 * base64-arraybuffer
-	 * https://github.com/niklasvh/base64-arraybuffer
-	 *
-	 * Copyright (c) 2012 Niklas von Hertzen
-	 * Licensed under the MIT license.
-	 */
-	(function(chars){
-	  "use strict";
-
-	  exports.encode = function(arraybuffer) {
-	    var bytes = new Uint8Array(arraybuffer),
-	    i, len = bytes.length, base64 = "";
-
-	    for (i = 0; i < len; i+=3) {
-	      base64 += chars[bytes[i] >> 2];
-	      base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
-	      base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
-	      base64 += chars[bytes[i + 2] & 63];
-	    }
-
-	    if ((len % 3) === 2) {
-	      base64 = base64.substring(0, base64.length - 1) + "=";
-	    } else if (len % 3 === 1) {
-	      base64 = base64.substring(0, base64.length - 2) + "==";
-	    }
-
-	    return base64;
-	  };
-
-	  exports.decode =  function(base64) {
-	    var bufferLength = base64.length * 0.75,
-	    len = base64.length, i, p = 0,
-	    encoded1, encoded2, encoded3, encoded4;
-
-	    if (base64[base64.length - 1] === "=") {
-	      bufferLength--;
-	      if (base64[base64.length - 2] === "=") {
-	        bufferLength--;
-	      }
-	    }
-
-	    var arraybuffer = new ArrayBuffer(bufferLength),
-	    bytes = new Uint8Array(arraybuffer);
-
-	    for (i = 0; i < len; i+=4) {
-	      encoded1 = chars.indexOf(base64[i]);
-	      encoded2 = chars.indexOf(base64[i+1]);
-	      encoded3 = chars.indexOf(base64[i+2]);
-	      encoded4 = chars.indexOf(base64[i+3]);
-
-	      bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
-	      bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
-	      bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
-	    }
-
-	    return arraybuffer;
-	  };
-	})("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
-
-
-/***/ },
-/* 46 */
-/***/ function(module, exports) {
-
 	module.exports = after
 
 	function after(count, callback, err_cb) {
@@ -20791,10 +20909,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 47 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/utf8js v2.0.0 by @mathias */
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/wtf8 v1.0.0 by @mathias */
 	;(function(root) {
 
 		// Detect free variables `exports`
@@ -20860,14 +20978,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			return output;
 		}
 
-		function checkScalarValue(codePoint) {
-			if (codePoint >= 0xD800 && codePoint <= 0xDFFF) {
-				throw Error(
-					'Lone surrogate U+' + codePoint.toString(16).toUpperCase() +
-					' is not a scalar value'
-				);
-			}
-		}
 		/*--------------------------------------------------------------------------*/
 
 		function createByte(codePoint, shift) {
@@ -20883,7 +20993,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				symbol = stringFromCharCode(((codePoint >> 6) & 0x1F) | 0xC0);
 			}
 			else if ((codePoint & 0xFFFF0000) == 0) { // 3-byte sequence
-				checkScalarValue(codePoint);
 				symbol = stringFromCharCode(((codePoint >> 12) & 0x0F) | 0xE0);
 				symbol += createByte(codePoint, 6);
 			}
@@ -20896,7 +21005,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			return symbol;
 		}
 
-		function utf8encode(string) {
+		function wtf8encode(string) {
 			var codePoints = ucs2decode(string);
 			var length = codePoints.length;
 			var index = -1;
@@ -20923,7 +21032,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				return continuationByte & 0x3F;
 			}
 
-			// If we end up here, it’s not a continuation byte
+			// If we end up here, it’s not a continuation byte.
 			throw Error('Invalid continuation byte');
 		}
 
@@ -20942,7 +21051,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				return false;
 			}
 
-			// Read first byte
+			// Read the first byte.
 			byte1 = byteArray[byteIndex] & 0xFF;
 			byteIndex++;
 
@@ -20968,7 +21077,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				byte3 = readContinuationByte();
 				codePoint = ((byte1 & 0x0F) << 12) | (byte2 << 6) | byte3;
 				if (codePoint >= 0x0800) {
-					checkScalarValue(codePoint);
 					return codePoint;
 				} else {
 					throw Error('Invalid continuation byte');
@@ -20987,13 +21095,13 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 			}
 
-			throw Error('Invalid UTF-8 detected');
+			throw Error('Invalid WTF-8 detected');
 		}
 
 		var byteArray;
 		var byteCount;
 		var byteIndex;
-		function utf8decode(byteString) {
+		function wtf8decode(byteString) {
 			byteArray = ucs2decode(byteString);
 			byteCount = byteArray.length;
 			byteIndex = 0;
@@ -21007,10 +21115,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		/*--------------------------------------------------------------------------*/
 
-		var utf8 = {
-			'version': '2.0.0',
-			'encode': utf8encode,
-			'decode': utf8decode
+		var wtf8 = {
+			'version': '1.0.0',
+			'encode': wtf8encode,
+			'decode': wtf8decode
 		};
 
 		// Some AMD build optimizers, like r.js, check for specific condition patterns
@@ -21019,25 +21127,98 @@ return /******/ (function(modules) { // webpackBootstrap
 			true
 		) {
 			!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
-				return utf8;
+				return wtf8;
 			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 		}	else if (freeExports && !freeExports.nodeType) {
 			if (freeModule) { // in Node.js or RingoJS v0.8.0+
-				freeModule.exports = utf8;
+				freeModule.exports = wtf8;
 			} else { // in Narwhal or RingoJS v0.7.0-
 				var object = {};
 				var hasOwnProperty = object.hasOwnProperty;
-				for (var key in utf8) {
-					hasOwnProperty.call(utf8, key) && (freeExports[key] = utf8[key]);
+				for (var key in wtf8) {
+					hasOwnProperty.call(wtf8, key) && (freeExports[key] = wtf8[key]);
 				}
 			}
 		} else { // in Rhino or a web browser
-			root.utf8 = utf8;
+			root.wtf8 = wtf8;
 		}
 
 	}(this));
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)(module), (function() { return this; }())))
+
+/***/ },
+/* 47 */
+/***/ function(module, exports) {
+
+	/*
+	 * base64-arraybuffer
+	 * https://github.com/niklasvh/base64-arraybuffer
+	 *
+	 * Copyright (c) 2012 Niklas von Hertzen
+	 * Licensed under the MIT license.
+	 */
+	(function(){
+	  "use strict";
+
+	  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+	  // Use a lookup table to find the index.
+	  var lookup = new Uint8Array(256);
+	  for (var i = 0; i < chars.length; i++) {
+	    lookup[chars.charCodeAt(i)] = i;
+	  }
+
+	  exports.encode = function(arraybuffer) {
+	    var bytes = new Uint8Array(arraybuffer),
+	    i, len = bytes.length, base64 = "";
+
+	    for (i = 0; i < len; i+=3) {
+	      base64 += chars[bytes[i] >> 2];
+	      base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
+	      base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
+	      base64 += chars[bytes[i + 2] & 63];
+	    }
+
+	    if ((len % 3) === 2) {
+	      base64 = base64.substring(0, base64.length - 1) + "=";
+	    } else if (len % 3 === 1) {
+	      base64 = base64.substring(0, base64.length - 2) + "==";
+	    }
+
+	    return base64;
+	  };
+
+	  exports.decode =  function(base64) {
+	    var bufferLength = base64.length * 0.75,
+	    len = base64.length, i, p = 0,
+	    encoded1, encoded2, encoded3, encoded4;
+
+	    if (base64[base64.length - 1] === "=") {
+	      bufferLength--;
+	      if (base64[base64.length - 2] === "=") {
+	        bufferLength--;
+	      }
+	    }
+
+	    var arraybuffer = new ArrayBuffer(bufferLength),
+	    bytes = new Uint8Array(arraybuffer);
+
+	    for (i = 0; i < len; i+=4) {
+	      encoded1 = lookup[base64.charCodeAt(i)];
+	      encoded2 = lookup[base64.charCodeAt(i+1)];
+	      encoded3 = lookup[base64.charCodeAt(i+2)];
+	      encoded4 = lookup[base64.charCodeAt(i+3)];
+
+	      bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
+	      bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
+	      bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
+	    }
+
+	    return arraybuffer;
+	  };
+	})();
+
 
 /***/ },
 /* 48 */
@@ -21146,6 +21327,176 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 49 */
 /***/ function(module, exports) {
 
+	
+	/**
+	 * Expose `Emitter`.
+	 */
+
+	module.exports = Emitter;
+
+	/**
+	 * Initialize a new `Emitter`.
+	 *
+	 * @api public
+	 */
+
+	function Emitter(obj) {
+	  if (obj) return mixin(obj);
+	};
+
+	/**
+	 * Mixin the emitter properties.
+	 *
+	 * @param {Object} obj
+	 * @return {Object}
+	 * @api private
+	 */
+
+	function mixin(obj) {
+	  for (var key in Emitter.prototype) {
+	    obj[key] = Emitter.prototype[key];
+	  }
+	  return obj;
+	}
+
+	/**
+	 * Listen on the given `event` with `fn`.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+
+	Emitter.prototype.on =
+	Emitter.prototype.addEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+	  (this._callbacks[event] = this._callbacks[event] || [])
+	    .push(fn);
+	  return this;
+	};
+
+	/**
+	 * Adds an `event` listener that will be invoked a single
+	 * time then automatically removed.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+
+	Emitter.prototype.once = function(event, fn){
+	  var self = this;
+	  this._callbacks = this._callbacks || {};
+
+	  function on() {
+	    self.off(event, on);
+	    fn.apply(this, arguments);
+	  }
+
+	  on.fn = fn;
+	  this.on(event, on);
+	  return this;
+	};
+
+	/**
+	 * Remove the given callback for `event` or all
+	 * registered callbacks.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+
+	Emitter.prototype.off =
+	Emitter.prototype.removeListener =
+	Emitter.prototype.removeAllListeners =
+	Emitter.prototype.removeEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+
+	  // all
+	  if (0 == arguments.length) {
+	    this._callbacks = {};
+	    return this;
+	  }
+
+	  // specific event
+	  var callbacks = this._callbacks[event];
+	  if (!callbacks) return this;
+
+	  // remove all handlers
+	  if (1 == arguments.length) {
+	    delete this._callbacks[event];
+	    return this;
+	  }
+
+	  // remove specific handler
+	  var cb;
+	  for (var i = 0; i < callbacks.length; i++) {
+	    cb = callbacks[i];
+	    if (cb === fn || cb.fn === fn) {
+	      callbacks.splice(i, 1);
+	      break;
+	    }
+	  }
+	  return this;
+	};
+
+	/**
+	 * Emit `event` with the given args.
+	 *
+	 * @param {String} event
+	 * @param {Mixed} ...
+	 * @return {Emitter}
+	 */
+
+	Emitter.prototype.emit = function(event){
+	  this._callbacks = this._callbacks || {};
+	  var args = [].slice.call(arguments, 1)
+	    , callbacks = this._callbacks[event];
+
+	  if (callbacks) {
+	    callbacks = callbacks.slice(0);
+	    for (var i = 0, len = callbacks.length; i < len; ++i) {
+	      callbacks[i].apply(this, args);
+	    }
+	  }
+
+	  return this;
+	};
+
+	/**
+	 * Return array of callbacks for `event`.
+	 *
+	 * @param {String} event
+	 * @return {Array}
+	 * @api public
+	 */
+
+	Emitter.prototype.listeners = function(event){
+	  this._callbacks = this._callbacks || {};
+	  return this._callbacks[event] || [];
+	};
+
+	/**
+	 * Check if this emitter has `event` handlers.
+	 *
+	 * @param {String} event
+	 * @return {Boolean}
+	 * @api public
+	 */
+
+	Emitter.prototype.hasListeners = function(event){
+	  return !! this.listeners(event).length;
+	};
+
+
+/***/ },
+/* 50 */
+/***/ function(module, exports) {
+
 	/**
 	 * Compiles a querystring
 	 * Returns string representation of the object
@@ -21186,7 +21537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports) {
 
 	
@@ -21198,7 +21549,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21272,7 +21623,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -21281,7 +21632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var Polling = __webpack_require__(39);
-	var inherit = __webpack_require__(50);
+	var inherit = __webpack_require__(51);
 
 	/**
 	 * Module exports.
@@ -21301,12 +21652,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var callbacks;
-
-	/**
-	 * Callbacks count.
-	 */
-
-	var index = 0;
 
 	/**
 	 * Noop.
@@ -21404,21 +21749,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  script.async = true;
 	  script.src = this.uri();
-	  script.onerror = function(e){
-	    self.onError('jsonp poll error',e);
+	  script.onerror = function (e) {
+	    self.onError('jsonp poll error', e);
 	  };
 
 	  var insertAt = document.getElementsByTagName('script')[0];
 	  if (insertAt) {
 	    insertAt.parentNode.insertBefore(script, insertAt);
-	  }
-	  else {
+	  } else {
 	    (document.head || document.body).appendChild(script);
 	  }
 	  this.script = script;
 
-	  var isUAgecko = 'undefined' != typeof navigator && /gecko/i.test(navigator.userAgent);
-	  
+	  var isUAgecko = 'undefined' !== typeof navigator && /gecko/i.test(navigator.userAgent);
+
 	  if (isUAgecko) {
 	    setTimeout(function () {
 	      var iframe = document.createElement('iframe');
@@ -21478,7 +21822,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    try {
 	      // ie6 dynamic iframes with target="" support (thanks Chris Lambacher)
-	      var html = '<iframe src="javascript:0" name="'+ self.iframeId +'">';
+	      var html = '<iframe src="javascript:0" name="' + self.iframeId + '">';
 	      iframe = document.createElement(html);
 	    } catch (e) {
 	      iframe = document.createElement('iframe');
@@ -21501,11 +21845,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  try {
 	    this.form.submit();
-	  } catch(e) {}
+	  } catch (e) {}
 
 	  if (this.iframe.attachEvent) {
-	    this.iframe.onreadystatechange = function(){
-	      if (self.iframe.readyState == 'complete') {
+	    this.iframe.onreadystatechange = function () {
+	      if (self.iframe.readyState === 'complete') {
 	        complete();
 	      }
 	    };
@@ -21517,7 +21861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -21526,9 +21870,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Transport = __webpack_require__(40);
 	var parser = __webpack_require__(41);
-	var parseqs = __webpack_require__(49);
-	var inherit = __webpack_require__(50);
-	var yeast = __webpack_require__(51);
+	var parseqs = __webpack_require__(50);
+	var inherit = __webpack_require__(51);
+	var yeast = __webpack_require__(52);
 	var debug = __webpack_require__(21)('engine.io-client:websocket');
 	var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 
@@ -21541,7 +21885,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var WebSocket = BrowserWebSocket;
 	if (!WebSocket && typeof window === 'undefined') {
 	  try {
-	    WebSocket = __webpack_require__(54);
+	    WebSocket = __webpack_require__(55);
 	  } catch (e) { }
 	}
 
@@ -21558,7 +21902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	function WS(opts){
+	function WS (opts) {
 	  var forceBase64 = (opts && opts.forceBase64);
 	  if (forceBase64) {
 	    this.supportsBinary = false;
@@ -21593,15 +21937,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	WS.prototype.doOpen = function(){
+	WS.prototype.doOpen = function () {
 	  if (!this.check()) {
 	    // let probe timeout
 	    return;
 	  }
 
-	  var self = this;
 	  var uri = this.uri();
-	  var protocols = void(0);
+	  var protocols = void (0);
 	  var opts = {
 	    agent: this.agent,
 	    perMessageDeflate: this.perMessageDeflate
@@ -21619,7 +21962,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    opts.headers = this.extraHeaders;
 	  }
 
-	  this.ws = BrowserWebSocket ? new WebSocket(uri) : new WebSocket(uri, protocols, opts);
+	  try {
+	    this.ws = BrowserWebSocket ? new WebSocket(uri) : new WebSocket(uri, protocols, opts);
+	  } catch (err) {
+	    return this.emit('error', err);
+	  }
 
 	  if (this.ws.binaryType === undefined) {
 	    this.supportsBinary = false;
@@ -21627,7 +21974,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  if (this.ws.supports && this.ws.supports.binary) {
 	    this.supportsBinary = true;
-	    this.ws.binaryType = 'buffer';
+	    this.ws.binaryType = 'nodebuffer';
 	  } else {
 	    this.ws.binaryType = 'arraybuffer';
 	  }
@@ -21641,19 +21988,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	WS.prototype.addEventListeners = function(){
+	WS.prototype.addEventListeners = function () {
 	  var self = this;
 
-	  this.ws.onopen = function(){
+	  this.ws.onopen = function () {
 	    self.onOpen();
 	  };
-	  this.ws.onclose = function(){
+	  this.ws.onclose = function () {
 	    self.onClose();
 	  };
-	  this.ws.onmessage = function(ev){
+	  this.ws.onmessage = function (ev) {
 	    self.onData(ev.data);
 	  };
-	  this.ws.onerror = function(e){
+	  this.ws.onerror = function (e) {
 	    self.onError('websocket error', e);
 	  };
 	};
@@ -21665,11 +22012,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	if ('undefined' != typeof navigator
-	  && /iPad|iPhone|iPod/i.test(navigator.userAgent)) {
-	  WS.prototype.onData = function(data){
+	if ('undefined' !== typeof navigator &&
+	  /iPad|iPhone|iPod/i.test(navigator.userAgent)) {
+	  WS.prototype.onData = function (data) {
 	    var self = this;
-	    setTimeout(function(){
+	    setTimeout(function () {
 	      Transport.prototype.onData.call(self, data);
 	    }, 0);
 	  };
@@ -21682,7 +22029,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	WS.prototype.write = function(packets){
+	WS.prototype.write = function (packets) {
 	  var self = this;
 	  this.writable = false;
 
@@ -21690,8 +22037,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // no need for encodePayload
 	  var total = packets.length;
 	  for (var i = 0, l = total; i < l; i++) {
-	    (function(packet) {
-	      parser.encodePacket(packet, self.supportsBinary, function(data) {
+	    (function (packet) {
+	      parser.encodePacket(packet, self.supportsBinary, function (data) {
 	        if (!BrowserWebSocket) {
 	          // always create a new object (GH-437)
 	          var opts = {};
@@ -21700,16 +22047,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 
 	          if (self.perMessageDeflate) {
-	            var len = 'string' == typeof data ? global.Buffer.byteLength(data) : data.length;
+	            var len = 'string' === typeof data ? global.Buffer.byteLength(data) : data.length;
 	            if (len < self.perMessageDeflate.threshold) {
 	              opts.compress = false;
 	            }
 	          }
 	        }
 
-	        //Sometimes the websocket has already been closed but the browser didn't
-	        //have a chance of informing us about it yet, in that case send will
-	        //throw an error
+	        // Sometimes the websocket has already been closed but the browser didn't
+	        // have a chance of informing us about it yet, in that case send will
+	        // throw an error
 	        try {
 	          if (BrowserWebSocket) {
 	            // TypeError is thrown when passing the second argument on Safari
@@ -21717,7 +22064,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          } else {
 	            self.ws.send(data, opts);
 	          }
-	        } catch (e){
+	        } catch (e) {
 	          debug('websocket closed before onclose event');
 	        }
 
@@ -21726,12 +22073,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    })(packets[i]);
 	  }
 
-	  function done(){
+	  function done () {
 	    self.emit('flush');
 
 	    // fake drain
 	    // defer to next tick to allow Socket to clear writeBuffer
-	    setTimeout(function(){
+	    setTimeout(function () {
 	      self.writable = true;
 	      self.emit('drain');
 	    }, 0);
@@ -21744,7 +22091,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	WS.prototype.onClose = function(){
+	WS.prototype.onClose = function () {
 	  Transport.prototype.onClose.call(this);
 	};
 
@@ -21754,7 +22101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	WS.prototype.doClose = function(){
+	WS.prototype.doClose = function () {
 	  if (typeof this.ws !== 'undefined') {
 	    this.ws.close();
 	  }
@@ -21766,14 +22113,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	WS.prototype.uri = function(){
+	WS.prototype.uri = function () {
 	  var query = this.query || {};
 	  var schema = this.secure ? 'wss' : 'ws';
 	  var port = '';
 
 	  // avoid port if default for schema
-	  if (this.port && (('wss' == schema && this.port != 443)
-	    || ('ws' == schema && this.port != 80))) {
+	  if (this.port && (('wss' === schema && this.port !== 443) ||
+	    ('ws' === schema && this.port !== 80))) {
 	    port = ':' + this.port;
 	  }
 
@@ -21805,20 +22152,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	WS.prototype.check = function(){
+	WS.prototype.check = function () {
 	  return !!WebSocket && !('__initialize' in WebSocket && this.name === WS.prototype.name);
 	};
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports) {
 
 	
@@ -21833,7 +22180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -21871,7 +22218,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -21880,12 +22227,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	var parser = __webpack_require__(24);
-	var Emitter = __webpack_require__(58);
-	var toArray = __webpack_require__(59);
-	var on = __webpack_require__(60);
-	var bind = __webpack_require__(61);
+	var Emitter = __webpack_require__(59);
+	var toArray = __webpack_require__(60);
+	var on = __webpack_require__(61);
+	var bind = __webpack_require__(62);
 	var debug = __webpack_require__(21)('socket.io-client:socket');
-	var hasBin = __webpack_require__(62);
+	var hasBin = __webpack_require__(63);
 
 	/**
 	 * Module exports.
@@ -21928,7 +22275,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	function Socket(io, nsp){
+	function Socket (io, nsp, opts) {
 	  this.io = io;
 	  this.nsp = nsp;
 	  this.json = this; // compat
@@ -21938,6 +22285,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.sendBuffer = [];
 	  this.connected = false;
 	  this.disconnected = true;
+	  if (opts && opts.query) {
+	    this.query = opts.query;
+	  }
 	  if (this.io.autoConnect) this.open();
 	}
 
@@ -21953,7 +22303,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.subEvents = function() {
+	Socket.prototype.subEvents = function () {
 	  if (this.subs) return;
 
 	  var io = this.io;
@@ -21971,12 +22321,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Socket.prototype.open =
-	Socket.prototype.connect = function(){
+	Socket.prototype.connect = function () {
 	  if (this.connected) return this;
 
 	  this.subEvents();
 	  this.io.open(); // ensure open
-	  if ('open' == this.io.readyState) this.onopen();
+	  if ('open' === this.io.readyState) this.onopen();
 	  this.emit('connecting');
 	  return this;
 	};
@@ -21988,7 +22338,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Socket.prototype.send = function(){
+	Socket.prototype.send = function () {
 	  var args = toArray(arguments);
 	  args.unshift('message');
 	  this.emit.apply(this, args);
@@ -22004,7 +22354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Socket.prototype.emit = function(ev){
+	Socket.prototype.emit = function (ev) {
 	  if (events.hasOwnProperty(ev)) {
 	    emit.apply(this, arguments);
 	    return this;
@@ -22019,7 +22369,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  packet.options.compress = !this.flags || false !== this.flags.compress;
 
 	  // event ack callback
-	  if ('function' == typeof args[args.length - 1]) {
+	  if ('function' === typeof args[args.length - 1]) {
 	    debug('emitting packet with ack id %d', this.ids);
 	    this.acks[this.ids] = args.pop();
 	    packet.id = this.ids++;
@@ -22043,7 +22393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.packet = function(packet){
+	Socket.prototype.packet = function (packet) {
 	  packet.nsp = this.nsp;
 	  this.io.packet(packet);
 	};
@@ -22054,12 +22404,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.onopen = function(){
+	Socket.prototype.onopen = function () {
 	  debug('transport is open - connecting');
 
 	  // write connect packet if necessary
-	  if ('/' != this.nsp) {
-	    this.packet({ type: parser.CONNECT });
+	  if ('/' !== this.nsp) {
+	    if (this.query) {
+	      this.packet({type: parser.CONNECT, query: this.query});
+	    } else {
+	      this.packet({type: parser.CONNECT});
+	    }
 	  }
 	};
 
@@ -22070,7 +22424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.onclose = function(reason){
+	Socket.prototype.onclose = function (reason) {
 	  debug('close (%s)', reason);
 	  this.connected = false;
 	  this.disconnected = true;
@@ -22085,8 +22439,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.onpacket = function(packet){
-	  if (packet.nsp != this.nsp) return;
+	Socket.prototype.onpacket = function (packet) {
+	  if (packet.nsp !== this.nsp) return;
 
 	  switch (packet.type) {
 	    case parser.CONNECT:
@@ -22126,7 +22480,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.onevent = function(packet){
+	Socket.prototype.onevent = function (packet) {
 	  var args = packet.data || [];
 	  debug('emitting event %j', args);
 
@@ -22148,10 +22502,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.ack = function(id){
+	Socket.prototype.ack = function (id) {
 	  var self = this;
 	  var sent = false;
-	  return function(){
+	  return function () {
 	    // prevent double callbacks
 	    if (sent) return;
 	    sent = true;
@@ -22174,9 +22528,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.onack = function(packet){
+	Socket.prototype.onack = function (packet) {
 	  var ack = this.acks[packet.id];
-	  if ('function' == typeof ack) {
+	  if ('function' === typeof ack) {
 	    debug('calling ack %s with %j', packet.id, packet.data);
 	    ack.apply(this, packet.data);
 	    delete this.acks[packet.id];
@@ -22191,7 +22545,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.onconnect = function(){
+	Socket.prototype.onconnect = function () {
 	  this.connected = true;
 	  this.disconnected = false;
 	  this.emit('connect');
@@ -22204,7 +22558,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.emitBuffered = function(){
+	Socket.prototype.emitBuffered = function () {
 	  var i;
 	  for (i = 0; i < this.receiveBuffer.length; i++) {
 	    emit.apply(this, this.receiveBuffer[i]);
@@ -22223,7 +22577,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 
-	Socket.prototype.ondisconnect = function(){
+	Socket.prototype.ondisconnect = function () {
 	  debug('server disconnect (%s)', this.nsp);
 	  this.destroy();
 	  this.onclose('io server disconnect');
@@ -22237,7 +22591,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private.
 	 */
 
-	Socket.prototype.destroy = function(){
+	Socket.prototype.destroy = function () {
 	  if (this.subs) {
 	    // clean subscriptions to avoid reconnections
 	    for (var i = 0; i < this.subs.length; i++) {
@@ -22257,7 +22611,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Socket.prototype.close =
-	Socket.prototype.disconnect = function(){
+	Socket.prototype.disconnect = function () {
 	  if (this.connected) {
 	    debug('performing disconnect (%s)', this.nsp);
 	    this.packet({ type: parser.DISCONNECT });
@@ -22281,7 +22635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	Socket.prototype.compress = function(compress){
+	Socket.prototype.compress = function (compress) {
 	  this.flags = this.flags || {};
 	  this.flags.compress = compress;
 	  return this;
@@ -22289,7 +22643,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports) {
 
 	
@@ -22456,7 +22810,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports) {
 
 	module.exports = toArray
@@ -22475,7 +22829,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports) {
 
 	
@@ -22494,10 +22848,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 
-	function on(obj, ev, fn) {
+	function on (obj, ev, fn) {
 	  obj.on(ev, fn);
 	  return {
-	    destroy: function(){
+	    destroy: function () {
 	      obj.removeListener(ev, fn);
 	    }
 	  };
@@ -22505,7 +22859,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports) {
 
 	/**
@@ -22534,7 +22888,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -22600,7 +22954,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports) {
 
 	
@@ -22691,42 +23045,42 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 64 */,
 /* 65 */,
 /* 66 */,
 /* 67 */,
 /* 68 */,
-/* 69 */
+/* 69 */,
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var generate, testcases;
 
 	if (window === parent) {
 	  generate = __webpack_require__(8);
-	  testcases = __webpack_require__(70);
+	  testcases = __webpack_require__(71);
 	  generate(testcases);
-	  __webpack_require__(71);
+	  __webpack_require__(72);
 	  riot.mount("pre-info");
 	} else if (location.hash.match("am-autoevent")) {
-	  __webpack_require__(72);
+	  __webpack_require__(73);
 	} else if (location.hash.match("am-coffee-time")) {
-	  __webpack_require__(74);
+	  __webpack_require__(75);
 	} else if (location.hash.match("am-simple-server")) {
-	  __webpack_require__(76);
+	  __webpack_require__(77);
 	}
 
-	__webpack_require__(77);
+	__webpack_require__(78);
 
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports) {
 
 	module.exports = {
 		"allpattern": {
 			"am-autoevent": {
 				"エラーでOK": {
-					"timeout=1000": "./index.html",
+					"timeout=100": "./index.html",
 					"clickAssert=true": "./index.html",
 					"select=6": "./index.html"
 				},
@@ -22748,12 +23102,83 @@ return /******/ (function(modules) { // webpackBootstrap
 			},
 			"am-simple-server": {
 				"port=50001": "./index.html"
+			},
+			"zz1": {
+				"2": {
+					"3": {
+						"4": {
+							"5": {
+								"6": {
+									"1": {
+										"2": {
+											"3": {
+												"4": {
+													"5": {
+														"6": {
+															"1": {
+																"2": {
+																	"3": {
+																		"4": {
+																			"5": {
+																				"6": {
+																					"1": {
+																						"2": {
+																							"3": {
+																								"4": {
+																									"5": {
+																										"6": {
+																											"1": {
+																												"2": {
+																													"3": {
+																														"4": {
+																															"5": {
+																																"6": {
+																																	"1": {
+																																		"2": {
+																																			"3": {
+																																				"4": {
+																																					"5": {
+																																						"6": 1
+																																					}
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	};
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports) {
 
 	riot.tag2('pre-info', '<a href="/?_noWs">/?_noWs(no websocket)</a> <a href="/?">/?(websocket)</a>', 'pre-info,[riot-tag="pre-info"],[data-is="pre-info"]{display:block;margin:10px 0} pre-info a,[riot-tag="pre-info"] a,[data-is="pre-info"] a{display:block}', '', function(opts) {
@@ -22761,7 +23186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $, AutoEvent, AutoEventNoGen, Test, func, test;
@@ -22774,7 +23199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Test = __webpack_require__(4);
 
-	$("body").append($(__webpack_require__(73)));
+	$("body").append($(__webpack_require__(74)));
 
 	(function(_this) {
 	  return (function() {
@@ -22802,7 +23227,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	test = {
 	  test: (function(_this) {
 	    return function() {
-	      return func(AutoEvent);
+	      func(AutoEvent);
+	      return $ERROR;
 	    };
 	  })(this),
 	  testNoGen: (function(_this) {
@@ -22819,7 +23245,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      createTimeoutBox = function() {
 	        return $("body").append("<box>box</box>");
 	      };
-	      return setTimeout(createTimeoutBox, 3000);
+	      return setTimeout(createTimeoutBox, 500);
 	    };
 	  })(this),
 	  clickAssert: (function(_this) {
@@ -22833,7 +23259,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return function(value) {
 	      var ae;
 	      ae = new AutoEvent;
-	      return ae.register().wait(300).selectValue("select", value).start();
+	      ae.register().wait(300).selectValue("select", value).start();
+	      return $ERROR;
 	    };
 	  })(this)
 	};
@@ -22842,20 +23269,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports) {
 
 	module.exports = "<head>\r\n  <title>am auto event</title>\r\n</head>\r\n<button id=\"test\" type=\"button\" name=\"button\">a</button>\r\n<input id=\"input\" type=\"text\" name=\"name\" value=\"\">\r\n<button id=\"test2\" type=\"button\" name=\"button\">b</button>\r\n<input id=\"input2\" type=\"text\" name=\"name\" value=\"\">\r\n<select name=\"\">\r\n  <option value=\"1\">項目１</option>\r\n  <option value=\"2\" selected>項目２</option>\r\n  <option value=\"3\">項目３</option>\r\n  <option value=\"4\">項目４</option>\r\n  <option value=\"5\">項目５</option>\r\n</select>\r\n";
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $, test;
 
 	$ = __webpack_require__(5);
 
-	$("body").append($(__webpack_require__(75)));
+	$("body").append($(__webpack_require__(76)));
 
 	test = {
 	  params1: (function(_this) {
@@ -22896,13 +23323,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"p1\">\r\n  parent\r\n  <div class=\"child c-1\">\r\n    child 1\r\n    <div class=\"grandchild\">\r\n      grandchild\r\n    </div>\r\n  </div>\r\n  <div class=\"child c-2\">\r\n    child 2\r\n  </div>\r\n</div>\r\n<div style=\"width: 100px;display: inline-block; background: #ccc; margin: 40px;\">\r\n  <div style=\"width: 50px; display: inline-block;\">test1</div><div style=\"width: 50px; display: inline-block;\">test2</div>\r\n</div>\r\n<div style=\"height: 1000px; background: lightyellow\">\r\n  scroll area\r\n</div>\r\n<div style=\"background: lightblue; vertical-align: bottom\">\r\n  end line\r\n</div>\r\n<script type=\"text/javascript\">\r\n  let grandChild = document.querySelector(\".grandchild\")\r\n  setTimeout(() => grandChild.innerHTML += \"<div class='nest-grandchild'>nest grand child</div>\", 1000)\r\n</script>\r\n";
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Test, WSClient, test;
@@ -22934,13 +23361,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	Test.start(test);
-
-
-/***/ },
-/* 77 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(78);
 
 
 /***/ },

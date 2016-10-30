@@ -125,7 +125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	          try {
 	            return callback($this);
-	          } catch (undefined) {}
+	          } catch (error) {}
 	        }
 	      };
 	    })(this));

@@ -125,7 +125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	          try {
 	            return callback($this);
-	          } catch (undefined) {}
+	          } catch (error) {}
 	        }
 	      };
 	    })(this));
@@ -312,7 +312,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    while (num--) {
 	      i = -1;
 	      while (this.funcs[++i]) {
-	        (yield this.funcs[i]());
+	        yield this.funcs[i]();
 	      }
 	    }
 	    return this.end();

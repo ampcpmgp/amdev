@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(64);
+	module.exports = __webpack_require__(65);
 
 
 /***/ },
@@ -63,11 +63,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 9:
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.6.2, @license MIT */
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.6.4, @license MIT */
 
 	;(function(window, undefined) {
 	  'use strict';
-	var riot = { version: 'v2.6.2', settings: {} },
+	var riot = { version: 'v2.6.4', settings: {} },
 	  // be aware, internal usage
 	  // ATTENTION: prefix the global dynamic variables with `__`
 
@@ -598,7 +598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * The riot template engine
-	 * @version v2.4.1
+	 * @version v2.4.2
 	 */
 	/**
 	 * riot.util.brackets
@@ -855,7 +855,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  var
-	    CH_IDEXPR = '\u2057',
+	    CH_IDEXPR = String.fromCharCode(0x2057),
 	    RE_CSNAME = /^(?:(-?[_A-Za-z\xA0-\xFF][-\w\xA0-\xFF]*)|\u2057(\d+)~):/,
 	    RE_QBLOCK = RegExp(brackets.S_QBLOCKS, 'g'),
 	    RE_DQUOTE = /\u2057/g,
@@ -971,7 +971,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // istanbul ignore next: not both
 	  var // eslint-disable-next-line max-len
 	    JS_CONTEXT = '"in this?this:' + (typeof window !== 'object' ? 'global' : 'window') + ').',
-	    JS_VARNAME = /[,{][$\w]+(?=:)|(^ *|[^$\w\.])(?!(?:typeof|true|false|null|undefined|in|instanceof|is(?:Finite|NaN)|void|NaN|new|Date|RegExp|Math)(?![$\w]))([$_A-Za-z][$\w]*)/g,
+	    JS_VARNAME = /[,{][\$\w]+(?=:)|(^ *|[^$\w\.{])(?!(?:typeof|true|false|null|undefined|in|instanceof|is(?:Finite|NaN)|void|NaN|new|Date|RegExp|Math)(?![$\w]))([$_A-Za-z][$\w]*)/g,
 	    JS_NOPROPS = /^(?=(\.[$\w]+))\1(?:[^.[(]|$)/
 
 	  function _wrapExpr (expr, asText, key) {
@@ -1011,7 +1011,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return expr
 	  }
 
-	  _tmpl.version = brackets.version = 'v2.4.1'
+	  _tmpl.version = brackets.version = 'v2.4.2'
 
 	  return _tmpl
 
@@ -2745,22 +2745,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 64:
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(65);
-
-
-/***/ },
-
 /***/ 65:
 /***/ function(module, exports, __webpack_require__) {
 
-	window.riot = __webpack_require__(9);
-
 	__webpack_require__(66);
-
-	riot.mount("*");
 
 
 /***/ },
@@ -2768,10 +2756,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 66:
 /***/ function(module, exports, __webpack_require__) {
 
+	window.riot = __webpack_require__(9);
+
+	__webpack_require__(67);
+
+	riot.mount("*");
+
+
+/***/ },
+
+/***/ 67:
+/***/ function(module, exports, __webpack_require__) {
+
 	riot.tag2('app', '<before-login if="{!Status.isLogin}"></before-login> <after-login if="{Status.isLogin}"></after-login>', 'app,[riot-tag="app"],[data-is="app"]{display:flex;align-items:center;justify-content:center;height:100%}', '', function(opts) {
 	var Status;
 
-	Status = this.Status = __webpack_require__(67);
+	Status = this.Status = __webpack_require__(68);
 
 	Status.on("update", (function(_this) {
 	  return function() {
@@ -2783,7 +2783,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	riot.tag2('before-login', '<span>パスワードはappleです。ログインしてください。</span> <label for="id"> <span>ID:</span> <input type="text" name="id" value=""> </label> <label for="pw"> <span>PW:</span> <input type="password" name="pw" value=""> </label> <input type="button" name="check" value="login" onclick="{check}"> <span class="error">{errorMsg}</span>', 'before-login,[riot-tag="before-login"],[data-is="before-login"]{height:300px;border:1px solid #555;padding:0 20px;display:flex;align-items:center;justify-content:center;flex-direction:column} before-login>*,[riot-tag="before-login"]>*,[data-is="before-login"]>*{padding:4px 0} before-login label,[riot-tag="before-login"] label,[data-is="before-login"] label{display:flex;justify-content:space-between;width:210px} before-login .error,[riot-tag="before-login"] .error,[data-is="before-login"] .error{height:24px;color:rgba(255,32,32,0.6)}', '', function(opts) {
 	var Status;
 
-	Status = __webpack_require__(67);
+	Status = __webpack_require__(68);
 
 	this.errorMsg = "";
 
@@ -2811,7 +2811,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 67:
+/***/ 68:
 /***/ function(module, exports) {
 
 	var Status;
