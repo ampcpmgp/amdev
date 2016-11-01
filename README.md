@@ -17,9 +17,7 @@ npm start
 
 ```
 # install chocolatey
-choco install -yf --allow-empty-checksums githubforwindows
-choco install -yf --allow-empty-checksums atom
-choco install -yf --allow-empty-checksums line lhaplus cmder notepadplusplus googlechrome firefox clover autoit crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install virtualbox.extensionpack screentogif slack yarn
+choco install -yf --allow-empty-checksums githubforwindows atom lhaplus notepadplusplus googlechrome firefox clover autoit crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install virtualbox screentogif slack yarn
 # download
 TODO: cliborを含んだ開発環境を作る
 clibor - http://www.amunsnet.com/
