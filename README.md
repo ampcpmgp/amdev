@@ -1,5 +1,12 @@
 # まだ工事中
 
+実装したいリスト
+* Bot開発のための土台
+  * commandライン入力をelectron上で仮想的に実装
+* IoT開発のための土台
+  * ssh接続＋自動FTP送信あたり？
+
+
 # amdev?
 * AM development environment
 * 午前の開発環境
