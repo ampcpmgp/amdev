@@ -1,10 +1,12 @@
-Atom=======>819,20,1107,987
-Atom=======>779,0,1107,987
-Clover=======>2406,26,796,498
-Clover=======>2406,519,796,498
-GitHub=======>467,364,1224,675
-Google Chrome=======>1945,0,1202,959
-Google Chrome=======>4,1,1062,975
-Google Chrome=======>560,0,1281,1032
-LINE=======>2767,57,629,588
-Slack=======>666,54,1096,978
+atom.exe,Atom=======>819,20,1107,987
+atom.exe,Atom=======>779,0,1107,987
+clover.exe,Clover=======>2406,26,796,498
+clover.exe,Clover=======>2406,519,796,498
+GitHub.exe,GitHub=======>467,364,1224,675
+chrome.exe,Google Chrome=======>1945,0,1202,959
+chrome.exe,Google Chrome=======>4,1,1062,975
+chrome.exe,Google Chrome=======>560,0,1281,1032
+LINE.exe,LINE=======>2767,57,629,588
+slack.exe,Slack=======>666,54,1096,978
+cmd.exe,npm=======>1931,525,993,519
+electron.exe,Electron=======>1922,6,1027,914
