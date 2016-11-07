@@ -9,18 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "am-common": "latest",
-    "chokidar": "latest",
-    "cson": "latest",
-    "data-utils": "latest",
-    "fs-extra": "latest",
-    "ftp": "latest",
-    "jquery": "latest",
-    "mime": "latest",
-    "mkdirp": "latest",
-    "readline": "latest",
-    "socket.io": "latest",
-    "socket.io-client": "latest",
-    "uglify-js": "latest"
+    "chokidar": "^1.6.1",
+    "cson": "^4.0.0",
+    "electron": "^1.4.5",
+    "fs-extra": "^1.0.0",
+    "glob": "^7.1.1",
+    "jquery": "^3.1.1"
+  },
+  "devDependencies": {
+    "mkdirp": "^0.5.1"
   }
 }

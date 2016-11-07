@@ -8,5 +8,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "am-coffee-time": "0.0.25",
+    "jquery": "^3.1.1"
+  }
 }
