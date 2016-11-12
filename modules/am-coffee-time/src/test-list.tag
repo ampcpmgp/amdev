@@ -40,7 +40,7 @@ require("./test-iframe.tag")
         return
       WholeStatus.executablePath[executePath]()
     @toRouteHash = => riot.route("")
-    @on("update", () =>
+    WholeStatus.on("item-update", () =>
       for itemStatus in WholeStatus.itemStatuses
         if itemStatus.onExecute
           onExecute = true
