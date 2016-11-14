@@ -107,8 +107,9 @@ module.exports =
 	    return ModuleCompiler.__super__.constructor.apply(this, arguments);
 	  }
 
-	  ModuleCompiler.compile = function*(baseOption, moduleDir, callback) {
-	    var coffeeFile, coffeeFiles, error, file, files, i, len, option;
+	  ModuleCompiler.compile = function*(arg) {
+	    var baseOption, callback, coffeeFile, coffeeFiles, error, file, files, i, len, moduleDir, option, preExt, ref;
+	    baseOption = arg.baseOption, moduleDir = arg.moduleDir, preExt = (ref = arg.preExt) != null ? ref : "", callback = arg.callback;
 	    option = _.cloneDeep(baseOption);
 	    option.resolve.root = process.cwd();
 	    try {
@@ -133,7 +134,7 @@ module.exports =
 	      for (i = 0, len = coffeeFiles.length; i < len; i++) {
 	        coffeeFile = coffeeFiles[i];
 	        option.entry = {};
-	        option.entry[moduleDir + "/" + (coffeeFile.replace(/\.coffee/, ''))] = "./" + moduleDir + "/" + coffeeFile;
+	        option.entry[moduleDir + "/" + (coffeeFile.replace(/\.coffee/, preExt))] = "./" + moduleDir + "/" + coffeeFile;
 	        yield webpack(option).run(function() {
 	          return ModuleCompiler.compileGen.next();
 	        });
@@ -149,11 +150,35 @@ module.exports =
 	  ModuleCompiler.compileModules = function(dir, callback) {
 	    var compileBrowserModule, compileNodeModule;
 	    compileNodeModule = function() {
-	      ModuleCompiler.compileGen = ModuleCompiler.compile(ModuleCompiler.electronOption, "modules/" + dir, callback);
+	      var baseOption, moduleDir;
+	      baseOption = ModuleCompiler.electronOption;
+	      moduleDir = "modules/" + dir;
+	      ModuleCompiler.compileGen = ModuleCompiler.compile({
+	        baseOption: baseOption,
+	        moduleDir: moduleDir,
+	        callback: function() {
+	          return ModuleCompiler.compileGen.next();
+	        }
+	      });
+	      moduleDir = "modules/" + dir + "/browser";
+	      ModuleCompiler.compileGen = ModuleCompiler.compile({
+	        baseOption: baseOption,
+	        moduleDir: moduleDir,
+	        callback: callback
+	      });
 	      return ModuleCompiler.compileGen.next();
 	    };
 	    compileBrowserModule = function() {
-	      ModuleCompiler.compileGen = ModuleCompiler.compile(ModuleCompiler.browserOption, "modules/" + dir + "/browser", compileNodeModule);
+	      var baseOption, moduleDir, preExt;
+	      baseOption = ModuleCompiler.browserOption;
+	      moduleDir = "modules/" + dir + "/browser";
+	      preExt = ".bundle";
+	      ModuleCompiler.compileGen = ModuleCompiler.compile({
+	        baseOption: baseOption,
+	        moduleDir: moduleDir,
+	        preExt: preExt,
+	        callback: compileNodeModule
+	      });
 	      return ModuleCompiler.compileGen.next();
 	    };
 	    return compileBrowserModule();
@@ -1451,7 +1476,7 @@ module.exports =
 	  };
 	})(this);
 
-	this.on("update", (function(_this) {
+	WholeStatus.on("item-update", (function(_this) {
 	  return function() {
 	    var i, itemStatus, len, onExecute, ref;
 	    ref = WholeStatus.itemStatuses;
@@ -1604,7 +1629,6 @@ module.exports =
 	        }
 	      },
 	      error: function(msg) {
-	        console.warn("error occured: " + msg);
 	        return _this.warn = true;
 	      }
 	    });
@@ -1700,7 +1724,8 @@ module.exports =
 	          return callbackObj.assert(flg, msg);
 	        };
 	        iframeWindow.onerror = function(msg) {
-	          return callbackObj.error(msg);
+	          callbackObj.error(msg);
+	          return false;
 	        };
 	        iframeWindow.console.info = function(msg) {
 	          return callbackObj.info(msg);

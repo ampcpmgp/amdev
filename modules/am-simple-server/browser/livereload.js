@@ -1004,9 +1004,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var debug = __webpack_require__(21)('socket.io-parser');
 	var json = __webpack_require__(25);
-	var isArray = __webpack_require__(27);
-	var Emitter = __webpack_require__(28);
-	var binary = __webpack_require__(29);
+	var Emitter = __webpack_require__(27);
+	var binary = __webpack_require__(28);
 	var isBuf = __webpack_require__(30);
 
 	/**
@@ -1322,16 +1321,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // look up json data
 	  if (str.charAt(++i)) {
-	    try {
-	      p.data = json.parse(str.substr(i));
-	    } catch(e){
-	      return error();
-	    }
+	    p = tryParse(p, str.substr(i));
 	  }
 
 	  debug('decoded %s as %j', str, p);
 	  return p;
 	}
+
+	function tryParse(p, str) {
+	  try {
+	    p.data = json.parse(str);
+	  } catch(e){
+	    return error();
+	  }
+	  return p; 
+	};
 
 	/**
 	 * Deallocates a parser's resources
@@ -2328,15 +2332,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 27 */
 /***/ function(module, exports) {
 
-	module.exports = Array.isArray || function (arr) {
-	  return Object.prototype.toString.call(arr) == '[object Array]';
-	};
-
-
-/***/ },
-/* 28 */
-/***/ function(module, exports) {
-
 	
 	/**
 	 * Expose `Emitter`.
@@ -2504,7 +2499,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -2513,7 +2508,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Module requirements
 	 */
 
-	var isArray = __webpack_require__(27);
+	var isArray = __webpack_require__(29);
 	var isBuf = __webpack_require__(30);
 
 	/**
@@ -2650,6 +2645,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 29 */
+/***/ function(module, exports) {
+
+	module.exports = Array.isArray || function (arr) {
+	  return Object.prototype.toString.call(arr) == '[object Array]';
+	};
+
 
 /***/ },
 /* 30 */
@@ -3339,6 +3343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.transports = opts.transports || ['polling', 'websocket'];
 	  this.readyState = '';
 	  this.writeBuffer = [];
+	  this.prevBufferLen = 0;
 	  this.policyPort = opts.policyPort || 843;
 	  this.rememberUpgrade = opts.rememberUpgrade || false;
 	  this.binaryType = null;
@@ -3366,6 +3371,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.extraHeaders = opts.extraHeaders;
 	    }
 	  }
+
+	  // set on handshake
+	  this.id = null;
+	  this.upgrades = null;
+	  this.pingInterval = null;
+	  this.pingTimeout = null;
+
+	  // set on heartbeat
+	  this.pingIntervalTimer = null;
+	  this.pingTimeoutTimer = null;
 
 	  this.open();
 	}
@@ -3671,7 +3686,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Socket.prototype.onPacket = function (packet) {
-	  if ('opening' === this.readyState || 'open' === this.readyState) {
+	  if ('opening' === this.readyState || 'open' === this.readyState ||
+	      'closing' === this.readyState) {
 	    debug('socket receive: type "%s", data "%s"', packet.type, packet.data);
 
 	    this.emit('packet', packet);
@@ -4051,10 +4067,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// browser shim for xmlhttprequest module
-
-	// Indicate to eslint that ActiveXObject is global
-	/* global ActiveXObject */
+	/* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
 	var hasCORS = __webpack_require__(37);
 
@@ -4087,11 +4100,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  if (!xdomain) {
 	    try {
-	      return new ActiveXObject('Microsoft.XMLHTTP');
+	      return new global[['Active'].concat('Object').join('X')]('Microsoft.XMLHTTP');
 	    } catch (e) { }
 	  }
 	};
 
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 37 */
@@ -4341,6 +4355,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } catch (e) {}
 	    }
 
+	    try {
+	      xhr.setRequestHeader('Accept', '*/*');
+	    } catch (e) {}
+
 	    // ie6 check
 	    if ('withCredentials' in xhr) {
 	      xhr.withCredentials = true;
@@ -4515,9 +4533,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * emitted.
 	 */
 
+	Request.requestsCount = 0;
+	Request.requests = {};
+
 	if (global.document) {
-	  Request.requestsCount = 0;
-	  Request.requests = {};
 	  if (global.attachEvent) {
 	    global.attachEvent('onunload', unloadHandler);
 	  } else if (global.addEventListener) {
@@ -4962,7 +4981,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var utf8 = __webpack_require__(46);
 
 	var base64encoder;
-	if (global.ArrayBuffer) {
+	if (global && global.ArrayBuffer) {
 	  base64encoder = __webpack_require__(47);
 	}
 
@@ -5175,8 +5194,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	exports.decodePacket = function (data, binaryType, utf8decode) {
+	  if (data === undefined) {
+	    return err;
+	  }
 	  // String data
-	  if (typeof data == 'string' || data === undefined) {
+	  if (typeof data == 'string') {
 	    if (data.charAt(0) == 'b') {
 	      return exports.decodeBase64Packet(data.substr(1), binaryType);
 	    }
@@ -5594,7 +5616,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Module requirements.
 	 */
 
-	var isArray = __webpack_require__(27);
+	var isArray = __webpack_require__(29);
 
 	/**
 	 * Module exports.
@@ -6817,23 +6839,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/**
-	 * Override `onData` to use a timer on iOS.
-	 * See: https://gist.github.com/mloughran/2052006
-	 *
-	 * @api private
-	 */
-
-	if ('undefined' !== typeof navigator &&
-	  /iPad|iPhone|iPod/i.test(navigator.userAgent)) {
-	  WS.prototype.onData = function (data) {
-	    var self = this;
-	    setTimeout(function () {
-	      Transport.prototype.onData.call(self, data);
-	    }, 0);
-	  };
-	}
-
-	/**
 	 * Writes data to socket.
 	 *
 	 * @param {Array} array of packets.
@@ -7707,7 +7712,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Module requirements.
 	 */
 
-	var isArray = __webpack_require__(27);
+	var isArray = __webpack_require__(29);
 
 	/**
 	 * Module exports.

@@ -95,11 +95,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.6.4, @license MIT */
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.6.7, @license MIT */
 
 	;(function(window, undefined) {
 	  'use strict';
-	var riot = { version: 'v2.6.4', settings: {} },
+	var riot = { version: 'v2.6.7', settings: {} },
 	  // be aware, internal usage
 	  // ATTENTION: prefix the global dynamic variables with `__`
 
@@ -1071,16 +1071,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Creates a DOM element to wrap the given content. Normally an `DIV`, but can be
 	   * also a `TABLE`, `SELECT`, `TBODY`, `TR`, or `COLGROUP` element.
 	   *
-	   * @param   {string} templ  - The template coming from the custom tag definition
-	   * @param   {string} [html] - HTML content that comes from the DOM element where you
+	   * @param   { String } templ  - The template coming from the custom tag definition
+	   * @param   { String } [html] - HTML content that comes from the DOM element where you
 	   *           will mount the tag, mostly the original tag in the page
+	   * @param   { Boolean } checkSvg - flag needed to know if we need to force the svg rendering in case of loop nodes
 	   * @returns {HTMLElement} DOM element with _templ_ merged through `YIELD` with the _html_.
 	   */
-	  function _mkdom(templ, html) {
+	  function _mkdom(templ, html, checkSvg) {
 	    var
 	      match   = templ && templ.match(/^\s*<([-\w]+)/),
 	      tagName = match && match[1].toLowerCase(),
-	      el = mkEl('div', isSVGTag(tagName))
+	      el = mkEl('div', checkSvg && isSVGTag(tagName))
 
 	    // replace all the yield tags with the tag inner html
 	    templ = replaceYield(templ, html)
@@ -1242,6 +1243,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
+	/**
+	 * Insert a new tag avoiding the insert for the conditional tags
+	 * @param   {Boolean} isVirtual [description]
+	 * @param   { Tag }  prevTag - tag instance used as reference to prepend our new tag
+	 * @param   { Tag }  newTag - new tag to be inserted
+	 * @param   { HTMLElement }  root - loop parent node
+	 * @param   { Array }  tags - array containing the current tags list
+	 * @param   { Function }  virtualFn - callback needed to move or insert virtual DOM
+	 * @param   { Object } dom - DOM node we need to loop
+	 */
+	function insertTag(isVirtual, prevTag, newTag, root, tags, virtualFn, dom) {
+	  if (isInStub(prevTag.root)) return
+	  if (isVirtual) virtualFn(prevTag, root, newTag, dom.childNodes.length)
+	  else root.insertBefore(prevTag.root, newTag.root) // #1374 some browsers reset selected here
+	}
+
 
 	/**
 	 * Manage tags having the 'each'
@@ -1337,9 +1354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        // this tag must be insert
 	        else {
-	          if (isVirtual)
-	            addVirtual(tag, root, tags[i])
-	          else root.insertBefore(tag.root, tags[i].root) // #1374 some browsers reset selected here
+	          insertTag(isVirtual, tag, tags[i], root, tags, addVirtual, dom)
 	          oldItems.splice(i, 0, item)
 	        }
 
@@ -1352,10 +1367,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        pos !== i && _mustReorder &&
 	        tags[i] // fix 1581 unable to reproduce it in a test!
 	      ) {
-	        // update the DOM
-	        if (isVirtual)
-	          moveVirtual(tag, root, tags[i], dom.childNodes.length)
-	        else if (tags[i].root.parentNode) root.insertBefore(tag.root, tags[i].root)
+	        // #closes 2040 PLEASE DON'T REMOVE IT!
+	        // there are no tests for this feature
+	        if (contains(items, oldItems[i]))
+	          insertTag(isVirtual, tag, tags[i], root, tags, moveVirtual, dom)
+
 	        // update the position attribute if it exists
 	        if (expr.pos)
 	          tag[expr.pos] = i
@@ -1575,7 +1591,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (tmpl.hasExpr(val)) attr[el.name] = val
 	  })
 
-	  dom = mkdom(impl.tmpl, innerHTML)
+	  dom = mkdom(impl.tmpl, innerHTML, isLoop)
 
 	  // options
 	  function updateOpts() {
@@ -2859,7 +2875,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	})(this);
 
-	this.on("update", (function(_this) {
+	WholeStatus.on("item-update", (function(_this) {
 	  return function() {
 	    var i, itemStatus, len, onExecute, ref;
 	    ref = WholeStatus.itemStatuses;
@@ -3012,7 +3028,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      },
 	      error: function(msg) {
-	        console.warn("error occured: " + msg);
 	        return _this.warn = true;
 	      }
 	    });
@@ -3108,7 +3123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return callbackObj.assert(flg, msg);
 	        };
 	        iframeWindow.onerror = function(msg) {
-	          return callbackObj.error(msg);
+	          callbackObj.error(msg);
+	          return false;
 	        };
 	        iframeWindow.console.info = function(msg) {
 	          return callbackObj.info(msg);

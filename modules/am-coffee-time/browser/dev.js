@@ -145,11 +145,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.6.4, @license MIT */
+	var __WEBPACK_AMD_DEFINE_RESULT__;/* Riot v2.6.7, @license MIT */
 
 	;(function(window, undefined) {
 	  'use strict';
-	var riot = { version: 'v2.6.4', settings: {} },
+	var riot = { version: 'v2.6.7', settings: {} },
 	  // be aware, internal usage
 	  // ATTENTION: prefix the global dynamic variables with `__`
 
@@ -1121,16 +1121,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Creates a DOM element to wrap the given content. Normally an `DIV`, but can be
 	   * also a `TABLE`, `SELECT`, `TBODY`, `TR`, or `COLGROUP` element.
 	   *
-	   * @param   {string} templ  - The template coming from the custom tag definition
-	   * @param   {string} [html] - HTML content that comes from the DOM element where you
+	   * @param   { String } templ  - The template coming from the custom tag definition
+	   * @param   { String } [html] - HTML content that comes from the DOM element where you
 	   *           will mount the tag, mostly the original tag in the page
+	   * @param   { Boolean } checkSvg - flag needed to know if we need to force the svg rendering in case of loop nodes
 	   * @returns {HTMLElement} DOM element with _templ_ merged through `YIELD` with the _html_.
 	   */
-	  function _mkdom(templ, html) {
+	  function _mkdom(templ, html, checkSvg) {
 	    var
 	      match   = templ && templ.match(/^\s*<([-\w]+)/),
 	      tagName = match && match[1].toLowerCase(),
-	      el = mkEl('div', isSVGTag(tagName))
+	      el = mkEl('div', checkSvg && isSVGTag(tagName))
 
 	    // replace all the yield tags with the tag inner html
 	    templ = replaceYield(templ, html)
@@ -1292,6 +1293,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
+	/**
+	 * Insert a new tag avoiding the insert for the conditional tags
+	 * @param   {Boolean} isVirtual [description]
+	 * @param   { Tag }  prevTag - tag instance used as reference to prepend our new tag
+	 * @param   { Tag }  newTag - new tag to be inserted
+	 * @param   { HTMLElement }  root - loop parent node
+	 * @param   { Array }  tags - array containing the current tags list
+	 * @param   { Function }  virtualFn - callback needed to move or insert virtual DOM
+	 * @param   { Object } dom - DOM node we need to loop
+	 */
+	function insertTag(isVirtual, prevTag, newTag, root, tags, virtualFn, dom) {
+	  if (isInStub(prevTag.root)) return
+	  if (isVirtual) virtualFn(prevTag, root, newTag, dom.childNodes.length)
+	  else root.insertBefore(prevTag.root, newTag.root) // #1374 some browsers reset selected here
+	}
+
 
 	/**
 	 * Manage tags having the 'each'
@@ -1387,9 +1404,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        // this tag must be insert
 	        else {
-	          if (isVirtual)
-	            addVirtual(tag, root, tags[i])
-	          else root.insertBefore(tag.root, tags[i].root) // #1374 some browsers reset selected here
+	          insertTag(isVirtual, tag, tags[i], root, tags, addVirtual, dom)
 	          oldItems.splice(i, 0, item)
 	        }
 
@@ -1402,10 +1417,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        pos !== i && _mustReorder &&
 	        tags[i] // fix 1581 unable to reproduce it in a test!
 	      ) {
-	        // update the DOM
-	        if (isVirtual)
-	          moveVirtual(tag, root, tags[i], dom.childNodes.length)
-	        else if (tags[i].root.parentNode) root.insertBefore(tag.root, tags[i].root)
+	        // #closes 2040 PLEASE DON'T REMOVE IT!
+	        // there are no tests for this feature
+	        if (contains(items, oldItems[i]))
+	          insertTag(isVirtual, tag, tags[i], root, tags, moveVirtual, dom)
+
 	        // update the position attribute if it exists
 	        if (expr.pos)
 	          tag[expr.pos] = i
@@ -1625,7 +1641,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (tmpl.hasExpr(val)) attr[el.name] = val
 	  })
 
-	  dom = mkdom(impl.tmpl, innerHTML)
+	  dom = mkdom(impl.tmpl, innerHTML, isLoop)
 
 	  // options
 	  function updateOpts() {
@@ -2909,7 +2925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	})(this);
 
-	this.on("update", (function(_this) {
+	WholeStatus.on("item-update", (function(_this) {
 	  return function() {
 	    var i, itemStatus, len, onExecute, ref;
 	    ref = WholeStatus.itemStatuses;
@@ -3062,7 +3078,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      },
 	      error: function(msg) {
-	        console.warn("error occured: " + msg);
 	        return _this.warn = true;
 	      }
 	    });
@@ -3158,7 +3173,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return callbackObj.assert(flg, msg);
 	        };
 	        iframeWindow.onerror = function(msg) {
-	          return callbackObj.error(msg);
+	          callbackObj.error(msg);
+	          return false;
 	        };
 	        iframeWindow.console.info = function(msg) {
 	          return callbackObj.info(msg);
@@ -5212,9 +5228,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var debug = __webpack_require__(21)('socket.io-parser');
 	var json = __webpack_require__(25);
-	var isArray = __webpack_require__(27);
-	var Emitter = __webpack_require__(28);
-	var binary = __webpack_require__(29);
+	var Emitter = __webpack_require__(27);
+	var binary = __webpack_require__(28);
 	var isBuf = __webpack_require__(30);
 
 	/**
@@ -5530,16 +5545,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // look up json data
 	  if (str.charAt(++i)) {
-	    try {
-	      p.data = json.parse(str.substr(i));
-	    } catch(e){
-	      return error();
-	    }
+	    p = tryParse(p, str.substr(i));
 	  }
 
 	  debug('decoded %s as %j', str, p);
 	  return p;
 	}
+
+	function tryParse(p, str) {
+	  try {
+	    p.data = json.parse(str);
+	  } catch(e){
+	    return error();
+	  }
+	  return p; 
+	};
 
 	/**
 	 * Deallocates a parser's resources
@@ -6536,15 +6556,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 27 */
 /***/ function(module, exports) {
 
-	module.exports = Array.isArray || function (arr) {
-	  return Object.prototype.toString.call(arr) == '[object Array]';
-	};
-
-
-/***/ },
-/* 28 */
-/***/ function(module, exports) {
-
 	
 	/**
 	 * Expose `Emitter`.
@@ -6712,7 +6723,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -6721,7 +6732,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Module requirements
 	 */
 
-	var isArray = __webpack_require__(27);
+	var isArray = __webpack_require__(29);
 	var isBuf = __webpack_require__(30);
 
 	/**
@@ -6858,6 +6869,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 29 */
+/***/ function(module, exports) {
+
+	module.exports = Array.isArray || function (arr) {
+	  return Object.prototype.toString.call(arr) == '[object Array]';
+	};
+
 
 /***/ },
 /* 30 */
@@ -7547,6 +7567,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.transports = opts.transports || ['polling', 'websocket'];
 	  this.readyState = '';
 	  this.writeBuffer = [];
+	  this.prevBufferLen = 0;
 	  this.policyPort = opts.policyPort || 843;
 	  this.rememberUpgrade = opts.rememberUpgrade || false;
 	  this.binaryType = null;
@@ -7574,6 +7595,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.extraHeaders = opts.extraHeaders;
 	    }
 	  }
+
+	  // set on handshake
+	  this.id = null;
+	  this.upgrades = null;
+	  this.pingInterval = null;
+	  this.pingTimeout = null;
+
+	  // set on heartbeat
+	  this.pingIntervalTimer = null;
+	  this.pingTimeoutTimer = null;
 
 	  this.open();
 	}
@@ -7879,7 +7910,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Socket.prototype.onPacket = function (packet) {
-	  if ('opening' === this.readyState || 'open' === this.readyState) {
+	  if ('opening' === this.readyState || 'open' === this.readyState ||
+	      'closing' === this.readyState) {
 	    debug('socket receive: type "%s", data "%s"', packet.type, packet.data);
 
 	    this.emit('packet', packet);
@@ -8259,10 +8291,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// browser shim for xmlhttprequest module
-
-	// Indicate to eslint that ActiveXObject is global
-	/* global ActiveXObject */
+	/* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
 	var hasCORS = __webpack_require__(37);
 
@@ -8295,11 +8324,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  if (!xdomain) {
 	    try {
-	      return new ActiveXObject('Microsoft.XMLHTTP');
+	      return new global[['Active'].concat('Object').join('X')]('Microsoft.XMLHTTP');
 	    } catch (e) { }
 	  }
 	};
 
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 37 */
@@ -8549,6 +8579,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } catch (e) {}
 	    }
 
+	    try {
+	      xhr.setRequestHeader('Accept', '*/*');
+	    } catch (e) {}
+
 	    // ie6 check
 	    if ('withCredentials' in xhr) {
 	      xhr.withCredentials = true;
@@ -8723,9 +8757,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * emitted.
 	 */
 
+	Request.requestsCount = 0;
+	Request.requests = {};
+
 	if (global.document) {
-	  Request.requestsCount = 0;
-	  Request.requests = {};
 	  if (global.attachEvent) {
 	    global.attachEvent('onunload', unloadHandler);
 	  } else if (global.addEventListener) {
@@ -9170,7 +9205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var utf8 = __webpack_require__(46);
 
 	var base64encoder;
-	if (global.ArrayBuffer) {
+	if (global && global.ArrayBuffer) {
 	  base64encoder = __webpack_require__(47);
 	}
 
@@ -9383,8 +9418,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	exports.decodePacket = function (data, binaryType, utf8decode) {
+	  if (data === undefined) {
+	    return err;
+	  }
 	  // String data
-	  if (typeof data == 'string' || data === undefined) {
+	  if (typeof data == 'string') {
 	    if (data.charAt(0) == 'b') {
 	      return exports.decodeBase64Packet(data.substr(1), binaryType);
 	    }
@@ -9802,7 +9840,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Module requirements.
 	 */
 
-	var isArray = __webpack_require__(27);
+	var isArray = __webpack_require__(29);
 
 	/**
 	 * Module exports.
@@ -11025,23 +11063,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/**
-	 * Override `onData` to use a timer on iOS.
-	 * See: https://gist.github.com/mloughran/2052006
-	 *
-	 * @api private
-	 */
-
-	if ('undefined' !== typeof navigator &&
-	  /iPad|iPhone|iPod/i.test(navigator.userAgent)) {
-	  WS.prototype.onData = function (data) {
-	    var self = this;
-	    setTimeout(function () {
-	      Transport.prototype.onData.call(self, data);
-	    }, 0);
-	  };
-	}
-
-	/**
 	 * Writes data to socket.
 	 *
 	 * @param {Array} array of packets.
@@ -11915,7 +11936,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Module requirements.
 	 */
 
-	var isArray = __webpack_require__(27);
+	var isArray = __webpack_require__(29);
 
 	/**
 	 * Module exports.
