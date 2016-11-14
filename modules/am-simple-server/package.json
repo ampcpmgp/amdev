@@ -9,8 +9,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chokidar": "latest",
-    "mime": "latest",
-    "socket.io": "latest"
+    "am-common": "^1.0.31",
+    "chokidar": "^1.6.1",
+    "glob": "^7.1.1",
+    "lodash": "^4.16.6",
+    "mime": "^1.3.4",
+    "socket.io": "^1.5.1",
+    "socket.io-client": "^1.5.1"
+  },
+  "devDependencies": {
+    "am-coffee-time": "0.0.25"
   }
 }

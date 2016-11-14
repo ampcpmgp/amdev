@@ -1,0 +1,14 @@
+clover.exe,Clover=======>2406,26,796,498
+SciTE.exe,SciTE-Lite [2 of 7]=======>763,61,1103,962
+cmd.exe,npm=======>1931,525,993,519
+atom.exe,README.md — C:\Users\TEST\Documents\GitHub\amdev — Atom=======>819,20,1107,987
+GitHub.exe,GitHub=======>467,364,1224,675
+slack.exe,A-Frame=======>666,54,1096,978
+electron.exe,Electron=======>1922,6,1027,914
+chrome.exe,Google Chrome=======>1945,0,1202,959
+chrome.exe,Google Chrome=======>4,1,1062,975
+chrome.exe,Google Chrome=======>560,0,1281,1032
+clover.exe,Clover=======>2406,519,796,498
+explorer.exe,Sticky Notes=======>0,0,1,1
+LINE.exe,LINE=======>2767,57,629,588
+explorer.exe,Program Manager=======>0,0,5760,1080

@@ -40,7 +40,7 @@ require("./test-iframe.tag")
         return
       WholeStatus.executablePath[executePath]()
     @toRouteHash = => riot.route("")
-    @on("update", () =>
+    WholeStatus.on("item-update", () =>
       for itemStatus in WholeStatus.itemStatuses
         if itemStatus.onExecute
           onExecute = true
@@ -190,7 +190,6 @@ require("./test-iframe.tag")
             @update()
             callback and callback()
         error: (msg) =>
-          console.warn "error occured: #{msg}"
           @warn = true
       )
     @router = (e) => riot.route("path=" + e.target.getAttribute("href"))

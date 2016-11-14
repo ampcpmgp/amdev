@@ -2,7 +2,11 @@
 Testing and development of the mock page using a router.  
 this is renamed from am-lunch-time.
 
+repository  
 https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time
+
+sample page  
+https://ampcpmgp.github.io/amdev/modules/am-coffee-time/web/list.html
 
 ## sample code
 

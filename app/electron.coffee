@@ -8,7 +8,7 @@ Compiler = require("../Compiler")
 window.electonReadFlg = true
 
 class ModuleCompiler extends Compiler
-  @compile: (baseOption, moduleDir, callback) =>
+  @compile: ({baseOption, moduleDir, preExt = "", callback}) =>
     option = _.cloneDeep(baseOption)
     option.resolve.root = process.cwd()
     try
@@ -20,7 +20,7 @@ class ModuleCompiler extends Compiler
       delete option.devtool
       for coffeeFile in coffeeFiles
         option.entry = {}
-        option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, '')}"] = "./#{moduleDir}/#{coffeeFile}"
+        option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, preExt)}"] = "./#{moduleDir}/#{coffeeFile}"
         yield webpack(option).run(=>
           @compileGen.next()
         )
@@ -30,10 +30,17 @@ class ModuleCompiler extends Compiler
       callback()
   @compileModules: (dir, callback) =>
     compileNodeModule = => #node or electron
-      @compileGen = @compile(@electronOption, "modules/#{dir}", callback)
+      baseOption = @electronOption
+      moduleDir = "modules/#{dir}"
+      @compileGen = @compile({baseOption, moduleDir, callback: => @compileGen.next()})
+      moduleDir = "modules/#{dir}/browser"
+      @compileGen = @compile({baseOption, moduleDir, callback})
       @compileGen.next()
     compileBrowserModule = => #browser
-      @compileGen = @compile(@browserOption, "modules/#{dir}/browser", compileNodeModule)
+      baseOption = @browserOption
+      moduleDir = "modules/#{dir}/browser"
+      preExt = ".bundle"
+      @compileGen = @compile({baseOption, moduleDir, preExt, callback: compileNodeModule})
       @compileGen.next()
     compileBrowserModule()
   @config: =>
