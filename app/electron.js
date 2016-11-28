@@ -45,55 +45,1729 @@ module.exports =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("var $, Compiler, ModuleCompiler, _, exec, fs, webpack,\n  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },\n  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },\n  hasProp = {}.hasOwnProperty;\n\n$ = __webpack_require__(1);\n\nwebpack = __webpack_require__(2);\n\n_ = __webpack_require__(3);\n\nfs = __webpack_require__(4);\n\nCompiler = __webpack_require__(5);\n\nexec = __webpack_require__(7).exec;\n\nwindow.electonReadFlg = true;\n\nModuleCompiler = (function(superClass) {\n  extend(ModuleCompiler, superClass);\n\n  function ModuleCompiler() {\n    this._config = bind(this._config, this);\n    this.compileModules = bind(this.compileModules, this);\n    this.compile = bind(this.compile, this);\n    return ModuleCompiler.__super__.constructor.apply(this, arguments);\n  }\n\n  ModuleCompiler.prototype.compile = function*(baseOption, moduleDir, callback) {\n    var coffeeFile, coffeeFiles, error, error1, error2, file, files, i, len, option;\n    option = _.cloneDeep(baseOption);\n    option.resolve.root = process.cwd();\n    try {\n      files = fs.readdirSync(moduleDir);\n    } catch (error1) {\n      error = error1;\n      return callback();\n    }\n    try {\n      coffeeFiles = (function() {\n        var i, len, results;\n        results = [];\n        for (i = 0, len = files.length; i < len; i++) {\n          file = files[i];\n          if (file.match(/.coffee$/)) {\n            results.push(file);\n          }\n        }\n        return results;\n      })();\n      delete option.devtool;\n      for (i = 0, len = coffeeFiles.length; i < len; i++) {\n        coffeeFile = coffeeFiles[i];\n        option.entry = {};\n        option.entry[moduleDir + \"/\" + (coffeeFile.replace(/\\.coffee/, ''))] = \"./\" + moduleDir + \"/\" + coffeeFile;\n        (yield webpack(option).run((function(_this) {\n          return function() {\n            return _this.compileGen.next();\n          };\n        })(this)));\n      }\n      return callback();\n    } catch (error2) {\n      error = error2;\n      console.log(error);\n      return callback();\n    }\n  };\n\n  ModuleCompiler.prototype.compileModules = function(dir, callback) {\n    var compileBrowserModule, compileNodeModule;\n    compileNodeModule = (function(_this) {\n      return function() {\n        _this.compileGen = _this.compile(_this.electronOption, \"modules/\" + dir, callback);\n        return _this.compileGen.next();\n      };\n    })(this);\n    compileBrowserModule = (function(_this) {\n      return function() {\n        _this.compileGen = _this.compile(_this.browserOption, \"modules/\" + dir + \"/browser\", compileNodeModule);\n        return _this.compileGen.next();\n      };\n    })(this);\n    return compileBrowserModule();\n  };\n\n  ModuleCompiler.prototype._config = function() {\n    return this.browserOption.plugins = [new webpack.optimize.OccurenceOrderPlugin(true), new webpack.optimize.DedupePlugin()];\n  };\n\n  return ModuleCompiler;\n\n})(Compiler);\n\nModuleCompiler.prototype._config();\n\n$(restart).on(\"click\", function(e) {\n  return __webpack_require__(8).ipcRenderer.send(\"restart\");\n});\n\n(function() {\n  var $box, $content, $fragment, fn, i, len, module, modules;\n  modules = fs.readdirSync(\"./modules/\");\n  $box = $(\".npm-update-box\");\n  $content = $(npmUpdateButton.content);\n  fn = function($content) {\n    var $buttons;\n    $content = $content.clone();\n    $buttons = $content.find(\"button\").each(function() {\n      return $(this).attr(\"onclick\", $(this).attr(\"onclick\").replace(/!val!/, module));\n    }).addClass(module);\n    $buttons.filter(\".patch\").text(module);\n    return $fragment.append($content);\n  };\n  for (i = 0, len = modules.length; i < len; i++) {\n    module = modules[i];\n    $fragment = $(document.createDocumentFragment());\n    fn($content);\n    $box.append($fragment);\n  }\n  window.npmPublish = function(uploadModules, version) {\n    var callback, dir, j, len1, results;\n    console.log(\"npm upload start - \" + uploadModules);\n    ea.liveReloadStopFlg === true || toggleReloadFlgButton.click();\n    results = [];\n    for (j = 0, len1 = uploadModules.length; j < len1; j++) {\n      module = uploadModules[j];\n      dir = \"./modules/\" + module;\n      callback = (function(_this) {\n        return function() {\n          return exec(\"cd \" + dir + \" && npm version \" + version + \" && npm publish\", function(e, out, err) {\n            return console.log(out);\n          });\n        };\n      })(this);\n      results.push(ModuleCompiler.prototype.compileModules(module, callback));\n    }\n    return results;\n  };\n  return window.browserChangeReloadFlg = (function(_this) {\n    return function(e) {\n      return e.target.querySelector(\"span\").innerHTML = ea.liveReloadStopFlg = !ea.liveReloadStopFlg;\n    };\n  })(this);\n})();\n\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMC5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL2FwcC9lbGVjdHJvbi5jb2ZmZWU/MjkyNCJdLCJzb3VyY2VzQ29udGVudCI6WyIkID0gcmVxdWlyZShcImpxdWVyeVwiKVxyXG53ZWJwYWNrID0gcmVxdWlyZShcIndlYnBhY2tcIilcclxuXyA9IHJlcXVpcmUoXCJsb2Rhc2hcIilcclxuXHJcbiNcclxuZnMgPSByZXF1aXJlKFwiZnNcIilcclxuI1xyXG5Db21waWxlciA9IHJlcXVpcmUoXCJhbS1jb21waWxlclwiKVxyXG5leGVjID0gcmVxdWlyZShcImNoaWxkX3Byb2Nlc3NcIikuZXhlY1xyXG5cclxud2luZG93LmVsZWN0b25SZWFkRmxnID0gdHJ1ZVxyXG5cclxuY2xhc3MgTW9kdWxlQ29tcGlsZXIgZXh0ZW5kcyBDb21waWxlclxyXG4gIGNvbXBpbGU6IChiYXNlT3B0aW9uLCBtb2R1bGVEaXIsIGNhbGxiYWNrKSA9PlxyXG4gICAgb3B0aW9uID0gXy5jbG9uZURlZXAoYmFzZU9wdGlvbilcclxuICAgIG9wdGlvbi5yZXNvbHZlLnJvb3QgPSBwcm9jZXNzLmN3ZCgpXHJcbiAgICB0cnlcclxuICAgICAgZmlsZXMgPSBmcy5yZWFkZGlyU3luYyhtb2R1bGVEaXIpXHJcbiAgICBjYXRjaCBlcnJvclxyXG4gICAgICByZXR1cm4gY2FsbGJhY2soKVxyXG4gICAgdHJ5XHJcbiAgICAgIGNvZmZlZUZpbGVzID0gKGZpbGUgZm9yIGZpbGUgaW4gZmlsZXMgd2hlbiBmaWxlLm1hdGNoKC8uY29mZmVlJC8pKVxyXG4gICAgICBkZWxldGUgb3B0aW9uLmRldnRvb2xcclxuICAgICAgZm9yIGNvZmZlZUZpbGUgaW4gY29mZmVlRmlsZXNcclxuICAgICAgICBvcHRpb24uZW50cnkgPSB7fVxyXG4gICAgICAgIG9wdGlvbi5lbnRyeVtcIiN7bW9kdWxlRGlyfS8je2NvZmZlZUZpbGUucmVwbGFjZSgvXFwuY29mZmVlLywgJycpfVwiXSA9IFwiLi8je21vZHVsZURpcn0vI3tjb2ZmZWVGaWxlfVwiXHJcbiAgICAgICAgeWllbGQgd2VicGFjayhvcHRpb24pLnJ1big9PlxyXG4gICAgICAgICAgQGNvbXBpbGVHZW4ubmV4dCgpXHJcbiAgICAgICAgKVxyXG4gICAgICBjYWxsYmFjaygpXHJcbiAgICBjYXRjaCBlcnJvclxyXG4gICAgICBjb25zb2xlLmxvZyBlcnJvclxyXG4gICAgICBjYWxsYmFjaygpXHJcbiAgY29tcGlsZU1vZHVsZXM6IChkaXIsIGNhbGxiYWNrKSA9PlxyXG4gICAgY29tcGlsZU5vZGVNb2R1bGUgPSA9PiAjbm9kZSBvciBlbGVjdHJvblxyXG4gICAgICBAY29tcGlsZUdlbiA9IEBjb21waWxlKEBlbGVjdHJvbk9wdGlvbiwgXCJtb2R1bGVzLyN7ZGlyfVwiLCBjYWxsYmFjaylcclxuICAgICAgQGNvbXBpbGVHZW4ubmV4dCgpXHJcbiAgICBjb21waWxlQnJvd3Nlck1vZHVsZSA9ID0+ICNicm93c2VyXHJcbiAgICAgIEBjb21waWxlR2VuID0gQGNvbXBpbGUoQGJyb3dzZXJPcHRpb24sIFwibW9kdWxlcy8je2Rpcn0vYnJvd3NlclwiLCBjb21waWxlTm9kZU1vZHVsZSlcclxuICAgICAgQGNvbXBpbGVHZW4ubmV4dCgpXHJcbiAgICBjb21waWxlQnJvd3Nlck1vZHVsZSgpXHJcbiAgX2NvbmZpZzogPT5cclxuICAgICNtaW5pZmllZFxyXG4gICAgQGJyb3dzZXJPcHRpb24ucGx1Z2lucyA9IFtcclxuICAgICAgbmV3IHdlYnBhY2sub3B0aW1pemUuT2NjdXJlbmNlT3JkZXJQbHVnaW4odHJ1ZSlcclxuICAgICAgbmV3IHdlYnBhY2sub3B0aW1pemUuRGVkdXBlUGx1Z2luKClcclxuICAgICAgIyBuZXcgd2VicGFjay5vcHRpbWl6ZS5VZ2xpZnlKc1BsdWdpbigpXHJcbiAgICBdXHJcbk1vZHVsZUNvbXBpbGVyOjpfY29uZmlnKClcclxuXHJcbiQocmVzdGFydCkub24oXCJjbGlja1wiLCAoZSkgLT4gcmVxdWlyZSgnZWxlY3Ryb24nKS5pcGNSZW5kZXJlci5zZW5kKFwicmVzdGFydFwiKSlcclxuZG8gLT4gI3VwbG9hZCBucG1cclxuICBtb2R1bGVzID0gZnMucmVhZGRpclN5bmMoXCIuL21vZHVsZXMvXCIpXHJcbiAgJGJveCA9ICQoXCIubnBtLXVwZGF0ZS1ib3hcIilcclxuICAkY29udGVudCA9ICQobnBtVXBkYXRlQnV0dG9uLmNvbnRlbnQpXHJcbiAgZm9yIG1vZHVsZSBpbiBtb2R1bGVzXHJcbiAgICAkZnJhZ21lbnQgPSAkKGRvY3VtZW50LmNyZWF0ZURvY3VtZW50RnJhZ21lbnQoKSlcclxuICAgIGRvKCRjb250ZW50KSAtPlxyXG4gICAgICAkY29udGVudCA9ICRjb250ZW50LmNsb25lKClcclxuICAgICAgJGJ1dHRvbnMgPSAkY29udGVudC5maW5kKFwiYnV0dG9uXCIpXHJcbiAgICAgICAgLmVhY2goLT4gJCh0aGlzKS5hdHRyKFwib25jbGlja1wiLCAkKHRoaXMpLmF0dHIoXCJvbmNsaWNrXCIpLnJlcGxhY2UoLyF2YWwhLywgbW9kdWxlKSkpXHJcbiAgICAgICAgLmFkZENsYXNzKG1vZHVsZSlcclxuICAgICAgJGJ1dHRvbnMuZmlsdGVyKFwiLnBhdGNoXCIpLnRleHQobW9kdWxlKVxyXG4gICAgICAkZnJhZ21lbnQuYXBwZW5kKCRjb250ZW50KVxyXG4gICAgJGJveC5hcHBlbmQoJGZyYWdtZW50KVxyXG4gIHdpbmRvdy5ucG1QdWJsaXNoID0gKHVwbG9hZE1vZHVsZXMsIHZlcnNpb24pIC0+XHJcbiAgICBjb25zb2xlLmxvZyBcIm5wbSB1cGxvYWQgc3RhcnQgLSAje3VwbG9hZE1vZHVsZXN9XCJcclxuICAgIGVhLmxpdmVSZWxvYWRTdG9wRmxnIGlzIHRydWUgb3IgdG9nZ2xlUmVsb2FkRmxnQnV0dG9uLmNsaWNrKClcclxuICAgIGZvciBtb2R1bGUgaW4gdXBsb2FkTW9kdWxlc1xyXG4gICAgICBkaXIgPSBcIi4vbW9kdWxlcy8je21vZHVsZX1cIlxyXG4gICAgICBjYWxsYmFjayA9ID0+XHJcbiAgICAgICAgIyBUT0RPOiDliJ3jgoHjgabjga7jg5Djg7zjgrjjg6fjg7PjgarjgolucG0gcHVibGlzaOOCkuOBi+OBkeOCi+OAglxyXG4gICAgICAgIGV4ZWMoXCJjZCAje2Rpcn0gJiYgbnBtIHZlcnNpb24gI3t2ZXJzaW9ufSAmJiBucG0gcHVibGlzaFwiLFxyXG4gICAgICAgICAgKGUsIG91dCwgZXJyKSAtPlxyXG4gICAgICAgICAgICBjb25zb2xlLmxvZyBvdXRcclxuICAgICAgICApXHJcbiAgICAgIE1vZHVsZUNvbXBpbGVyOjpjb21waWxlTW9kdWxlcyhtb2R1bGUsIGNhbGxiYWNrKVxyXG4gIHdpbmRvdy5icm93c2VyQ2hhbmdlUmVsb2FkRmxnID0gKGUpID0+XHJcbiAgICBlLnRhcmdldC5xdWVyeVNlbGVjdG9yKFwic3BhblwiKS5pbm5lckhUTUwgPVxyXG4gICAgICBlYS5saXZlUmVsb2FkU3RvcEZsZyA9IG5vdCBlYS5saXZlUmVsb2FkU3RvcEZsZ1xyXG5cblxuXG4vKiogV0VCUEFDSyBGT09URVIgKipcbiAqKiAuL2FwcC9lbGVjdHJvbi5jb2ZmZWVcbiAqKi8iXSwibWFwcGluZ3MiOiJBQUFBO0FBQUE7Ozs7QUFBQTtBQUNBO0FBQUE7QUFDQTtBQUFBO0FBQ0E7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUFBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7Ozs7Ozs7Ozs7QUFDQTtBQUNBO0FBQUE7QUFDQTtBQUNBO0FBQ0E7QUFEQTtBQUVBO0FBQ0E7O0FBQ0E7QUFDQTs7QUFBQTtBQUFBOztBQUFBO0FBQUE7O0FBQUE7OztBQUNBO0FBQ0E7O0FBQ0E7QUFDQTtBQUNBO0FBQUE7QUFDQTtBQURBO0FBQUE7QUFIQTtBQU1BO0FBVEE7QUFVQTtBQUNBO0FBQ0E7O0FBbkJBO0FBQ0E7QUFtQkE7QUFDQTtBQUFBO0FBQUE7QUFDQTtBQUNBO0FBRkE7QUFBQTtBQUdBO0FBQUE7QUFDQTtBQUNBO0FBRkE7QUFBQTtBQUdBO0FBUEE7QUFDQTtBQU9BO0FBRUE7QUFGQTtBQUNBOzs7QUE5QkE7QUFDQTtBQW1DQTtBQUNBO0FBQ0E7QUFBQTtBQUFBO0FBQ0E7QUFBQTtBQUNBO0FBQUE7QUFDQTtBQUNBO0FBR0E7QUFDQTtBQUFBO0FBQ0E7QUFDQTtBQUFBO0FBRUE7QUFDQTtBQU5BO0FBRkE7O0FBQ0E7QUFDQTtBQU9BO0FBVEE7QUFVQTtBQUNBO0FBQUE7QUFDQTtBQUNBO0FBQUE7O0FBQ0E7QUFDQTtBQUFBO0FBRUE7QUFFQTtBQURBO0FBSEE7QUFBQTtBQU1BO0FBUkE7O0FBSEE7QUFZQTtBQUFBO0FBQ0E7QUFEQTtBQUFBO0FBMUJBOyIsInNvdXJjZVJvb3QiOiIifQ==");
+	module.exports = __webpack_require__(1);
+
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = require(\"jquery\");\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMS5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9leHRlcm5hbCBcImpxdWVyeVwiPzBiNzYiXSwic291cmNlc0NvbnRlbnQiOlsibW9kdWxlLmV4cG9ydHMgPSByZXF1aXJlKFwianF1ZXJ5XCIpO1xuXG5cbi8qKioqKioqKioqKioqKioqKlxuICoqIFdFQlBBQ0sgRk9PVEVSXG4gKiogZXh0ZXJuYWwgXCJqcXVlcnlcIlxuICoqIG1vZHVsZSBpZCA9IDFcbiAqKiBtb2R1bGUgY2h1bmtzID0gMCAxXG4gKiovIl0sIm1hcHBpbmdzIjoiQUFBQSIsInNvdXJjZVJvb3QiOiIifQ==");
+	var $, Common, Compiler, ModuleCompiler, _, exec, fs, params, webpack,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+
+	fs = __webpack_require__(2);
+
+	exec = __webpack_require__(3).exec;
+
+	$ = __webpack_require__(4);
+
+	global.riot = __webpack_require__(5);
+
+	webpack = __webpack_require__(6);
+
+	_ = __webpack_require__(7);
+
+	Compiler = __webpack_require__(8);
+
+	Common = __webpack_require__(12);
+
+	window.electonReadFlg = true;
+
+	ModuleCompiler = (function(superClass) {
+	  extend(ModuleCompiler, superClass);
+
+	  function ModuleCompiler() {
+	    return ModuleCompiler.__super__.constructor.apply(this, arguments);
+	  }
+
+	  ModuleCompiler.compile = function*(arg) {
+	    var baseOption, callback, coffeeFile, coffeeFiles, error, file, files, i, len, moduleDir, option, preExt, ref;
+	    baseOption = arg.baseOption, moduleDir = arg.moduleDir, preExt = (ref = arg.preExt) != null ? ref : "", callback = arg.callback;
+	    option = _.cloneDeep(baseOption);
+	    option.resolve.root = process.cwd();
+	    try {
+	      files = fs.readdirSync(moduleDir);
+	    } catch (error1) {
+	      error = error1;
+	      return callback();
+	    }
+	    try {
+	      coffeeFiles = (function() {
+	        var i, len, results;
+	        results = [];
+	        for (i = 0, len = files.length; i < len; i++) {
+	          file = files[i];
+	          if (file.match(/.coffee$/)) {
+	            results.push(file);
+	          }
+	        }
+	        return results;
+	      })();
+	      delete option.devtool;
+	      for (i = 0, len = coffeeFiles.length; i < len; i++) {
+	        coffeeFile = coffeeFiles[i];
+	        option.entry = {};
+	        option.entry[moduleDir + "/" + (coffeeFile.replace(/\.coffee/, preExt))] = "./" + moduleDir + "/" + coffeeFile;
+	        yield webpack(option).run(function() {
+	          return ModuleCompiler.compileGen.next();
+	        });
+	      }
+	      return callback();
+	    } catch (error1) {
+	      error = error1;
+	      console.log(error);
+	      return callback();
+	    }
+	  };
+
+	  ModuleCompiler.compileModules = function(dir, callback) {
+	    var compileBrowserModule, compileNodeModule;
+	    compileNodeModule = function() {
+	      var baseOption, moduleDir;
+	      baseOption = ModuleCompiler.electronOption;
+	      moduleDir = "modules/" + dir;
+	      ModuleCompiler.compileGen = ModuleCompiler.compile({
+	        baseOption: baseOption,
+	        moduleDir: moduleDir,
+	        callback: function() {
+	          return ModuleCompiler.compileGen.next();
+	        }
+	      });
+	      moduleDir = "modules/" + dir + "/browser";
+	      ModuleCompiler.compileGen = ModuleCompiler.compile({
+	        baseOption: baseOption,
+	        moduleDir: moduleDir,
+	        callback: callback
+	      });
+	      return ModuleCompiler.compileGen.next();
+	    };
+	    compileBrowserModule = function() {
+	      var baseOption, moduleDir, preExt;
+	      baseOption = ModuleCompiler.browserOption;
+	      moduleDir = "modules/" + dir + "/browser";
+	      preExt = ".bundle";
+	      ModuleCompiler.compileGen = ModuleCompiler.compile({
+	        baseOption: baseOption,
+	        moduleDir: moduleDir,
+	        preExt: preExt,
+	        callback: compileNodeModule
+	      });
+	      return ModuleCompiler.compileGen.next();
+	    };
+	    return compileBrowserModule();
+	  };
+
+	  ModuleCompiler.config = function() {
+	    return ModuleCompiler.browserOption.plugins = [new webpack.optimize.OccurenceOrderPlugin(true), new webpack.optimize.DedupePlugin()];
+	  };
+
+	  return ModuleCompiler;
+
+	})(Compiler);
+
+	ModuleCompiler.config();
+
+	$(restart).on("click", function(e) {
+	  return __webpack_require__(13).ipcRenderer.send("restart");
+	});
+
+	(function() {
+	  var $box, $content, $fragment, fn, i, len, module, modules;
+	  modules = fs.readdirSync("./modules/");
+	  $box = $(".npm-update-box");
+	  $content = $(npmUpdateButton.content);
+	  fn = function($content) {
+	    var $buttons;
+	    $content = $content.clone();
+	    $buttons = $content.find("button").each(function() {
+	      return $(this).attr("onclick", $(this).attr("onclick").replace(/!val!/, module));
+	    }).addClass(module);
+	    $buttons.filter(".patch").text(module);
+	    return $fragment.append($content);
+	  };
+	  for (i = 0, len = modules.length; i < len; i++) {
+	    module = modules[i];
+	    $fragment = $(document.createDocumentFragment());
+	    fn($content);
+	    $box.append($fragment);
+	  }
+	  window.npmPublish = function(uploadModules, version) {
+	    var callback, dir, j, len1, results;
+	    console.log("npm upload start - " + uploadModules);
+	    ea.liveReloadStopFlg === true || toggleReloadFlgButton.click();
+	    results = [];
+	    for (j = 0, len1 = uploadModules.length; j < len1; j++) {
+	      module = uploadModules[j];
+	      dir = "./modules/" + module;
+	      callback = (function(_this) {
+	        return function() {
+	          if (!ea.publishFlg) {
+	            return console.log("compile finished");
+	          }
+	          return exec("cd " + dir + " && npm version " + version + " && npm publish", function(e, out, err) {
+	            if (err) {
+	              return console.log(err);
+	            }
+	            return console.log(out);
+	          });
+	        };
+	      })(this);
+	      results.push(ModuleCompiler.compileModules(module, callback));
+	    }
+	    return results;
+	  };
+	  window.browserChangeReloadFlg = (function(_this) {
+	    return function(e) {
+	      return e.currentTarget.querySelector("span").innerHTML = ea.liveReloadStopFlg = !ea.liveReloadStopFlg;
+	    };
+	  })(this);
+	  return window.browserPublishFlg = (function(_this) {
+	    return function(e) {
+	      return e.currentTarget.querySelector("span").innerHTML = ea.publishFlg = !ea.publishFlg;
+	    };
+	  })(this);
+	})();
+
+
+	/* switch test code / 各モジュールにテストコードをうつし削除予定 */
+
+	params = Common.prototype.getParams(location.href);
+
+	(function(_this) {
+	  return (function() {
+	    var generate, testcases;
+	    if (params["am-simple-server"]) {
+	      return __webpack_require__(14);
+	    } else if (params["am-coffee-time"]) {
+	      return __webpack_require__(20);
+	    } else {
+	      generate = __webpack_require__(27);
+	      testcases = __webpack_require__(32);
+	      return generate(testcases);
+	    }
+	  });
+	})(this)();
+
 
 /***/ },
 /* 2 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"webpack\");\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMi5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9leHRlcm5hbCBcIndlYnBhY2tcIj8zOTNkIl0sInNvdXJjZXNDb250ZW50IjpbIm1vZHVsZS5leHBvcnRzID0gcmVxdWlyZShcIndlYnBhY2tcIik7XG5cblxuLyoqKioqKioqKioqKioqKioqXG4gKiogV0VCUEFDSyBGT09URVJcbiAqKiBleHRlcm5hbCBcIndlYnBhY2tcIlxuICoqIG1vZHVsZSBpZCA9IDJcbiAqKiBtb2R1bGUgY2h1bmtzID0gMFxuICoqLyJdLCJtYXBwaW5ncyI6IkFBQUEiLCJzb3VyY2VSb290IjoiIn0=");
+	module.exports = require("fs");
 
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"lodash\");\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMy5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9leHRlcm5hbCBcImxvZGFzaFwiPzBjOGIiXSwic291cmNlc0NvbnRlbnQiOlsibW9kdWxlLmV4cG9ydHMgPSByZXF1aXJlKFwibG9kYXNoXCIpO1xuXG5cbi8qKioqKioqKioqKioqKioqKlxuICoqIFdFQlBBQ0sgRk9PVEVSXG4gKiogZXh0ZXJuYWwgXCJsb2Rhc2hcIlxuICoqIG1vZHVsZSBpZCA9IDNcbiAqKiBtb2R1bGUgY2h1bmtzID0gMFxuICoqLyJdLCJtYXBwaW5ncyI6IkFBQUEiLCJzb3VyY2VSb290IjoiIn0=");
+	module.exports = require("child_process");
 
 /***/ },
 /* 4 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"fs\");\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNC5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9leHRlcm5hbCBcImZzXCI/MmUwOSJdLCJzb3VyY2VzQ29udGVudCI6WyJtb2R1bGUuZXhwb3J0cyA9IHJlcXVpcmUoXCJmc1wiKTtcblxuXG4vKioqKioqKioqKioqKioqKipcbiAqKiBXRUJQQUNLIEZPT1RFUlxuICoqIGV4dGVybmFsIFwiZnNcIlxuICoqIG1vZHVsZSBpZCA9IDRcbiAqKiBtb2R1bGUgY2h1bmtzID0gMCAxIDJcbiAqKi8iXSwibWFwcGluZ3MiOiJBQUFBIiwic291cmNlUm9vdCI6IiJ9");
+	module.exports = require("jquery");
 
 /***/ },
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	eval("var Base, _, fs, path, webpack,\n  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };\n\npath = __webpack_require__(6);\n\nwebpack = __webpack_require__(2);\n\n_ = __webpack_require__(3);\n\nfs = __webpack_require__(4);\n\nmodule.exports = Base = (function() {\n  function Base() {\n    this.callback = bind(this.callback, this);\n    this.start = bind(this.start, this);\n    this.compile = bind(this.compile, this);\n    this._config = bind(this._config, this);\n  }\n\n  Base.prototype.baseOption = {\n    output: {\n      path: path.resolve(),\n      filename: \"[name].js\",\n      libraryTarget: \"commonjs2\"\n    },\n    module: {\n      loaders: [\n        {\n          test: /\\.coffee$/,\n          loader: \"coffee\"\n        }, {\n          test: /\\.cson$/,\n          loader: \"cson-loader\"\n        }, {\n          test: /\\.html$/,\n          loader: \"html\"\n        }, {\n          test: /\\.json$/,\n          loader: \"json\"\n        }, {\n          test: /\\.ya?ml$/,\n          loader: \"json!yaml\"\n        }\n      ],\n      postLoaders: [\n        {\n          test: /\\.src\\.coffee$/,\n          loader: \"raw\"\n        }\n      ]\n    },\n    devtool: \"#cheap-module-eval-source-map\",\n    resolve: {\n      modulesDirectories: [\"modules\", \"node_modules\"],\n      extensions: [\".coffee\", \".js\", \"\"]\n    }\n  };\n\n  Base.prototype.nodeModules = (function() {\n    var retObj;\n    retObj = {};\n    fs.readdirSync('node_modules').filter(function(x) {\n      return ['.bin'].indexOf(x) === -1;\n    }).forEach(function(mod) {\n      return retObj[mod] = 'commonjs ' + mod;\n    });\n    return retObj;\n  })();\n\n  Base.prototype._config = function() {\n    this.electronOption = _.cloneDeep(this.baseOption);\n    this.electronOption.target = \"atom\";\n    this.electronOption.externals = this.nodeModules;\n    this.electronOption.module.loaders.push({\n      test: /\\.tag$/,\n      loader: \"riotjs-loader\",\n      query: {\n        type: 'none'\n      }\n    });\n    this.nodeOption = _.cloneDeep(this.baseOption);\n    this.nodeOption.target = \"node\";\n    this.nodeOption.externals = this.nodeModules;\n    this.browserOption = _.cloneDeep(this.baseOption);\n    this.browserOption.target = \"web\";\n    this.browserOption.module.preLoaders = [];\n    this.browserOption.output.libraryTarget = \"umd\";\n    return this.browserOption.module.loaders.push({\n      test: /\\.tag$/,\n      loader: \"riotjs-loader\",\n      query: {\n        type: 'none'\n      }\n    });\n  };\n\n  Base.prototype.compile = function() {\n    if (this.electronOption.entry) {\n      webpack(this.electronOption).run((function(_this) {\n        return function(err, stats) {\n          return _this.callback(err, stats);\n        };\n      })(this));\n    }\n    if (this.nodeOption.entry) {\n      webpack(this.nodeOption).run((function(_this) {\n        return function(err, stats) {\n          return _this.callback(err, stats);\n        };\n      })(this));\n    }\n    if (this.browserOption.entry) {\n      return webpack(this.browserOption).run((function(_this) {\n        return function(err, stats) {\n          return _this.callback(err, stats);\n        };\n      })(this));\n    }\n  };\n\n  Base.prototype.start = function() {\n    if (this.electronOption.entry) {\n      webpack(this.electronOption).watch({}, (function(_this) {\n        return function(err, stats) {\n          return _this.callback(err, stats);\n        };\n      })(this));\n    }\n    if (this.nodeOption.entry) {\n      webpack(this.nodeOption).watch({}, (function(_this) {\n        return function(err, stats) {\n          return _this.callback(err, stats);\n        };\n      })(this));\n    }\n    if (this.browserOption.entry) {\n      return webpack(this.browserOption).watch({}, (function(_this) {\n        return function(err, stats) {\n          return _this.callback(err, stats);\n        };\n      })(this));\n    }\n  };\n\n  Base.prototype.callback = function(err, stats) {\n    var jsonStats;\n    if (err) {\n      return console.log(err);\n    }\n    jsonStats = stats.toJson();\n    return console.log(stats.toString({\n      colors: true,\n      assets: false,\n      version: false,\n      hash: false,\n      timings: false,\n      chunkModules: false\n    }));\n  };\n\n  return Base;\n\n})();\n\nBase.prototype._config();\n\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNS5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL21vZHVsZXMvYW0tY29tcGlsZXIvQmFzZS5jb2ZmZWU/ZGY3MiJdLCJzb3VyY2VzQ29udGVudCI6WyJwYXRoID0gcmVxdWlyZShcInBhdGhcIilcclxud2VicGFjayA9IHJlcXVpcmUoXCJ3ZWJwYWNrXCIpXHJcbl8gPSByZXF1aXJlKFwibG9kYXNoXCIpXHJcbiNcclxuZnMgPXJlcXVpcmUoXCJmc1wiKVxyXG5cclxubW9kdWxlLmV4cG9ydHMgPSBjbGFzcyBCYXNlXHJcbiAgYmFzZU9wdGlvbjpcclxuICAgIG91dHB1dDpcclxuICAgICAgcGF0aDogcGF0aC5yZXNvbHZlKClcclxuICAgICAgZmlsZW5hbWU6IFwiW25hbWVdLmpzXCJcclxuICAgICAgbGlicmFyeVRhcmdldDogXCJjb21tb25qczJcIlxyXG4gICAgbW9kdWxlOlxyXG4gICAgICBsb2FkZXJzOiBbXHJcbiAgICAgICAge3Rlc3Q6IC9cXC5jb2ZmZWUkLywgbG9hZGVyOiBcImNvZmZlZVwifVxyXG4gICAgICAgIHt0ZXN0OiAvXFwuY3NvbiQvLCBsb2FkZXI6IFwiY3Nvbi1sb2FkZXJcIn1cclxuICAgICAgICB7dGVzdDogL1xcLmh0bWwkLywgbG9hZGVyOiBcImh0bWxcIn1cclxuICAgICAgICB7dGVzdDogL1xcLmpzb24kLywgbG9hZGVyOiBcImpzb25cIn1cclxuICAgICAgICB7dGVzdDogL1xcLnlhP21sJC8sIGxvYWRlcjogXCJqc29uIXlhbWxcIn1cclxuICAgICAgXVxyXG4gICAgICBwb3N0TG9hZGVyczogW1xyXG4gICAgICAgIHt0ZXN0OiAvXFwuc3JjXFwuY29mZmVlJC8sIGxvYWRlcjogXCJyYXdcIn1cclxuICAgICAgXVxyXG4gICAgZGV2dG9vbDogXCIjY2hlYXAtbW9kdWxlLWV2YWwtc291cmNlLW1hcFwiXHJcbiAgICByZXNvbHZlOlxyXG4gICAgICBtb2R1bGVzRGlyZWN0b3JpZXM6IFtcIm1vZHVsZXNcIiwgXCJub2RlX21vZHVsZXNcIl1cclxuICAgICAgZXh0ZW5zaW9uczogW1wiLmNvZmZlZVwiLCBcIi5qc1wiLCBcIlwiXVxyXG4gIG5vZGVNb2R1bGVzOiBkbyA9PlxyXG4gICAgcmV0T2JqID0ge31cclxuICAgIGZzLnJlYWRkaXJTeW5jKCdub2RlX21vZHVsZXMnKVxyXG4gICAgICAuZmlsdGVyKCh4KSA9PlxyXG4gICAgICAgIFsnLmJpbiddLmluZGV4T2YoeCkgaXMgLTFcclxuICAgICAgICApLmZvckVhY2goKG1vZCkgPT5cclxuICAgICAgICAgIHJldE9ialttb2RdID0gJ2NvbW1vbmpzICcgKyBtb2RcclxuICAgICAgICAgIClcclxuICAgIHJldE9ialxyXG4gIF9jb25maWc6ID0+XHJcbiAgICBAZWxlY3Ryb25PcHRpb24gPSBfLmNsb25lRGVlcChAYmFzZU9wdGlvbilcclxuICAgIEBlbGVjdHJvbk9wdGlvbi50YXJnZXQgPSBcImF0b21cIlxyXG4gICAgQGVsZWN0cm9uT3B0aW9uLmV4dGVybmFscyA9IEBub2RlTW9kdWxlc1xyXG4gICAgQGVsZWN0cm9uT3B0aW9uLm1vZHVsZS5sb2FkZXJzLnB1c2goe3Rlc3Q6IC9cXC50YWckLywgbG9hZGVyOiBcInJpb3Rqcy1sb2FkZXJcIiwgcXVlcnk6IHt0eXBlOiAnbm9uZScgfX0pXHJcbiAgICBAbm9kZU9wdGlvbiA9IF8uY2xvbmVEZWVwKEBiYXNlT3B0aW9uKVxyXG4gICAgQG5vZGVPcHRpb24udGFyZ2V0ID0gXCJub2RlXCJcclxuICAgIEBub2RlT3B0aW9uLmV4dGVybmFscyA9IEBub2RlTW9kdWxlc1xyXG4gICAgQGJyb3dzZXJPcHRpb24gPSBfLmNsb25lRGVlcChAYmFzZU9wdGlvbilcclxuICAgIEBicm93c2VyT3B0aW9uLnRhcmdldCA9IFwid2ViXCJcclxuICAgIEBicm93c2VyT3B0aW9uLm1vZHVsZS5wcmVMb2FkZXJzID0gW11cclxuICAgIEBicm93c2VyT3B0aW9uLm91dHB1dC5saWJyYXJ5VGFyZ2V0ID0gXCJ1bWRcIlxyXG4gICAgQGJyb3dzZXJPcHRpb24ubW9kdWxlLmxvYWRlcnMucHVzaCh7dGVzdDogL1xcLnRhZyQvLCBsb2FkZXI6IFwicmlvdGpzLWxvYWRlclwiLCBxdWVyeToge3R5cGU6ICdub25lJyB9fSlcclxuICBjb21waWxlOiA9PlxyXG4gICAgd2VicGFjayhAZWxlY3Ryb25PcHRpb24pLnJ1bigoZXJyLCBzdGF0cykgPT4gQGNhbGxiYWNrKGVycixzdGF0cykpIGlmIEBlbGVjdHJvbk9wdGlvbi5lbnRyeVxyXG4gICAgd2VicGFjayhAbm9kZU9wdGlvbikucnVuKChlcnIsIHN0YXRzKSA9PiBAY2FsbGJhY2soZXJyLHN0YXRzKSkgaWYgQG5vZGVPcHRpb24uZW50cnlcclxuICAgIHdlYnBhY2soQGJyb3dzZXJPcHRpb24pLnJ1bigoZXJyLCBzdGF0cykgPT4gQGNhbGxiYWNrKGVycixzdGF0cykpIGlmIEBicm93c2VyT3B0aW9uLmVudHJ5XHJcbiAgc3RhcnQ6ID0+XHJcbiAgICB3ZWJwYWNrKEBlbGVjdHJvbk9wdGlvbikud2F0Y2goe30sIChlcnIsIHN0YXRzKSA9PiBAY2FsbGJhY2soZXJyLHN0YXRzKSkgaWYgQGVsZWN0cm9uT3B0aW9uLmVudHJ5XHJcbiAgICB3ZWJwYWNrKEBub2RlT3B0aW9uKS53YXRjaCh7fSwgKGVyciwgc3RhdHMpID0+IEBjYWxsYmFjayhlcnIsc3RhdHMpKSBpZiBAbm9kZU9wdGlvbi5lbnRyeVxyXG4gICAgd2VicGFjayhAYnJvd3Nlck9wdGlvbikud2F0Y2goe30sIChlcnIsIHN0YXRzKSA9PiBAY2FsbGJhY2soZXJyLHN0YXRzKSkgaWYgQGJyb3dzZXJPcHRpb24uZW50cnlcclxuICBjYWxsYmFjazogKGVyciwgc3RhdHMpID0+XHJcbiAgICByZXR1cm4gY29uc29sZS5sb2coZXJyKSBpZiAoZXJyKVxyXG4gICAganNvblN0YXRzID0gc3RhdHMudG9Kc29uKClcclxuICAgIGNvbnNvbGUubG9nIHN0YXRzLnRvU3RyaW5nKFxyXG4gICAgICBjb2xvcnM6IHRydWVcclxuICAgICAgYXNzZXRzOiBmYWxzZVxyXG4gICAgICB2ZXJzaW9uOiBmYWxzZVxyXG4gICAgICBoYXNoOiBmYWxzZVxyXG4gICAgICB0aW1pbmdzOiBmYWxzZVxyXG4gICAgICBjaHVua01vZHVsZXM6IGZhbHNlXHJcbiAgICAgIClcclxuXHJcbkJhc2U6Ol9jb25maWcoKVxyXG5cblxuXG4vKiogV0VCUEFDSyBGT09URVIgKipcbiAqKiAuL21vZHVsZXMvYW0tY29tcGlsZXIvQmFzZS5jb2ZmZWVcbiAqKi8iXSwibWFwcGluZ3MiOiJBQUFBO0FBQUE7QUFDQTtBQURBO0FBQ0E7QUFBQTtBQUNBO0FBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7Ozs7Ozs7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBSEE7QUFJQTtBQUNBO0FBQ0E7QUFBQTtBQUFBO0FBREE7QUFFQTtBQUFBO0FBRkE7QUFHQTtBQUFBO0FBSEE7QUFJQTtBQUFBO0FBSkE7QUFLQTtBQUFBO0FBTEE7QUFBQTtBQU9BO0FBQ0E7QUFBQTtBQUFBO0FBREE7QUFQQTtBQUxBO0FBZUE7QUFDQTtBQUNBO0FBQ0E7QUFsQkE7OztBQW1CQTtBQUNBO0FBQUE7QUFDQTtBQUVBO0FBREE7QUFHQTtBQURBO0FBR0E7QUFSQTtBQUNBO0FBUUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFaQTtBQUNBO0FBWUE7QUFDQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBQ0E7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBOztBQUNBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTs7QUFIQTtBQUNBO0FBR0E7QUFDQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7O0FBQ0E7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBOztBQUNBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTs7QUFIQTtBQUNBO0FBR0E7QUFDQTtBQUFBO0FBQUE7O0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQU5BO0FBSEE7QUFDQTs7Ozs7QUFXQTsiLCJzb3VyY2VSb290IjoiIn0=");
+	module.exports = require("riot");
 
 /***/ },
 /* 6 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"path\");\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNi5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9leHRlcm5hbCBcInBhdGhcIj81YjJhIl0sInNvdXJjZXNDb250ZW50IjpbIm1vZHVsZS5leHBvcnRzID0gcmVxdWlyZShcInBhdGhcIik7XG5cblxuLyoqKioqKioqKioqKioqKioqXG4gKiogV0VCUEFDSyBGT09URVJcbiAqKiBleHRlcm5hbCBcInBhdGhcIlxuICoqIG1vZHVsZSBpZCA9IDZcbiAqKiBtb2R1bGUgY2h1bmtzID0gMFxuICoqLyJdLCJtYXBwaW5ncyI6IkFBQUEiLCJzb3VyY2VSb290IjoiIn0=");
+	module.exports = require("webpack");
 
 /***/ },
 /* 7 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"child_process\");\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiNy5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9leHRlcm5hbCBcImNoaWxkX3Byb2Nlc3NcIj80MzA4Il0sInNvdXJjZXNDb250ZW50IjpbIm1vZHVsZS5leHBvcnRzID0gcmVxdWlyZShcImNoaWxkX3Byb2Nlc3NcIik7XG5cblxuLyoqKioqKioqKioqKioqKioqXG4gKiogV0VCUEFDSyBGT09URVJcbiAqKiBleHRlcm5hbCBcImNoaWxkX3Byb2Nlc3NcIlxuICoqIG1vZHVsZSBpZCA9IDdcbiAqKiBtb2R1bGUgY2h1bmtzID0gMCAyXG4gKiovIl0sIm1hcHBpbmdzIjoiQUFBQSIsInNvdXJjZVJvb3QiOiIifQ==");
+	module.exports = require("lodash");
 
 /***/ },
 /* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Compiler, _, fs, fse, path, webpack;
+
+	fs = __webpack_require__(2);
+
+	path = __webpack_require__(9);
+
+	fse = __webpack_require__(10);
+
+	_ = __webpack_require__(7);
+
+	webpack = __webpack_require__(6);
+
+	module.exports = Compiler = (function() {
+	  function Compiler() {}
+
+	  Compiler.baseOption = {
+	    output: {
+	      path: path.resolve(),
+	      filename: "[name].js",
+	      libraryTarget: "commonjs2"
+	    },
+	    module: {
+	      loaders: [
+	        {
+	          test: /\.coffee$/,
+	          loader: "coffee"
+	        }, {
+	          test: /\.cson$/,
+	          loader: "cson-loader"
+	        }, {
+	          test: /\.html$/,
+	          loader: "html"
+	        }, {
+	          test: /\.json$/,
+	          loader: "json"
+	        }, {
+	          test: /\.ya?ml$/,
+	          loader: "json!yaml"
+	        }
+	      ],
+	      postLoaders: [
+	        {
+	          test: /\.src\.coffee$/,
+	          loader: "raw"
+	        }
+	      ]
+	    },
+	    devtool: "cheap-module-eval-source-map",
+	    resolve: {
+	      modulesDirectories: ["modules", "node_modules"],
+	      extensions: [".coffee", ".tag", ".js", ""]
+	    }
+	  };
+
+	  Compiler.nodeModules = (function() {
+	    var retObj;
+	    retObj = {};
+	    fs.readdirSync('node_modules').filter(function(x) {
+	      return ['.bin'].indexOf(x) === -1;
+	    }).forEach(function(mod) {
+	      return retObj[mod] = 'commonjs ' + mod;
+	    });
+	    return retObj;
+	  })();
+
+	  Compiler.checkNum = 0;
+
+	  Compiler._config = function() {
+	    Compiler.electronOption = _.cloneDeep(Compiler.baseOption);
+	    Compiler.electronOption.target = "atom";
+	    Compiler.electronOption.externals = Compiler.nodeModules;
+	    Compiler.electronOption.module.loaders.push({
+	      test: /\.tag$/,
+	      loader: "riotjs-loader",
+	      query: {
+	        type: 'none'
+	      }
+	    });
+	    Compiler.nodeOption = _.cloneDeep(Compiler.baseOption);
+	    Compiler.nodeOption.target = "node";
+	    Compiler.nodeOption.externals = Compiler.nodeModules;
+	    Compiler.browserOption = _.cloneDeep(Compiler.baseOption);
+	    Compiler.browserOption.target = "web";
+	    Compiler.browserOption.module.preLoaders = [];
+	    Compiler.browserOption.output.library = "[name]";
+	    Compiler.browserOption.output.libraryTarget = "umd";
+	    return Compiler.browserOption.module.loaders.push({
+	      test: /\.tag$/,
+	      loader: "riotjs-loader",
+	      query: {
+	        type: 'none'
+	      }
+	    });
+	  };
+
+	  Compiler.run = function() {
+	    Compiler.setFilePath();
+	    delete Compiler.electronOption.devtool;
+	    delete Compiler.nodeOption.devtool;
+	    delete Compiler.browserOption.devtool;
+	    Compiler.electronStart = function() {
+	      return 0;
+	    };
+	    if (Compiler.electronOption.entry) {
+	      webpack(Compiler.electronOption).run(function(err, stats) {
+	        return Compiler.callback(err, stats);
+	      });
+	    }
+	    if (Compiler.nodeOption.entry) {
+	      webpack(Compiler.nodeOption).run(function(err, stats) {
+	        return Compiler.callback(err, stats);
+	      });
+	    }
+	    if (Compiler.browserOption.entry) {
+	      return webpack(Compiler.browserOption).run(function(err, stats) {
+	        return Compiler.callback(err, stats);
+	      });
+	    }
+	  };
+
+	  Compiler.start = function() {
+	    Compiler.setFilePath();
+	    if (Compiler.electronOption.entry) {
+	      webpack(Compiler.electronOption).watch({}, function(err, stats) {
+	        return Compiler.callback(err, stats);
+	      });
+	    }
+	    if (Compiler.nodeOption.entry) {
+	      webpack(Compiler.nodeOption).watch({}, function(err, stats) {
+	        return Compiler.callback(err, stats);
+	      });
+	    }
+	    if (Compiler.browserOption.entry) {
+	      return webpack(Compiler.browserOption).watch({}, function(err, stats) {
+	        return Compiler.callback(err, stats);
+	      });
+	    }
+	  };
+
+	  Compiler.setFilePath = function() {
+	    Compiler.electronOption.entry = {};
+	    Compiler.nodeOption.entry = {};
+	    Compiler.browserOption.entry = {};
+	    __webpack_require__(11).sync("./**/@(electron|app)/*.coffee", {
+	      ignore: "./**/@(node_modules)/**"
+	    }).forEach(function(filepath) {
+	      return Compiler.electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
+	    });
+	    __webpack_require__(11).sync("./**/node/*.coffee", {
+	      ignore: "./**/@(node_modules)/**"
+	    }).forEach(function(filepath) {
+	      return Compiler.nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
+	    });
+	    return __webpack_require__(11).sync("./**/web/*.coffee", {
+	      ignore: "./**/@(node_modules)/**"
+	    }).concat(__webpack_require__(11).sync("./**/browser/*.coffee", {
+	      ignore: "./**/@(node_modules)/**"
+	    })).forEach(function(filepath) {
+	      return Compiler.browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath];
+	    });
+	  };
+
+	  Compiler.callback = function(err, stats) {
+	    var jsonStats;
+	    if (err) {
+	      return console.log(err);
+	    }
+	    jsonStats = stats.toJson();
+	    console.log(stats.toString({
+	      colors: true,
+	      assets: false,
+	      version: false,
+	      hash: false,
+	      timings: false,
+	      chunkModules: false
+	    }));
+	    if (++Compiler.checkNum === 3) {
+	      return Compiler.electronStart();
+	    }
+	  };
+
+	  Compiler.electronStart = function() {
+	    var cmd;
+	    cmd = fse.readJsonSync("package.json").scripts.electron;
+	    return __webpack_require__(3).exec(cmd);
+	  };
+
+	  return Compiler;
+
+	})();
+
+	Compiler._config();
+
+
+/***/ },
+/* 9 */
 /***/ function(module, exports) {
 
-	eval("module.exports = require(\"electron\");\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiOC5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy9leHRlcm5hbCBcImVsZWN0cm9uXCI/NjkyOCJdLCJzb3VyY2VzQ29udGVudCI6WyJtb2R1bGUuZXhwb3J0cyA9IHJlcXVpcmUoXCJlbGVjdHJvblwiKTtcblxuXG4vKioqKioqKioqKioqKioqKipcbiAqKiBXRUJQQUNLIEZPT1RFUlxuICoqIGV4dGVybmFsIFwiZWxlY3Ryb25cIlxuICoqIG1vZHVsZSBpZCA9IDhcbiAqKiBtb2R1bGUgY2h1bmtzID0gMCAxIDJcbiAqKi8iXSwibWFwcGluZ3MiOiJBQUFBIiwic291cmNlUm9vdCI6IiJ9");
+	module.exports = require("path");
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = require("fs-extra");
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = require("glob");
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	var Common,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+	module.exports = Common = (function() {
+	  function Common() {
+	    this.getHash = bind(this.getHash, this);
+	    this.getParams = bind(this.getParams, this);
+	  }
+
+	  Common.prototype.params = null;
+
+	  Common.prototype.hashs = null;
+
+	  Common.prototype.hashSeparator = "/";
+
+	  Common.prototype.getParams = function(url) {
+	    var i, len, param, query, ref, val;
+	    if (url == null) {
+	      url = location.search;
+	    }
+	    if (decodeURI) {
+	      url = decodeURI(url);
+	    }
+	    query = url.replace(/.*\?([^#]*)$/, "$1");
+	    this.params = {};
+	    if (url !== query) {
+	      ref = query.split("&");
+	      for (i = 0, len = ref.length; i < len; i++) {
+	        val = ref[i];
+	        param = val.split("=");
+	        val = param[1];
+	        if (val != null) {
+	          if (val.match(",")) {
+	            val = val.split(",");
+	          }
+	        } else {
+	          val = true;
+	        }
+	        this.params[param[0]] = val;
+	      }
+	    }
+	    return this.params;
+	  };
+
+	  Common.prototype.getHash = function(url) {
+	    var hash, i, len, ref, val;
+	    if (url == null) {
+	      url = location.hash;
+	    }
+	    hash = url.replace(/.*\#(.*)$/, "$1");
+	    this.hashs = [];
+	    if (url !== hash) {
+	      ref = hash.split(this.hashSeparator);
+	      for (i = 0, len = ref.length; i < len; i++) {
+	        val = ref[i];
+	        this.hashs.push(val);
+	      }
+	    }
+	    return this.hashs;
+	  };
+
+	  return Common;
+
+	})();
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	module.exports = require("electron");
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SimpleServer;
+
+	SimpleServer = __webpack_require__(15);
+
+	SimpleServer.prototype.webDir = ["./web", "./test"];
+
+	SimpleServer.prototype.watchPath = ["./package.json"];
+
+	SimpleServer.prototype.start();
+
+	SimpleServer.prototype.start(8081);
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(__dirname) {var SimpleServer, chokidar, fs, glob, http, lodash, mime, sio,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+	fs = __webpack_require__(2);
+
+	http = __webpack_require__(16);
+
+	chokidar = __webpack_require__(17);
+
+	mime = __webpack_require__(18);
+
+	sio = __webpack_require__(19);
+
+	glob = __webpack_require__(11);
+
+	lodash = __webpack_require__(7);
+
+	module.exports = SimpleServer = (function() {
+	  function SimpleServer() {
+	    this.checkReloadList = bind(this.checkReloadList, this);
+	    this.wsEventReload = bind(this.wsEventReload, this);
+	    this.wsStart = bind(this.wsStart, this);
+	  }
+
+	  SimpleServer.prototype.livereloadJs = __dirname + "/browser/livereload.js";
+
+	  SimpleServer.prototype.livereloadPath = "/__livereload.js";
+
+	  SimpleServer.prototype.webDir = ["./"];
+
+	  SimpleServer.prototype.watchPath = glob.sync("./**/web/*.@(html|js)", {
+	    ignore: "./**/node_modules/**"
+	  });
+
+	  SimpleServer.prototype.sioOption = {};
+
+	  SimpleServer.prototype.reloadList = [];
+
+	  SimpleServer.prototype.start = function(httpPort, wsPort) {
+	    var error, lastArg, listen, path;
+	    this.httpPort = httpPort != null ? httpPort : 8080;
+	    this.wsPort = wsPort != null ? wsPort : this.httpPort;
+	    try {
+	      path = "./modules/am-simple-server/browser/livereload.js";
+	      fs.statSync(path);
+	      this.livereloadJs = path;
+	    } catch (error1) {
+	      error = error1;
+	      0;
+	    }
+	    this.app = http.createServer((function(_this) {
+	      return function(req, res) {
+	        return _this.httpServerAction(req, res);
+	      };
+	    })(this));
+	    lastArg = arguments[arguments.length - 1];
+	    listen = (function(_this) {
+	      return function() {
+	        return _this.app.listen(_this.httpPort, typeof lastArg === "function" ? lastArg : void 0);
+	      };
+	    })(this);
+	    setTimeout(listen, 0);
+	    return this.wsStart();
+	  };
+
+	  SimpleServer.prototype._checkExistsFile = function(file) {
+	    var dir, j, len, path, webDir;
+	    webDir = typeof this.webDir !== "object" ? [this.webDir] : this.webDir;
+	    for (j = 0, len = webDir.length; j < len; j++) {
+	      dir = webDir[j];
+	      path = "" + dir + file;
+	      if (fs.existsSync(path) && fs.lstatSync(path).isFile()) {
+	        return path;
+	      }
+	    }
+	    return false;
+	  };
+
+	  SimpleServer.prototype.httpServerAction = function(req, res) {
+	    var data, date, ip, path, type, url;
+	    url = req.url.replace(/\/{2,}/, "/").replace(/\?.*$/, "");
+	    if (url[url.length - 1] === "/") {
+	      url += "index.html";
+	    }
+
+	    /*get file */
+	    path = this._checkExistsFile(url);
+	    if (path) {
+	      data = fs.readFileSync(path);
+	      type = mime.lookup(path);
+	      res.writeHead(200, {
+	        "Content-Type": type
+	      });
+	      if (type === "text/html") {
+	        data = data.toString("utf8") + ("<script src='" + this.livereloadPath + "'></script>");
+	        data = Buffer.from(data);
+	      }
+	      res.end(data);
+	    } else if (url === this.livereloadPath) {
+	      data = fs.readFileSync(this.livereloadJs);
+	      type = mime.lookup(this.livereloadJs);
+	      res.writeHead(200, {
+	        "Content-Type": type
+	      });
+	      res.end(data);
+	    } else {
+	      res.writeHead(404);
+	      res.end("404 - file not found");
+	    }
+
+	    /*access log */
+	    if (url.slice(url.length - 4, +(url.length - 1) + 1 || 9e9) === "html") {
+	      ip = req.connection.remoteAddress.replace(/.*[^\d](\d+\.\d+\.\d+\.\d+$)/, "$1");
+	      date = new Date().toLocaleTimeString();
+	      return console.log(date + " " + ip + " " + path);
+	    }
+	  };
+
+	  SimpleServer.prototype.wsStart = function() {
+	    var server;
+	    server = this.wsPort === this.httpPort ? this.app : this.wsPort;
+	    this.websocket = sio(server, this.sioOption);
+	    this.websocket.on("connection", (function(_this) {
+	      return function(socket) {
+	        _this.reloadList.push(socket);
+	        return socket.on("test", function(msg) {
+	          return console.log(msg);
+	        });
+	      };
+	    })(this));
+	    return this.wsEventReload();
+	  };
+
+	  SimpleServer.prototype.wsEventReload = function() {
+	    return chokidar.watch(this.watchPath, {
+	      persistent: true,
+	      awaitWriteFinish: {
+	        stabilityThreshold: 10,
+	        pollInterval: 10
+	      }
+	    }).on("change", (function(_this) {
+	      return function(path, stat) {
+	        var j, len, ref, results, socket;
+	        _this.checkReloadList();
+	        ref = _this.reloadList;
+	        results = [];
+	        for (j = 0, len = ref.length; j < len; j++) {
+	          socket = ref[j];
+	          results.push(_this.sendReloadEvent(socket));
+	        }
+	        return results;
+	      };
+	    })(this));
+	  };
+
+	  SimpleServer.prototype.sendReloadEvent = function(socket) {
+	    return socket.emit("reload");
+	  };
+
+	  SimpleServer.prototype.sendCssReloadEvent = function(socket, filepath) {
+	    return socket.emit("css reload", fs.readFileSync(filepath, {
+	      encoding: "utf-8"
+	    }));
+	  };
+
+	  SimpleServer.prototype.checkReloadList = function() {
+	    var arr, i, j, k, len, len1, num, ref, results, socket;
+	    arr = [];
+	    ref = this.reloadList;
+	    for (i = j = 0, len = ref.length; j < len; i = ++j) {
+	      socket = ref[i];
+	      if (socket.disconnected) {
+	        arr.unshift(i);
+	      }
+	    }
+	    results = [];
+	    for (k = 0, len1 = arr.length; k < len1; k++) {
+	      num = arr[k];
+	      results.push(this.reloadList.splice(num, 1));
+	    }
+	    return results;
+	  };
+
+	  return SimpleServer;
+
+	})();
+
+	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	module.exports = require("http");
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	module.exports = require("chokidar");
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = require("mime");
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = require("socket.io");
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var LunchServer, TestLunch, fse, test,
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+
+	fse = __webpack_require__(10);
+
+	LunchServer = __webpack_require__(21);
+
+	TestLunch = (function(superClass) {
+	  extend(TestLunch, superClass);
+
+	  function TestLunch() {
+	    return TestLunch.__super__.constructor.apply(this, arguments);
+	  }
+
+	  TestLunch.prototype.webDir = "./modules/am-coffee-time/test/web/";
+
+	  TestLunch.prototype.watchPath = "./modules/am-coffee-time/test/web/test.js";
+
+	  TestLunch.prototype.patternFile = "./modules/am-coffee-time/test/web/case.cson";
+
+	  TestLunch.prototype.htmlPath = (process.cwd()) + "/modules/am-coffee-time/browser/index.html";
+
+	  TestLunch.prototype.devJsPath = (process.cwd()) + "/modules/am-coffee-time/browser/dev.js";
+
+	  return TestLunch;
+
+	})(LunchServer);
+
+	test = {
+	  port: (function(_this) {
+	    return function(arg) {
+	      var httpPort, wsPort;
+	      httpPort = arg[0], wsPort = arg[1];
+	      return TestLunch.prototype.start(httpPort, wsPort);
+	    };
+	  })(this)
+	};
+
+	__webpack_require__(23).start(test);
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(__dirname) {var LunchServer, SimpleServer, chokidar, cson, devJs, fs, html, mime,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+
+	fs = __webpack_require__(2);
+
+	mime = __webpack_require__(18);
+
+	chokidar = __webpack_require__(17);
+
+	cson = __webpack_require__(22);
+
+	SimpleServer = __webpack_require__(15);
+
+	html = null;
+
+	devJs = null;
+
+	module.exports = LunchServer = (function(superClass) {
+	  extend(LunchServer, superClass);
+
+	  function LunchServer() {
+	    this.sendTestCase = bind(this.sendTestCase, this);
+	    this.httpServerAction = bind(this.httpServerAction, this);
+	    this.start = bind(this.start, this);
+	    return LunchServer.__super__.constructor.apply(this, arguments);
+	  }
+
+	  LunchServer.prototype.watchPath = "./web/test.js";
+
+	  LunchServer.prototype.patternFile = "./web/case.cson";
+
+	  LunchServer.prototype.htmlPath = __dirname + "/browser/index.html";
+
+	  LunchServer.prototype.devJsPath = __dirname + "/browser/dev.js";
+
+	  LunchServer.prototype.sioOption = {
+	    origins: "*:*"
+	  };
+
+	  LunchServer.prototype.start = function(httpPort, wsPort) {
+	    this.httpPort = httpPort != null ? httpPort : 8080;
+	    this.wsPort = wsPort != null ? wsPort : this.httpPort;
+	    LunchServer.__super__.start.call(this, this.httpPort, this.wsPort, (function(_this) {
+	      return function() {
+	        return console.log("server start, on port:" + _this.httpPort);
+	      };
+	    })(this));
+	    html = fs.readFileSync(this.htmlPath, {
+	      encoding: "utf-8"
+	    });
+	    devJs = fs.readFileSync(this.devJsPath, {
+	      encoding: "utf-8"
+	    }).replace("{__WSPORT__}", this.wsPort).replace("{__TESTJS__}", this.watchPath.replace(this.webDir, ""));
+	    chokidar.watch(this.patternFile).on("change", (function(_this) {
+	      return function(path) {
+	        var i, len, ref, results, socket;
+	        ref = _this.reloadList;
+	        results = [];
+	        for (i = 0, len = ref.length; i < len; i++) {
+	          socket = ref[i];
+	          results.push(_this.sendTestCase(socket));
+	        }
+	        return results;
+	      };
+	    })(this));
+	    return this.websocket.on("connection", (function(_this) {
+	      return function(socket) {
+	        return _this.sendTestCase(socket);
+	      };
+	    })(this));
+	  };
+
+	  LunchServer.prototype.httpServerAction = function(req, res) {
+	    var url;
+	    url = req.url.replace(/\/{2,}/, "/").replace(/\?.*$/, "");
+	    res.setHeader('Access-Control-Allow-Origin', '*');
+	    res.setHeader('Cache-Control', 'no-cache');
+	    if (url === "/") {
+	      res.writeHead(200, {
+	        "Content-Type": "text/html"
+	      });
+	      return res.end(html);
+	    } else if (url === "/dev.js") {
+	      res.writeHead(200, {
+	        "Content-Type": "text/javascript"
+	      });
+	      return res.end(devJs.replace("{__DOMAIN__}", req.headers.host));
+	    }
+	    return LunchServer.__super__.httpServerAction.call(this, req, res);
+	  };
+
+	  LunchServer.prototype.sendTestCase = function(socket, pattern) {
+	    var ext, obj;
+	    ext = this.patternFile.match(/\.([^\.]+)$/)[1];
+	    obj = cson.parseFile(this.patternFile, {
+	      format: ext
+	    });
+	    return socket.emit("pattern", obj);
+	  };
+
+	  return LunchServer;
+
+	})(SimpleServer);
+
+	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	module.exports = require("cson");
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
+
+	$ = __webpack_require__(4);
+
+	jquery_stylesheet = __webpack_require__(24);
+
+	jquery_stylesheet($);
+
+	getRandomColor = (function(_this) {
+	  return function(opacity) {
+	    var getRandomNum;
+	    if (opacity == null) {
+	      opacity = 1;
+	    }
+	    getRandomNum = function() {
+	      return Math.floor(Math.random() * 256);
+	    };
+	    return "rgba(" + (getRandomNum()) + "," + (getRandomNum()) + "," + (getRandomNum()) + ", " + opacity + ")";
+	  };
+	})(this);
+
+	actionFuncs = {
+	  _border: (function(_this) {
+	    return function(selector) {
+	      selector = selector === true || !selector ? "*" : selector;
+	      if (typeof selector === "object") {
+	        selector = selector.join(",");
+	      }
+	      return $.stylesheet(selector).css("box-shadow", "0px 0px 0px 1px " + (getRandomColor()));
+	    };
+	  })(this),
+	  _color: (function(_this) {
+	    return function(selector) {
+	      selector = selector === true || !selector ? "*" : selector;
+	      if (typeof selector === "object") {
+	        selector = selector.join(",");
+	      }
+	      return $.stylesheet(selector).css("background", "" + (getRandomColor(0.1)));
+	    };
+	  })(this),
+	  _hide: (function(_this) {
+	    return function(selector) {
+	      if (typeof selector === "object") {
+	        selector = selector.join(",");
+	      }
+	      return $.stylesheet(selector).css("display", "none");
+	    };
+	  })(this),
+	  _auto: (function(_this) {
+	    return function() {
+	      return {
+	        AutoEvent: __webpack_require__(25)
+	      };
+	    };
+	  })(this)
+	};
+
+	module.exports = Test = (function() {
+	  function Test() {}
+
+	  Test.start = function(testObj) {
+	    var action, arg, func, i, key, len, ref, ref1, results, value;
+	    if (testObj == null) {
+	      testObj = Test;
+	    }
+	    Test.actions = decodeURI(location.hash.replace(/^#+/, "")).split("/");
+	    Test.actionObj = {};
+	    ref = Test.actions;
+	    results = [];
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      action = ref[i];
+	      ref1 = action.split("="), key = ref1[0], value = ref1[1];
+	      func = testObj[key] || Test[key];
+	      arg = !value || value.split(",");
+	      if (typeof func === "function") {
+	        func(arg.length === 1 ? arg[0] : arg);
+	      }
+	      if (typeof actionFuncs[key] === "function") {
+	        actionFuncs[key](value);
+	      }
+	      results.push(Test.actionObj[key] = value);
+	    }
+	    return results;
+	  };
+
+	  return Test;
+
+	})();
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	module.exports = require("jquery-stylesheet");
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AutoEvent, AutoEventBase,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+	  hasProp = {}.hasOwnProperty;
+
+	AutoEventBase = __webpack_require__(26);
+
+	module.exports = AutoEvent = (function(superClass) {
+	  extend(AutoEvent, superClass);
+
+	  function AutoEvent() {
+	    this.start = bind(this.start, this);
+	    this.contoller = bind(this.contoller, this);
+	    return AutoEvent.__super__.constructor.apply(this, arguments);
+	  }
+
+	  AutoEvent.prototype.contoller = function(loopNum, callback) {
+	    var curFuncNum, i;
+	    curFuncNum = 0;
+	    this.innerFuncs[this.funcs.length] = [];
+	    this.funcs.push((function(_this) {
+	      return function() {
+	        if (--loopNum) {
+	          curFuncNum = 0;
+	          return _this.funcs[0]();
+	        } else {
+	          if (callback) {
+	            return callback();
+	          } else {
+	            return _this.end();
+	          }
+	        }
+	      };
+	    })(this));
+	    i = -1;
+	    while (this.funcs[++i]) {
+	      this.innerFuncs[i].push((function(_this) {
+	        return function() {
+	          var base, name;
+	          return typeof (base = _this.funcs)[name = ++curFuncNum] === "function" ? base[name]() : void 0;
+	        };
+	      })(this));
+	    }
+	    return this.funcs[0]();
+	  };
+
+	  AutoEvent.prototype.start = function(loopNum, callback) {
+	    if (loopNum == null) {
+	      loopNum = 1;
+	    }
+	    return this.contoller(loopNum, callback);
+	  };
+
+	  return AutoEvent;
+
+	})(AutoEventBase);
+
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	var $, AutoEvent, trigger,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+	$ = (function(_this) {
+	  return function(selector) {
+	    return document.querySelector(selector);
+	  };
+	})(this);
+
+	trigger = (function(_this) {
+	  return function($dom, eventType) {
+	    var event;
+	    event = document.createEvent("HTMLEvents");
+	    event.initEvent(eventType, false, true);
+	    return $dom.dispatchEvent(event);
+	  };
+	})(this);
+
+	module.exports = AutoEvent = (function() {
+	  function AutoEvent() {
+	    this.end = bind(this.end, this);
+	    this._createFuncInWait = bind(this._createFuncInWait, this);
+	    this.waitSelector = bind(this.waitSelector, this);
+	    this.wait = bind(this.wait, this);
+	    this.waitEvent = bind(this.waitEvent, this);
+	    this.click = bind(this.click, this);
+	    this.setHtml = bind(this.setHtml, this);
+	    this.setValue = bind(this.setValue, this);
+	    this.selectValue = bind(this.selectValue, this);
+	    this.addSelectorEvent = bind(this.addSelectorEvent, this);
+	    this.addEvent = bind(this.addEvent, this);
+	    this.register = bind(this.register, this);
+	  }
+
+	  AutoEvent.prototype.timeoutMsec = 10000;
+
+	  AutoEvent.prototype.register = function() {
+	    this.funcs = [];
+	    this.innerFuncs = [];
+	    this.funcNum = -1;
+	    this.wait(0);
+	    return this;
+	  };
+
+	  AutoEvent.prototype.addEvent = function(callback) {
+	    var innerFunc;
+	    innerFunc = this.innerFuncs[this.funcNum];
+	    innerFunc.push(callback);
+	    return this;
+	  };
+
+	  AutoEvent.prototype.addSelectorEvent = function(arg) {
+	    var assertionMsg, callback, selector;
+	    selector = arg.selector, assertionMsg = arg.assertionMsg, callback = arg.callback;
+	    return this.addEvent((function(_this) {
+	      return function() {
+	        var $this;
+	        $this = $(selector);
+	        if (assertionMsg) {
+	          console.assert($this, selector + " " + assertionMsg);
+	          return callback($this);
+	        } else {
+	          try {
+	            return callback($this);
+	          } catch (error) {}
+	        }
+	      };
+	    })(this));
+	  };
+
+	  AutoEvent.prototype.selectValue = function(selector, value, assertFlg) {
+	    if (assertFlg == null) {
+	      assertFlg = true;
+	    }
+	    return this.addSelectorEvent({
+	      selector: selector + " [value='" + value + "']",
+	      assertionMsg: assertFlg ? "can't select value" : void 0,
+	      callback: (function(_this) {
+	        return function() {
+	          var $selector;
+	          $selector = $(selector);
+	          $selector.value = value;
+	          return trigger($selector, "change");
+	        };
+	      })(this)
+	    });
+	  };
+
+	  AutoEvent.prototype.setValue = function(selector, value, assertFlg) {
+	    if (assertFlg == null) {
+	      assertFlg = true;
+	    }
+	    return this.addSelectorEvent({
+	      selector: selector,
+	      assertionMsg: assertFlg ? "not find" : void 0,
+	      callback: (function(_this) {
+	        return function($this) {
+	          $this.value = value;
+	          return trigger($this, "input");
+	        };
+	      })(this)
+	    });
+	  };
+
+	  AutoEvent.prototype.setHtml = function(selector, html, assertFlg) {
+	    if (assertFlg == null) {
+	      assertFlg = true;
+	    }
+	    return this.addSelectorEvent({
+	      selector: selector,
+	      assertionMsg: assertFlg ? "can't set html" : void 0,
+	      callback: (function(_this) {
+	        return function($this) {
+	          return $this.innerHTML = html;
+	        };
+	      })(this)
+	    });
+	  };
+
+	  AutoEvent.prototype.click = function(selector, assertFlg) {
+	    if (assertFlg == null) {
+	      assertFlg = true;
+	    }
+	    return this.addSelectorEvent({
+	      selector: selector,
+	      assertionMsg: assertFlg ? "can't click" : void 0,
+	      callback: (function(_this) {
+	        return function($this) {
+	          return $this.click();
+	        };
+	      })(this)
+	    });
+	  };
+
+	  AutoEvent.prototype.waitEvent = function(callback) {
+	    this.funcs.push(callback);
+	    return this;
+	  };
+
+	  AutoEvent.prototype.wait = function(msec) {
+	    var func;
+	    func = this._createFuncInWait();
+	    return this.waitEvent((function(_this) {
+	      return function() {
+	        return setTimeout(func, msec);
+	      };
+	    })(this));
+	  };
+
+	  AutoEvent.prototype.waitSelector = function(selector, exists) {
+	    var executeFunc, func, stopTimer, testTimer;
+	    if (exists == null) {
+	      exists = true;
+	    }
+	    func = this._createFuncInWait();
+	    testTimer = null;
+	    stopTimer = (function(_this) {
+	      return function() {
+	        return clearInterval(testTimer);
+	      };
+	    })(this);
+	    executeFunc = (function(_this) {
+	      return function() {
+	        stopTimer();
+	        return func();
+	      };
+	    })(this);
+	    return this.waitEvent((function(_this) {
+	      return function() {
+	        var now;
+	        now = Date.now();
+	        return testTimer = setInterval(function() {
+	          var withInTimeFlg;
+	          withInTimeFlg = Date.now() - now < _this.timeoutMsec;
+	          console.assert(withInTimeFlg, "timeout for \"" + selector + "\" selector");
+	          if (!withInTimeFlg) {
+	            return stopTimer();
+	          }
+	          if (exists) {
+	            if ($(selector)) {
+	              return executeFunc();
+	            }
+	          } else {
+	            if (!$(selector)) {
+	              return executeFunc();
+	            }
+	          }
+	        }, 100);
+	      };
+	    })(this));
+	  };
+
+	  AutoEvent.prototype._createFuncInWait = function() {
+	    var funcNum, innerFunc;
+	    funcNum = ++this.funcNum;
+	    innerFunc = this.innerFuncs[funcNum] = [];
+	    return (function(_this) {
+	      return function() {
+	        var func, i, len, results;
+	        results = [];
+	        for (i = 0, len = innerFunc.length; i < len; i++) {
+	          func = innerFunc[i];
+	          results.push(func());
+	        }
+	        return results;
+	      };
+	    })(this);
+	  };
+
+	  AutoEvent.prototype.end = function() {
+	    return console.info("finished");
+	  };
+
+	  return AutoEvent;
+
+	})();
+
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var WholeStatus;
+
+	window.riot = __webpack_require__(5);
+
+	WholeStatus = __webpack_require__(28);
+
+	__webpack_require__(29);
+
+	module.exports = (function(_this) {
+	  return function(testPatterns, opts) {
+	    if (opts == null) {
+	      opts = {};
+	    }
+	    WholeStatus.opts = opts;
+	    return {
+	      list: riot.mount("test-list", {
+	        testPatterns: testPatterns
+	      })
+	    };
+	  };
+	})(this);
+
+
+/***/ },
+/* 28 */
+/***/ function(module, exports) {
+
+	var Status;
+
+	module.exports = Status = (function() {
+	  function Status() {}
+
+	  Status.sumInit = function() {
+	    Status.successSum = 0;
+	    return Status.executeSum = 0;
+	  };
+
+	  Status.init = function() {
+	    Status.thisBasePath = "?";
+	    Status.basePath = "#";
+	    Status.itemStatuses = [];
+	    Status.executeIframe = [];
+	    Status.executablePath = {};
+	    Status.sumInit();
+	    return riot.observable(Status);
+	  };
+
+	  Status.firstTimeInit = function() {
+	    return Status.opts = {};
+	  };
+
+	  return Status;
+
+	})();
+
+	Status.init();
+
+	Status.firstTimeInit();
+
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(30)
+
+	riot.tag2('test-list', '<test-list-count></test-list-count> <a onclick="{toRouteHash}">base</a> <recursive-item data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe name="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{WholeStatus.config}"></test-iframe>', 'test-list,[riot-tag="test-list"],[data-is="test-list"]{ display: block; background-color: white; font-size: 14px; } test-list a,[riot-tag="test-list"] a,[data-is="test-list"] a{ color: blue; text-decoration: none; cursor: pointer; display: inline-block; } test-list a:hover,[riot-tag="test-list"] a:hover,[data-is="test-list"] a:hover{ opacity: 0.4; }', '', function(opts) {
+	var WholeStatus, bodyStyle;
+
+	this.WholeStatus = WholeStatus = __webpack_require__(28);
+
+	bodyStyle = document.body.style;
+
+	this.init = (function(_this) {
+	  return function() {
+	    _this.instanceUrl = null;
+	    return WholeStatus.trigger("init");
+	  };
+	})(this);
+
+	this.check = (function(_this) {
+	  return function() {
+	    var executePath;
+	    _this.init();
+	    WholeStatus.sumInit();
+	    executePath = riot.route.query().path;
+	    if (!executePath) {
+	      return _this.update();
+	    }
+	    if (!/%[0-9a-f]{2}/i.test(executePath)) {
+	      executePath = encodeURI(executePath);
+	    }
+	    if (!WholeStatus.executablePath[executePath]) {
+	      _this.instanceUrl = executePath;
+	      _this.update();
+	      _this.tags.testFrame.setConsoleEvent();
+	      return;
+	    }
+	    return WholeStatus.executablePath[executePath]();
+	  };
+	})(this);
+
+	this.toRouteHash = (function(_this) {
+	  return function() {
+	    return riot.route("");
+	  };
+	})(this);
+
+	WholeStatus.on("item-update", (function(_this) {
+	  return function() {
+	    var i, itemStatus, len, onExecute, ref;
+	    ref = WholeStatus.itemStatuses;
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      itemStatus = ref[i];
+	      if (itemStatus.onExecute) {
+	        onExecute = true;
+	        break;
+	      }
+	    }
+	    return bodyStyle.overflowY = onExecute || _this.instanceUrl ? "hidden" : "";
+	  };
+	})(this));
+
+	this.on("mount", (function(_this) {
+	  return function() {
+	    _this.check();
+	    return riot.route.start();
+	  };
+	})(this));
+
+	riot.route.base(WholeStatus.thisBasePath);
+
+	riot.route("..", this.check);
+
+	window.addEventListener("popstate", (function(_this) {
+	  return function() {
+	    if (!location.href.match("\\" + WholeStatus.thisBasePath)) {
+	      return history.replaceState("", null, WholeStatus.thisBasePath);
+	    }
+	  };
+	})(this));
+	});
+
+	riot.tag2('test-list-count', '<span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span>', '', '', function(opts) {
+	this.WholeStatus = __webpack_require__(28);
+
+	this.WholeStatus.on("item-update", (function(_this) {
+	  return function() {
+	    return _this.update();
+	  };
+	})(this));
+	});
+
+	riot.tag2('recursive-item', '<list-line name="lines" each="{key, data in list}" list="{this}" routing="{this.parent.opts.routing}"></list-line>', ':scope { display: block; }', '', function(opts) {
+	this.list = typeof opts.data === "object" ? opts.data : {};
+	});
+
+	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error, warn: warn}"></span> <a class="tree" href="{routing}" name="treeTask" onclick="{router}">{key}</a> <a class="single" if="{url}" href="{routerExecutionPath}" name="singleTask" onclick="{router}">{url}</a> </div> <recursive-item name="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe name="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{WholeStatus.config}"></test-iframe>', 'list-line .bold,[riot-tag="list-line"] .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[riot-tag="list-line"] .tree,[data-is="list-line"] .tree{color:#333} list-line .single,[riot-tag="list-line"] .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[riot-tag="list-line"] .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[riot-tag="list-line"] .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[riot-tag="list-line"] .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[riot-tag="list-line"] .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .warn,[riot-tag="list-line"] .warn,[data-is="list-line"] .warn{color:gold} list-line .warn:after,[riot-tag="list-line"] .warn:after,[data-is="list-line"] .warn:after{content:"△"} list-line .error,[riot-tag="list-line"] .error,[data-is="list-line"] .error{color:red} list-line .error:after,[riot-tag="list-line"] .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[riot-tag="list-line"] .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
+	var WholeStatus, executeIframe;
+
+	WholeStatus = this.WholeStatus = __webpack_require__(28);
+
+	executeIframe = (function(_this) {
+	  return function() {
+	    var base;
+	    return typeof (base = WholeStatus.executeIframe.shift()) === "function" ? base() : void 0;
+	  };
+	})(this);
+
+	this.key = opts.list.key;
+
+	this.data = opts.list.data;
+
+	this.routing = opts.routing ? opts.routing + "/" + this.key : this.key;
+
+	this.url = typeof this.data === "object" ? "" : this.data;
+
+	this.routerExecutionPath = this.url + WholeStatus.basePath + this.routing;
+
+	this.status = {
+	  onExecute: false
+	};
+
+	this.deleteIframe = (function(_this) {
+	  return function() {
+	    _this.status.onExecute = false;
+	    return _this.update();
+	  };
+	})(this);
+
+	this.init = (function(_this) {
+	  return function() {
+	    _this.error = null;
+	    _this.warn = null;
+	    _this.success = null;
+	    return _this.deleteIframe();
+	  };
+	})(this);
+
+	this.recursivelyExecuteTask = (function(_this) {
+	  return function() {
+	    var i, len, line, lines, results, trueLine;
+	    lines = _this.tags.item.tags.lines;
+	    if (lines.length) {
+	      results = [];
+	      for (i = 0, len = lines.length; i < len; i++) {
+	        line = lines[i];
+	        trueLine = line.tags.lines;
+	        results.push(trueLine.recursivelyExecuteTask());
+	      }
+	      return results;
+	    } else {
+	      return WholeStatus.executeIframe.push(function() {
+	        return _this.executeTask(function() {
+	          _this.deleteIframe();
+	          return executeIframe();
+	        });
+	      });
+	    }
+	  };
+	})(this);
+
+	this.multiExecuteTask = (function(_this) {
+	  return function() {
+	    WholeStatus.executeIframe.length = 0;
+	    _this.recursivelyExecuteTask();
+	    return executeIframe();
+	  };
+	})(this);
+
+	this.executeTask = (function(_this) {
+	  return function(callback) {
+	    _this.status.onExecute = true;
+	    _this.update();
+	    console.clear();
+	    ++WholeStatus.executeSum;
+	    return _this.tags.testFrame.setConsoleEvent({
+	      assert: function(flg, msg) {
+	        if (msg) {
+	          console.assert(flg, msg);
+	        } else {
+	          console.assert(flg);
+	        }
+	        if (!flg) {
+	          _this.error = true;
+	          _this.update();
+	          return callback && callback();
+	        }
+	      },
+	      info: function(msg) {
+	        if (msg === "finished" && !_this.error) {
+	          console.info(msg);
+	          if (!_this.warn) {
+	            _this.success = true;
+	          }
+	          ++WholeStatus.successSum;
+	          _this.update();
+	          return callback && callback();
+	        }
+	      },
+	      error: function(msg) {
+	        return _this.warn = true;
+	      }
+	    });
+	  };
+	})(this);
+
+	this.router = (function(_this) {
+	  return function(e) {
+	    return riot.route("path=" + e.target.getAttribute("href"));
+	  };
+	})(this);
+
+	this.mouseOn = (function(_this) {
+	  return function() {
+	    return _this.isHover = true;
+	  };
+	})(this);
+
+	this.mouseOut = (function(_this) {
+	  return function() {
+	    return _this.isHover = false;
+	  };
+	})(this);
+
+	WholeStatus.on("init", (function(_this) {
+	  return function() {
+	    return _this.init();
+	  };
+	})(this));
+
+	WholeStatus.itemStatuses.push(this.status);
+
+	WholeStatus.executablePath[encodeURI(this.routing)] = (function(_this) {
+	  return function() {
+	    return _this.multiExecuteTask();
+	  };
+	})(this);
+
+	WholeStatus.executablePath[encodeURI(this.routerExecutionPath)] = (function(_this) {
+	  return function() {
+	    if (_this.url) {
+	      return _this.executeTask();
+	    }
+	  };
+	})(this);
+
+	this.on("update", (function(_this) {
+	  return function() {
+	    return WholeStatus.trigger("item-update");
+	  };
+	})(this));
+
+	this.init();
+	});
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	riot.tag2('test-iframe', '<span class="{isIos ? \'ios\' : \'no-ios\'}"> <iframe if="{!isElectron}" riot-src="{opts.url}"></iframe> <webview if="{isElectron}" riot-src="{opts.url}" nodeintegration></webview> </span>', 'test-iframe .ios,[riot-tag="test-iframe"] .ios,[data-is="test-iframe"] .ios{ display: block; -webkit-overflow-scrolling: touch; overflow: auto; position: fixed; top: 0; left: 0; width: 100%; height: 100%; } test-iframe iframe,[riot-tag="test-iframe"] iframe,[data-is="test-iframe"] iframe,test-iframe webview,[riot-tag="test-iframe"] webview,[data-is="test-iframe"] webview{ background-color: white; border: none; width: 100%; height: 100%; } test-iframe .no-ios iframe,[riot-tag="test-iframe"] .no-ios iframe,[data-is="test-iframe"] .no-ios iframe,test-iframe .no-ios webview,[riot-tag="test-iframe"] .no-ios webview,[data-is="test-iframe"] .no-ios webview{ position: fixed; left: 0px; top: 0px; }', '', function(opts) {
+	var WholeStatus, ref;
+
+	WholeStatus = __webpack_require__(28);
+
+	this.isIos = __webpack_require__(31).ios();
+
+	this.isElectron = typeof process !== "undefined" && process !== null ? (ref = process.versions) != null ? ref.electron : void 0 : void 0;
+
+	this.addScript = (function(_this) {
+	  return function() {};
+	})(this);
+
+	this.setConsoleEvent = (function(_this) {
+	  return function(callbackObj) {
+	    var iframeWindow, webview;
+	    if (_this.isElectron) {
+	      webview = _this.root.querySelector("webview");
+	      webview.removeEventListener("console-message", _this._tmp_Function);
+	      _this._tmp_Function = function(e) {
+	        if (e.level === 2) {
+	          callbackObj.assert(false, e.message);
+	        }
+	        if (e.level === 0) {
+	          return callbackObj.info(e.message);
+	        }
+	      };
+	      return webview.addEventListener("console-message", _this._tmp_Function);
+	    } else {
+	      iframeWindow = _this.root.querySelector("iframe").contentWindow;
+	      if (callbackObj) {
+	        iframeWindow.console.assert = function(flg, msg) {
+	          return callbackObj.assert(flg, msg);
+	        };
+	        iframeWindow.onerror = function(msg) {
+	          callbackObj.error(msg);
+	          return false;
+	        };
+	        iframeWindow.console.info = function(msg) {
+	          return callbackObj.info(msg);
+	        };
+	      }
+	      if (!WholeStatus.opts.files) {
+	        return;
+	      }
+	      return iframeWindow.addEventListener("load", function() {
+	        var file, i, len, ref1, results, script;
+	        ref1 = WholeStatus.opts.files;
+	        results = [];
+	        for (i = 0, len = ref1.length; i < len; i++) {
+	          file = ref1[i];
+	          script = iframeWindow.document.createElement("script");
+	          script.src = file;
+	          script.type = "text/javascript";
+	          script.async = false;
+	          results.push(iframeWindow.document.head.appendChild(script));
+	        }
+	        return results;
+	      });
+	    }
+	  };
+	})(this);
+	});
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports) {
+
+	module.exports = require("is_js");
+
+/***/ },
+/* 32 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"allpattern": {
+			"am-simple-server": "index.html",
+			"am-coffee-time": {
+				"port=50001,50001": "index.html"
+			}
+		}
+	};
 
 /***/ }
 /******/ ]);

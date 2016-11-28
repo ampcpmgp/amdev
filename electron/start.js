@@ -46,7 +46,7 @@ module.exports =
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(36);
+	module.exports = __webpack_require__(35);
 
 
 /***/ },
@@ -90,6 +90,20 @@ module.exports =
 /***/ function(module, exports) {
 
 	module.exports = require("cson");
+
+/***/ },
+
+/***/ 35:
+/***/ function(module, exports, __webpack_require__) {
+
+	var Browser, browser;
+
+	Browser = __webpack_require__(36);
+
+	browser = new Browser();
+
+	browser.init().start();
+
 
 /***/ },
 

@@ -41,52 +41,12 @@ module.exports =
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(39);
-
-
-/***/ },
-
-/***/ 3:
-/***/ function(module, exports) {
-
-	module.exports = require("child_process");
-
-/***/ },
-
-/***/ 39:
-/***/ function(module, exports, __webpack_require__) {
-
-	var CmdExe, exec;
-
-	exec = __webpack_require__(3).exec;
-
-	module.exports = CmdExe = (function() {
-	  function CmdExe(directory, path) {
-	    this.directory = directory;
-	    this.path = path != null ? path : "electron";
-	  }
-
-	  CmdExe.prototype.start = function() {
-	    var command, proc;
-	    command = "start " + this.directory + "\\electron.exe " + this.path;
-	    proc = exec(command, (function(_this) {
-	      return function(e, out, err) {
-	        return console.log(e, out, err);
-	      };
-	    })(this));
-	    return console.log("command - \n" + command);
-	  };
-
-	  return CmdExe;
-
-	})();
+	(function webpackMissingModule() { throw new Error("Cannot find module \"./modules/am-streamize/node/test/index.coffee\""); }());
 
 
 /***/ }
-
-/******/ });
+/******/ ]);
