@@ -79,7 +79,7 @@ module.exports = class Compiler
     )
     .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
-      "./**/web/test/*.coffee"
+      "./**/web/*.coffee"
       , {ignore: "./**/@(node_modules)/**"}
     ).concat(
       require("glob").sync(
