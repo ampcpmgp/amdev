@@ -9,7 +9,7 @@
     "start:forever": "forever start -c coffee modules/am-dev/app/ci.coffee",
     "TODO:": "electron内実行に寄せる",
     "compile:gh-pages": "git checkout gh-pages && git merge master && coffee -e \"(require('./Compiler').run())\" && git add -A && git commit -am \"gh-pages updated.\" && git push origin && git checkout master",
-    "electron": "electron ./electron/test/start.js"
+    "electron": "electron ./electron/start.js"
   },
   "dependencies": {
     "chokidar": "^1.6.1",
@@ -41,6 +41,7 @@
     "riotjs-loader": "^3.0.0",
     "socket.io": "^1.5.1",
     "socket.io-client": "^1.5.1",
+    "uiflow": "^1.1.8",
     "webpack": "^1.5.3",
     "yaml-loader": "^0.4.0"
   },

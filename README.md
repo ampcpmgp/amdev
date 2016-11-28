@@ -32,7 +32,7 @@ clover - http://www.vector.co.jp/download/file/winnt/util/fh608107.html 3.2は�
 gapdebug - ios debug
 
 # atom package
-apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify pretty-json quantum-shell language-riot-tag linter-eslint
+apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify pretty-json quantum-shell language-riot-tag linter-eslint git-time-machine
 
 # windows config environment
 * 拡張子を表示する

@@ -27,7 +27,7 @@ func = (Klass) =>
 test =
   test:  =>
     func(AutoEvent)
-    $ERROR
+    $ERROR_IS_OKAY
   testNoGen:  =>
     func(AutoEventNoGen)
   timeout: (ms) =>
@@ -43,7 +43,7 @@ test =
   select: (value) =>
     ae = new AutoEvent
     ae.register().wait(300).selectValue("select", value).start()
-    $ERROR
+    $ERROR_IS_OKAY
 
 
 Test.start(test)

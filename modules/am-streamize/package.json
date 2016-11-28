@@ -1,0 +1,14 @@
+{
+  "name": "am-streamize",
+  "version": "0.0.0",
+  "description": "",
+  "main": "module name",
+  "scripts": {
+    "test": "echo error?"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "uiflow": "^1.1.8"
+  }
+}

@@ -17,10 +17,7 @@ allpattern:
     _border:  ./index.html
     root:  ./index.html
     _hide=.child:  ./index.html
-  am-simple-server:
-    port=50001: ./index.html
-  zz1:
-    2:
+    test:
       3:
         4:
           5:
@@ -54,4 +51,6 @@ allpattern:
                                                                   3:
                                                                     4:
                                                                       5:
-                                                                        6: 1
+                                                                        6: ./index.html
+  am-simple-server:
+    port=50001: ./index.html
