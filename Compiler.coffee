@@ -54,7 +54,7 @@ module.exports = class Compiler
     delete @electronOption.devtool
     delete @nodeOption.devtool
     delete @browserOption.devtool
-    @electronStart = =>
+    @electronStart = => 0
     webpack(@electronOption).run((err, stats) => @callback(err,stats)) if @electronOption.entry
     webpack(@nodeOption).run((err, stats) => @callback(err,stats)) if @nodeOption.entry
     webpack(@browserOption).run((err, stats) => @callback(err,stats)) if @browserOption.entry
@@ -69,17 +69,17 @@ module.exports = class Compiler
     @browserOption.entry = {}
     # TODO: 開発に必要なファイル軍だけをコンパイルする方針に変えたい
     require("glob").sync(
-      "./**/@(electron|app)/test/*.coffee"
+      "./**/@(electron|app)/*.coffee"
       , {ignore: "./**/@(node_modules)/**"}
     )
     .forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
-      "./**/node/test/*.coffee"
+      "./**/node/*.coffee"
       , {ignore: "./**/@(node_modules)/**"}
     )
     .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
-      "./**/web/test/*.coffee"
+      "./**/web/*.coffee"
       , {ignore: "./**/@(node_modules)/**"}
     ).concat(
       require("glob").sync(
