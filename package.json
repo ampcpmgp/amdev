@@ -9,7 +9,7 @@
     "start:forever": "forever start -c coffee modules/am-dev/app/ci.coffee",
     "TODO:": "electron内実行に寄せる",
     "compile:gh-pages": "git checkout gh-pages && git merge master && coffee -e \"(require('./Compiler').run())\" && git add -A && git commit -am \"gh-pages updated.\" && git push origin && git checkout master",
-    "electron": "electron ./electron/test/start.js"
+    "electron": "electron ./electron/start.js"
   },
   "dependencies": {
     "chokidar": "^1.6.1",

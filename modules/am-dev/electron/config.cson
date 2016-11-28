@@ -6,6 +6,6 @@ browserWindow:
   icon: "./web/favicon.ico"
   webPreferences:
     url: "/app/index.html"
-    preload: "/app/test/preload.js"
+    preload: "/app/preload.js"
 cl:
   intervalMin: 5
