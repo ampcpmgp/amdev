@@ -54,7 +54,7 @@ module.exports = class Compiler
     delete @electronOption.devtool
     delete @nodeOption.devtool
     delete @browserOption.devtool
-    @electronStart = =>
+    @electronStart = => 0
     webpack(@electronOption).run((err, stats) => @callback(err,stats)) if @electronOption.entry
     webpack(@nodeOption).run((err, stats) => @callback(err,stats)) if @nodeOption.entry
     webpack(@browserOption).run((err, stats) => @callback(err,stats)) if @browserOption.entry
