@@ -7,8 +7,6 @@ _ = require("lodash")
 Compiler = require("../Compiler")
 Common = require("am-common")
 
-window.electonReadFlg = true
-
 class ModuleCompiler extends Compiler
   @compile: ({baseOption, moduleDir, preExt = "", callback}) =>
     option = _.cloneDeep(baseOption)
@@ -88,7 +86,7 @@ do -> #upload npm
   window.browserPublishFlg = (e) =>
     e.currentTarget.querySelector("span").innerHTML = ea.publishFlg = not ea.publishFlg
 
-### switch test code / 各モジュールにテストコードをうつし削除予定 ### 
+### switch test code / 各モジュールにテストコードをうつし削除予定 ###
 params = Common::getParams(location.href)
 do =>
   # TODO: サーバー側はrequireを動的に扱いたい
