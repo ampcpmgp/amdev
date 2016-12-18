@@ -1,10 +1,10 @@
 am-coffee-time:
-  params1:  ./case.html
-  _color:  ./case.html
-  _color=.child:  ./case.html
-  _border:  ./case.html
-  root:  ./case.html
-  _hide=.child:  ./case.html
+  params1:  ./index.html
+  _color:  ./index.html
+  _color=.child:  ./index.html
+  _border:  ./index.html
+  root:  ./index.html
+  _hide=.child:  ./index.html
   test:
     3:
       4:
@@ -39,4 +39,4 @@ am-coffee-time:
                                                                 3:
                                                                   4:
                                                                     5:
-                                                                      6: ./case.html
+                                                                      6: ./index.html
