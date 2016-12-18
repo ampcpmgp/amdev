@@ -85,14 +85,3 @@ do -> #upload npm
     e.currentTarget.querySelector("span").innerHTML = ea.liveReloadStopFlg = not ea.liveReloadStopFlg
   window.browserPublishFlg = (e) =>
     e.currentTarget.querySelector("span").innerHTML = ea.publishFlg = not ea.publishFlg
-
-### switch test code / 各モジュールにテストコードをうつし削除予定 ###
-params = Common::getParams(location.href)
-do =>
-  # TODO: サーバー側はrequireを動的に扱いたい
-  if params["am-simple-server"] then require("am-simple-server/test/server")
-  else if params["am-coffee-time"] then require("am-coffee-time/test/server")
-  else
-    generate = require("am-coffee-time")
-    testcases = require("./case.yml")
-    generate(testcases)
