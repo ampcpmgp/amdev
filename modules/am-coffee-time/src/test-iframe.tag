@@ -37,7 +37,9 @@
         webview.removeEventListener("console-message", @_tmp_Function)
         @_tmp_Function = (e) =>
           if e.level is 2 then callbackObj.assert(false, e.message)
-          if e.level is 0 then callbackObj.info(e.message)
+          if e.level is 0
+            console.log e.message
+            callbackObj.info(e.message)
         webview.addEventListener("console-message", @_tmp_Function)
         # TODO: electronでもjs更新イベント設定
         #webview.addEventListener("did-finish-load", @_tmp_Function)
