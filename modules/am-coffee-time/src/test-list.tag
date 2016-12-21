@@ -8,6 +8,7 @@ require("./test-iframe.tag")
   <style scoped>
     :scope {
       display: block;
+      width: 100%;
       background-color: white;
       font-size: 14px;
     }
@@ -102,6 +103,7 @@ require("./test-iframe.tag")
     }
     .tree {
       color: #333;
+      word-break: break-all;
     }
     .single {
       padding-left: 6px;
