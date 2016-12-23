@@ -1,15 +1,16 @@
-regex =
+expressions =
   # 全体
   blank: /(\r?\n){2,}/g
-  section: /\[/g
+  section: "["
   # 各section
   name: /^\[(.+)\]\r?\n/g
 
 
 class Sections
-  @data: []
-  @add: (string) =>
-    string = string.replace(regex.name)
+  constructor: ->
+    @data = []
+  add: (string) =>
+    stringWithoutName = string.replace(expressions.name)
     name = RegExp.$1
     @data.push(
       "#{name}":
@@ -17,8 +18,9 @@ class Sections
     )
 
 module.exports = (flow) =>
+  sections = new Sections()
   flow
-    .replace(regex.blank, "\n")
-    .split(regex.section)
+    .replace(expressions.blank, "\n")
+    .split(expressions.section)
     .filter((section) => section if section)
-    .forEach((section) => Sections.add("[#{section}"))
+    .forEach((section) => sections.add("#{expressions.section}#{section}"))
