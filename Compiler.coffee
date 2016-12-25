@@ -79,13 +79,8 @@ module.exports = class Compiler
     )
     .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
-      "./**/web/*.coffee"
+      "./**/@(web|browser)/*.coffee"
       , {ignore: "./**/@(node_modules)/**"}
-    ).concat(
-      require("glob").sync(
-        "./**/browser/*.coffee"
-        , {ignore: "./**/@(node_modules)/**"}
-      )
     )
     .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
   @callback: (err, stats) =>
