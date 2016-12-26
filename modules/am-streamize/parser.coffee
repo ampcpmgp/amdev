@@ -4,18 +4,23 @@ expressions =
   section: "["
   # 各section
   name: /^\[(.+)\]\r?\n/g
-
+  splitter: /\-\-\r?\n/g
 
 class Sections
   constructor: ->
     @data = []
   add: (string) =>
-    stringWithoutName = string.replace(expressions.name)
+    console.log "---"
+    stringWithoutName = string.replace(expressions.name, "")
     name = RegExp.$1
+    blocks = stringWithoutName
+      .split(expressions.splitter)
+      .map((block) => @_getStatus(block))
     @data.push(
-      "#{name}":
-        {}
+      "#{name}": blocks
     )
+  _getStatus: (block) =>
+    console.log block
 
 module.exports = (flow) =>
   sections = new Sections()
