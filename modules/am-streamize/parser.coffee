@@ -42,3 +42,4 @@ module.exports = (flow) =>
     .split(expressions.section)
     .filter((section) => section if section)
     .forEach((section) => sections.add("#{expressions.section}#{section}"))
+  sections.data
