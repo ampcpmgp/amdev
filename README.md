@@ -26,7 +26,7 @@ https://github.com/ampcpmgp/amdev/tree/master/modules
 ## this project environment
 ```
 git clone github.com/ampcpmgp/amdev
-npm i
+yarn
 npm start
 ```
 

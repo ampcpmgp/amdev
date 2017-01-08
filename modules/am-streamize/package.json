@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "uiflow": "^1.1.8"
+    "riot": "^3.0.5"
   }
 }

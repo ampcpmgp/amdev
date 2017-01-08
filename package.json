@@ -38,6 +38,7 @@
     "raw-loader": "^0.5.1",
     "request": "^2.78.0",
     "riot": "^2.6.7",
+    "riot3": "https://github.com/riot/riot.git#v3.0.5",
     "riotjs-loader": "^3.0.0",
     "socket.io": "^1.5.1",
     "socket.io-client": "^1.5.1",
