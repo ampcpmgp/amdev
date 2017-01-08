@@ -1,9 +1,6 @@
 $ = require("jquery")
 AutoEvent = require("am-autoevent")
 AutoEventNoGen = require("am-autoevent/browser/AutoEvent-no-gen")
-Test = require("am-coffee-time/browser/Test")
-
-$("body").append($(require("./tag.html")))
 
 do => #setup
   $("button").click( =>
@@ -24,7 +21,8 @@ func = (Klass) =>
       console.info "finished"
     )
 
-test =
+
+require("am-coffee-time/browser/Test").start(
   test:  =>
     func(AutoEvent)
     $ERROR_IS_OKAY
@@ -44,6 +42,4 @@ test =
     ae = new AutoEvent
     ae.register().wait(300).selectValue("select", value).start()
     $ERROR_IS_OKAY
-
-
-Test.start(test)
+)
