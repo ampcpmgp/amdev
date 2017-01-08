@@ -1,5 +1,11 @@
 # まだ工事中
 
+出来ること
+coffeescriptを用い
+* nodeモジュールの開発・テスト
+* browserモジュールの開発・テスト
+* electronアプリケーションモジュールの開発・テスト
+
 実装したいリスト
 * Bot開発のための土台
   * commandライン入力をelectron上で仮想的に実装
@@ -12,6 +18,10 @@
 * 午前の開発環境
 
 ![](img/Animation.gif)
+
+#この環境で開発したモジュールの一覧
+https://github.com/ampcpmgp/amdev/tree/master/modules
+
 
 ## this project environment
 ```
