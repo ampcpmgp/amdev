@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "riot": "^3.0.5"
+    "riot": "^3.0.5",
+    "riot-route": "^3.0.2"
   }
 }
