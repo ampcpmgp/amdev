@@ -41,59 +41,67 @@ module.exports =
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(36);
+	module.exports = __webpack_require__(23);
 
 
 /***/ },
-
-/***/ 2:
+/* 1 */,
+/* 2 */
 /***/ function(module, exports) {
 
 	module.exports = require("fs");
 
 /***/ },
-
-/***/ 3:
+/* 3 */
 /***/ function(module, exports) {
 
 	module.exports = require("child_process");
 
 /***/ },
-
-/***/ 10:
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */
 /***/ function(module, exports) {
 
 	module.exports = require("fs-extra");
 
 /***/ },
-
-/***/ 13:
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = require("electron");
 
 /***/ },
-
-/***/ 17:
+/* 14 */,
+/* 15 */,
+/* 16 */
 /***/ function(module, exports) {
 
 	module.exports = require("chokidar");
 
 /***/ },
-
-/***/ 22:
+/* 17 */
 /***/ function(module, exports) {
 
-	module.exports = require("cson");
+	module.exports = {"browserWindow":{"x":0,"y":0,"width":1027,"height":968,"icon":"./web/favicon.ico","webPreferences":{"url":"/app/index.html","preload":"/app/preload.js"}},"cl":{"intervalMin":5},"server":{"port":8091}}
 
 /***/ },
-
-/***/ 36:
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Browser, BrowserWindow, Watcher, app, chokidar, cson, exec, fork, fs, fse, ipcMain, mainWindow, ref,
@@ -101,9 +109,9 @@ module.exports =
 
 	fse = __webpack_require__(10);
 
-	chokidar = __webpack_require__(17);
+	chokidar = __webpack_require__(16);
 
-	cson = __webpack_require__(22);
+	cson = __webpack_require__(24);
 
 	fs = __webpack_require__(2);
 
@@ -160,7 +168,7 @@ module.exports =
 	    try {
 	      this.config = cson.load(this.configCson);
 	    } catch (error) {
-	      this.config = __webpack_require__(37);
+	      this.config = __webpack_require__(17);
 	    }
 	    this.option = this.config.browserWindow;
 	    return this;
@@ -248,12 +256,10 @@ module.exports =
 
 
 /***/ },
-
-/***/ 37:
+/* 24 */
 /***/ function(module, exports) {
 
-	module.exports = {"browserWindow":{"x":0,"y":0,"width":1027,"height":968,"icon":"./web/favicon.ico","webPreferences":{"url":"/app/index.html","preload":"/app/preload.js"}},"cl":{"intervalMin":5}}
+	module.exports = require("cson");
 
 /***/ }
-
-/******/ });
+/******/ ]);

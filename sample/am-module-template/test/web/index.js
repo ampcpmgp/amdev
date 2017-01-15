@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["modules/am-coffee-time/browser/Test"] = factory();
+		exports["sample/am-module-template/test/web/index"] = factory();
 	else
-		root["modules/am-coffee-time/browser/Test"] = factory();
+		root["sample/am-module-template/test/web/index"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -50,15 +50,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(6);
+	module.exports = __webpack_require__(84);
 
 
 /***/ },
-/* 1 */
+
+/***/ 1:
 /***/ function(module, exports) {
 
 	var $, AutoEvent, trigger,
@@ -280,8 +282,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 2 */,
-/* 3 */
+
+/***/ 3:
 /***/ function(module, exports, __webpack_require__) {
 
 	var AutoEvent, AutoEventBase,
@@ -343,8 +345,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 4 */,
-/* 5 */
+
+/***/ 5:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10570,7 +10572,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 6 */
+
+/***/ 6:
 /***/ function(module, exports, __webpack_require__) {
 
 	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
@@ -10664,7 +10667,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 7 */
+
+/***/ 7:
 /***/ function(module, exports) {
 
 	/**
@@ -11095,7 +11099,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	// vi:sw=2:ts=2
 
 
+/***/ },
+
+/***/ 84:
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(6).start({
+	  params: (function(_this) {
+	    return function(arg) {};
+	  })(this)
+	});
+
+
 /***/ }
-/******/ ])
+
+/******/ })
 });
 ;

@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["modules/am-coffee-time/browser/Test"] = factory();
+		exports["modules/am-autoevent/test/web/index"] = factory();
 	else
-		root["modules/am-coffee-time/browser/Test"] = factory();
+		root["modules/am-autoevent/test/web/index"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -54,7 +54,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(6);
+	module.exports = __webpack_require__(4);
 
 
 /***/ },
@@ -343,7 +343,83 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 4 */,
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $, AutoEvent, AutoEventNoGen, func;
+
+	$ = __webpack_require__(5);
+
+	AutoEvent = __webpack_require__(3);
+
+	AutoEventNoGen = __webpack_require__(3);
+
+	(function(_this) {
+	  return (function() {
+	    $("button").click(function() {
+	      return console.log(2);
+	    });
+	    return $("select").on("change", function(e) {
+	      return console.log(e.currentTarget.value);
+	    });
+	  });
+	})(this)();
+
+	func = (function(_this) {
+	  return function(Klass) {
+	    var ae;
+	    ae = new Klass();
+	    return ae.register().click("#test").click("#test").wait(500).click("#test").setValue("#input", Date.now()).wait(200).click("#test2").setValue("#input2", Date.now()).wait("300").addEvent(function() {
+	      return console.log("hello");
+	    }).waitSelector("#test").setHtml("#test", Date.now()).start(2, function() {
+	      return console.info("finished");
+	    });
+	  };
+	})(this);
+
+	__webpack_require__(6).start({
+	  test: (function(_this) {
+	    return function() {
+	      func(AutoEvent);
+	      return $ERROR_IS_OKAY;
+	    };
+	  })(this),
+	  testNoGen: (function(_this) {
+	    return function() {
+	      return func(AutoEventNoGen);
+	    };
+	  })(this),
+	  timeout: (function(_this) {
+	    return function(ms) {
+	      var createTimeoutBox;
+	      AutoEvent = AutoEvent.prototype;
+	      AutoEvent.timeoutMsec = parseInt(ms);
+	      AutoEvent.register().waitSelector("box").start();
+	      createTimeoutBox = function() {
+	        return $("body").append("<box>box</box>");
+	      };
+	      return setTimeout(createTimeoutBox, 500);
+	    };
+	  })(this),
+	  clickAssert: (function(_this) {
+	    return function(assertFlg) {
+	      var ae;
+	      ae = new AutoEvent;
+	      return ae.register().wait(300).click(".box", assertFlg === "true").start();
+	    };
+	  })(this),
+	  select: (function(_this) {
+	    return function(value) {
+	      var ae;
+	      ae = new AutoEvent;
+	      ae.register().wait(300).selectValue("select", value).start();
+	      return $ERROR_IS_OKAY;
+	    };
+	  })(this)
+	});
+
+
+/***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 

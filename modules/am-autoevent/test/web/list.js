@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["modules/am-coffee-time/browser/generate"] = factory();
+		exports["modules/am-autoevent/test/web/list"] = factory();
 	else
-		root["modules/am-coffee-time/browser/generate"] = factory();
+		root["modules/am-autoevent/test/web/list"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -54,7 +54,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(9);
+	module.exports = __webpack_require__(8);
 
 
 /***/ },
@@ -65,7 +65,19 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 5 */,
 /* 6 */,
 /* 7 */,
-/* 8 */,
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var generate, testcases;
+
+	generate = __webpack_require__(9);
+
+	testcases = __webpack_require__(18);
+
+	generate(testcases);
+
+
+/***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -4719,6 +4731,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    window.observable = observable
 
 	})(typeof window != 'undefined' ? window : undefined);
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"am-autoevent": {
+			"エラーでOK": {
+				"timeout=100": "./index.html",
+				"clickAssert=true": "./index.html",
+				"select=6": "./index.html"
+			},
+			"エラーじゃダメ": {
+				"test": "./index.html",
+				"testNoGen": "./index.html",
+				"timeout=5000": "./index.html",
+				"clickAssert=false": "./index.html",
+				"select=5": "./index.html"
+			}
+		}
+	};
 
 /***/ }
 /******/ ])

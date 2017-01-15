@@ -1,5 +1,14 @@
-module.exports =
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["modules/am-coffee-time/test/web/case"] = factory();
+	else
+		root["modules/am-coffee-time/test/web/case"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -41,52 +50,14 @@ module.exports =
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(26);
-
-
-/***/ },
-
-/***/ 3:
-/***/ function(module, exports) {
-
-	module.exports = require("child_process");
-
-/***/ },
-
-/***/ 26:
-/***/ function(module, exports, __webpack_require__) {
-
-	var CmdExe, exec;
-
-	exec = __webpack_require__(3).exec;
-
-	module.exports = CmdExe = (function() {
-	  function CmdExe(directory, path) {
-	    this.directory = directory;
-	    this.path = path != null ? path : "electron";
-	  }
-
-	  CmdExe.prototype.start = function() {
-	    var command, proc;
-	    command = "start " + this.directory + "\\electron.exe " + this.path;
-	    proc = exec(command, (function(_this) {
-	      return function(e, out, err) {
-	        return console.log(e, out, err);
-	      };
-	    })(this));
-	    return console.log("command - \n" + command);
-	  };
-
-	  return CmdExe;
-
-	})();
+	(function webpackMissingModule() { throw new Error("Cannot find module \"./modules/am-coffee-time/test/web/case.coffee\""); }());
 
 
 /***/ }
-
-/******/ });
+/******/ ])
+});
+;

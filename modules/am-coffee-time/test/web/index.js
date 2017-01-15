@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["modules/am-coffee-time/browser/Test"] = factory();
+		exports["modules/am-coffee-time/test/web/index"] = factory();
 	else
-		root["modules/am-coffee-time/browser/Test"] = factory();
+		root["modules/am-coffee-time/test/web/index"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -50,15 +50,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(6);
+	module.exports = __webpack_require__(71);
 
 
 /***/ },
-/* 1 */
+
+/***/ 1:
 /***/ function(module, exports) {
 
 	var $, AutoEvent, trigger,
@@ -280,8 +282,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 2 */,
-/* 3 */
+
+/***/ 3:
 /***/ function(module, exports, __webpack_require__) {
 
 	var AutoEvent, AutoEventBase,
@@ -343,8 +345,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 4 */,
-/* 5 */
+
+/***/ 5:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10570,7 +10572,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 6 */
+
+/***/ 6:
 /***/ function(module, exports, __webpack_require__) {
 
 	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
@@ -10664,7 +10667,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 7 */
+
+/***/ 7:
 /***/ function(module, exports) {
 
 	/**
@@ -11095,7 +11099,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	// vi:sw=2:ts=2
 
 
+/***/ },
+
+/***/ 71:
+/***/ function(module, exports, __webpack_require__) {
+
+	var $, test;
+
+	$ = __webpack_require__(5);
+
+	test = {
+	  params1: (function(_this) {
+	    return function(params1Val) {
+	      console.assert(params1Val);
+	      return setTimeout(function() {
+	        return $("body").scrollTop(100);
+	      }, 100);
+	    };
+	  })(this),
+	  _color: (function(_this) {
+	    return function(selector) {
+	      selector = selector === true ? "*" : selector;
+	      return $(selector).each(function() {
+	        var $this, tagName;
+	        $this = $(this);
+	        tagName = $this.prop("tagName");
+	        return console.assert($this.css("background"), tagName);
+	      });
+	    };
+	  })(this),
+	  _border: (function(_this) {
+	    return function(selector) {
+	      selector = selector === true ? "*" : selector;
+	      return $(selector).each(function() {
+	        var $this, tagName;
+	        $this = $(this);
+	        tagName = $this.prop("tagName");
+	        return console.assert($this.css("border"), tagName);
+	      });
+	    };
+	  })(this)
+	};
+
+	__webpack_require__(6).start(test);
+
+	console.info("finished");
+
+
 /***/ }
-/******/ ])
+
+/******/ })
 });
 ;
