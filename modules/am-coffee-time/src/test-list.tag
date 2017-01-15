@@ -4,7 +4,7 @@ require("./test-iframe.tag")
   <test-list-count />
   <a onclick={toRouteHash}>base</a>
   <recursive-item data={opts.testPatterns} routing="" />
-  <test-iframe name="testFrame" if={instanceUrl} url={instanceUrl} config={WholeStatus.config}></test-iframe>
+  <test-iframe ref="testFrame" if={instanceUrl} url={instanceUrl} config={WholeStatus.config}></test-iframe>
   <style scoped>
     :scope {
       display: block;
@@ -38,7 +38,7 @@ require("./test-iframe.tag")
       unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
         @update()
-        @tags.testFrame.setConsoleEvent()
+        @refs.testFrame.setConsoleEvent()
         return
       WholeStatus.executablePath[executePath]()
     @toRouteHash = => route("")
@@ -74,7 +74,7 @@ require("./test-iframe.tag")
 </test-list-count>
 
 <recursive-item>
-  <list-line name="lines" each={key, data in list} list={this} routing={this.parent.opts.routing} />
+  <list-line ref="lines" each={data, key in list} list={this} routing={this.parent.opts.routing} />
   <style scope>
     :scope {
       display: block;
@@ -92,12 +92,12 @@ require("./test-iframe.tag")
   <div class="line{isHover && ' hover'}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error, warn: warn}"></span>
-      <a class="tree" href={routing} name="treeTask" onclick={router}>{key}</a>
-      <a class="single" if={url} href={routerExecutionPath} name="singleTask" onclick={router}>{url}</a>
+      <a class="tree" href={routing} onclick={router}>{key}</a>
+      <a class="single" if={url} href={routerExecutionPath} onclick={router}>{url}</a>
     </div>
-    <recursive-item name="item" if={!url} data={data} routing={routing} />
+    <recursive-item ref="item" if={!url} data={data} routing={routing} />
   </div>
-  <test-iframe name="testFrame" if={url && status.onExecute} url={routerExecutionPath} config={WholeStatus.config}></test-iframe>
+  <test-iframe ref="testFrame" if={url && status.onExecute} url={routerExecutionPath} config={WholeStatus.config}></test-iframe>
   <style scoped type="less">
     .bold {
       font-weight: bold;
@@ -139,6 +139,7 @@ require("./test-iframe.tag")
   </style>
   <script type="coffee">
     WholeStatus = @WholeStatus = require("./Status")
+    route = require("riot-route")
     executeIframe = =>
       WholeStatus.executeIframe.shift()?()
     @key = opts.list.key
@@ -156,11 +157,11 @@ require("./test-iframe.tag")
       @success = null
       @deleteIframe()
     @recursivelyExecuteTask = =>
-      lines = @tags.item.tags.lines
-      if lines.length
+      item = @refs.item
+      if item
+        lines = item.refs.lines
         for line in lines
-          trueLine = line.tags.lines
-          trueLine.recursivelyExecuteTask()
+          line.recursivelyExecuteTask()
       else
         WholeStatus.executeIframe.push(=> @executeTask( =>
           @deleteIframe()
@@ -175,7 +176,7 @@ require("./test-iframe.tag")
       this.update()
       console.clear()
       ++WholeStatus.executeSum
-      @tags.testFrame.setConsoleEvent(
+      @refs.testFrame.setConsoleEvent(
         assert: (flg, msg) =>
           if msg
             console.assert(flg, msg)
@@ -195,12 +196,15 @@ require("./test-iframe.tag")
         error: (msg) =>
           @warn = true
       )
-    @router = (e) => route("path=" + e.target.getAttribute("href"))
+    @router = (e) =>
+      route("path=" + e.target.getAttribute("href"))
+      e.preventDefault()
     @mouseOn = => @isHover = true
     @mouseOut = => @isHover = false
     WholeStatus.on("init", => @init())
     WholeStatus.itemStatuses.push(@status)
-    WholeStatus.executablePath[encodeURI(@routing)] =  () => @multiExecuteTask()
+    WholeStatus.executablePath[encodeURI(@routing)] =  () =>
+      @multiExecuteTask()
     WholeStatus.executablePath[encodeURI(@routerExecutionPath)] = () => @executeTask() if @url
     @on("update", => WholeStatus.trigger("item-update"))
     @init()
