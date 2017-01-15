@@ -18,9 +18,7 @@ class Sections
     blocks = stringWithoutName
       .split(expressions.splitter)
       .map((block) => @_getStatus(block))
-    @data.push(
-      "#{name}": blocks
-    )
+    @data.push({name, blocks})
   _getStatus: (block) =>
     {
       lines: [

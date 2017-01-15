@@ -7,6 +7,7 @@ require("am-coffee-time/browser/Test").start(
     flow = require("raw!./simple.flow")
     json = require("./simple.json")
     result = parser(flow)
+    # console.log JSON.stringify(result, null, "  ") # test用のデータ取得用
     console.assert(JSON.stringify(result) is JSON.stringify(json), "simple flow is not same")
 )
 
