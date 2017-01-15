@@ -1,12 +1,24 @@
 <data-flow>
-  <a-scene>
-    <a-box color="#6173F4" opacity="0.8" depth="2"></a-box>
-    <a-sphere radius="2" src="texture.png" position="1 1 0"></a-sphere>
-    <a-sky color="#ECECEC"></a-sky>
-  </a-scene>
+  <div class="box" each={opts.flow}>
+    <div class="title">
+      {name}
+    </div>
+  </div>
+  <style type="less">
+    .box > .title {
+      color: red;
+    }
+    :scope {
+      > .box {
+        > .title {
+          border: 1px solid black;
+        }
+      }
+    }
+  </style>
   <script type="coffee">
-    @mount = =>
-      console.log opts.flow
-      require("aframe")
+    @.on("mount", =>
+      console.log opts.flow[0]
+    )
   </script>
 </data-flow>
