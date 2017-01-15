@@ -24,6 +24,7 @@ require("./test-iframe.tag")
   </style>
   <script type="coffee">
     @WholeStatus = WholeStatus = require("./Status")
+    route = require("riot-route")
     bodyStyle = document.body.style
     @init = =>
       @instanceUrl = null
@@ -31,7 +32,7 @@ require("./test-iframe.tag")
     @check = =>
       @init()
       WholeStatus.sumInit()
-      executePath = riot.route.query().path
+      executePath = route.query().path
       return @update() unless executePath
       executePath = encodeURI(executePath) unless (/%[0-9a-f]{2}/i).test(executePath)
       unless WholeStatus.executablePath[executePath]
@@ -40,7 +41,7 @@ require("./test-iframe.tag")
         @tags.testFrame.setConsoleEvent()
         return
       WholeStatus.executablePath[executePath]()
-    @toRouteHash = => riot.route("")
+    @toRouteHash = => route("")
     WholeStatus.on("item-update", () =>
       for itemStatus in WholeStatus.itemStatuses
         if itemStatus.onExecute
@@ -50,11 +51,11 @@ require("./test-iframe.tag")
     )
     @on("mount", () =>
       @check()
-      riot.route.start()
+      route.start()
     )
-    riot.route.base(WholeStatus.thisBasePath)
-    riot.route("..", @check)
-    # riot.route機能はpathがないと動かないため無いときはつける必要がある
+    route.base(WholeStatus.thisBasePath)
+    route("..", @check)
+    # route機能はpathがないと動かないため無いときはつける必要がある
     window.addEventListener("popstate", =>
       unless location.href.match("\\" + WholeStatus.thisBasePath)
         history.replaceState("", null, WholeStatus.thisBasePath)
@@ -194,7 +195,7 @@ require("./test-iframe.tag")
         error: (msg) =>
           @warn = true
       )
-    @router = (e) => riot.route("path=" + e.target.getAttribute("href"))
+    @router = (e) => route("path=" + e.target.getAttribute("href"))
     @mouseOn = => @isHover = true
     @mouseOut = => @isHover = false
     WholeStatus.on("init", => @init())
