@@ -13,6 +13,7 @@ module.exports = class ElectronApp
   start: ->
     @init()
     @liveReload()
+    @serverStart()
   ### 信頼しているメソッドなるべくフロー順 ###
   init: ->
     if @_inspector then @autoInspector()
@@ -28,7 +29,7 @@ module.exports = class ElectronApp
         ipcRenderer.send('inspect element', obj, "mainWindow")
   liveReload: ->
     chokidar
-      .watch(glob.sync("./**/@(app|node)/**/*.@(html|js)", {ignore: "./**/node_modules/**"}),
+      .watch(glob.sync("./**/@(app|node)/*.@(html|js)", {ignore: "./**/node_modules/**"}),
         persistent: true
         awaitWriteFinish:
           stabilityThreshold: 10
@@ -38,3 +39,11 @@ module.exports = class ElectronApp
         return if @liveReloadStopFlg
         location.reload()
       )
+  serverStart: ->
+    # TODO: ../electron/Browser.coffeeのコードと統一する。
+    try
+      @config = cson.load('.config.cson')
+    catch
+      @config = require("../electron/config.cson")
+    @option = @config.server.port || 8091
+    require("am-simple-server").prototype.start(8091, 8091)

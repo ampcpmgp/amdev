@@ -1,3 +1,4 @@
+# 現在未使用
 SimpleServer = require("../SimpleServer")
 # TODO: clientにつながることを確認する必要がある。e2eか連携
 SimpleServer::webDir = [

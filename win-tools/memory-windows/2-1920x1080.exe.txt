@@ -10,3 +10,4 @@ LINE.exe,LINE=======>2767,57,629,588
 slack.exe,Slack=======>666,54,1096,978
 cmd.exe,npm=======>1931,525,993,519
 electron.exe,Electron=======>1922,6,1027,914
+electron.exe,Electron=======>2268,44,757,497

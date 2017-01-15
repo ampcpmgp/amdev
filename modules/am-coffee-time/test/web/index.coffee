@@ -1,5 +1,4 @@
 $ = require("jquery")
-$("body").append($(require("./tag.html")))
 
 test =
   params1: (params1Val) =>

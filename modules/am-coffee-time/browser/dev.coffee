@@ -12,8 +12,8 @@ class Client extends require("am-simple-server/browser/WSClient")
     @ws
       .on("pattern", (obj) =>
         document.body.innerHTML = "<test-list></test-list>"
-        @tags = generate(obj)
-        @listTag = @tags.list[0]
+        @refs = generate(obj)
+        @listTag = @refs.list[0]
       )
       .off("reload")
       .on("reload", =>

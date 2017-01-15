@@ -1,5 +1,11 @@
 # まだ工事中
 
+出来ること
+coffeescriptを用い
+* nodeモジュールの開発・テスト
+* browserモジュールの開発・テスト
+* electronアプリケーションモジュールの開発・テスト
+
 実装したいリスト
 * Bot開発のための土台
   * commandライン入力をelectron上で仮想的に実装
@@ -13,10 +19,14 @@
 
 ![](img/Animation.gif)
 
+#この環境で開発したモジュールの一覧
+https://github.com/ampcpmgp/amdev/tree/master/modules
+
+
 ## this project environment
 ```
 git clone github.com/ampcpmgp/amdev
-npm i
+yarn
 npm start
 ```
 
@@ -32,7 +42,7 @@ clover - http://www.vector.co.jp/download/file/winnt/util/fh608107.html 3.2は�
 gapdebug - ios debug
 
 # atom package
-apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify pretty-json quantum-shell language-riot-tag linter-eslint git-time-machine
+apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify quantum-shell language-riot-tag linter-eslint git-time-machine atom-mermaid git-plus docblockr
 
 # windows config environment
 * 拡張子を表示する

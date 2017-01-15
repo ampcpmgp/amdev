@@ -1,0 +1,11 @@
+am-autoevent:
+  エラーでOK:
+    timeout=100: ./index.html
+    clickAssert=true: ./index.html
+    select=6: ./index.html
+  エラーじゃダメ:
+    test: ./index.html
+    testNoGen: ./index.html
+    timeout=5000: ./index.html
+    clickAssert=false: ./index.html
+    select=5: ./index.html

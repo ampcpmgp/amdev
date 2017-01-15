@@ -19,11 +19,11 @@
   <span>パスワードはappleです。ログインしてください。</span>
   <label for="id">
     <span>ID:</span>
-    <input type="text" name="id" value="">
+    <input type="text" name="id" ref="id" value="">
   </label>
   <label for="pw">
     <span>PW:</span>
-    <input type="password" name="pw" value="">
+    <input type="password" name="pw" ref="pw" value="">
   </label>
   <input type="button" name="check" value="login" onclick={check}>
   <span class="error">{errorMsg}</span>
@@ -54,8 +54,8 @@
     Status = require("./Status")
     @errorMsg = ""
     @check = =>
-      id = @id.value
-      pw = @pw.value
+      id = @refs.id.value
+      pw = @refs.pw.value
       return @errorMsg = "ID/PWを入力してください" unless id or pw
       return @errorMsg = "PWが正しくないです" unless pw.match(/^(apple)$/)
       Status.isLogin = true

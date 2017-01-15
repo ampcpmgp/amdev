@@ -9,3 +9,5 @@ browserWindow:
     preload: "/app/preload.js"
 cl:
   intervalMin: 5
+server:
+  port: 8091

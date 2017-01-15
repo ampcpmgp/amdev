@@ -1,0 +1,42 @@
+am-coffee-time:
+  params1:  ./index.html
+  _color:  ./index.html
+  _color=.child:  ./index.html
+  _border:  ./index.html
+  root:  ./index.html
+  _hide=.child:  ./index.html
+  test:
+    3:
+      4:
+        5:
+          6:
+            1:
+              2:
+                3:
+                  4:
+                    5:
+                      6:
+                        1:
+                          2:
+                            3:
+                              4:
+                                5:
+                                  6:
+                                    1:
+                                      2:
+                                        3:
+                                          4:
+                                            5:
+                                              6:
+                                                1:
+                                                  2:
+                                                    3:
+                                                      4:
+                                                        5:
+                                                          6:
+                                                            1:
+                                                              2:
+                                                                3:
+                                                                  4:
+                                                                    5:
+                                                                      6: ./index.html

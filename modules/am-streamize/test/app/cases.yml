@@ -1,0 +1,3 @@
+node-streamize:
+  parser:
+    simple: ./index.html

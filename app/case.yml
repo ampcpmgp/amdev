@@ -1,4 +1,0 @@
-allpattern:
-  am-simple-server: index.html
-  am-coffee-time:
-    port=50001,50001: index.html
