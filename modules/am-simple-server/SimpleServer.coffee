@@ -47,6 +47,9 @@ module.exports = class SimpleServer
     path = @_checkExistsFile(url)
     if path
       data = fs.readFileSync(path)
+      unless data.length
+        setTimeout((=> @httpServerAction(req, res)), 500)
+        return
       type = mime.lookup(path)
       res.writeHead(200, "Content-Type": type)
       if type is "text/html"

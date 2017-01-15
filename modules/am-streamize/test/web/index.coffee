@@ -1,4 +1,4 @@
-window.riot = require("riot3")
+window.riot = require("riot")
 parser = require("am-streamize/parser")
 require("am-streamize/browser/data-flow.tag")
 
