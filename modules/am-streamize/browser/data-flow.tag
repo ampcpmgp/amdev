@@ -5,10 +5,7 @@
     </div>
   </div>
   <style type="less">
-    .box > .title {
-      color: red;
-    }
-    :scope {
+    data-flow {
       > .box {
         > .title {
           border: 1px solid black;
