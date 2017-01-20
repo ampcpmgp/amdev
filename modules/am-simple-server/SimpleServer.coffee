@@ -84,8 +84,10 @@ module.exports = class SimpleServer
         stabilityThreshold: 10
         pollInterval: 10
     ).on("change", (path, stat) =>
-      @checkReloadList()
-      @sendReloadEvent(socket) for socket in @reloadList
+      setTimeout(() =>
+        @checkReloadList()
+        @sendReloadEvent(socket) for socket in @reloadList
+      , 200)
     )
   sendReloadEvent: (socket) -> socket.emit("reload")
   sendCssReloadEvent: (socket,filepath) -> socket.emit("css reload", fs.readFileSync(filepath, {encoding:"utf-8"}))
