@@ -160,8 +160,11 @@ require("./test-iframe.tag")
       item = @refs.item
       if item
         lines = item.refs.lines
-        for line in lines
-          line.recursivelyExecuteTask()
+        unless lines.length
+          lines.recursivelyExecuteTask()
+        else
+          for line in lines
+            line.recursivelyExecuteTask()
       else
         WholeStatus.executeIframe.push(=> @executeTask( =>
           @deleteIframe()
