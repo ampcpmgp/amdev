@@ -84,6 +84,10 @@ module.exports = class SimpleServer
         stabilityThreshold: 10
         pollInterval: 10
     ).on("change", (path, stat) =>
+      curDate = Date.now()
+      diff = curDate - @wsEventReload_prevDate
+      @wsEventReload_prevDate = curDate
+      if diff < 1000 then return
       setTimeout(() =>
         @checkReloadList()
         @sendReloadEvent(socket) for socket in @reloadList

@@ -207,9 +207,9 @@ require("./test-iframe.tag")
     @mouseOut = => @isHover = false
     WholeStatus.on("init", => @init())
     WholeStatus.itemStatuses.push(@status)
-    WholeStatus.executablePath[encodeURI(@routing)] =  () =>
+    WholeStatus.executablePath[encodeURIComponent(@routing)] =  () =>
       @multiExecuteTask()
-    WholeStatus.executablePath[encodeURI(@routerExecutionPath)] = () => @executeTask() if @url
+    WholeStatus.executablePath[encodeURIComponent(@routerExecutionPath)] = () => @executeTask() if @url
     @on("update", => WholeStatus.trigger("item-update"))
     @init()
   </script>
