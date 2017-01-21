@@ -13888,9 +13888,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ },
 
 /***/ 80:
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	riot.tag2('data-flow', '<div class="box" each="{opts.flow}"> <div class="title"> {name} </div> </div>', '.box>.title{color:red}:scope>.box>.title{border:1px solid black}', '', function(opts) {
+	var riot = __webpack_require__(10);
+
+	riot.tag2('data-flow', '<div class="box" each="{opts.flow}"> <div class="title"> {name} </div> </div>', 'data-flow>.box>.title{border:1px solid black}', '', function(opts) {
 	this.on("mount", (function(_this) {
 	  return function() {
 	    return console.log(opts.flow[0]);

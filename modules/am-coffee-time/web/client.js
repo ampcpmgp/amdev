@@ -2745,7 +2745,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 75:
 /***/ function(module, exports, __webpack_require__) {
 
-	riot.tag2('app', '<before-login if="{!Status.isLogin}"></before-login> <after-login if="{Status.isLogin}"></after-login>', 'app,[riot-tag="app"],[data-is="app"]{display:flex;align-items:center;justify-content:center;height:100%}', '', function(opts) {
+	var riot = __webpack_require__(10);
+
+	riot.tag2('app', '<before-login if="{!Status.isLogin}"></before-login> <after-login if="{Status.isLogin}"></after-login>', 'app,[data-is="app"]{display:flex;align-items:center;justify-content:center;height:100%}', '', function(opts) {
 	var Status;
 
 	Status = this.Status = __webpack_require__(76);
@@ -2757,7 +2759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(this));
 	});
 
-	riot.tag2('before-login', '<span>パスワードはappleです。ログインしてください。</span> <label for="id"> <span>ID:</span> <input type="text" name="id" ref="id" value=""> </label> <label for="pw"> <span>PW:</span> <input type="password" name="pw" ref="pw" value=""> </label> <input type="button" name="check" value="login" onclick="{check}"> <span class="error">{errorMsg}</span>', 'before-login,[riot-tag="before-login"],[data-is="before-login"]{height:300px;border:1px solid #555;padding:0 20px;display:flex;align-items:center;justify-content:center;flex-direction:column} before-login>*,[riot-tag="before-login"]>*,[data-is="before-login"]>*{padding:4px 0} before-login label,[riot-tag="before-login"] label,[data-is="before-login"] label{display:flex;justify-content:space-between;width:210px} before-login .error,[riot-tag="before-login"] .error,[data-is="before-login"] .error{height:24px;color:rgba(255,32,32,0.6)}', '', function(opts) {
+	riot.tag2('before-login', '<span>パスワードはappleです。ログインしてください。</span> <label for="id"> <span>ID:</span> <input type="text" name="id" ref="id" value=""> </label> <label for="pw"> <span>PW:</span> <input type="password" name="pw" ref="pw" value=""> </label> <input type="button" name="check" value="login" onclick="{check}"> <span class="error">{errorMsg}</span>', 'before-login,[data-is="before-login"]{height:300px;border:1px solid #555;padding:0 20px;display:flex;align-items:center;justify-content:center;flex-direction:column} before-login>*,[data-is="before-login"]>*{padding:4px 0} before-login label,[data-is="before-login"] label{display:flex;justify-content:space-between;width:210px} before-login .error,[data-is="before-login"] .error{height:24px;color:rgba(255,32,32,0.6)}', '', function(opts) {
 	var Status;
 
 	Status = __webpack_require__(76);

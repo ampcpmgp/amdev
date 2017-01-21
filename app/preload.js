@@ -356,15 +356,24 @@ module.exports =
 	      }
 	    }).on("change", (function(_this) {
 	      return function(path, stat) {
-	        var j, len, ref, results, socket;
-	        _this.checkReloadList();
-	        ref = _this.reloadList;
-	        results = [];
-	        for (j = 0, len = ref.length; j < len; j++) {
-	          socket = ref[j];
-	          results.push(_this.sendReloadEvent(socket));
+	        var curDate, diff;
+	        curDate = Date.now();
+	        diff = curDate - _this.wsEventReload_prevDate;
+	        _this.wsEventReload_prevDate = curDate;
+	        if (diff < 1000) {
+	          return;
 	        }
-	        return results;
+	        return setTimeout(function() {
+	          var j, len, ref, results, socket;
+	          _this.checkReloadList();
+	          ref = _this.reloadList;
+	          results = [];
+	          for (j = 0, len = ref.length; j < len; j++) {
+	            socket = ref[j];
+	            results.push(_this.sendReloadEvent(socket));
+	          }
+	          return results;
+	        }, 200);
 	      };
 	    })(this));
 	  };

@@ -306,6 +306,12 @@ module.exports =
 	        }, {
 	          test: /\.ya?ml$/,
 	          loader: "json!yaml"
+	        }, {
+	          test: /\.tag$/,
+	          loader: "tag-loader",
+	          query: {
+	            type: 'none'
+	          }
 	        }
 	      ],
 	      postLoaders: [
@@ -339,13 +345,6 @@ module.exports =
 	    Compiler.electronOption = _.cloneDeep(Compiler.baseOption);
 	    Compiler.electronOption.target = "atom";
 	    Compiler.electronOption.externals = Compiler.nodeModules;
-	    Compiler.electronOption.module.loaders.push({
-	      test: /\.tag$/,
-	      loader: "riotjs-loader",
-	      query: {
-	        type: 'none'
-	      }
-	    });
 	    Compiler.nodeOption = _.cloneDeep(Compiler.baseOption);
 	    Compiler.nodeOption.target = "node";
 	    Compiler.nodeOption.externals = Compiler.nodeModules;
@@ -353,14 +352,7 @@ module.exports =
 	    Compiler.browserOption.target = "web";
 	    Compiler.browserOption.module.preLoaders = [];
 	    Compiler.browserOption.output.library = "[name]";
-	    Compiler.browserOption.output.libraryTarget = "umd";
-	    return Compiler.browserOption.module.loaders.push({
-	      test: /\.tag$/,
-	      loader: "riotjs-loader",
-	      query: {
-	        type: 'none'
-	      }
-	    });
+	    return Compiler.browserOption.output.libraryTarget = "umd";
 	  };
 
 	  Compiler.run = function() {
