@@ -17,6 +17,7 @@ module.exports = class Compiler
         {test: /\.html$/, loader: "html"}
         {test: /\.json$/, loader: "json"}
         {test: /\.ya?ml$/, loader: "json!yaml"}
+        {test: /\.tag$/, loader: "tag-loader", query: {type: 'none' }}
       ]
       postLoaders: [
         {test: /\.src\.coffee$/, loader: "raw"}
@@ -39,7 +40,6 @@ module.exports = class Compiler
     @electronOption = _.cloneDeep(@baseOption)
     @electronOption.target = "atom"
     @electronOption.externals = @nodeModules
-    @electronOption.module.loaders.push({test: /\.tag$/, loader: "tag-loader", query: {type: 'none' }})
     @nodeOption = _.cloneDeep(@baseOption)
     @nodeOption.target = "node"
     @nodeOption.externals = @nodeModules
@@ -48,7 +48,6 @@ module.exports = class Compiler
     @browserOption.module.preLoaders = []
     @browserOption.output.library = "[name]"
     @browserOption.output.libraryTarget = "umd"
-    @browserOption.module.loaders.push({test: /\.tag$/, loader: "tag-loader", query: {type: 'none' }})
   @run: () =>
     @setFilePath()
     delete @electronOption.devtool
