@@ -39,7 +39,7 @@ module.exports = class Compiler
     @electronOption = _.cloneDeep(@baseOption)
     @electronOption.target = "atom"
     @electronOption.externals = @nodeModules
-    @electronOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
+    @electronOption.module.loaders.push({test: /\.tag$/, loader: "tag-loader", query: {type: 'none' }})
     @nodeOption = _.cloneDeep(@baseOption)
     @nodeOption.target = "node"
     @nodeOption.externals = @nodeModules
@@ -48,7 +48,7 @@ module.exports = class Compiler
     @browserOption.module.preLoaders = []
     @browserOption.output.library = "[name]"
     @browserOption.output.libraryTarget = "umd"
-    @browserOption.module.loaders.push({test: /\.tag$/, loader: "riotjs-loader", query: {type: 'none' }})
+    @browserOption.module.loaders.push({test: /\.tag$/, loader: "tag-loader", query: {type: 'none' }})
   @run: () =>
     @setFilePath()
     delete @electronOption.devtool
