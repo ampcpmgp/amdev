@@ -34,7 +34,8 @@ require("./test-iframe.tag")
       WholeStatus.sumInit()
       executePath = route.query().path
       return @update() unless executePath
-      executePath = encodeURI(executePath) unless (/%[0-9a-f]{2}/i).test(executePath)
+      executePath = decodeURIComponent(executePath)
+      executePath = encodeURIComponent(executePath)
       unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
         @update()
@@ -160,8 +161,11 @@ require("./test-iframe.tag")
       item = @refs.item
       if item
         lines = item.refs.lines
-        for line in lines
-          line.recursivelyExecuteTask()
+        unless lines.length
+          lines.recursivelyExecuteTask()
+        else
+          for line in lines
+            line.recursivelyExecuteTask()
       else
         WholeStatus.executeIframe.push(=> @executeTask( =>
           @deleteIframe()
@@ -203,9 +207,9 @@ require("./test-iframe.tag")
     @mouseOut = => @isHover = false
     WholeStatus.on("init", => @init())
     WholeStatus.itemStatuses.push(@status)
-    WholeStatus.executablePath[encodeURI(@routing)] =  () =>
+    WholeStatus.executablePath[encodeURIComponent(@routing)] =  () =>
       @multiExecuteTask()
-    WholeStatus.executablePath[encodeURI(@routerExecutionPath)] = () => @executeTask() if @url
+    WholeStatus.executablePath[encodeURIComponent(@routerExecutionPath)] = () => @executeTask() if @url
     @on("update", => WholeStatus.trigger("item-update"))
     @init()
   </script>
