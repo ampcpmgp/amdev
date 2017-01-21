@@ -11,3 +11,4 @@ slack.exe,Slack=======>666,54,1096,978
 cmd.exe,npm=======>1931,525,993,519
 electron.exe,Electron=======>1922,6,1027,914
 electron.exe,Electron=======>2268,44,757,497
+notepad++.exe,Notepad++=======>3192,68,646,883
