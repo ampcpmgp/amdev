@@ -35,7 +35,7 @@ require("./test-iframe.tag")
       executePath = route.query().path
       return @update() unless executePath
       executePath = decodeURIComponent(executePath)
-      executePath = encodeURI(executePath) unless (/%[0-9a-fA-Z]{2}/i).test(executePath)
+      executePath = encodeURIComponent(executePath)
       unless WholeStatus.executablePath[executePath]
         @instanceUrl = executePath
         @update()
