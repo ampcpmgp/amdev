@@ -25,7 +25,7 @@ actionFuncs =
 
 module.exports = class Test
   @start: (testObj = @) =>
-    @actions = decodeURI(location.hash.replace(/^#+/, "")).split("/")
+    @actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/")
     @actionObj = {}
     for action in @actions
       [key, value] = action.split("=")

@@ -37,7 +37,7 @@ require("./test-iframe.tag")
       executePath = decodeURIComponent(executePath)
       executePath = encodeURIComponent(executePath)
       unless WholeStatus.executablePath[executePath]
-        @instanceUrl = executePath
+        @instanceUrl = decodeURIComponent(executePath)
         @update()
         @refs.testFrame.setConsoleEvent()
         return
