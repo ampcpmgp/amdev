@@ -9,3 +9,4 @@ am-autoevent:
     timeout=5000: ./index.html
     clickAssert=false: ./index.html
     select=5: ./index.html
+    scroll: ./index.html
