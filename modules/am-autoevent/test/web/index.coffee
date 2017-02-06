@@ -44,4 +44,5 @@ require("am-coffee-time/browser/Test").start(
     $ERROR_IS_OKAY
   scroll: =>
     scrollTest2.scrollTop = 30
+    console.info "finished"
 )
