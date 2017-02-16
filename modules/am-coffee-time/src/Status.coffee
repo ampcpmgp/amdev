@@ -16,9 +16,9 @@ module.exports = class Status
   @firstTimeInit: =>
     @opts = {}
   @taskFinished: =>
-    @executeSum > 0 and @executeIframe.length === 0
+    @executeSum > 0 and @executeIframe.length is 0
   @taskAllSuccess: =>
-    @taskFinished() and @executeSum === @successSum
+    @taskFinished() and @executeSum is @successSum
 
 
 Status.init()
