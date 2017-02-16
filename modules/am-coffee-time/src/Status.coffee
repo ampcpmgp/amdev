@@ -15,6 +15,11 @@ module.exports = class Status
     riot.observable(@)
   @firstTimeInit: =>
     @opts = {}
+  @taskFinished: =>
+    @executeSum > 0 and @executeIframe.length === 0
+  @taskAllSuccess: =>
+    @taskFinished() and @executeSum === @successSum
+
 
 Status.init()
 Status.firstTimeInit()

@@ -2,6 +2,8 @@ require("./test-iframe.tag")
 
 <test-list>
   <test-list-count />
+  <span if={WholeStatus.taskFinished()} class="finished">✔︎</span>
+  <span if={WholeStatus.taskAllSuccess()} class="all-success">💯</span>
   <a onclick={toRouteHash}>base</a>
   <recursive-item data={opts.testPatterns} routing="" />
   <test-iframe ref="testFrame" if={instanceUrl} url={instanceUrl} config={WholeStatus.config}></test-iframe>
@@ -20,6 +22,9 @@ require("./test-iframe.tag")
     }
     a:hover {
       opacity: 0.4;
+    }
+    .finished {
+      color: #17e017;
     }
   </style>
   <script type="coffee">
