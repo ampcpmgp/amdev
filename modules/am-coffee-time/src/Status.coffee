@@ -20,6 +20,5 @@ module.exports = class Status
   @taskAllSuccess: =>
     @taskFinished() and @executeSum is @successSum
 
-
 Status.init()
 Status.firstTimeInit()
