@@ -11,6 +11,9 @@ module.exports = class Status
     @executeIframe = []
     @executablePath = {}
     @sumInit()
+    #status
+    @hideParamMode = false
+    @showParameter = false
     #observable
     riot.observable(@)
   @firstTimeInit: =>
