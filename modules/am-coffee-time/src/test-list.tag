@@ -1,7 +1,7 @@
 require("./test-iframe.tag")
 
 <test-list>
-  <test-list-count />
+  <test-status />
   <a onclick={toRouteHash}>base</a>
   <a if={Status.hideParamMode} onclick={toggleParameterMode}>toggle params</a>
   <recursive-item data={opts.testPatterns} routing="" />
@@ -71,15 +71,19 @@ require("./test-iframe.tag")
   </script>
 </test-list>
 
-<test-list-count>
-  <span>{Status.successSum}/{Status.executeSum}</span>
+<test-status>
+  <span class="test-count">{Status.successSum}/{Status.executeSum}</span>
+  <span if={Status.taskFinished()} class="finished">✔︎</span>
+  <span if={Status.taskAllSuccess()} class="all-success">💯</span>
+  <style>
+    .finished {
+      color: #17e017;
+    }
+  </style>
   <script type="coffee">
-    Status = @Status = require("./Status")
-    Status = @Status.on("item-update", =>
-      this.update()
-    )
+    @Status = require("./Status").on("item-update", => this.update())
   </script>
-</test-list-count>
+</test-status>
 
 <recursive-item>
   <list-line ref="lines" each={data, key in list} list={this} routing={this.parent.opts.routing} />
