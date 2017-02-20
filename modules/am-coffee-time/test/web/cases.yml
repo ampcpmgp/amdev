@@ -5,6 +5,7 @@ am-coffee-time:
   _border:  ./index.html
   root:  ./index.html
   _hide=.child:  ./index.html
+  テストパターン(test=1): テストページ(./index.html)
   test:
     3:
       4:

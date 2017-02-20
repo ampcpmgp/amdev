@@ -93,8 +93,8 @@ require("./test-iframe.tag")
   <div class="line{isHover && ' hover'}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error, warn: warn}"></span>
-      <a class="tree" href={routing} onclick={router}>{key}</a>
-      <a class="single" if={url} href={routerExecutionPath} onclick={router}>{url}</a>
+      <a class="tree" href={routing} onclick={router}>{treeName}</a>
+      <a class="single" if={url} href={routerExecutionPath} onclick={router}>{linkName}</a>
     </div>
     <recursive-item ref="item" if={!url} data={data} routing={routing} />
   </div>
@@ -143,10 +143,9 @@ require("./test-iframe.tag")
     route = require("riot-route")
     executeIframe = =>
       WholeStatus.executeIframe.shift()?()
-    @key = opts.list.key
-    @data = opts.list.data
-    @routing = if opts.routing then "#{opts.routing}/#{@key}" else @key
-    @url = if typeof @data is "object" then "" else @data
+    [_, @treeName, @path] = @key.match(/^(.+)\((.+)\)$/) or ["", @key, @key]
+    @routing = if opts.routing then "#{opts.routing}/#{@path}" else @path
+    [_, @linkName, @url] = if typeof @data is "object" then [] else @data.match(/^(.+)\((.+)\)$/) or ["", @data, @data]
     @routerExecutionPath = @url + WholeStatus.basePath + @routing
     @status = {onExecute: false}
     @deleteIframe = =>
@@ -211,6 +210,5 @@ require("./test-iframe.tag")
       @multiExecuteTask()
     WholeStatus.executablePath[encodeURIComponent(@routerExecutionPath)] = () => @executeTask() if @url
     @on("update", => WholeStatus.trigger("item-update"))
-    @init()
   </script>
 </list-line>

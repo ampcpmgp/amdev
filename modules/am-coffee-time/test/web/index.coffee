@@ -20,6 +20,9 @@ test =
       tagName =$this.prop("tagName")
       console.assert($this.css("border"), tagName)
     )
+  test: (num) =>
+    console.assert(num)
+
 require("am-coffee-time/browser/Test").start(test)
 
 console.info("finished")
