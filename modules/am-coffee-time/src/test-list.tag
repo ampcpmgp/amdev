@@ -38,7 +38,7 @@ require("./test-iframe.tag")
       Status.sumInit()
       executePath = route.query().path
       return @update() unless executePath
-      executePath = encodeURIComponent(decodeURIComponent(executePath))
+      executePath = decodeURIComponent(encodeURIComponent(decodeURIComponent(executePath)))
       unless Status.executablePath[executePath]
         @instanceUrl = decodeURIComponent(executePath)
         @update()
@@ -176,8 +176,8 @@ require("./test-iframe.tag")
     Parser = require("../Parser")
     route = require("riot-route")
     setObservableEvent = =>
-      Status.executablePath[encodeURIComponent(@routing)] =  () => @multiExecuteTask()
-      Status.executablePath[encodeURIComponent(@routerExecutionPath)] = () => @executeTask() if @url
+      Status.executablePath[@routing] =  () => @multiExecuteTask()
+      Status.executablePath[@routerExecutionPath] = () => @executeTask() if @url
     setRouter = (path) =>
       @routing = if @initialRouting then "#{@initialRouting}/#{path}" else path
       @routerExecutionPath = @url + Status.basePath + @routing
