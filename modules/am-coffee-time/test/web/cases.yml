@@ -8,6 +8,9 @@ am-coffee-time:
   テストパターン(test=1): テストページ(./index.html)
   多言語切り替え[日本語(lang=ja), 英語(lang=en), lang=zh-cn, lang=zh-tw]:
     test: ./index.html
+    _color=*:
+      _hide=div: ./index.html
+      テスト(test): テスト(./index.html)
   test:
     3:
       4:

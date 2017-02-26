@@ -4,7 +4,7 @@ require("./test-iframe.tag")
   <test-status />
   <a onclick={toRouteHash}>base</a>
   <a if={Status.paramMode} onclick={toggleParameterMode}>toggle params</a>
-  <recursive-item data={opts.testPatterns} routing="" />
+  <recursive-item ref="item" data={opts.testPatterns} routing="" />
   <test-iframe ref="testFrame" if={instanceUrl} url={instanceUrl} config={Status.config}></test-iframe>
   <style type="less">
     :scope {
@@ -40,6 +40,11 @@ require("./test-iframe.tag")
       return @update() unless executePath
       executePath = decodeURIComponent(encodeURIComponent(decodeURIComponent(executePath)))
       unless Status.executablePath[executePath]
+        params = executePath.split("/")
+        @refs.item.recursivelyCheck(params)
+        Status.executablePath[executePath]()
+        return
+        # 以下処理今後検討
         @instanceUrl = decodeURIComponent(executePath)
         @update()
         @refs.testFrame.setConsoleEvent()
@@ -92,8 +97,18 @@ require("./test-iframe.tag")
     }
   </style>
   <script type="coffee">
+    getLines = =>
+      lines = @refs.lines
+      unless lines.length then [lines] else lines
+    @recursivelyCheck = (params) =>
+      lines = getLines()
+      lines.forEach((line) =>
+        copyParams = []
+        Object.assign(copyParams, params)
+        line.recursivelyCheckItem(copyParams)
+        )
     @recursivelyUpdate = (routing) =>
-      @refs.lines.recursivelyUpdate(routing)
+      getLines().forEach((line) => line.recursivelyUpdate(routing))
       @update()
     @list = if typeof opts.data is "object"
       opts.data
@@ -107,7 +122,7 @@ require("./test-iframe.tag")
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error, warn: warn}"></span>
       <a class="tree" href={routing} onclick={router}>{treeName}</a>
-      <label each={pattern, i in patterns} class={focus: pattern.focus} data-id={i} onclick={changePattern}>
+      <label each={pattern, i in patterns} class={focus: pattern.focus} data-id={i} onclick={changePatternEvent}>
         {pattern.name}
       </label>
       <a class="single" if={url} href={routerExecutionPath} onclick={router}>{linkName}</a>
@@ -264,8 +279,7 @@ require("./test-iframe.tag")
       else
         @isHover = true
     @mouseOut = => @isHover = false
-    @changePattern = (e) =>
-      nextId = e.currentTarget.dataset.id
+    @changePattern = (nextId) =>
       @patterns.forEach((pattern) => pattern.focus = false)
       nextPattern = @patterns[nextId]
       nextPattern.focus = true
@@ -273,6 +287,22 @@ require("./test-iframe.tag")
       setRouter(@path)
       @refs.item.recursivelyUpdate(@routing)
       setObservableEvent()
+    @changePatternEvent = (e) => @changePattern(e.currentTarget.dataset.id)
+    @recursivelyCheckItem = (params) =>
+      param = params.shift()
+      matchedPattern = @patterns?.filter((pattern, i) => param is pattern.path)?[0]
+      if matchedPattern
+        @patterns.forEach((pattern, i) =>
+          pattern.focus = false
+          if matchedPattern is pattern
+            @changePattern(i)
+          )
+        @update()
+      if param is @path or matchedPattern
+        if params
+          @refs.item?.recursivelyCheck(params)
+        else
+          setObservableEvent()
     Status.on("init", => @init())
     paramMode and Status.on("toggle-mode", =>
       @treeName =
@@ -288,7 +318,7 @@ require("./test-iframe.tag")
           @_linkName = @linkName
           @linkName = @data
       @update()
-    )
+      )
     Status.itemStatuses.push(@status)
     setObservableEvent()
     Status.paramMode = paramMode or Status.paramMode
