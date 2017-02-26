@@ -16,3 +16,30 @@ module.exports = class Parser
     else
       {paramMode, name, path} = @parseStr(str)
     {toggleMode, paramMode, name, path, patterns}
+  @getSingleTaskList: (patterns, {patternLoop} = {}) =>
+    taskList = []
+    recursiveFunc = (patterns, testName = "", testUrl = "") =>
+      for key, value of patterns
+        do (testName, testUrl) =>
+          if typeof value is "object"
+            testName += "/"
+            testUrl += "/"
+            info = @getStrInfo(key)
+            if info.patterns and not patternLoop
+              testName += info.patterns[0].name
+              testUrl += info.patterns[0].path
+            else
+              testName += info.name
+              testUrl += info.path
+            recursiveFunc(value, testName, testUrl)
+          else
+            keyInfo = @getStrInfo(key)
+            valueInfo = @getStrInfo(value)
+            testUrl = testUrl.replace(/^\//, "") + "/#{keyInfo.path}"
+            testName = testName.replace(/^\//, "") + "/#{keyInfo.name}"
+            mockUrl = "?path=#{valueInfo.path}##{testUrl}"
+            mockName = valueInfo.name
+            testUrl = "?path=#{testUrl}"
+            taskList.push({testName, testUrl, mockName, mockUrl})
+    recursiveFunc(patterns)
+    taskList
