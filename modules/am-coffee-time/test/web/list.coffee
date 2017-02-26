@@ -1,3 +1,3 @@
 generate = require("am-coffee-time")
 testcases = require("./cases.yml")
-generate(testcases)
+generate(testcases, {prefix: ["日本語(lang=ja)", "英語(lang=en)", "lang=zh-cn", "lang=zh-tw"]})

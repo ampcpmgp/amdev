@@ -3,8 +3,8 @@ require("./test-iframe.tag")
 <test-list>
   <test-status />
   <a onclick={toRouteHash}>base</a>
-  <a if={Status.hideParamMode} onclick={toggleParameterMode}>toggle params</a>
-  <recursive-item data={opts.testPatterns} routing="" />
+  <a if={Status.paramMode} onclick={toggleParameterMode}>toggle params</a>
+  <recursive-item ref="item" data={opts.testPatterns} routing="" />
   <test-iframe ref="testFrame" if={instanceUrl} url={instanceUrl} config={Status.config}></test-iframe>
   <style type="less">
     :scope {
@@ -38,9 +38,13 @@ require("./test-iframe.tag")
       Status.sumInit()
       executePath = route.query().path
       return @update() unless executePath
-      executePath = decodeURIComponent(executePath)
-      executePath = encodeURIComponent(executePath)
+      executePath = decodeURIComponent(encodeURIComponent(decodeURIComponent(executePath)))
       unless Status.executablePath[executePath]
+        params = executePath.split("/")
+        @refs.item.recursivelyCheck(params)
+        Status.executablePath[executePath]()
+        return
+        # 以下処理今後検討
         @instanceUrl = decodeURIComponent(executePath)
         @update()
         @refs.testFrame.setConsoleEvent()
@@ -93,6 +97,19 @@ require("./test-iframe.tag")
     }
   </style>
   <script type="coffee">
+    getLines = =>
+      lines = @refs.lines
+      unless lines.length then [lines] else lines
+    @recursivelyCheck = (params) =>
+      lines = getLines()
+      lines.forEach((line) =>
+        copyParams = []
+        Object.assign(copyParams, params)
+        line.recursivelyCheckItem(copyParams)
+        )
+    @recursivelyUpdate = (routing) =>
+      getLines().forEach((line) => line.recursivelyUpdate(routing))
+      @update()
     @list = if typeof opts.data is "object"
       opts.data
      else
@@ -105,12 +122,32 @@ require("./test-iframe.tag")
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error, warn: warn}"></span>
       <a class="tree" href={routing} onclick={router}>{treeName}</a>
+      <label each={pattern, i in patterns} class={focus: pattern.focus} data-id={i} onclick={changePatternEvent}>
+        {pattern.name}
+      </label>
       <a class="single" if={url} href={routerExecutionPath} onclick={router}>{linkName}</a>
     </div>
     <recursive-item ref="item" if={!url} data={data} routing={routing} />
   </div>
   <test-iframe ref="testFrame" if={url && status.onExecute} url={routerExecutionPath} config={Status.config}></test-iframe>
-  <style scoped type="less">
+  <style type="less">
+    :scope {
+      .line > div > label {
+        cursor: pointer;
+        border: 1px solid rgba(255,128,0,0.6);
+        padding: 0 6px;
+        text-align: center;
+        display: inline-block;
+        &.focus {
+          background: rgba(255, 255, 0, 1);
+        }
+        &:not(.focus) {
+        }
+        &:hover {
+          opacity: 0.6;
+        }
+      }
+    }
     .bold {
       font-weight: bold;
     }
@@ -150,19 +187,38 @@ require("./test-iframe.tag")
     }
   </style>
   <script type="coffee">
-    Status = Status = @Status = require("./Status")
+    Status = @Status = require("./Status")
+    Parser = require("../Parser")
     route = require("riot-route")
+    setObservableEvent = =>
+      Status.executablePath[@routing] =  () => @multiExecuteTask()
+      Status.executablePath[@routerExecutionPath] = () => @executeTask() if @url
+    setRouter = (path) =>
+      @routing = if @initialRouting then "#{@initialRouting}/#{path}" else path
+      @routerExecutionPath = @url + Status.basePath + @routing
     executeIframe = =>
       Status.executeIframe.shift()?()
-    [@hideParamMode, @treeName, @path] = @key.match(/^(.+)\((.+)\)$/) or [null, @key, @key]
-    @routing = if opts.routing then "#{opts.routing}/#{@path}" else @path
-    [_, @linkName, @url] =
-      if typeof @data is "object"
-        []
-      else
-        @data.match(/^(.+)\((.+)\)$/) or ["", @data, @data]
-    @routerExecutionPath = @url + Status.basePath + @routing
+    {toggleMode, paramMode, name, path, patterns} = Parser.getStrInfo(@key)
+    @initialRouting = opts.routing
+    @treeName = name
+    if toggleMode
+      initialPattern = patterns[0]
+      initialPattern.focus = true
+      @path = initialPattern.path
+      @patterns = patterns
+    else
+      @path = path
+    {name, path} = if typeof @data is "object" then {} else Parser.getStrInfo(@data)
+    @linkName = name
+    @url = path
+    setRouter(@path)
     @status = {onExecute: false}
+    @recursivelyUpdate = (routing) =>
+      @initialRouting = routing
+      setRouter(@path)
+      this.refs.item?.recursivelyUpdate(@routing)
+      setObservableEvent()
+      @update()
     @deleteIframe = =>
       @status.onExecute = false
       @update()
@@ -217,10 +273,38 @@ require("./test-iframe.tag")
     @router = (e) =>
       route("path=" + e.target.getAttribute("href"))
       e.preventDefault()
-    @mouseOn = => @isHover = true
+    @mouseOn = (e) =>
+      if e.target.tagName is "LABEL"
+        @isHover = false
+      else
+        @isHover = true
     @mouseOut = => @isHover = false
+    @changePattern = (nextId) =>
+      @patterns.forEach((pattern) => pattern.focus = false)
+      nextPattern = @patterns[nextId]
+      nextPattern.focus = true
+      @path = nextPattern.path
+      setRouter(@path)
+      @refs.item.recursivelyUpdate(@routing)
+      setObservableEvent()
+    @changePatternEvent = (e) => @changePattern(e.currentTarget.dataset.id)
+    @recursivelyCheckItem = (params) =>
+      param = params.shift()
+      matchedPattern = @patterns?.filter((pattern, i) => param is pattern.path)?[0]
+      if matchedPattern
+        @patterns.forEach((pattern, i) =>
+          pattern.focus = false
+          if matchedPattern is pattern
+            @changePattern(i)
+          )
+        @update()
+      if param is @path or matchedPattern
+        if params
+          @refs.item?.recursivelyCheck(params)
+        else
+          setObservableEvent()
     Status.on("init", => @init())
-    @hideParamMode and Status.on("toggle-mode", =>
+    paramMode and Status.on("toggle-mode", =>
       @treeName =
         if @key is @treeName
           @treeName = @_treeName or @treeName
@@ -234,12 +318,10 @@ require("./test-iframe.tag")
           @_linkName = @linkName
           @linkName = @data
       @update()
-    )
+      )
     Status.itemStatuses.push(@status)
-    Status.executablePath[encodeURIComponent(@routing)] =  () =>
-      @multiExecuteTask()
-    Status.executablePath[encodeURIComponent(@routerExecutionPath)] = () => @executeTask() if @url
-    Status.hideParamMode = @hideParamMode or Status.hideParamMode
+    setObservableEvent()
+    Status.paramMode = paramMode or Status.paramMode
     @on("update", => Status.trigger("item-update"))
   </script>
 </list-line>
