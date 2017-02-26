@@ -3,7 +3,7 @@ require("./test-iframe.tag")
 <test-list>
   <test-status />
   <a onclick={toRouteHash}>base</a>
-  <a if={Status.hideParamMode} onclick={toggleParameterMode}>toggle params</a>
+  <a if={Status.paramMode} onclick={toggleParameterMode}>toggle params</a>
   <recursive-item data={opts.testPatterns} routing="" />
   <test-iframe ref="testFrame" if={instanceUrl} url={instanceUrl} config={Status.config}></test-iframe>
   <style type="less">
@@ -150,17 +150,18 @@ require("./test-iframe.tag")
     }
   </style>
   <script type="coffee">
-    Status = Status = @Status = require("./Status")
+    Status = @Status = require("./Status")
+    Parser = require("../Parser")
     route = require("riot-route")
     executeIframe = =>
       Status.executeIframe.shift()?()
-    [@hideParamMode, @treeName, @path] = @key.match(/^(.+)\((.+)\)$/) or [null, @key, @key]
+    {paramMode, name, path} = Parser.getStrInfo(@key)
+    @treeName = name
+    @path = path
     @routing = if opts.routing then "#{opts.routing}/#{@path}" else @path
-    [_, @linkName, @url] =
-      if typeof @data is "object"
-        []
-      else
-        @data.match(/^(.+)\((.+)\)$/) or ["", @data, @data]
+    {name, path} = if typeof @data is "object" then {} else Parser.getStrInfo(@data)
+    @linkName = name
+    @url = path
     @routerExecutionPath = @url + Status.basePath + @routing
     @status = {onExecute: false}
     @deleteIframe = =>
@@ -220,7 +221,7 @@ require("./test-iframe.tag")
     @mouseOn = => @isHover = true
     @mouseOut = => @isHover = false
     Status.on("init", => @init())
-    @hideParamMode and Status.on("toggle-mode", =>
+    paramMode and Status.on("toggle-mode", =>
       @treeName =
         if @key is @treeName
           @treeName = @_treeName or @treeName
@@ -239,7 +240,7 @@ require("./test-iframe.tag")
     Status.executablePath[encodeURIComponent(@routing)] =  () =>
       @multiExecuteTask()
     Status.executablePath[encodeURIComponent(@routerExecutionPath)] = () => @executeTask() if @url
-    Status.hideParamMode = @hideParamMode or Status.hideParamMode
+    Status.paramMode = paramMode or Status.paramMode
     @on("update", => Status.trigger("item-update"))
   </script>
 </list-line>

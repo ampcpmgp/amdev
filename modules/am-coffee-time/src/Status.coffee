@@ -12,7 +12,7 @@ module.exports = class Status
     @executablePath = {}
     @sumInit()
     #status
-    @hideParamMode = false
+    @paramMode = false
     @showParameter = false
     #observable
     riot.observable(@)
