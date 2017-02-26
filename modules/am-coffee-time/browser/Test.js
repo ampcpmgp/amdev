@@ -296,11 +296,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  function AutoEvent() {
 	    this.start = bind(this.start, this);
-	    this.contoller = bind(this.contoller, this);
+	    this.controller = bind(this.controller, this);
 	    return AutoEvent.__super__.constructor.apply(this, arguments);
 	  }
 
-	  AutoEvent.prototype.contoller = function(loopNum, callback) {
+	  AutoEvent.prototype.controller = function(loopNum, callback) {
 	    var curFuncNum, i;
 	    curFuncNum = 0;
 	    this.innerFuncs[this.funcs.length] = [];
@@ -334,7 +334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (loopNum == null) {
 	      loopNum = 1;
 	    }
-	    return this.contoller(loopNum, callback);
+	    return this.controller(loopNum, callback);
 	  };
 
 	  return AutoEvent;
@@ -10638,7 +10638,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (testObj == null) {
 	      testObj = Test;
 	    }
-	    Test.actions = decodeURI(location.hash.replace(/^#+/, "")).split("/");
+	    Test.actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/");
 	    Test.actionObj = {};
 	    ref = Test.actions;
 	    results = [];

@@ -50,17 +50,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(71);
+	module.exports = __webpack_require__(20);
 
 
 /***/ },
-
-/***/ 1:
+/* 1 */
 /***/ function(module, exports) {
 
 	var $, AutoEvent, trigger,
@@ -282,8 +280,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-
-/***/ 3:
+/* 2 */,
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AutoEvent, AutoEventBase,
@@ -298,11 +296,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  function AutoEvent() {
 	    this.start = bind(this.start, this);
-	    this.contoller = bind(this.contoller, this);
+	    this.controller = bind(this.controller, this);
 	    return AutoEvent.__super__.constructor.apply(this, arguments);
 	  }
 
-	  AutoEvent.prototype.contoller = function(loopNum, callback) {
+	  AutoEvent.prototype.controller = function(loopNum, callback) {
 	    var curFuncNum, i;
 	    curFuncNum = 0;
 	    this.innerFuncs[this.funcs.length] = [];
@@ -336,7 +334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (loopNum == null) {
 	      loopNum = 1;
 	    }
-	    return this.contoller(loopNum, callback);
+	    return this.controller(loopNum, callback);
 	  };
 
 	  return AutoEvent;
@@ -345,8 +343,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-
-/***/ 5:
+/* 4 */,
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10572,8 +10570,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-
-/***/ 6:
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
@@ -10641,7 +10638,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (testObj == null) {
 	      testObj = Test;
 	    }
-	    Test.actions = decodeURI(location.hash.replace(/^#+/, "")).split("/");
+	    Test.actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/");
 	    Test.actionObj = {};
 	    ref = Test.actions;
 	    results = [];
@@ -10667,8 +10664,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-
-/***/ 7:
+/* 7 */
 /***/ function(module, exports) {
 
 	/**
@@ -11100,13 +11096,125 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */
+/***/ function(module, exports) {
 
-/***/ 71:
+	var Parser;
+
+	module.exports = Parser = (function() {
+	  function Parser() {}
+
+	  Parser.patternForPathName = /^(.+)\((.+)\)$/;
+
+	  Parser.parseStr = function(str) {
+	    var name, paramMode, path, ref;
+	    ref = str.match(Parser.patternForPathName) || [false, str, str], paramMode = ref[0], name = ref[1], path = ref[2];
+	    return {
+	      paramMode: paramMode,
+	      name: name,
+	      path: path
+	    };
+	  };
+
+	  Parser.getStrInfo = function(str) {
+	    var name, paramMode, path, patternStr, patterns, ref, ref1, toggleMode;
+	    ref = str.match(/(.*)\[(.+)\]$/) || [], toggleMode = ref[0], name = ref[1], patternStr = ref[2];
+	    if (toggleMode) {
+	      patterns = patternStr.split(/\s*,\s*/).map(function(str) {
+	        var paramMode, strInfo;
+	        strInfo = Parser.parseStr(str);
+	        paramMode = paramMode || strInfo.paramMode;
+	        return strInfo;
+	      });
+	    } else {
+	      ref1 = Parser.parseStr(str), paramMode = ref1.paramMode, name = ref1.name, path = ref1.path;
+	    }
+	    return {
+	      toggleMode: toggleMode,
+	      paramMode: paramMode,
+	      name: name,
+	      path: path,
+	      patterns: patterns
+	    };
+	  };
+
+	  Parser.getSingleTaskList = function(patterns, arg) {
+	    var patternLoop, recursiveFunc, taskList;
+	    patternLoop = (arg != null ? arg : {}).patternLoop;
+	    taskList = [];
+	    recursiveFunc = function(patterns, testName, testUrl) {
+	      var key, results, value;
+	      if (testName == null) {
+	        testName = "";
+	      }
+	      if (testUrl == null) {
+	        testUrl = "";
+	      }
+	      results = [];
+	      for (key in patterns) {
+	        value = patterns[key];
+	        results.push((function(testName, testUrl) {
+	          var info, keyInfo, mockName, mockUrl, valueInfo;
+	          if (typeof value === "object") {
+	            testName += "/";
+	            testUrl += "/";
+	            info = Parser.getStrInfo(key);
+	            if (info.patterns && !patternLoop) {
+	              testName += info.patterns[0].name;
+	              testUrl += info.patterns[0].path;
+	            } else {
+	              testName += info.name;
+	              testUrl += info.path;
+	            }
+	            return recursiveFunc(value, testName, testUrl);
+	          } else {
+	            keyInfo = Parser.getStrInfo(key);
+	            valueInfo = Parser.getStrInfo(value);
+	            testUrl = testUrl.replace(/^\//, "") + ("/" + keyInfo.path);
+	            testName = testName.replace(/^\//, "") + ("/" + keyInfo.name);
+	            mockUrl = "?path=" + valueInfo.path + "#" + testUrl;
+	            mockName = valueInfo.name;
+	            testUrl = "?path=" + testUrl;
+	            return taskList.push({
+	              testName: testName,
+	              testUrl: testUrl,
+	              mockName: mockName,
+	              mockUrl: mockUrl
+	            });
+	          }
+	        })(testName, testUrl));
+	      }
+	      return results;
+	    };
+	    recursiveFunc(patterns);
+	    return taskList;
+	  };
+
+	  return Parser;
+
+	})();
+
+
+/***/ },
+/* 19 */,
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, test;
+	var $, Parser, test;
 
 	$ = __webpack_require__(5);
+
+	Parser = __webpack_require__(18);
 
 	test = {
 	  params1: (function(_this) {
@@ -11138,6 +11246,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return console.assert($this.css("border"), tagName);
 	      });
 	    };
+	  })(this),
+	  test: (function(_this) {
+	    return function(num) {
+	      console.log("test", num);
+	      return console.assert(num);
+	    };
+	  })(this),
+	  lang: (function(_this) {
+	    return function(type) {
+	      return console.log(type);
+	    };
+	  })(this),
+	  タスクリスト一覧: (function(_this) {
+	    return function() {
+	      var answerPattern, list, testPattern;
+	      testPattern = __webpack_require__(21);
+	      list = Parser.getSingleTaskList(testPattern);
+	      answerPattern = __webpack_require__(22);
+	      return console.assert(JSON.stringify(list) === JSON.stringify(answerPattern));
+	    };
 	  })(this)
 	};
 
@@ -11146,8 +11274,179 @@ return /******/ (function(modules) { // webpackBootstrap
 	console.info("finished");
 
 
-/***/ }
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
 
-/******/ })
+	module.exports = {
+		"am-coffee-time": {
+			"params1": "./index.html",
+			"_color": "./index.html",
+			"_color=.child": "./index.html",
+			"_border": "./index.html",
+			"root": "./index.html",
+			"_hide=.child": "./index.html",
+			"テストパターン(test=1)": "テストページ(./index.html)",
+			"タスクリスト一覧": "./index.html",
+			"多言語切り替え[日本語(lang=ja), 英語(lang=en), lang=zh-cn, lang=zh-tw]": {
+				"test": "./index.html",
+				"_color=*": {
+					"_hide=div": "./index.html",
+					"テスト(test)": "テスト(./index.html)"
+				}
+			},
+			"test": {
+				"3": {
+					"4": {
+						"5": {
+							"6": {
+								"1": {
+									"2": {
+										"3": {
+											"4": {
+												"5": {
+													"6": {
+														"1": {
+															"2": {
+																"3": {
+																	"4": {
+																		"5": {
+																			"6": {
+																				"1": {
+																					"2": {
+																						"3": {
+																							"4": {
+																								"5": {
+																									"6": {
+																										"1": {
+																											"2": {
+																												"3": {
+																													"4": {
+																														"5": {
+																															"6": {
+																																"1": {
+																																	"2": {
+																																		"3": {
+																																			"4": {
+																																				"5": {
+																																					"6": "./index.html"
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	};
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	module.exports = [
+		{
+			"testName": "am-coffee-time/params1",
+			"testUrl": "?path=am-coffee-time/params1",
+			"mockName": "./index.html",
+			"mockUrl": "?path=./index.html#am-coffee-time/params1"
+		},
+		{
+			"testName": "am-coffee-time/_color",
+			"testUrl": "?path=am-coffee-time/_color",
+			"mockName": "./index.html",
+			"mockUrl": "?path=./index.html#am-coffee-time/_color"
+		},
+		{
+			"testName": "am-coffee-time/_color=.child",
+			"testUrl": "?path=am-coffee-time/_color=.child",
+			"mockName": "./index.html",
+			"mockUrl": "?path=./index.html#am-coffee-time/_color=.child"
+		},
+		{
+			"testName": "am-coffee-time/_border",
+			"testUrl": "?path=am-coffee-time/_border",
+			"mockName": "./index.html",
+			"mockUrl": "?path=./index.html#am-coffee-time/_border"
+		},
+		{
+			"testName": "am-coffee-time/root",
+			"testUrl": "?path=am-coffee-time/root",
+			"mockName": "./index.html",
+			"mockUrl": "?path=./index.html#am-coffee-time/root"
+		},
+		{
+			"testName": "am-coffee-time/_hide=.child",
+			"testUrl": "?path=am-coffee-time/_hide=.child",
+			"mockName": "./index.html",
+			"mockUrl": "?path=./index.html#am-coffee-time/_hide=.child"
+		},
+		{
+			"testName": "am-coffee-time/テストパターン",
+			"testUrl": "?path=am-coffee-time/test=1",
+			"mockName": "テストページ",
+			"mockUrl": "?path=./index.html#am-coffee-time/test=1"
+		},
+		{
+			"testName": "am-coffee-time/タスクリスト一覧",
+			"testUrl": "?path=am-coffee-time/タスクリスト一覧",
+			"mockName": "./index.html",
+			"mockUrl": "?path=./index.html#am-coffee-time/タスクリスト一覧"
+		},
+		{
+			"testName": "am-coffee-time/日本語/test",
+			"testUrl": "?path=am-coffee-time/lang=ja/test",
+			"mockName": "./index.html",
+			"mockUrl": "?path=./index.html#am-coffee-time/lang=ja/test"
+		},
+		{
+			"testName": "am-coffee-time/日本語/_color=*/_hide=div",
+			"testUrl": "?path=am-coffee-time/lang=ja/_color=*/_hide=div",
+			"mockName": "./index.html",
+			"mockUrl": "?path=./index.html#am-coffee-time/lang=ja/_color=*/_hide=div"
+		},
+		{
+			"testName": "am-coffee-time/日本語/_color=*/テスト",
+			"testUrl": "?path=am-coffee-time/lang=ja/_color=*/test",
+			"mockName": "テスト",
+			"mockUrl": "?path=./index.html#am-coffee-time/lang=ja/_color=*/test"
+		},
+		{
+			"testName": "am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6",
+			"testUrl": "?path=am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6",
+			"mockName": "./index.html",
+			"mockUrl": "?path=./index.html#am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6"
+		}
+	];
+
+/***/ }
+/******/ ])
 });
 ;

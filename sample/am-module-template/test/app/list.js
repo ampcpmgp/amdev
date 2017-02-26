@@ -46,7 +46,7 @@ module.exports =
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(44);
+	module.exports = __webpack_require__(45);
 
 
 /***/ },
@@ -61,11 +61,11 @@ module.exports =
 /***/ 36:
 /***/ function(module, exports, __webpack_require__) {
 
-	var WholeStatus;
+	var Status;
 
 	window.riot = __webpack_require__(5);
 
-	WholeStatus = __webpack_require__(37);
+	Status = __webpack_require__(37);
 
 	__webpack_require__(38);
 
@@ -74,7 +74,7 @@ module.exports =
 	    if (opts == null) {
 	      opts = {};
 	    }
-	    WholeStatus.opts = opts;
+	    Status.opts = opts;
 	    return {
 	      list: riot.mount("test-list", {
 	        testPatterns: testPatterns
@@ -106,11 +106,21 @@ module.exports =
 	    Status.executeIframe = [];
 	    Status.executablePath = {};
 	    Status.sumInit();
+	    Status.paramMode = false;
+	    Status.showParameter = false;
 	    return riot.observable(Status);
 	  };
 
 	  Status.firstTimeInit = function() {
 	    return Status.opts = {};
+	  };
+
+	  Status.taskFinished = function() {
+	    return Status.executeSum > 0 && Status.executeIframe.length === 0;
+	  };
+
+	  Status.taskAllSuccess = function() {
+	    return Status.taskFinished() && Status.executeSum === Status.successSum;
 	  };
 
 	  return Status;
@@ -127,14 +137,14 @@ module.exports =
 /***/ 38:
 /***/ function(module, exports, __webpack_require__) {
 
-	var riot = __webpack_require__(5);
+	
+	    var riot = __webpack_require__(5)
+	    __webpack_require__(39)
 
-	__webpack_require__(39)
+	riot.tag2('test-list', '<test-status></test-status> <a onclick="{toRouteHash}">base</a> <a if="{Status.paramMode}" onclick="{toggleParameterMode}">toggle params</a> <recursive-item ref="item" data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe ref="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{Status.config}"></test-iframe>', 'test-list,[data-is="test-list"]{display:block;width:100%;background-color:white;font-size:14px} test-list>a,[data-is="test-list"]>a{border:1px solid #ccc} test-list a,[data-is="test-list"] a{color:blue;text-decoration:none;cursor:pointer;display:inline-block} test-list a:hover,[data-is="test-list"] a:hover{opacity:.4}', '', function(opts) {
+	var Status, bodyStyle, route;
 
-	riot.tag2('test-list', '<test-list-count></test-list-count> <a onclick="{toRouteHash}">base</a> <recursive-item data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe ref="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{WholeStatus.config}"></test-iframe>', 'test-list,[data-is="test-list"]{ display: block; width: 100%; background-color: white; font-size: 14px; } test-list a,[data-is="test-list"] a{ color: blue; text-decoration: none; cursor: pointer; display: inline-block; } test-list a:hover,[data-is="test-list"] a:hover{ opacity: 0.4; }', '', function(opts) {
-	var WholeStatus, bodyStyle, route;
-
-	this.WholeStatus = WholeStatus = __webpack_require__(37);
+	Status = this.Status = __webpack_require__(37);
 
 	route = __webpack_require__(41);
 
@@ -143,28 +153,31 @@ module.exports =
 	this.init = (function(_this) {
 	  return function() {
 	    _this.instanceUrl = null;
-	    return WholeStatus.trigger("init");
+	    return Status.trigger("init");
 	  };
 	})(this);
 
 	this.check = (function(_this) {
 	  return function() {
-	    var executePath;
+	    var executePath, params;
 	    _this.init();
-	    WholeStatus.sumInit();
+	    Status.sumInit();
 	    executePath = route.query().path;
 	    if (!executePath) {
 	      return _this.update();
 	    }
-	    executePath = decodeURIComponent(executePath);
-	    executePath = encodeURIComponent(executePath);
-	    if (!WholeStatus.executablePath[executePath]) {
-	      _this.instanceUrl = executePath;
+	    executePath = decodeURIComponent(encodeURIComponent(decodeURIComponent(executePath)));
+	    if (!Status.executablePath[executePath]) {
+	      params = executePath.replace(/^[^#]+#/, "").split("/");
+	      _this.refs.item.recursivelyCheck(params);
+	      Status.executablePath[executePath]();
+	      return;
+	      _this.instanceUrl = decodeURIComponent(executePath);
 	      _this.update();
 	      _this.refs.testFrame.setConsoleEvent();
 	      return;
 	    }
-	    return WholeStatus.executablePath[executePath]();
+	    return Status.executablePath[executePath]();
 	  };
 	})(this);
 
@@ -174,10 +187,17 @@ module.exports =
 	  };
 	})(this);
 
-	WholeStatus.on("item-update", (function(_this) {
+	this.toggleParameterMode = (function(_this) {
+	  return function() {
+	    _this.showParameter = !_this.showParameter;
+	    return Status.trigger("toggle-mode");
+	  };
+	})(this);
+
+	Status.on("item-update", (function(_this) {
 	  return function() {
 	    var i, itemStatus, len, onExecute, ref;
-	    ref = WholeStatus.itemStatuses;
+	    ref = Status.itemStatuses;
 	    for (i = 0, len = ref.length; i < len; i++) {
 	      itemStatus = ref[i];
 	      if (itemStatus.onExecute) {
@@ -196,23 +216,21 @@ module.exports =
 	  };
 	})(this));
 
-	route.base(WholeStatus.thisBasePath);
+	route.base(Status.thisBasePath);
 
 	route("..", this.check);
 
 	window.addEventListener("popstate", (function(_this) {
 	  return function() {
-	    if (!location.href.match("\\" + WholeStatus.thisBasePath)) {
-	      return history.replaceState("", null, WholeStatus.thisBasePath);
+	    if (!location.href.match("\\" + Status.thisBasePath)) {
+	      return history.replaceState("", null, Status.thisBasePath);
 	    }
 	  };
 	})(this));
 	});
 
-	riot.tag2('test-list-count', '<span>{WholeStatus.successSum}/{WholeStatus.executeSum}</span>', '', '', function(opts) {
-	this.WholeStatus = __webpack_require__(37);
-
-	this.WholeStatus.on("item-update", (function(_this) {
+	riot.tag2('test-status', '<span class="test-count">{Status.successSum}/{Status.executeSum}</span> <span if="{Status.taskFinished()}" class="finished">✔︎</span> <span if="{Status.taskAllSuccess()}" class="all-success">💯</span>', 'test-status .finished,[data-is="test-status"] .finished{ color: #17e017; }', '', function(opts) {
+	this.Status = __webpack_require__(37).on("item-update", (function(_this) {
 	  return function() {
 	    return _this.update();
 	  };
@@ -220,36 +238,120 @@ module.exports =
 	});
 
 	riot.tag2('recursive-item', '<list-line ref="lines" each="{data, key in list}" list="{this}" routing="{this.parent.opts.routing}"></list-line>', 'recursive-item,[data-is="recursive-item"]{ display: block; }', '', function(opts) {
+	var getLines;
+
+	getLines = (function(_this) {
+	  return function() {
+	    var lines;
+	    lines = _this.refs.lines;
+	    if (!lines.length) {
+	      return [lines];
+	    } else {
+	      return lines;
+	    }
+	  };
+	})(this);
+
+	this.recursivelyCheck = (function(_this) {
+	  return function(params) {
+	    var lines;
+	    lines = getLines();
+	    return lines.forEach(function(line) {
+	      var copyParams;
+	      copyParams = [];
+	      Object.assign(copyParams, params);
+	      return line.recursivelyCheckItem(copyParams);
+	    });
+	  };
+	})(this);
+
+	this.recursivelyUpdate = (function(_this) {
+	  return function(routing) {
+	    getLines().forEach(function(line) {
+	      return line.recursivelyUpdate(routing);
+	    });
+	    return _this.update();
+	  };
+	})(this);
+
 	this.list = typeof opts.data === "object" ? opts.data : {};
 	});
 
-	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error, warn: warn}"></span> <a class="tree" href="{routing}" onclick="{router}">{key}</a> <a class="single" if="{url}" href="{routerExecutionPath}" onclick="{router}">{url}</a> </div> <recursive-item ref="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe ref="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{WholeStatus.config}"></test-iframe>', 'list-line .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[data-is="list-line"] .tree{color:#333;word-break:break-all} list-line .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .warn,[data-is="list-line"] .warn{color:gold} list-line .warn:after,[data-is="list-line"] .warn:after{content:"△"} list-line .error,[data-is="list-line"] .error{color:red} list-line .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
-	var WholeStatus, executeIframe, route;
+	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error, warn: warn}"></span> <a class="tree" href="{routing}" onclick="{router}">{treeName}</a> <label each="{pattern, i in patterns}" class="{focus: pattern.focus}" data-id="{i}" onclick="{changePatternEvent}"> {pattern.name} </label> <a class="single" if="{url}" href="{routerExecutionPath}" onclick="{router}">{linkName}</a> </div> <recursive-item ref="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe ref="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{Status.config}"></test-iframe>', 'list-line .line>div>label,[data-is="list-line"] .line>div>label{cursor:pointer;border:1px solid rgba(255,128,0,0.6);padding:0 6px;text-align:center;display:inline-block} list-line .line>div>label.focus,[data-is="list-line"] .line>div>label.focus{background:#ff0} list-line .line>div>label:hover,[data-is="list-line"] .line>div>label:hover{opacity:.6} list-line .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[data-is="list-line"] .tree{color:#333;word-break:break-all} list-line .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .warn,[data-is="list-line"] .warn{color:gold} list-line .warn:after,[data-is="list-line"] .warn:after{content:"△"} list-line .error,[data-is="list-line"] .error{color:red} list-line .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
+	var Parser, Status, executeIframe, initialPattern, name, paramMode, path, patterns, ref, ref1, route, setObservableEvent, setRouter, toggleMode;
 
-	WholeStatus = this.WholeStatus = __webpack_require__(37);
+	Status = this.Status = __webpack_require__(37);
+
+	Parser = __webpack_require__(42);
 
 	route = __webpack_require__(41);
+
+	setObservableEvent = (function(_this) {
+	  return function() {
+	    Status.executablePath[_this.routing] = function() {
+	      return _this.multiExecuteTask();
+	    };
+	    return Status.executablePath[_this.routerExecutionPath] = function() {
+	      if (_this.url) {
+	        return _this.executeTask();
+	      }
+	    };
+	  };
+	})(this);
+
+	setRouter = (function(_this) {
+	  return function(path) {
+	    _this.routing = _this.initialRouting ? _this.initialRouting + "/" + path : path;
+	    return _this.routerExecutionPath = _this.url + Status.basePath + _this.routing;
+	  };
+	})(this);
 
 	executeIframe = (function(_this) {
 	  return function() {
 	    var base;
-	    return typeof (base = WholeStatus.executeIframe.shift()) === "function" ? base() : void 0;
+	    return typeof (base = Status.executeIframe.shift()) === "function" ? base() : void 0;
 	  };
 	})(this);
 
-	this.key = opts.list.key;
+	ref = Parser.getStrInfo(this.key), toggleMode = ref.toggleMode, paramMode = ref.paramMode, name = ref.name, path = ref.path, patterns = ref.patterns;
 
-	this.data = opts.list.data;
+	this.initialRouting = opts.routing;
 
-	this.routing = opts.routing ? opts.routing + "/" + this.key : this.key;
+	this.treeName = name;
 
-	this.url = typeof this.data === "object" ? "" : this.data;
+	if (toggleMode) {
+	  initialPattern = patterns[0];
+	  initialPattern.focus = true;
+	  this.path = initialPattern.path;
+	  this.patterns = patterns;
+	} else {
+	  this.path = path;
+	}
 
-	this.routerExecutionPath = this.url + WholeStatus.basePath + this.routing;
+	ref1 = typeof this.data === "object" ? {} : Parser.getStrInfo(this.data), name = ref1.name, path = ref1.path;
+
+	this.linkName = name;
+
+	this.url = path;
+
+	setRouter(this.path);
 
 	this.status = {
 	  onExecute: false
 	};
+
+	this.recursivelyUpdate = (function(_this) {
+	  return function(routing) {
+	    var ref2;
+	    _this.initialRouting = routing;
+	    setRouter(_this.path);
+	    if ((ref2 = _this.refs.item) != null) {
+	      ref2.recursivelyUpdate(_this.routing);
+	    }
+	    setObservableEvent();
+	    return _this.update();
+	  };
+	})(this);
 
 	this.deleteIframe = (function(_this) {
 	  return function() {
@@ -269,7 +371,7 @@ module.exports =
 
 	this.recursivelyExecuteTask = (function(_this) {
 	  return function() {
-	    var i, item, len, line, lines, results;
+	    var item, j, len, line, lines, results;
 	    item = _this.refs.item;
 	    if (item) {
 	      lines = item.refs.lines;
@@ -277,14 +379,14 @@ module.exports =
 	        return lines.recursivelyExecuteTask();
 	      } else {
 	        results = [];
-	        for (i = 0, len = lines.length; i < len; i++) {
-	          line = lines[i];
+	        for (j = 0, len = lines.length; j < len; j++) {
+	          line = lines[j];
 	          results.push(line.recursivelyExecuteTask());
 	        }
 	        return results;
 	      }
 	    } else {
-	      return WholeStatus.executeIframe.push(function() {
+	      return Status.executeIframe.push(function() {
 	        return _this.executeTask(function() {
 	          _this.deleteIframe();
 	          return executeIframe();
@@ -296,7 +398,7 @@ module.exports =
 
 	this.multiExecuteTask = (function(_this) {
 	  return function() {
-	    WholeStatus.executeIframe.length = 0;
+	    Status.executeIframe.length = 0;
 	    _this.recursivelyExecuteTask();
 	    return executeIframe();
 	  };
@@ -307,7 +409,7 @@ module.exports =
 	    _this.status.onExecute = true;
 	    _this.update();
 	    console.clear();
-	    ++WholeStatus.executeSum;
+	    ++Status.executeSum;
 	    return _this.refs.testFrame.setConsoleEvent({
 	      assert: function(flg, msg) {
 	        if (msg) {
@@ -327,7 +429,7 @@ module.exports =
 	          if (!_this.warn) {
 	            _this.success = true;
 	          }
-	          ++WholeStatus.successSum;
+	          ++Status.successSum;
 	          _this.update();
 	          return callback && callback();
 	        }
@@ -347,8 +449,12 @@ module.exports =
 	})(this);
 
 	this.mouseOn = (function(_this) {
-	  return function() {
-	    return _this.isHover = true;
+	  return function(e) {
+	    if (e.target.tagName === "LABEL") {
+	      return _this.isHover = false;
+	    } else {
+	      return _this.isHover = true;
+	    }
 	  };
 	})(this);
 
@@ -358,46 +464,93 @@ module.exports =
 	  };
 	})(this);
 
-	WholeStatus.on("init", (function(_this) {
+	this.changePattern = (function(_this) {
+	  return function(nextId) {
+	    var nextPattern, ref2;
+	    _this.patterns.forEach(function(pattern) {
+	      return pattern.focus = false;
+	    });
+	    nextPattern = _this.patterns[nextId];
+	    nextPattern.focus = true;
+	    _this.path = nextPattern.path;
+	    setRouter(_this.path);
+	    if ((ref2 = _this.refs.item) != null) {
+	      ref2.recursivelyUpdate(_this.routing);
+	    }
+	    return setObservableEvent();
+	  };
+	})(this);
+
+	this.changePatternEvent = (function(_this) {
+	  return function(e) {
+	    return _this.changePattern(e.currentTarget.dataset.id);
+	  };
+	})(this);
+
+	this.recursivelyCheckItem = (function(_this) {
+	  return function(params) {
+	    var matchedPattern, param, ref2, ref3, ref4;
+	    param = params.shift();
+	    matchedPattern = (ref2 = _this.patterns) != null ? (ref3 = ref2.filter(function(pattern, i) {
+	      return param === pattern.path;
+	    })) != null ? ref3[0] : void 0 : void 0;
+	    if (matchedPattern) {
+	      _this.patterns.forEach(function(pattern, i) {
+	        pattern.focus = false;
+	        if (matchedPattern === pattern) {
+	          return _this.changePattern(i);
+	        }
+	      });
+	      _this.update();
+	    }
+	    if (param === _this.path || matchedPattern) {
+	      if (params) {
+	        return (ref4 = _this.refs.item) != null ? ref4.recursivelyCheck(params) : void 0;
+	      } else {
+	        return setObservableEvent();
+	      }
+	    }
+	  };
+	})(this);
+
+	Status.on("init", (function(_this) {
 	  return function() {
 	    return _this.init();
 	  };
 	})(this));
 
-	WholeStatus.itemStatuses.push(this.status);
-
-	WholeStatus.executablePath[encodeURIComponent(this.routing)] = (function(_this) {
+	paramMode && Status.on("toggle-mode", (function(_this) {
 	  return function() {
-	    return _this.multiExecuteTask();
-	  };
-	})(this);
-
-	WholeStatus.executablePath[encodeURIComponent(this.routerExecutionPath)] = (function(_this) {
-	  return function() {
-	    if (_this.url) {
-	      return _this.executeTask();
-	    }
-	  };
-	})(this);
-
-	this.on("update", (function(_this) {
-	  return function() {
-	    return WholeStatus.trigger("item-update");
+	    _this.treeName = _this.key === _this.treeName ? _this.treeName = _this._treeName || _this.treeName : (_this._treeName = _this.treeName, _this.treeName = _this.key);
+	    _this.linkName = _this.data === _this.linkName ? _this.linkName = _this._linkName || _this.linkName : (_this._linkName = _this.linkName, _this.linkName = _this.data);
+	    return _this.update();
 	  };
 	})(this));
 
-	this.init();
+	Status.itemStatuses.push(this.status);
+
+	setObservableEvent();
+
+	Status.paramMode = paramMode || Status.paramMode;
+
+	this.on("update", (function(_this) {
+	  return function() {
+	    return Status.trigger("item-update");
+	  };
+	})(this));
 	});
 
+	    
+	  
 
 /***/ },
 
 /***/ 39:
 /***/ function(module, exports, __webpack_require__) {
 
-	var riot = __webpack_require__(5);
-
-	riot.tag2('test-iframe', '<span class="{isIos ? \'ios\' : \'no-ios\'}"> <iframe if="{!isElectron}" riot-src="{opts.url}"></iframe> <webview if="{isElectron}" riot-src="{opts.url}" nodeintegration></webview> </span>', 'test-iframe .ios,[data-is="test-iframe"] .ios{ display: block; -webkit-overflow-scrolling: touch; overflow: auto; position: fixed; top: 0; left: 0; width: 100%; height: 100%; } test-iframe iframe,[data-is="test-iframe"] iframe,test-iframe webview,[data-is="test-iframe"] webview{ background-color: white; border: none; width: 100%; height: 100%; } test-iframe .no-ios iframe,[data-is="test-iframe"] .no-ios iframe,test-iframe .no-ios webview,[data-is="test-iframe"] .no-ios webview{ position: fixed; left: 0px; top: 0px; }', '', function(opts) {
+	
+	    var riot = __webpack_require__(5)
+	    riot.tag2('test-iframe', '<span class="{isIos ? \'ios\' : \'no-ios\'}"> <iframe if="{!isElectron}" riot-src="{opts.url}"></iframe> <webview if="{isElectron}" riot-src="{opts.url}" nodeintegration></webview> </span>', 'test-iframe .ios,[data-is="test-iframe"] .ios{ display: block; -webkit-overflow-scrolling: touch; overflow: auto; position: fixed; top: 0; left: 0; width: 100%; height: 100%; } test-iframe iframe,[data-is="test-iframe"] iframe,test-iframe webview,[data-is="test-iframe"] webview{ background-color: white; border: none; width: 100%; height: 100%; } test-iframe .no-ios iframe,[data-is="test-iframe"] .no-ios iframe,test-iframe .no-ios webview,[data-is="test-iframe"] .no-ios webview{ position: fixed; left: 0px; top: 0px; }', '', function(opts) {
 	var WholeStatus, ref;
 
 	WholeStatus = __webpack_require__(37);
@@ -463,6 +616,8 @@ module.exports =
 	})(this);
 	});
 
+	    
+	  
 
 /***/ },
 
@@ -480,21 +635,122 @@ module.exports =
 
 /***/ },
 
-/***/ 44:
+/***/ 42:
+/***/ function(module, exports) {
+
+	var Parser;
+
+	module.exports = Parser = (function() {
+	  function Parser() {}
+
+	  Parser.patternForPathName = /^(.+)\((.+)\)$/;
+
+	  Parser.parseStr = function(str) {
+	    var name, paramMode, path, ref;
+	    ref = str.match(Parser.patternForPathName) || [false, str, str], paramMode = ref[0], name = ref[1], path = ref[2];
+	    return {
+	      paramMode: paramMode,
+	      name: name,
+	      path: path
+	    };
+	  };
+
+	  Parser.getStrInfo = function(str) {
+	    var name, paramMode, path, patternStr, patterns, ref, ref1, toggleMode;
+	    ref = str.match(/(.*)\[(.+)\]$/) || [], toggleMode = ref[0], name = ref[1], patternStr = ref[2];
+	    if (toggleMode) {
+	      patterns = patternStr.split(/\s*,\s*/).map(function(str) {
+	        var paramMode, strInfo;
+	        strInfo = Parser.parseStr(str);
+	        paramMode = paramMode || strInfo.paramMode;
+	        return strInfo;
+	      });
+	    } else {
+	      ref1 = Parser.parseStr(str), paramMode = ref1.paramMode, name = ref1.name, path = ref1.path;
+	    }
+	    return {
+	      toggleMode: toggleMode,
+	      paramMode: paramMode,
+	      name: name,
+	      path: path,
+	      patterns: patterns
+	    };
+	  };
+
+	  Parser.getSingleTaskList = function(patterns, arg) {
+	    var patternLoop, recursiveFunc, taskList;
+	    patternLoop = (arg != null ? arg : {}).patternLoop;
+	    taskList = [];
+	    recursiveFunc = function(patterns, testName, testUrl) {
+	      var key, results, value;
+	      if (testName == null) {
+	        testName = "";
+	      }
+	      if (testUrl == null) {
+	        testUrl = "";
+	      }
+	      results = [];
+	      for (key in patterns) {
+	        value = patterns[key];
+	        results.push((function(testName, testUrl) {
+	          var info, keyInfo, mockName, mockUrl, valueInfo;
+	          if (typeof value === "object") {
+	            testName += "/";
+	            testUrl += "/";
+	            info = Parser.getStrInfo(key);
+	            if (info.patterns && !patternLoop) {
+	              testName += info.patterns[0].name;
+	              testUrl += info.patterns[0].path;
+	            } else {
+	              testName += info.name;
+	              testUrl += info.path;
+	            }
+	            return recursiveFunc(value, testName, testUrl);
+	          } else {
+	            keyInfo = Parser.getStrInfo(key);
+	            valueInfo = Parser.getStrInfo(value);
+	            testUrl = testUrl.replace(/^\//, "") + ("/" + keyInfo.path);
+	            testName = testName.replace(/^\//, "") + ("/" + keyInfo.name);
+	            mockUrl = "?path=" + valueInfo.path + "#" + testUrl;
+	            mockName = valueInfo.name;
+	            testUrl = "?path=" + testUrl;
+	            return taskList.push({
+	              testName: testName,
+	              testUrl: testUrl,
+	              mockName: mockName,
+	              mockUrl: mockUrl
+	            });
+	          }
+	        })(testName, testUrl));
+	      }
+	      return results;
+	    };
+	    recursiveFunc(patterns);
+	    return taskList;
+	  };
+
+	  return Parser;
+
+	})();
+
+
+/***/ },
+
+/***/ 45:
 /***/ function(module, exports, __webpack_require__) {
 
 	var generate, testcases;
 
 	generate = __webpack_require__(36);
 
-	testcases = __webpack_require__(45);
+	testcases = __webpack_require__(46);
 
 	generate(testcases);
 
 
 /***/ },
 
-/***/ 45:
+/***/ 46:
 /***/ function(module, exports) {
 
 	module.exports = {

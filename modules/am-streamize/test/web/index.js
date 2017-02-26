@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(78);
+	module.exports = __webpack_require__(82);
 
 
 /***/ },
@@ -298,11 +298,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  function AutoEvent() {
 	    this.start = bind(this.start, this);
-	    this.contoller = bind(this.contoller, this);
+	    this.controller = bind(this.controller, this);
 	    return AutoEvent.__super__.constructor.apply(this, arguments);
 	  }
 
-	  AutoEvent.prototype.contoller = function(loopNum, callback) {
+	  AutoEvent.prototype.controller = function(loopNum, callback) {
 	    var curFuncNum, i;
 	    curFuncNum = 0;
 	    this.innerFuncs[this.funcs.length] = [];
@@ -336,7 +336,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (loopNum == null) {
 	      loopNum = 1;
 	    }
-	    return this.contoller(loopNum, callback);
+	    return this.controller(loopNum, callback);
 	  };
 
 	  return AutoEvent;
@@ -10641,7 +10641,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (testObj == null) {
 	      testObj = Test;
 	    }
-	    Test.actions = decodeURI(location.hash.replace(/^#+/, "")).split("/");
+	    Test.actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/");
 	    Test.actionObj = {};
 	    ref = Test.actions;
 	    results = [];
@@ -13771,16 +13771,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 78:
+/***/ 82:
 /***/ function(module, exports, __webpack_require__) {
 
 	var mount, parser;
 
 	window.riot = __webpack_require__(10);
 
-	parser = __webpack_require__(79);
+	parser = __webpack_require__(83);
 
-	__webpack_require__(80);
+	__webpack_require__(84);
 
 	mount = (function(_this) {
 	  return function(flow) {
@@ -13794,7 +13794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  simple: (function(_this) {
 	    return function() {
 	      var flow;
-	      flow = parser(__webpack_require__(81));
+	      flow = parser(__webpack_require__(85));
 	      return mount(flow);
 	    };
 	  })(this)
@@ -13803,7 +13803,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 79:
+/***/ 83:
 /***/ function(module, exports) {
 
 	var Sections, expressions,
@@ -13887,12 +13887,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 80:
+/***/ 84:
 /***/ function(module, exports, __webpack_require__) {
 
-	var riot = __webpack_require__(10);
-
-	riot.tag2('data-flow', '<div class="box" each="{opts.flow}"> <div class="title"> {name} </div> </div>', 'data-flow>.box>.title{border:1px solid black}', '', function(opts) {
+	
+	    var riot = __webpack_require__(10)
+	    riot.tag2('data-flow', '<div class="box" each="{opts.flow}"> <div class="title"> {name} </div> </div>', 'data-flow>.box>.title{border:1px solid black}', '', function(opts) {
 	this.on("mount", (function(_this) {
 	  return function() {
 	    return console.log(opts.flow[0]);
@@ -13900,10 +13900,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(this));
 	});
 
+	    
+	  
 
 /***/ },
 
-/***/ 81:
+/***/ 85:
 /***/ function(module, exports) {
 
 	module.exports = "[プロモーション画面]\r\nユーザーが見るものを書きます。\r\nユーザーがする行動を書きます。\r\n\r\n[ようこそ画面]\r\nユーザー情報を取得\r\nif ログインユーザー or ゲストユーザー\r\n  if ゲストユーザー\r\n    ゲスト機能を表示=>チャット画面\r\nelse if 管理者\r\n  =2段階認証=>管理画面\r\nelse\r\n  =>ログイン画面\r\n--\r\nユーザーがすること１ => その結果１\r\nユーザーがすること２ => その結果２\r\n\r\n[その結果１]\r\n結果\r\n\r\n[その結果２]\r\n結果\r\n\r\n[ログイン画面]\r\nログイン機能\r\nゲスト機能\r\n\r\n[チャット画面]\r\nチャット機能\r\n"

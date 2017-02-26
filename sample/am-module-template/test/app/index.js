@@ -46,7 +46,7 @@ module.exports =
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(43);
+	module.exports = __webpack_require__(44);
 
 
 /***/ },
@@ -126,7 +126,7 @@ module.exports =
 	    if (testObj == null) {
 	      testObj = Test;
 	    }
-	    Test.actions = decodeURI(location.hash.replace(/^#+/, "")).split("/");
+	    Test.actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/");
 	    Test.actionObj = {};
 	    ref = Test.actions;
 	    results = [];
@@ -175,11 +175,11 @@ module.exports =
 
 	  function AutoEvent() {
 	    this.start = bind(this.start, this);
-	    this.contoller = bind(this.contoller, this);
+	    this.controller = bind(this.controller, this);
 	    return AutoEvent.__super__.constructor.apply(this, arguments);
 	  }
 
-	  AutoEvent.prototype.contoller = function(loopNum, callback) {
+	  AutoEvent.prototype.controller = function(loopNum, callback) {
 	    var curFuncNum, i;
 	    curFuncNum = 0;
 	    this.innerFuncs[this.funcs.length] = [];
@@ -213,7 +213,7 @@ module.exports =
 	    if (loopNum == null) {
 	      loopNum = 1;
 	    }
-	    return this.contoller(loopNum, callback);
+	    return this.controller(loopNum, callback);
 	  };
 
 	  return AutoEvent;
@@ -446,7 +446,7 @@ module.exports =
 
 /***/ },
 
-/***/ 43:
+/***/ 44:
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(29).start({

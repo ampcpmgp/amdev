@@ -295,11 +295,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  function AutoEvent() {
 	    this.start = bind(this.start, this);
-	    this.contoller = bind(this.contoller, this);
+	    this.controller = bind(this.controller, this);
 	    return AutoEvent.__super__.constructor.apply(this, arguments);
 	  }
 
-	  AutoEvent.prototype.contoller = function*(num) {
+	  AutoEvent.prototype.controller = function*(num) {
 	    var i;
 	    i = -1;
 	    while (this.funcs[++i]) {
@@ -322,7 +322,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (loopNum == null) {
 	      loopNum = 1;
 	    }
-	    this.gen = this.contoller(loopNum);
+	    this.gen = this.controller(loopNum);
 	    return this.gen.next();
 	  };
 

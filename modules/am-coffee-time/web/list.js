@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["modules/am-streamize/test/web/list"] = factory();
+		exports["modules/am-coffee-time/web/list"] = factory();
 	else
-		root["modules/am-streamize/test/web/list"] = factory();
+		root["modules/am-coffee-time/web/list"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -50,17 +50,23 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(86);
+	module.exports = __webpack_require__(29);
 
 
 /***/ },
-
-/***/ 9:
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Status;
@@ -87,8 +93,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-
-/***/ 10:
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* Riot v3.0.7, @license MIT */
@@ -2757,8 +2762,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-
-/***/ 11:
+/* 11 */
 /***/ function(module, exports) {
 
 	var Status;
@@ -2805,8 +2809,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-
-/***/ 12:
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -3216,8 +3219,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  
 
 /***/ },
-
-/***/ 13:
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {
@@ -3293,8 +3295,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-
-/***/ 14:
+/* 14 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -3480,8 +3481,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-
-/***/ 15:
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -4394,8 +4394,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-
-/***/ 16:
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4746,8 +4745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-
-/***/ 17:
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function(window, undefined) {var observable = function(el) {
@@ -4885,8 +4883,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(typeof window != 'undefined' ? window : undefined);
 
 /***/ },
-
-/***/ 18:
+/* 18 */
 /***/ function(module, exports) {
 
 	var Parser;
@@ -4986,32 +4983,41 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-
-/***/ 86:
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var generate, testcases;
+	var generate, patterns;
 
 	generate = __webpack_require__(9);
 
-	testcases = __webpack_require__(87);
-
-	generate(testcases);
-
-
-/***/ },
-
-/***/ 87:
-/***/ function(module, exports) {
-
-	module.exports = {
-		"am-module": {
-			"simple": "./index.html"
-		}
+	patterns = {
+	  全パターン: {
+	    動作フロー確認用: {
+	      "結果=成功": "./index.html",
+	      "結果=失敗": "./index.html"
+	    },
+	    "ID入力=melon": {
+	      "PW入力=google": "./index.html",
+	      "PW入力=apple": "./index.html"
+	    },
+	    "スイッチ[日本語(lang=ja), 英語(lang=en), 中国語(lang=ch)]": "多言語化(./index.html)"
+	  }
 	};
 
-/***/ }
+	generate(patterns);
 
-/******/ })
+
+/***/ }
+/******/ ])
 });
 ;

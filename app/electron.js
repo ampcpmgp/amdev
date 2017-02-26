@@ -308,10 +308,8 @@ module.exports =
 	          loader: "json!yaml"
 	        }, {
 	          test: /\.tag$/,
-	          loader: "tag-loader",
-	          query: {
-	            type: 'none'
-	          }
+	          exclude: /node_modules/,
+	          loader: "riot-tag-loader"
 	        }
 	      ],
 	      postLoaders: [
