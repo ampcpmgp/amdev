@@ -17,7 +17,7 @@ module.exports = class Compiler
         {test: /\.html$/, loader: "html"}
         {test: /\.json$/, loader: "json"}
         {test: /\.ya?ml$/, loader: "json!yaml"}
-        {test: /\.tag$/, loader: "tag-loader", query: {type: 'none' }}
+        {test: /\.tag$/, exclude: /node_modules/, loader: "riot-tag-loader"}
       ]
       postLoaders: [
         {test: /\.src\.coffee$/, loader: "raw"}

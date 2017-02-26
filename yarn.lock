@@ -2316,7 +2316,7 @@ load-json-file@^1.0.0:
     pinkie-promise "^2.0.0"
     strip-bom "^2.0.0"
 
-loader-utils@0.2.x, loader-utils@^0.2.11, loader-utils@^0.2.15, loader-utils@^0.2.5, loader-utils@^0.2.6:
+loader-utils@0.2.x, loader-utils@^0.2.11, loader-utils@^0.2.15, loader-utils@^0.2.16, loader-utils@^0.2.5:
   version "0.2.16"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-0.2.16.tgz#f08632066ed8282835dff88dfb52704765adee6d"
   dependencies:
@@ -3558,6 +3558,12 @@ riot-route@^3.0.2:
   dependencies:
     riot-observable "^3.0.0"
 
+riot-tag-loader@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/riot-tag-loader/-/riot-tag-loader-1.0.0.tgz#bbd94290f5cf946ac684985275d977442ee4868e"
+  dependencies:
+    loader-utils "^0.2.16"
+
 riot-tmpl@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/riot-tmpl/-/riot-tmpl-3.0.1.tgz#2d69a563053259dcefcfd2da6d206d9466072225"
@@ -3950,12 +3956,6 @@ supports-color@^3.1.0, supports-color@^3.1.2:
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-3.1.2.tgz#72a262894d9d408b956ca05ff37b2ed8a6e2a2d5"
   dependencies:
     has-flag "^1.0.0"
-
-tag-loader@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/tag-loader/-/tag-loader-0.3.0.tgz#a873d6006e30d3edf1cd5ae8c62750dd00509373"
-  dependencies:
-    loader-utils "^0.2.6"
 
 tap-mocha-reporter@^2.0.0:
   version "2.0.1"
