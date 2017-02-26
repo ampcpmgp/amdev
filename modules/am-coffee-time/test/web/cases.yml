@@ -6,6 +6,8 @@ am-coffee-time:
   root:  ./index.html
   _hide=.child:  ./index.html
   テストパターン(test=1): テストページ(./index.html)
+  多言語切り替え[日本語(lang=ja), 英語(lang=en), lang=zh-cn, lang=zh-tw]:
+    test: ./index.html
   test:
     3:
       4:

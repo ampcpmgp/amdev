@@ -21,7 +21,10 @@ test =
       console.assert($this.css("border"), tagName)
     )
   test: (num) =>
+    console.log "test", num
     console.assert(num)
+  lang: (type) =>
+    console.log(type)
 
 require("am-coffee-time/browser/Test").start(test)
 
