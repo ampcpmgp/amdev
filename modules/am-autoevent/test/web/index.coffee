@@ -42,4 +42,7 @@ require("am-coffee-time/browser/Test").start(
     ae = new AutoEvent
     ae.register().wait(300).selectValue("select", value).start()
     $ERROR_IS_OKAY
+  scroll: =>
+    scrollTest2.scrollTop = 30
+    console.info "finished"
 )
