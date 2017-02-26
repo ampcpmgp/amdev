@@ -40,7 +40,7 @@ require("./test-iframe.tag")
       return @update() unless executePath
       executePath = decodeURIComponent(encodeURIComponent(decodeURIComponent(executePath)))
       unless Status.executablePath[executePath]
-        params = executePath.split("/")
+        params = executePath.replace(/^[^#]+#/, "").split("/")
         @refs.item.recursivelyCheck(params)
         Status.executablePath[executePath]()
         return
@@ -285,7 +285,7 @@ require("./test-iframe.tag")
       nextPattern.focus = true
       @path = nextPattern.path
       setRouter(@path)
-      @refs.item.recursivelyUpdate(@routing)
+      @refs.item?.recursivelyUpdate(@routing)
       setObservableEvent()
     @changePatternEvent = (e) => @changePattern(e.currentTarget.dataset.id)
     @recursivelyCheckItem = (params) =>
