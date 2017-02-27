@@ -1,15 +1,15 @@
 # am-coffee-time
-Testing and development of the mock page using a router.  
+Testing and development of the mock page using a router.
 this is renamed from am-lunch-time.
 
-repository  
+repository
 https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time
 
 sample page (Japanese)
 https://ampcpmgp.github.io/amdev/modules/am-coffee-time/web/list.html
 
 
-## OverView
+## Overview
 This test tool is divided into two layers, a page displaying a list of test patterns and a page on which the test is executed, and they are executed in cooperation with each other.
 
 ### list page
@@ -38,8 +38,8 @@ generate(testcases)
 ```
 
 ### mock pages
-This module watch event of console.assert.  
-It will end result in an error at the time of console.assert() is false.  
+This module watch event of console.assert.
+It will end result in an error at the time of console.assert() is false.
 All passed the test by putting the console.info after it was true ( "finished").
 
 #### sample code
@@ -78,7 +78,38 @@ Test.start(
 AutoEvent.start()
 ```
 
-### Test Event has some default events.  
-_color=.child   #selector set random background color   
-_border=.child  #selector set random border color  
-_hide=.child  # selector hide  
+### Test Event has some default events.
+_color=.child   #selector set random background color
+_border=.child  #selector set random border color
+_hide=.child  # selector hide
+
+
+## API
+### Parser
+Parser = require("am-coffee-time/Parser")
+taskList = Parser.getSingleTaskList(testPattern)
+
+#### example return code
+```
+[
+  {
+    "testName": "am-coffee-time/params1",
+    "testUrl": "?path=am-coffee-time/params1",
+    "mockName": "./index.html",
+    "mockUrl": "?path=./index.html#am-coffee-time/params1"
+  },
+  {
+    "testName": "am-coffee-time/_color",
+    "testUrl": "?path=am-coffee-time/_color",
+    "mockName": "./index.html",
+    "mockUrl": "?path=./index.html#am-coffee-time/_color"
+  },
+  {
+    "testName": "am-coffee-time/_color=.child",
+    "testUrl": "?path=am-coffee-time/_color=.child",
+    "mockName": "./index.html",
+    "mockUrl": "?path=./index.html#am-coffee-time/_color=.child"
+  },
+  ...
+]
+```
