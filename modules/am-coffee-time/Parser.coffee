@@ -37,7 +37,7 @@ module.exports = class Parser
             valueInfo = @getStrInfo(value)
             testUrl = testUrl.replace(/^\//, "") + "/#{keyInfo.path}"
             testName = testName.replace(/^\//, "") + "/#{keyInfo.name}"
-            mockUrl = "?path=#{valueInfo.path}##{testUrl}"
+            mockUrl = "#{valueInfo.path}##{testUrl}"
             mockName = valueInfo.name
             testUrl = "?path=#{testUrl}"
             taskList.push({testName, testUrl, mockName, mockUrl})

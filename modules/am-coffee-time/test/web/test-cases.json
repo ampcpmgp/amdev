@@ -3,72 +3,72 @@
     "testName": "am-coffee-time/params1",
     "testUrl": "?path=am-coffee-time/params1",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/params1"
+    "mockUrl": "./index.html#am-coffee-time/params1"
   },
   {
     "testName": "am-coffee-time/_color",
     "testUrl": "?path=am-coffee-time/_color",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/_color"
+    "mockUrl": "./index.html#am-coffee-time/_color"
   },
   {
     "testName": "am-coffee-time/_color=.child",
     "testUrl": "?path=am-coffee-time/_color=.child",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/_color=.child"
+    "mockUrl": "./index.html#am-coffee-time/_color=.child"
   },
   {
     "testName": "am-coffee-time/_border",
     "testUrl": "?path=am-coffee-time/_border",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/_border"
+    "mockUrl": "./index.html#am-coffee-time/_border"
   },
   {
     "testName": "am-coffee-time/root",
     "testUrl": "?path=am-coffee-time/root",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/root"
+    "mockUrl": "./index.html#am-coffee-time/root"
   },
   {
     "testName": "am-coffee-time/_hide=.child",
     "testUrl": "?path=am-coffee-time/_hide=.child",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/_hide=.child"
+    "mockUrl": "./index.html#am-coffee-time/_hide=.child"
   },
   {
     "testName": "am-coffee-time/テストパターン",
     "testUrl": "?path=am-coffee-time/test=1",
     "mockName": "テストページ",
-    "mockUrl": "?path=./index.html#am-coffee-time/test=1"
+    "mockUrl": "./index.html#am-coffee-time/test=1"
   },
   {
     "testName": "am-coffee-time/タスクリスト一覧",
     "testUrl": "?path=am-coffee-time/タスクリスト一覧",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/タスクリスト一覧"
+    "mockUrl": "./index.html#am-coffee-time/タスクリスト一覧"
   },
   {
     "testName": "am-coffee-time/日本語/test",
     "testUrl": "?path=am-coffee-time/lang=ja/test",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/lang=ja/test"
+    "mockUrl": "./index.html#am-coffee-time/lang=ja/test"
   },
   {
     "testName": "am-coffee-time/日本語/_color=*/_hide=div",
     "testUrl": "?path=am-coffee-time/lang=ja/_color=*/_hide=div",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/lang=ja/_color=*/_hide=div"
+    "mockUrl": "./index.html#am-coffee-time/lang=ja/_color=*/_hide=div"
   },
   {
     "testName": "am-coffee-time/日本語/_color=*/テスト",
     "testUrl": "?path=am-coffee-time/lang=ja/_color=*/test",
     "mockName": "テスト",
-    "mockUrl": "?path=./index.html#am-coffee-time/lang=ja/_color=*/test"
+    "mockUrl": "./index.html#am-coffee-time/lang=ja/_color=*/test"
   },
   {
     "testName": "am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6",
     "testUrl": "?path=am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6"
+    "mockUrl": "./index.html#am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6"
   }
 ]
