@@ -98,19 +98,19 @@ example return code
     "testName": "am-coffee-time/params1",
     "testUrl": "?path=am-coffee-time/params1",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/params1"
+    "mockUrl": "./index.html#am-coffee-time/params1"
   },
   {
     "testName": "am-coffee-time/_color",
     "testUrl": "?path=am-coffee-time/_color",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/_color"
+    "mockUrl": "./index.html#am-coffee-time/_color"
   },
   {
     "testName": "am-coffee-time/_color=.child",
     "testUrl": "?path=am-coffee-time/_color=.child",
     "mockName": "./index.html",
-    "mockUrl": "?path=./index.html#am-coffee-time/_color=.child"
+    "mockUrl": "./index.html#am-coffee-time/_color=.child"
   },
   ...
 ]
