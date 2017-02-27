@@ -86,10 +86,12 @@ _hide=.child  # selector hide
 
 ## API
 ### Parser
+```
 Parser = require("am-coffee-time/Parser")
-taskList = Parser.getSingleTaskList(testPattern)
-
-#### example return code
+```
+#### Parser.getSingleTaskList(testPattern)
+Get single task list.
+example return code
 ```
 [
   {
