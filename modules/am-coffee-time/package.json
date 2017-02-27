@@ -8,6 +8,11 @@
   },
   "author": "",
   "license": "ISC",
+  "homepage": "https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ampcpmgp/amdev.git"
+  },
   "dependencies": {
     "am-autoevent": "^1.1.8",
     "chokidar": "^1.6.1",
