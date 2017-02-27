@@ -79,10 +79,11 @@ AutoEvent.start()
 ```
 
 ### Test Event has some default events.
+```coffee
 _color=.child   #selector set random background color
 _border=.child  #selector set random border color
 _hide=.child  # selector hide
-
+```
 
 ## API
 ### Parser
