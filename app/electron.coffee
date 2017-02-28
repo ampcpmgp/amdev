@@ -32,9 +32,11 @@ class ModuleCompiler extends Compiler
     compileNodeModule = => #node or electron
       baseOption = @electronOption
       moduleDir = "modules/#{dir}"
-      @compileGen = @compile({baseOption, moduleDir, callback: => @compileGen.next()})
-      moduleDir = "modules/#{dir}/browser"
-      @compileGen = @compile({baseOption, moduleDir, callback})
+      @compileGen = @compile({baseOption, moduleDir, callback: =>
+        moduleDir = "modules/#{dir}/browser"
+        @compileGen = @compile({baseOption, moduleDir, callback})
+        @compileGen.next()
+      })
       @compileGen.next()
     compileBrowserModule = => #browser
       baseOption = @browserOption
