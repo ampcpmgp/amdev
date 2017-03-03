@@ -31,6 +31,14 @@ test =
     list = Parser.getSingleTaskList(testPattern)
     answerPattern = require("./test-cases.json")
     console.assert(JSON.stringify(list) is JSON.stringify(answerPattern))
+  int: (value) =>
+    console.assert typeof value is "number"
+  bool: (value) =>
+    console.assert typeof value is "boolean"
+  types: ([key, value]) =>
+    console.assert (typeof key) is "number"
+    console.assert (typeof value) is "boolean"
+
 
 require("am-coffee-time/browser/Test").start(test)
 

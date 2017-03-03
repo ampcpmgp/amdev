@@ -1,4 +1,7 @@
 am-coffee-time:
+  int=1: ./index.html
+  bool=true: ./index.html
+  types=555,true: ./index.html
   params1:  ./index.html
   _color:  ./index.html
   _color=.child:  ./index.html
