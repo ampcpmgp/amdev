@@ -26,8 +26,7 @@ actionFuncs =
 getValue = (arg) =>
   return arg if typeof arg isnt "object"
   arg = arg.map((val) =>
-    if val.match(/^(true|false)$/)
-      Boolean(val)
+    if val is "true" then true else if val is "false" then false
     else if val.match(/^\d+$/)
       Number(val)
     else

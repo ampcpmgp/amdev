@@ -34,7 +34,7 @@ test =
   int: (value) =>
     console.assert typeof value is "number"
   bool: (value) =>
-    console.assert typeof value is "boolean"
+    console.assert value is false
   types: ([key, value]) =>
     console.assert (typeof key) is "number"
     console.assert (typeof value) is "boolean"
