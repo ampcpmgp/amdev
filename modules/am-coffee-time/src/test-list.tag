@@ -42,9 +42,9 @@ require("./test-iframe.tag")
       unless Status.executablePath[executePath]
         params = executePath.replace(/^[^#]+#/, "").split("/")
         @refs.item.recursivelyCheck(params)
-        Status.executablePath[executePath]()
+        Status.executablePath[executePath]?()
         return
-        # 以下処理今後検討
+        # TODO: 以下処理今後検討
         @instanceUrl = decodeURIComponent(executePath)
         @update()
         @refs.testFrame.setConsoleEvent()
