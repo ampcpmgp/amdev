@@ -8,7 +8,7 @@ glob = require("glob")
 module.exports = class ElectronApp
   _inspector: 1
   publishFlg: true
-  liveReloadStopFlg: false
+  liveReloadFlg: false
   constructor: ->
   start: ->
     @init()
@@ -36,7 +36,7 @@ module.exports = class ElectronApp
           pollInterval: 10
       )
       .on("change", (path) =>
-        return if @liveReloadStopFlg
+        return if @liveReloadFlg
         location.reload()
       )
   serverStart: ->

@@ -26,13 +26,14 @@
     exec = require("child_process").exec
     fs = require("fs")
     ModuleCompiler = require("./ModuleCompiler")
+    Status = require("./Status")
     @modules = fs.readdirSync("./modules/")
     @npmPublish = (e) =>
       moduleName = e.currentTarget.dataset.name
       type = e.currentTarget.dataset.type
-      APP.liveReloadStopFlg is true or toggleReloadFlgButton.click()
+      Status.liveReloadFlg is true and Status.toggleliveReloadFlg()
       callback = =>
-        return console.log "compile finished. and not publish." unless APP.publishFlg
+        return console.log "compile finished. and not publish." unless Status.publishFlg
         dir = "./modules/#{moduleName}"
         exec("cd #{dir} && npm version #{version} && npm publish",
           (e, out, err) ->
