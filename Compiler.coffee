@@ -1,8 +1,8 @@
-fs =require("fs")
-path = require("path")
 fse = require("fs-extra")
 _ = require("lodash")
 webpack = require("webpack")
+fs =require("fs")
+path = require("path")
 
 module.exports = class Compiler
   @baseOption:

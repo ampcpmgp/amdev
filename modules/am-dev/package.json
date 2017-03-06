@@ -15,8 +15,5 @@
     "fs-extra": "^1.0.0",
     "glob": "^7.1.1",
     "jquery": "^3.1.1"
-  },
-  "devDependencies": {
-    "mkdirp": "^0.5.1"
   }
 }
