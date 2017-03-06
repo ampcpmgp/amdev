@@ -1,26 +1,19 @@
-<!-- dom -->
-<top-section>
-  <button style="display:block;" type="button" name="button" id="restart">Browser restart</button>
-  <button type="button" id="toggleReloadFlgButton" onclick="browserChangeReloadFlg(event)">toggle ReloadStopFlg = <span>false</span></button>
-  <button type="button" id="publishFlgButton" onclick="browserPublishFlg(event)">toggle PublishFlg = <span>true</span></button>
-  <template id="npmUpdateButton">
-    <div class="">
-      <button class="patch" type="button" name="npm-update" onclick="npmPublish(['!val!'], 'patch')"></button>
-      <button type="button" name="npm-update" onclick="npmPublish(['!val!'], 'minor')">minor</button>
-      <button type="button" name="npm-update" onclick="npmPublish(['!val!'], 'major')">major</button>
-    </div>
-  </template>
-  <div class="npm-update-box">
-    npm update:
-  </div>
-  <style>
-    top-section {
-      display: block;
-      background-color: #ccc;
-    }
-  </style>
-</top-section>
-<a href="../modules/am-streamize/test/app/list.html">am-streamize</a>
-<!-- scripts -->
-<script src="./electron.js" charset="utf-8"></script>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <top-section>
+      <button style="display:block;" type="button" name="button" id="restart">Browser restart</button>
+      <button type="button" id="toggleReloadFlgButton" onclick="browserChangeReloadFlg(event)">toggle ReloadStopFlg = <span>false</span></button>
+      <button type="button" id="publishFlgButton" onclick="browserPublishFlg(event)">toggle PublishFlg = <span>true</span></button>
+      <npm-modules></npm-modules>
+    </top-section>
+    <a href="../modules/am-streamize/test/app/list.html">am-streamize</a>
+    <!-- scripts -->
+    <script src="./electron.js" charset="utf-8"></script>
+  </body>
+</html>
 </script>
