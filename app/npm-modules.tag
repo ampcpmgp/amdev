@@ -47,7 +47,7 @@
       Status.liveReloadFlg is true and Status.toggleliveReloadFlg()
       callback = =>
         return console.log "compile finished. and not publish." unless Status.publishFlg
-        exec("cd #{getDirName(moduleName)} && npm version #{version} && npm publish",
+        exec("cd #{getDirName(moduleName)} && npm version #{type} && npm publish",
           (e, out, err) =>
             return console.log err if err
             console.log out

@@ -35,8 +35,8 @@ module.exports = class Parser
           else
             keyInfo = @getStrInfo(key)
             valueInfo = @getStrInfo(value)
-            testUrl = testUrl.replace(/^\//, "") + "/#{keyInfo.path}"
-            testName = testName.replace(/^\//, "") + "/#{keyInfo.name}"
+            testUrl = (testUrl + "/#{keyInfo.path}").replace(/^\//, "")
+            testName = (testName + "/#{keyInfo.name}").replace(/^\//, "")
             mockUrl = "#{valueInfo.path}##{testUrl}"
             mockName = valueInfo.name
             testUrl = "?path=#{testUrl}"
