@@ -1,4 +1,10 @@
 [
+   {
+      "testName": "path23",
+      "testUrl": "?path=path23",
+      "mockName": "./index.html",
+      "mockUrl": "./index.html#path23"
+   },
   {
     "testName": "am-coffee-time/params1",
     "testUrl": "?path=am-coffee-time/params1",
