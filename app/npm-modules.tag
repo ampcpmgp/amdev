@@ -5,7 +5,7 @@
   <div class="module" each={moduleName in modules}>
     <div class="name-box">
       <span class="name">{moduleName}</span>
-      <button type="button" name="button" data-name={moduleName} onclick={yarn}>yarn</button>
+      <button if={false} type="button" name="button" data-name={moduleName} onclick={yarn}>yarn</button>
     </div>
     <div class="update">
       version update:
