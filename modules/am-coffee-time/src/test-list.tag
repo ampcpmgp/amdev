@@ -40,7 +40,8 @@ require("./test-iframe.tag")
       return @update() unless executePath
       executePath = decodeURIComponent(encodeURIComponent(decodeURIComponent(executePath)))
       unless Status.executablePath[executePath]
-        params = executePath.replace(/^[^#]+#/, "").split("/")
+        regex = /^[^#]+#/
+        params = executePath.replace(regex, "").split("/")
         @refs.item.recursivelyCheck(params)
         Status.executablePath[executePath]?()
         return
@@ -102,15 +103,15 @@ require("./test-iframe.tag")
       lines = @refs.lines
       unless lines.length then [lines] else lines
     @recursivelyCheck = (params) =>
-      lines = getLines()
-      lines.forEach((line) =>
+      getLines().forEach((line) =>
         copyParams = []
         objectAssign(copyParams, params)
         line.recursivelyCheckItem(copyParams)
         )
     @recursivelyUpdate = (routing) =>
-      getLines().forEach((line) => line.recursivelyUpdate(routing))
-      @update()
+      getLines().forEach((line) =>
+        line.recursivelyUpdate(routing)
+      )
     @list = if typeof opts.data is "object"
       opts.data
      else
@@ -214,12 +215,12 @@ require("./test-iframe.tag")
     @url = path
     setRouter(@path)
     @status = {onExecute: false}
+    @getRouting = => @initialRouting
     @recursivelyUpdate = (routing) =>
       @initialRouting = routing
       setRouter(@path)
-      this.refs.item?.recursivelyUpdate(@routing)
+      @refs.item?.recursivelyUpdate(@routing)
       setObservableEvent()
-      @update()
     @deleteIframe = =>
       @status.onExecute = false
       @update()
