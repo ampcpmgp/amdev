@@ -25,14 +25,23 @@ actionFuncs =
 
 getValue = (arg) =>
   return arg if typeof arg isnt "object"
-  arg = arg.map((val) =>
-    if val is "true" then true else if val is "false" then false
-    else if val.match(/^\d+$/)
-      Number(val)
-    else
-      val
-    )
+
+  arg = arg.map parseValue
+
   if arg.length is 1 then arg[0] else arg
+
+# Regexp for double quoted values
+RE_STR = /^"(.*)"$/
+
+# Parses the single value
+parseValue = (val) =>
+  if RE_STR.test val
+    val.match(RE_STR)[1]
+  else if val is "true" then true else if val is "false" then false
+  else if val.match(/^\d+$/)
+    Number(val)
+  else
+    val
 
 module.exports = class Test
   @start: (testObj = @) =>
