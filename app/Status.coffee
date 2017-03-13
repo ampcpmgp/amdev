@@ -1,11 +1,10 @@
 class Status
   init: =>
-    @liveReloadFlg = true
     @publishFlg = true
     @
     riot.observable(@)
   toggleliveReloadFlg: =>
-    @liveReloadFlg = not @liveReloadFlg
+    window.ea.liveReloadFlg = not window.ea.liveReloadFlg
     @trigger("update")
   togglePublishFlg: =>
     @publishFlg = not @publishFlg

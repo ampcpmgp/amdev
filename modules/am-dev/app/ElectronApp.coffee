@@ -36,7 +36,7 @@ module.exports = class ElectronApp
           pollInterval: 10
       )
       .on("change", (path) =>
-        return if @liveReloadFlg
+        return unless @liveReloadFlg
         location.reload()
       )
   serverStart: ->

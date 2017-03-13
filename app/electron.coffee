@@ -1,4 +1,6 @@
-global.riot = require("riot")
+start = =>
+  global.riot = require("riot")
+  require("./index.tag")
+  riot.mount('*')
 
-require("./index.tag")
-riot.mount('*')
+document.addEventListener("DOMContentLoaded", start)
