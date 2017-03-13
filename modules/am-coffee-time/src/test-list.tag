@@ -97,6 +97,7 @@ require("./test-iframe.tag")
     }
   </style>
   <script type="coffee">
+    objectAssign = require("object-assign")
     getLines = =>
       lines = @refs.lines
       unless lines.length then [lines] else lines
@@ -104,7 +105,7 @@ require("./test-iframe.tag")
       lines = getLines()
       lines.forEach((line) =>
         copyParams = []
-        Object.assign(copyParams, params)
+        objectAssign(copyParams, params)
         line.recursivelyCheckItem(copyParams)
         )
     @recursivelyUpdate = (routing) =>
