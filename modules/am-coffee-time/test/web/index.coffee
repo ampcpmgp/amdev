@@ -38,6 +38,9 @@ test =
   types: ([key, value]) =>
     console.assert (typeof key) is "number"
     console.assert (typeof value) is "boolean"
+  typecheck: ([string, int]) =>
+    console.assert (typeof string) is "string"
+    console.assert (typeof int) is "number"
 
 
 require("am-coffee-time/browser/Test").start(test)
