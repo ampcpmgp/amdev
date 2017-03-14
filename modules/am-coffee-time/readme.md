@@ -40,7 +40,7 @@ generate(testcases)
 ### mock pages
 This module watch event of console.assert.
 It will end result in an error at the time of console.assert() is false.
-All passed the test by putting the console.info after it was true ( "finished").
+All passed the test by putting the console.info after it was true ("finished").
 
 #### sample code
 ```coffee
