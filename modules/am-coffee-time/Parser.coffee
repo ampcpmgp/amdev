@@ -7,7 +7,7 @@ module.exports = class Parser
     [toggleMode, name, patternStr] = str.match(/(.*)\[(.+)\]$/) or []
     if toggleMode
       patterns =patternStr
-        .split(/\s*,\s*/)
+        .split(/\s*\|\s*/)
         .map((str) =>
           strInfo = @parseStr(str)
           paramMode = paramMode or strInfo.paramMode

@@ -33,7 +33,7 @@ testcases =
     "input=name,takasi": "/url.html"
     "input=age,94": "/url.html"
     "description(input=param)": "pageName(./index.html)"
-  "langSwitch[ja, en, zh-cn, zh-tw]": "langPage(./lang.html)"
+  "langSwitch[ja | en | zh-cn | zh-tw]": "langPage(./lang.html)"
 generate(testcases)
 ```
 
