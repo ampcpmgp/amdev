@@ -41,6 +41,10 @@ test =
   typecheck: ([string, int]) =>
     console.assert (typeof string) is "string"
     console.assert (typeof int) is "number"
+  nullcheck: (data) =>
+    console.assert data is null
+  undefinedCheck: (data) =>
+    console.assert data is undefined
 
 
 require("am-coffee-time/browser/Test").start(test)

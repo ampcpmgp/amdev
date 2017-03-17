@@ -38,6 +38,7 @@ parseValue = (val) =>
   if RE_STR.test val
     val.match(RE_STR)[1]
   else if val is "true" then true else if val is "false" then false
+  else if val is "null" then null else if val is "undefined" then undefined
   else if val.match(/^\d+$/)
     Number(val)
   else
