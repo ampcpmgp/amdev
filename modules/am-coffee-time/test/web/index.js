@@ -54,7 +54,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(20);
+	module.exports = __webpack_require__(21);
 
 
 /***/ },
@@ -10573,7 +10573,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
+	var $, RE_STR, Test, actionFuncs, getRandomColor, getValue, jquery_stylesheet, parseValue;
 
 	$ = __webpack_require__(5);
 
@@ -10630,6 +10630,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	  })(this)
 	};
 
+	getValue = (function(_this) {
+	  return function(arg) {
+	    if (typeof arg !== "object") {
+	      return arg;
+	    }
+	    arg = arg.map(parseValue);
+	    if (arg.length === 1) {
+	      return arg[0];
+	    } else {
+	      return arg;
+	    }
+	  };
+	})(this);
+
+	RE_STR = /^"(.*)"$/;
+
+	parseValue = (function(_this) {
+	  return function(val) {
+	    if (RE_STR.test(val)) {
+	      return val.match(RE_STR)[1];
+	    } else if (val === "true") {
+	      return true;
+	    } else if (val === "false") {
+	      return false;
+	    } else if (val === "null") {
+	      return null;
+	    } else if (val === "undefined") {
+	      return void 0;
+	    } else if (val.match(/^\d+$/)) {
+	      return Number(val);
+	    } else {
+	      return val;
+	    }
+	  };
+	})(this);
+
 	module.exports = Test = (function() {
 	  function Test() {}
 
@@ -10648,7 +10684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      func = testObj[key] || Test[key];
 	      arg = !value || value.split(",");
 	      if (typeof func === "function") {
-	        func(arg.length === 1 ? arg[0] : arg);
+	        func(getValue(arg));
 	      }
 	      if (typeof actionFuncs[key] === "function") {
 	        actionFuncs[key](value);
@@ -11106,7 +11142,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 15 */,
 /* 16 */,
 /* 17 */,
-/* 18 */
+/* 18 */,
+/* 19 */
 /***/ function(module, exports) {
 
 	var Parser;
@@ -11130,7 +11167,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var name, paramMode, path, patternStr, patterns, ref, ref1, toggleMode;
 	    ref = str.match(/(.*)\[(.+)\]$/) || [], toggleMode = ref[0], name = ref[1], patternStr = ref[2];
 	    if (toggleMode) {
-	      patterns = patternStr.split(/\s*,\s*/).map(function(str) {
+	      patterns = patternStr.split(/\s*\|\s*/).map(function(str) {
 	        var paramMode, strInfo;
 	        strInfo = Parser.parseStr(str);
 	        paramMode = paramMode || strInfo.paramMode;
@@ -11180,9 +11217,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          } else {
 	            keyInfo = Parser.getStrInfo(key);
 	            valueInfo = Parser.getStrInfo(value);
-	            testUrl = testUrl.replace(/^\//, "") + ("/" + keyInfo.path);
-	            testName = testName.replace(/^\//, "") + ("/" + keyInfo.name);
-	            mockUrl = "?path=" + valueInfo.path + "#" + testUrl;
+	            testUrl = (testUrl + ("/" + keyInfo.path)).replace(/^\//, "");
+	            testName = (testName + ("/" + keyInfo.name)).replace(/^\//, "");
+	            mockUrl = valueInfo.path + "#" + testUrl;
 	            mockName = valueInfo.name;
 	            testUrl = "?path=" + testUrl;
 	            return taskList.push({
@@ -11206,15 +11243,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 19 */,
-/* 20 */
+/* 20 */,
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $, Parser, test;
 
 	$ = __webpack_require__(5);
 
-	Parser = __webpack_require__(18);
+	Parser = __webpack_require__(19);
 
 	test = {
 	  params1: (function(_this) {
@@ -11261,10 +11298,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	  タスクリスト一覧: (function(_this) {
 	    return function() {
 	      var answerPattern, list, testPattern;
-	      testPattern = __webpack_require__(21);
+	      testPattern = __webpack_require__(22);
 	      list = Parser.getSingleTaskList(testPattern);
-	      answerPattern = __webpack_require__(22);
+	      answerPattern = __webpack_require__(23);
 	      return console.assert(JSON.stringify(list) === JSON.stringify(answerPattern));
+	    };
+	  })(this),
+	  int: (function(_this) {
+	    return function(value) {
+	      return console.assert(typeof value === "number");
+	    };
+	  })(this),
+	  bool: (function(_this) {
+	    return function(value) {
+	      return console.assert(value === false);
+	    };
+	  })(this),
+	  types: (function(_this) {
+	    return function(arg) {
+	      var key, value;
+	      key = arg[0], value = arg[1];
+	      console.assert((typeof key) === "number");
+	      return console.assert((typeof value) === "boolean");
+	    };
+	  })(this),
+	  typecheck: (function(_this) {
+	    return function(arg) {
+	      var int, string;
+	      string = arg[0], int = arg[1];
+	      console.assert((typeof string) === "string");
+	      return console.assert((typeof int) === "number");
+	    };
+	  })(this),
+	  nullcheck: (function(_this) {
+	    return function(data) {
+	      return console.assert(data === null);
+	    };
+	  })(this),
+	  undefinedCheck: (function(_this) {
+	    return function(data) {
+	      return console.assert(data === void 0);
 	    };
 	  })(this)
 	};
@@ -11275,10 +11348,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	module.exports = {
+		"path23": "./index.html",
 		"am-coffee-time": {
 			"params1": "./index.html",
 			"_color": "./index.html",
@@ -11288,7 +11362,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			"_hide=.child": "./index.html",
 			"テストパターン(test=1)": "テストページ(./index.html)",
 			"タスクリスト一覧": "./index.html",
-			"多言語切り替え[日本語(lang=ja), 英語(lang=en), lang=zh-cn, lang=zh-tw]": {
+			"多言語切り替え[日本語(lang=ja) | 英語(lang=en) | lang=zh-cn | lang=zh-tw]": {
 				"test": "./index.html",
 				"_color=*": {
 					"_hide=div": "./index.html",
@@ -11368,81 +11442,87 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports) {
 
 	module.exports = [
 		{
+			"testName": "path23",
+			"testUrl": "?path=path23",
+			"mockName": "./index.html",
+			"mockUrl": "./index.html#path23"
+		},
+		{
 			"testName": "am-coffee-time/params1",
 			"testUrl": "?path=am-coffee-time/params1",
 			"mockName": "./index.html",
-			"mockUrl": "?path=./index.html#am-coffee-time/params1"
+			"mockUrl": "./index.html#am-coffee-time/params1"
 		},
 		{
 			"testName": "am-coffee-time/_color",
 			"testUrl": "?path=am-coffee-time/_color",
 			"mockName": "./index.html",
-			"mockUrl": "?path=./index.html#am-coffee-time/_color"
+			"mockUrl": "./index.html#am-coffee-time/_color"
 		},
 		{
 			"testName": "am-coffee-time/_color=.child",
 			"testUrl": "?path=am-coffee-time/_color=.child",
 			"mockName": "./index.html",
-			"mockUrl": "?path=./index.html#am-coffee-time/_color=.child"
+			"mockUrl": "./index.html#am-coffee-time/_color=.child"
 		},
 		{
 			"testName": "am-coffee-time/_border",
 			"testUrl": "?path=am-coffee-time/_border",
 			"mockName": "./index.html",
-			"mockUrl": "?path=./index.html#am-coffee-time/_border"
+			"mockUrl": "./index.html#am-coffee-time/_border"
 		},
 		{
 			"testName": "am-coffee-time/root",
 			"testUrl": "?path=am-coffee-time/root",
 			"mockName": "./index.html",
-			"mockUrl": "?path=./index.html#am-coffee-time/root"
+			"mockUrl": "./index.html#am-coffee-time/root"
 		},
 		{
 			"testName": "am-coffee-time/_hide=.child",
 			"testUrl": "?path=am-coffee-time/_hide=.child",
 			"mockName": "./index.html",
-			"mockUrl": "?path=./index.html#am-coffee-time/_hide=.child"
+			"mockUrl": "./index.html#am-coffee-time/_hide=.child"
 		},
 		{
 			"testName": "am-coffee-time/テストパターン",
 			"testUrl": "?path=am-coffee-time/test=1",
 			"mockName": "テストページ",
-			"mockUrl": "?path=./index.html#am-coffee-time/test=1"
+			"mockUrl": "./index.html#am-coffee-time/test=1"
 		},
 		{
 			"testName": "am-coffee-time/タスクリスト一覧",
 			"testUrl": "?path=am-coffee-time/タスクリスト一覧",
 			"mockName": "./index.html",
-			"mockUrl": "?path=./index.html#am-coffee-time/タスクリスト一覧"
+			"mockUrl": "./index.html#am-coffee-time/タスクリスト一覧"
 		},
 		{
 			"testName": "am-coffee-time/日本語/test",
 			"testUrl": "?path=am-coffee-time/lang=ja/test",
 			"mockName": "./index.html",
-			"mockUrl": "?path=./index.html#am-coffee-time/lang=ja/test"
+			"mockUrl": "./index.html#am-coffee-time/lang=ja/test"
 		},
 		{
 			"testName": "am-coffee-time/日本語/_color=*/_hide=div",
 			"testUrl": "?path=am-coffee-time/lang=ja/_color=*/_hide=div",
 			"mockName": "./index.html",
-			"mockUrl": "?path=./index.html#am-coffee-time/lang=ja/_color=*/_hide=div"
+			"mockUrl": "./index.html#am-coffee-time/lang=ja/_color=*/_hide=div"
 		},
 		{
 			"testName": "am-coffee-time/日本語/_color=*/テスト",
 			"testUrl": "?path=am-coffee-time/lang=ja/_color=*/test",
 			"mockName": "テスト",
-			"mockUrl": "?path=./index.html#am-coffee-time/lang=ja/_color=*/test"
+			"mockUrl": "./index.html#am-coffee-time/lang=ja/_color=*/test"
 		},
 		{
 			"testName": "am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6",
 			"testUrl": "?path=am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6",
 			"mockName": "./index.html",
-			"mockUrl": "?path=./index.html#am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6"
+			"mockUrl": "./index.html#am-coffee-time/test/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6/1/2/3/4/5/6"
 		}
 	];
 

@@ -46,45 +46,45 @@ module.exports =
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(30);
+	module.exports = __webpack_require__(10);
 
 
 /***/ },
 
-/***/ 9:
+/***/ 10:
 /***/ function(module, exports) {
 
-	module.exports = require("child_process");
+	var Status,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-/***/ },
-
-/***/ 30:
-/***/ function(module, exports, __webpack_require__) {
-
-	var CmdExe, exec;
-
-	exec = __webpack_require__(9).exec;
-
-	module.exports = CmdExe = (function() {
-	  function CmdExe(directory, path) {
-	    this.directory = directory;
-	    this.path = path != null ? path : "electron";
+	Status = (function() {
+	  function Status() {
+	    this.togglePublishFlg = bind(this.togglePublishFlg, this);
+	    this.toggleliveReloadFlg = bind(this.toggleliveReloadFlg, this);
+	    this.init = bind(this.init, this);
 	  }
 
-	  CmdExe.prototype.start = function() {
-	    var command, proc;
-	    command = "start " + this.directory + "\\electron.exe " + this.path;
-	    proc = exec(command, (function(_this) {
-	      return function(e, out, err) {
-	        return console.log(e, out, err);
-	      };
-	    })(this));
-	    return console.log("command - \n" + command);
+	  Status.prototype.init = function() {
+	    this.publishFlg = true;
+	    this;
+	    return riot.observable(this);
 	  };
 
-	  return CmdExe;
+	  Status.prototype.toggleliveReloadFlg = function() {
+	    window.ea.liveReloadFlg = !window.ea.liveReloadFlg;
+	    return this.trigger("update");
+	  };
+
+	  Status.prototype.togglePublishFlg = function() {
+	    this.publishFlg = !this.publishFlg;
+	    return this.trigger("update");
+	  };
+
+	  return Status;
 
 	})();
+
+	module.exports = new Status().init();
 
 
 /***/ }

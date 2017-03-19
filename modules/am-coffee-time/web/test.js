@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(26);
+	module.exports = __webpack_require__(27);
 
 
 /***/ },
@@ -10576,7 +10576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 6:
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
+	var $, RE_STR, Test, actionFuncs, getRandomColor, getValue, jquery_stylesheet, parseValue;
 
 	$ = __webpack_require__(5);
 
@@ -10633,6 +10633,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	  })(this)
 	};
 
+	getValue = (function(_this) {
+	  return function(arg) {
+	    if (typeof arg !== "object") {
+	      return arg;
+	    }
+	    arg = arg.map(parseValue);
+	    if (arg.length === 1) {
+	      return arg[0];
+	    } else {
+	      return arg;
+	    }
+	  };
+	})(this);
+
+	RE_STR = /^"(.*)"$/;
+
+	parseValue = (function(_this) {
+	  return function(val) {
+	    if (RE_STR.test(val)) {
+	      return val.match(RE_STR)[1];
+	    } else if (val === "true") {
+	      return true;
+	    } else if (val === "false") {
+	      return false;
+	    } else if (val === "null") {
+	      return null;
+	    } else if (val === "undefined") {
+	      return void 0;
+	    } else if (val.match(/^\d+$/)) {
+	      return Number(val);
+	    } else {
+	      return val;
+	    }
+	  };
+	})(this);
+
 	module.exports = Test = (function() {
 	  function Test() {}
 
@@ -10651,7 +10687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      func = testObj[key] || Test[key];
 	      arg = !value || value.split(",");
 	      if (typeof func === "function") {
-	        func(arg.length === 1 ? arg[0] : arg);
+	        func(getValue(arg));
 	      }
 	      if (typeof actionFuncs[key] === "function") {
 	        actionFuncs[key](value);
@@ -11101,69 +11137,43 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 26:
+/***/ 27:
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, AutoEvent, Test, actions, autoEvent;
+	'use strict';
 
-	Test = __webpack_require__(6);
-
-	AutoEvent = __webpack_require__(3);
-
-	autoEvent = new AutoEvent();
-
-	$ = (function(_this) {
-	  return function(selector) {
-	    return document.querySelector(selector);
-	  };
-	})(this);
-
-	actions = {
-	  lang: (function(_this) {
-	    return function(type) {
-	      return autoEvent.wait(200).addEvent(function() {
-	        return $("before-login > span:first-child").innerHTML = ("<div>言語は " + type + " です</div>") + $("before-login > span:first-child").innerHTML;
-	      });
-	    };
-	  })(this),
-	  動作フロー確認用: (function(_this) {
-	    return function() {
-	      return console.log("動作フロー確認です");
-	    };
-	  })(this),
-	  結果: (function(_this) {
-	    return function(値) {
-	      if (値.match("成功")) {
-	        return console.assert(true);
-	      } else if (値.match("失敗")) {
-	        return console.assert(false, "失敗です");
-	      }
-	    };
-	  })(this),
-	  ID入力: (function(_this) {
-	    return function(value) {
-	      return autoEvent.wait(400).setValue("[name='id']", value);
-	    };
-	  })(this),
-	  PW入力: (function(_this) {
-	    return function(value) {
-	      return autoEvent.wait(400).setValue("[name='pw']", value).wait(400).click('[name="check"]').wait(400).addEvent(function() {
-	        return console.assert($("after-login"), "after-login not found");
-	      });
-	    };
-	  })(this)
+	var Test = __webpack_require__(6);
+	var AutoEvent = __webpack_require__(3);
+	var autoEvent = new AutoEvent();
+	var $ = function $(selector) {
+	  return document.querySelector(selector);
 	};
-
+	var actions = {
+	  lang: function lang(type) {
+	    autoEvent.wait(200).addEvent(function () {
+	      $('before-login > span:first-child').innerHTML = '<div>言語は #{type} です</div>' + $('before-login > span:first-child').innerHTML;
+	    });
+	  },
+	  動作フロー確認用: function _() {
+	    return console.log('動作フロー確認です');
+	  },
+	  結果: function _(値) {
+	    if (値.match('成功')) console.assert(true);else if (値.match('失敗')) console.assert(false, '失敗です');
+	  },
+	  ID入力: function ID(value) {
+	    autoEvent.wait(400).setValue('[name="id"]', value);
+	  },
+	  PW入力: function PW(value) {
+	    autoEvent.wait(400).setValue('[name="pw"]', value).wait(400).click('[name="check"]').wait(400).addEvent(function () {
+	      return console.assert($('after-login'), 'after-login not found');
+	    });
+	  }
+	};
 	autoEvent.register();
-
 	Test.start(actions);
-
-	autoEvent.start(1, (function(_this) {
-	  return function() {
-	    return console.info("finished");
-	  };
-	})(this));
-
+	autoEvent.start(1, function () {
+	  return console.info('finished');
+	});
 
 /***/ }
 

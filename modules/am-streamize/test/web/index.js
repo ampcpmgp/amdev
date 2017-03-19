@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(82);
+	module.exports = __webpack_require__(84);
 
 
 /***/ },
@@ -10576,7 +10576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 6:
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
+	var $, RE_STR, Test, actionFuncs, getRandomColor, getValue, jquery_stylesheet, parseValue;
 
 	$ = __webpack_require__(5);
 
@@ -10633,6 +10633,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	  })(this)
 	};
 
+	getValue = (function(_this) {
+	  return function(arg) {
+	    if (typeof arg !== "object") {
+	      return arg;
+	    }
+	    arg = arg.map(parseValue);
+	    if (arg.length === 1) {
+	      return arg[0];
+	    } else {
+	      return arg;
+	    }
+	  };
+	})(this);
+
+	RE_STR = /^"(.*)"$/;
+
+	parseValue = (function(_this) {
+	  return function(val) {
+	    if (RE_STR.test(val)) {
+	      return val.match(RE_STR)[1];
+	    } else if (val === "true") {
+	      return true;
+	    } else if (val === "false") {
+	      return false;
+	    } else if (val === "null") {
+	      return null;
+	    } else if (val === "undefined") {
+	      return void 0;
+	    } else if (val.match(/^\d+$/)) {
+	      return Number(val);
+	    } else {
+	      return val;
+	    }
+	  };
+	})(this);
+
 	module.exports = Test = (function() {
 	  function Test() {}
 
@@ -10651,7 +10687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      func = testObj[key] || Test[key];
 	      arg = !value || value.split(",");
 	      if (typeof func === "function") {
-	        func(arg.length === 1 ? arg[0] : arg);
+	        func(getValue(arg));
 	      }
 	      if (typeof actionFuncs[key] === "function") {
 	        actionFuncs[key](value);
@@ -11104,18 +11140,18 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 10:
 /***/ function(module, exports, __webpack_require__) {
 
-	/* Riot v3.0.7, @license MIT */
+	/* Riot v3.3.2, @license MIT */
 	(function (global, factory) {
-	   true ? factory(exports) :
-	  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	  (factory((global.riot = global.riot || {})));
+		 true ? factory(exports) :
+		typeof define === 'function' && define.amd ? define(['exports'], factory) :
+		(factory((global.riot = global.riot || {})));
 	}(this, (function (exports) { 'use strict';
 
 	var __TAGS_CACHE = [];
 	var __TAG_IMPL = {};
 	var GLOBAL_MIXIN = '__global_mixin';
 	var ATTRS_PREFIX = 'riot-';
-	var REF_DIRECTIVES = ['data-ref', 'ref'];
+	var REF_DIRECTIVES = ['ref', 'data-ref'];
 	var IS_DIRECTIVE = 'data-is';
 	var CONDITIONAL_DIRECTIVE = 'if';
 	var LOOP_DIRECTIVE = 'each';
@@ -11132,20 +11168,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var RE_SPECIAL_TAGS = /^(?:t(?:body|head|foot|[rhd])|caption|col(?:group)?|opt(?:ion|group))$/;
 	var RE_SPECIAL_TAGS_NO_OPTION = /^(?:t(?:body|head|foot|[rhd])|caption|col(?:group)?)$/;
 	var RE_RESERVED_NAMES = /^(?:_(?:item|id|parent)|update|root|(?:un)?mount|mixin|is(?:Mounted|Loop)|tags|refs|parent|opts|trigger|o(?:n|ff|ne))$/;
-	var RE_SVG_TAGS = /^(altGlyph|animate(?:Color)?|circle|clipPath|defs|ellipse|fe(?:Blend|ColorMatrix|ComponentTransfer|Composite|ConvolveMatrix|DiffuseLighting|DisplacementMap|Flood|GaussianBlur|Image|Merge|Morphology|Offset|SpecularLighting|Tile|Turbulence)|filter|font|foreignObject|g(?:lyph)?(?:Ref)?|image|line(?:arGradient)?|ma(?:rker|sk)|missing-glyph|path|pattern|poly(?:gon|line)|radialGradient|rect|stop|svg|switch|symbol|text(?:Path)?|tref|tspan|use)$/;
 	var RE_HTML_ATTRS = /([-\w]+) ?= ?(?:"([^"]*)|'([^']*)|({[^}]*}))/g;
 	var CASE_SENSITIVE_ATTRIBUTES = { 'viewbox': 'viewBox' };
 	var RE_BOOL_ATTRS = /^(?:disabled|checked|readonly|required|allowfullscreen|auto(?:focus|play)|compact|controls|default|formnovalidate|hidden|ismap|itemscope|loop|multiple|muted|no(?:resize|shade|validate|wrap)?|open|reversed|seamless|selected|sortable|truespeed|typemustmatch)$/;
 	var IE_VERSION = (WIN && WIN.document || {}).documentMode | 0;
-
-	/**
-	 * Check whether a DOM node must be considered a part of an svg document
-	 * @param   { String } name -
-	 * @returns { Boolean } -
-	 */
-	function isSVGTag(name) {
-	  return RE_SVG_TAGS.test(name)
-	}
 
 	/**
 	 * Check Check if the passed argument is undefined
@@ -11232,7 +11258,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	var check = Object.freeze({
-		isSVGTag: isSVGTag,
 		isBoolAttr: isBoolAttr,
 		isFunction: isFunction,
 		isObject: isObject,
@@ -11283,29 +11308,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Create a generic DOM node
 	 * @param   { String } name - name of the DOM node we want to create
-	 * @param   { Boolean } isSvg - should we use a SVG as parent node?
 	 * @returns { Object } DOM node just created
 	 */
-	function mkEl(name, isSvg) {
-	  return isSvg ?
-	    document.createElementNS('http://www.w3.org/2000/svg', 'svg') :
-	    document.createElement(name)
-	}
-
-	/**
-	 * Get the outer html of any DOM node SVGs included
-	 * @param   { Object } el - DOM node to parse
-	 * @returns { String } el.outerHTML
-	 */
-	function getOuterHTML(el) {
-	  if (el.outerHTML)
-	    { return el.outerHTML }
-	  // some browsers do not support outerHTML on the SVGs tags
-	  else {
-	    var container = mkEl('div');
-	    container.appendChild(el.cloneNode(true));
-	    return container.innerHTML
-	  }
+	function mkEl(name) {
+	  return document.createElement(name)
 	}
 
 	/**
@@ -11313,6 +11319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param { Object } container - DOM node where we'll inject new html
 	 * @param { String } html - html to inject
 	 */
+	/* istanbul ignore next */
 	function setInnerHTML(container, html) {
 	  if (!isUndefined(container.innerHTML))
 	    { container.innerHTML = html; }
@@ -11409,7 +11416,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		createFrag: createFrag,
 		createDOMPlaceholder: createDOMPlaceholder,
 		mkEl: mkEl,
-		getOuterHTML: getOuterHTML,
 		setInnerHTML: setInnerHTML,
 		remAttr: remAttr,
 		getAttr: getAttr,
@@ -11434,6 +11440,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // replace any user node or insert the new one into the head
 	    var userNode = $('style[type=riot]');
+	    /* istanbul ignore next */
 	    if (userNode) {
 	      if (userNode.id) { newNode.id = userNode.id; }
 	      userNode.parentNode.replaceChild(newNode, userNode);
@@ -11470,6 +11477,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var style = Object.keys(byName)
 	      .map(function(k) { return byName[k] })
 	      .concat(remainder).join('\n');
+	    /* istanbul ignore next */
 	    if (cssTextProp) { cssTextProp.cssText = style; }
 	    else { styleNode.innerHTML = style; }
 	  }
@@ -11477,7 +11485,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * The riot template engine
-	 * @version v3.0.1
+	 * @version v3.0.3
 	 */
 	/**
 	 * riot.util.brackets
@@ -11490,6 +11498,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* global riot */
 
+	/* istanbul ignore next */
 	var brackets = (function (UNDEF) {
 
 	  var
@@ -11497,7 +11506,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    R_MLCOMMS = /\/\*[^*]*\*+(?:[^*\/][^*]*\*+)*\//g,
 
-	    R_STRINGS = /"[^"\\]*(?:\\[\S\s][^"\\]*)*"|'[^'\\]*(?:\\[\S\s][^'\\]*)*'/g,
+	    R_STRINGS = /"[^"\\]*(?:\\[\S\s][^"\\]*)*"|'[^'\\]*(?:\\[\S\s][^'\\]*)*'|`[^`\\]*(?:\\[\S\s][^`\\]*)*`/g,
 
 	    S_QBLOCKS = R_STRINGS.source + '|' +
 	      /(?:\breturn\s+|(?:[$\w\)\]]|\+\+|--)\s*(\/)(?![*\/]))/.source + '|' +
@@ -11694,6 +11703,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * tmpl.loopKeys - Get the keys for an 'each' loop (used by `_each`)
 	 */
 
+	/* istanbul ignore next */
 	var tmpl = (function () {
 
 	  var _cache = {};
@@ -11716,7 +11726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function _logErr (err, ctx) {
 
 	    err.riotData = {
-	      tagName: ctx && ctx.root && ctx.root.tagName,
+	      tagName: ctx && ctx.__ && ctx.__.tagName,
 	      _riot_id: ctx && ctx._riot_id  //eslint-disable-line camelcase
 	    };
 
@@ -11726,7 +11736,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      typeof console.error === 'function'
 	    ) {
 	      if (err.riotData.tagName) {
-	        console.error('Riot template error thrown in the <%s> tag', err.riotData.tagName.toLowerCase());
+	        console.error('Riot template error thrown in the <%s> tag', err.riotData.tagName);
 	      }
 	      console.error(err);
 	    }
@@ -11897,12 +11907,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return expr
 	  }
 
-	  _tmpl.version = brackets.version = 'v3.0.1';
+	  _tmpl.version = brackets.version = 'v3.0.3';
 
 	  return _tmpl
 
 	})();
 
+	/* istanbul ignore next */
 	var observable$1 = function(el) {
 
 	  /**
@@ -12037,12 +12048,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function each(list, fn) {
 	  var len = list ? list.length : 0;
-
-	  for (var i = 0, el; i < len; ++i) {
-	    el = list[i];
-	    // return false -> current item was removed by fn during the loop
-	    if (fn(el, i) === false)
-	      { i--; }
+	  var i = 0;
+	  for (; i < len; ++i) {
+	    fn(list[i], i);
 	  }
 	  return list
 	}
@@ -12054,7 +12062,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns { Boolean } -
 	 */
 	function contains(array, item) {
-	  return ~array.indexOf(item)
+	  return array.indexOf(item) !== -1
 	}
 
 	/**
@@ -12127,6 +12135,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		extend: extend
 	});
 
+	var settings$1 = extend(Object.create(brackets.settings), {
+	  skipAnonymousTags: true
+	});
+
 	var EVENTS_PREFIX_REGEX = /^on/;
 
 	/**
@@ -12136,18 +12148,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param   { Object } e - event object
 	 */
 	function handleEvent(dom, handler, e) {
-	  var ptag = this._parent,
-	    item = this._item;
+	  var ptag = this.__.parent,
+	    item = this.__.item;
 
 	  if (!item)
 	    { while (ptag && !item) {
-	      item = ptag._item;
-	      ptag = ptag._parent;
+	      item = ptag.__.item;
+	      ptag = ptag.__.parent;
 	    } }
 
 	  // override the event properties
+	  /* istanbul ignore next */
 	  if (isWritable(e, 'currentTarget')) { e.currentTarget = dom; }
+	  /* istanbul ignore next */
 	  if (isWritable(e, 'target')) { e.target = e.srcElement; }
+	  /* istanbul ignore next */
 	  if (isWritable(e, 'which')) { e.which = e.charCode || e.keyCode; }
 
 	  e.item = item;
@@ -12172,11 +12187,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var eventName,
 	    cb = handleEvent.bind(tag, dom, handler);
 
-	  if (!dom.addEventListener) {
-	    dom[name] = cb;
-	    return
-	  }
-
 	  // avoid to bind twice the same event
 	  dom[name] = null;
 
@@ -12200,34 +12210,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function updateDataIs(expr, parent) {
 	  var tagName = tmpl(expr.value, parent),
-	    conf;
+	    conf, isVirtual, head, ref;
 
 	  if (expr.tag && expr.tagName === tagName) {
 	    expr.tag.update();
 	    return
 	  }
 
+	  isVirtual = expr.dom.tagName === 'VIRTUAL';
 	  // sync _parent to accommodate changing tagnames
 	  if (expr.tag) {
-	    each(expr.attrs, function (a) { return setAttr(expr.tag.root, a.name, a.value); });
+
+	    // need placeholder before unmount
+	    if(isVirtual) {
+	      head = expr.tag.__.head;
+	      ref = createDOMPlaceholder();
+	      head.parentNode.insertBefore(ref, head);
+	    }
+
 	    expr.tag.unmount(true);
 	  }
 
 	  expr.impl = __TAG_IMPL[tagName];
 	  conf = {root: expr.dom, parent: parent, hasImpl: true, tagName: tagName};
 	  expr.tag = initChildTag(expr.impl, conf, expr.dom.innerHTML, parent);
+	  each(expr.attrs, function (a) { return setAttr(expr.tag.root, a.name, a.value); });
 	  expr.tagName = tagName;
 	  expr.tag.mount();
+	  if (isVirtual)
+	    { makeReplaceVirtual(expr.tag, ref || expr.tag.root); } // root exist first time, after use placeholder
 
 	  // parent is the placeholder tag, not the dynamic tag so clean up
-	  parent.on('unmount', function () {
+	  parent.__.onUnmount = function() {
 	    var delName = expr.tag.opts.dataIs,
 	      tags = expr.tag.parent.tags,
-	      _tags = expr.tag._parent.tags;
+	      _tags = expr.tag.__.parent.tags;
 	    arrayishRemove(tags, delName, expr.tag);
 	    arrayishRemove(_tags, delName, expr.tag);
 	    expr.tag.unmount();
-	  });
+	  };
 	}
 
 	/**
@@ -12237,6 +12258,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns { undefined }
 	 */
 	function updateExpression(expr) {
+	  if (this.root && getAttr(this.root,'virtualized')) { return }
+
 	  var dom = expr.dom,
 	    attrName = expr.attr,
 	    isToggle = contains([SHOW_DIRECTIVE, HIDE_DIRECTIVE], attrName),
@@ -12259,11 +12282,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      expr.mount();
 
-	      if (isVirtual) {
-	        var frag = document.createDocumentFragment();
-	        makeVirtual.call(expr, frag);
-	        expr.root.parentElement.replaceChild(frag, expr.root);
-	      }
+	      if (isVirtual)
+	        { makeReplaceVirtual(expr, expr.root); }
+
 	    }
 	    return
 	  }
@@ -12324,13 +12345,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (value != null)
 	      { setAttr(dom, attrName, value); }
 	  } else {
-	    // <select> <option selected={true}> </select>
-	    if (attrName === 'selected' && parent && /^(SELECT|OPTGROUP)$/.test(parent.tagName) && value) {
-	      parent.value = dom.value;
-	    } if (expr.bool) {
+	    if (expr.bool) {
 	      dom[attrName] = value;
 	      if (!value) { return }
-	    } if (value === 0 || value && typeof value !== T_OBJECT) {
+	    }
+
+	    if (value === 0 || value && typeof value !== T_OBJECT) {
 	      setAttr(dom, attrName, value);
 	    }
 	  }
@@ -12421,10 +12441,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      remAttr(this.dom, this.attr);
 	    } else {
 	      // add it to the refs of parent tag (this behavior was changed >=3.0)
-	      if (customParent) { arrayishAdd(customParent.refs, value, tagOrDom); }
+	      if (customParent) { arrayishAdd(
+	        customParent.refs,
+	        value,
+	        tagOrDom,
+	        // use an array if it's a looped node and the ref is not an expression
+	        null,
+	        this.parent.__.index
+	      ); }
 	      // set the actual DOM attr
 	      setAttr(this.dom, this.attr, value);
 	    }
+
 	    this.value = value;
 	    this.firstRun = false;
 	  },
@@ -12462,19 +12490,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Unmount the redundant tags
 	 * @param   { Array } items - array containing the current items to loop
 	 * @param   { Array } tags - array containing all the children tags
-	 * @param   { String } tagName - key used to identify the type of tag
 	 */
-	function unmountRedundant(items, tags, tagName) {
+	function unmountRedundant(items, tags) {
 	  var i = tags.length,
-	    j = items.length,
-	    t;
+	    j = items.length;
 
 	  while (i > j) {
-	    t = tags[--i];
-	    tags.splice(i, 1);
-	    t.unmount();
-	    arrayishRemove(t.parent, tagName, t, true);
+	    i--;
+	    remove.apply(tags[i], [tags, i]);
 	  }
+	}
+
+
+	/**
+	 * Remove a child tag
+	 * @this Tag
+	 * @param   { Array } tags - tags collection
+	 * @param   { Number } i - index of the tag to remove
+	 */
+	function remove(tags, i) {
+	  tags.splice(i, 1);
+	  this.unmount();
+	  arrayishRemove(this.parent, this, this.__.tagName, true);
 	}
 
 	/**
@@ -12486,13 +12523,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var this$1 = this;
 
 	  each(Object.keys(this.tags), function (tagName) {
-	    var tag = this$1.tags[tagName];
-	    if (isArray(tag))
-	      { each(tag, function (t) {
-	        moveChildTag.apply(t, [tagName, i]);
-	      }); }
-	    else
-	      { moveChildTag.apply(tag, [tagName, i]); }
+	    moveChildTag.apply(this$1.tags[tagName], [tagName, i]);
 	  });
 	}
 
@@ -12551,10 +12582,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var mustReorder = typeof getAttr(dom, LOOP_NO_REORDER_DIRECTIVE) !== T_STRING || remAttr(dom, LOOP_NO_REORDER_DIRECTIVE),
 	    tagName = getTagName(dom),
-	    impl = __TAG_IMPL[tagName] || { tmpl: getOuterHTML(dom) },
-	    useRoot = RE_SPECIAL_TAGS.test(tagName),
+	    impl = __TAG_IMPL[tagName],
 	    parentNode = dom.parentNode,
-	    ref = createDOMPlaceholder(),
+	    placeholder = createDOMPlaceholder(),
 	    child = getTag(dom),
 	    ifExpr = getAttr(dom, CONDITIONAL_DIRECTIVE),
 	    tags = [],
@@ -12571,16 +12601,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (ifExpr) { remAttr(dom, CONDITIONAL_DIRECTIVE); }
 
 	  // insert a marked where the loop tags will be injected
-	  parentNode.insertBefore(ref, dom);
+	  parentNode.insertBefore(placeholder, dom);
 	  parentNode.removeChild(dom);
 
 	  expr.update = function updateEach() {
-
 	    // get the new items collection
 	    var items = tmpl(expr.val, parent),
 	      frag = createFrag(),
-	      isObject$$1 = !isArray(items),
-	      root = ref.parentNode;
+	      isObject$$1 = !isArray(items) && !isString(items),
+	      root = placeholder.parentNode;
 
 	    // object loop. any changes cause full redraw
 	    if (isObject$$1) {
@@ -12608,26 +12637,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var
 	        doReorder = mustReorder && typeof item === T_OBJECT && !hasKeys,
 	        oldPos = oldItems.indexOf(item),
-	        isNew = !~oldPos,
-	        mustAppend = i <= tags.length,
+	        isNew = oldPos === -1,
 	        pos = !isNew && doReorder ? oldPos : i,
 	        // does a tag exist in this position?
-	        tag = tags[pos];
+	        tag = tags[pos],
+	        mustAppend = i >= oldItems.length,
+	        mustCreate =  doReorder && isNew || !doReorder && !tag;
 
 	      item = !hasKeys && expr.key ? mkitem(expr, item, i) : item;
 
 	      // new tag
-	      if (
-	        doReorder && isNew // by default we always try to reorder the DOM elements
-	        ||
-	        !doReorder && !tag // with no-reorder we just update the old tags
-	      ) {
+	      if (mustCreate) {
 	        tag = new Tag$1(impl, {
 	          parent: parent,
 	          isLoop: isLoop,
 	          isAnonymous: isAnonymous,
-	          root: useRoot ? root : dom.cloneNode(),
-	          item: item
+	          tagName: tagName,
+	          root: dom.cloneNode(isAnonymous),
+	          item: item,
+	          index: i,
 	        }, dom.innerHTML);
 
 	        // mount the tag
@@ -12641,21 +12669,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!mustAppend) { oldItems.splice(i, 0, item); }
 	        tags.splice(i, 0, tag);
 	        if (child) { arrayishAdd(parent.tags, tagName, tag, true); }
-	        pos = i; // handled here so no move
-	      } else { tag.update(item); }
-
-	      // reorder the tag if it's not located in its previous position
-	      if (pos !== i && doReorder) {
-	        // #closes 2040
-	        if (contains(items, oldItems[i])) {
+	      } else if (pos !== i && doReorder) {
+	        // move
+	        if (contains(items, oldItems[pos])) {
 	          move.apply(tag, [root, tags[i], isVirtual]);
+	          // move the old tag instance
+	          tags.splice(i, 0, tags.splice(pos, 1)[0]);
+	          // move the old item
+	          oldItems.splice(i, 0, oldItems.splice(pos, 1)[0]);
 	        }
+
 	        // update the position attribute if it exists
 	        if (expr.pos) { tag[expr.pos] = i; }
-	        // move the old tag instance
-	        tags.splice(i, 0, tags.splice(pos, 1)[0]);
-	        // move the old item
-	        oldItems.splice(i, 0, oldItems.splice(pos, 1)[0]);
+
 	        // if the loop tags are not custom
 	        // we need to move all their custom tags into the right position
 	        if (!child && tag.tags) { moveNestedTags.call(tag, i); }
@@ -12663,18 +12689,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // cache the original item to use it in the events bound to this node
 	      // and its children
-	      tag._item = item;
-	      // cache the real parent tag internally
-	      defineProperty(tag, '_parent', parent);
+	      tag.__.item = item;
+	      tag.__.index = i;
+	      tag.__.parent = parent;
+
+	      if (!mustCreate) { tag.update(item); }
 	    });
 
 	    // remove the redundant tags
-	    unmountRedundant(items, tags, tagName);
+	    unmountRedundant(items, tags);
 
 	    // clone the items array
 	    oldItems = items.slice();
 
-	    root.insertBefore(frag, ref);
+	    root.insertBefore(frag, placeholder);
 	  };
 
 	  expr.unmount = function() {
@@ -12707,8 +12735,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (type !== 1) { return ctx } // not an element
 
+	    var isVirtual = dom.tagName === 'VIRTUAL';
+
 	    // loop. each does it's own thing (for now)
 	    if (attr = getAttr(dom, LOOP_DIRECTIVE)) {
+	      if(isVirtual) { setAttr(dom, 'loopVirtual', true); } // ignore here, handled in _each
 	      parent.children.push(_each(dom, this$1, attr));
 	      return false
 	    }
@@ -12730,10 +12761,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // if this is a tag, stop traversing here.
 	    // we ignore the root, since parseExpressions is called while we're mounting that root
 	    tagImpl = getTag(dom);
+	    if(isVirtual) {
+	      if(getAttr(dom, 'virtualized')) {dom.parentElement.removeChild(dom); } // tag created, remove from dom
+	      if(!tagImpl && !getAttr(dom, 'virtualized') && !getAttr(dom, 'loopVirtual'))  // ok to create virtual tag
+	        { tagImpl = { tmpl: dom.outerHTML }; }
+	    }
+
 	    if (tagImpl && (dom !== root || mustIncludeRoot)) {
-	      var conf = {root: dom, parent: this$1, hasImpl: true};
-	      parent.children.push(initChildTag(tagImpl, conf, dom.innerHTML, this$1));
-	      return false
+	      if(isVirtual && !getAttr(dom, IS_DIRECTIVE)) { // handled in update
+	        // can not remove attribute like directives
+	        // so flag for removal after creation to prevent maximum stack error
+	        setAttr(dom, 'virtualized', true);
+
+	        var tag = new Tag$1({ tmpl: dom.outerHTML },
+	          {root: dom, parent: this$1},
+	          dom.innerHTML);
+	        parent.children.push(tag); // no return, anonymous tag, keep parsing
+	      } else {
+	        var conf = {root: dom, parent: this$1, hasImpl: true};
+	        parent.children.push(initChildTag(tagImpl, conf, dom.innerHTML, this$1));
+	        return false
+	      }
 	    }
 
 	    // attribute expressions
@@ -12806,6 +12854,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // returns the immediate parent if tr/th/td/col is the only element, if not
 	  // returns the whole tree, as this can include additional elements
+	  /* istanbul ignore next */
 	  if (select) {
 	    parent.selectedIndex = -1;  // for IE9, compatible w/current riot behavior
 	  } else {
@@ -12848,13 +12897,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param   { String } tmpl  - The template coming from the custom tag definition
 	 * @param   { String } html - HTML content that comes from the DOM element where you
 	 *           will mount the tag, mostly the original tag in the page
-	 * @param   { Boolean } checkSvg - flag needed to know if we need to force the svg rendering in case of loop nodes
 	 * @returns { HTMLElement } DOM element with _tmpl_ merged through `YIELD` with the _html_.
 	 */
-	function mkdom(tmpl, html, checkSvg) {
+	function mkdom(tmpl, html) {
 	  var match   = tmpl && tmpl.match(/^\s*<([-\w]+)/),
 	    tagName = match && match[1].toLowerCase(),
-	    el = mkEl(GENERIC, checkSvg && isSVGTag(tagName));
+	    el = mkEl(GENERIC);
 
 	  // replace all the yield tags with the tag inner html
 	  tmpl = replaceYield(tmpl, html);
@@ -12864,8 +12912,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    { el = specialTags(el, tmpl, tagName); }
 	  else
 	    { setInnerHTML(el, tmpl); }
-
-	  el.stub = true;
 
 	  return el
 	}
@@ -12942,14 +12988,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns { String } name/id of the tag just created
 	 */
 	function tag2$1(name, tmpl, css, attrs, fn) {
-	  if (css)
-	    { styleManager.add(css, name); }
+	  if (css) { styleManager.add(css, name); }
 
-	  var exists = !!__TAG_IMPL[name];
 	  __TAG_IMPL[name] = { name: name, tmpl: tmpl, attrs: attrs, fn: fn };
-
-	  if (exists && util.hotReloader)
-	    { util.hotReloader(name); }
 
 	  return name
 	}
@@ -12974,10 +13015,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        setAttr(root, IS_DIRECTIVE, tagName);
 	      }
 
-	      var tag$$1 = mountTo(root, riotTag || root.tagName.toLowerCase(), opts);
+	      var tag = mountTo(root, riotTag || root.tagName.toLowerCase(), opts);
 
-	      if (tag$$1)
-	        { tags.push(tag$$1); }
+	      if (tag)
+	        { tags.push(tag); }
 	    } else if (root.length)
 	      { each(root, pushTagsTo); } // assume nodeList
 	  }
@@ -13037,7 +13078,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Create a mixin that could be globally shared across all the tags
 	var mixins = {};
 	var globals = mixins[GLOBAL_MIXIN] = {};
-	var _id = 0;
+	var mixins_id = 0;
 
 	/**
 	 * Create/Return a mixin by its name
@@ -13049,7 +13090,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function mixin$1(name, mix, g) {
 	  // Unnamed global
 	  if (isObject(name)) {
-	    mixin$1(("__unnamed_" + (_id++)), name, true);
+	    mixin$1(("__unnamed_" + (mixins_id++)), name, true);
 	    return
 	  }
 
@@ -13074,12 +13115,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns { Array } all the tags instances
 	 */
 	function update$1() {
-	  return each(__TAGS_CACHE, function (tag$$1) { return tag$$1.update(); })
+	  return each(__TAGS_CACHE, function (tag) { return tag.update(); })
 	}
 
 	function unregister$1(name) {
 	  delete __TAG_IMPL[name];
 	}
+
+	var version = 'v3.3.2';
+
+
+	var core = Object.freeze({
+		Tag: Tag$2,
+		tag: tag$1,
+		tag2: tag2$1,
+		mount: mount$1,
+		mixin: mixin$1,
+		update: update$1,
+		unregister: unregister$1,
+		version: version
+	});
 
 	// counter to give a unique id to all the Tag instances
 	var __uid = 0;
@@ -13116,12 +13171,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param { String } innerHTML - html that eventually we need to inject in the tag
 	 */
 	function Tag$1(impl, conf, innerHTML) {
+	  if ( impl === void 0 ) impl = {};
+	  if ( conf === void 0 ) conf = {};
+
 
 	  var opts = extend({}, conf.opts),
 	    parent = conf.parent,
 	    isLoop = conf.isLoop,
-	    isAnonymous = conf.isAnonymous,
+	    isAnonymous = !!conf.isAnonymous,
+	    skipAnonymous = settings$1.skipAnonymousTags && isAnonymous,
 	    item = cleanUpData(conf.item),
+	    index = conf.index, // available only for the looped nodes
 	    instAttrs = [], // All attributes on the Tag when it's first parsed
 	    implAttrs = [], // expressions on this type of Tag
 	    expressions = [],
@@ -13132,35 +13192,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	    dom;
 
 	  // make this tag observable
-	  observable$1(this);
+	  if (!skipAnonymous) { observable$1(this); }
 	  // only call unmount if we have a valid __TAG_IMPL (has name property)
 	  if (impl.name && root._tag) { root._tag.unmount(true); }
 
 	  // not yet mounted
 	  this.isMounted = false;
-	  root.isLoop = isLoop;
 
-	  defineProperty(this, '_internal', {
+	  defineProperty(this, '__', {
 	    isAnonymous: isAnonymous,
 	    instAttrs: instAttrs,
 	    innerHTML: innerHTML,
+	    tagName: tagName,
+	    index: index,
+	    isLoop: isLoop,
 	    // these vars will be needed only for the virtual tags
 	    virts: [],
 	    tail: null,
-	    head: null
+	    head: null,
+	    parent: null,
+	    item: null
 	  });
 
 	  // create a unique id to this tag
 	  // it could be handy to use it also to improve the virtual dom rendering speed
 	  defineProperty(this, '_riot_id', ++__uid); // base 1 allows test !t._riot_id
-
-	  extend(this, { root: root, opts: opts }, item);
+	  defineProperty(this, 'root', root);
+	  extend(this, { opts: opts }, item);
 	  // protect the "tags" and "refs" property from being overridden
 	  defineProperty(this, 'parent', parent || null);
 	  defineProperty(this, 'tags', {});
 	  defineProperty(this, 'refs', {});
 
-	  dom = mkdom(impl.tmpl, innerHTML, isLoop);
+	  dom = isLoop && isAnonymous ? root : mkdom(impl.tmpl, innerHTML, isLoop);
 
 	  /**
 	   * Update the tag expressions and options
@@ -13168,19 +13232,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @returns { Tag } the current tag instance
 	   */
 	  defineProperty(this, 'update', function tagUpdate(data) {
-	    if (isFunction(this.shouldUpdate) && !this.shouldUpdate(data)) { return this }
+	    var nextOpts = {},
+	      canTrigger = this.isMounted && !skipAnonymous;
 
 	    // make sure the data passed will not override
 	    // the component core methods
 	    data = cleanUpData(data);
+	    extend(this, data);
+	    updateOpts.apply(this, [isLoop, parent, isAnonymous, nextOpts, instAttrs]);
+	    if (this.isMounted && isFunction(this.shouldUpdate) && !this.shouldUpdate(data, nextOpts)) { return this }
 
 	    // inherit properties from the parent, but only for isAnonymous tags
 	    if (isLoop && isAnonymous) { inheritFrom.apply(this, [this.parent, propsInSyncWithParent]); }
-	    extend(this, data);
-	    updateOpts.apply(this, [isLoop, parent, isAnonymous, opts, instAttrs]);
-	    if (this.isMounted) { this.trigger('update', data); }
+	    extend(opts, nextOpts);
+	    if (canTrigger) { this.trigger('update', data); }
 	    updateAllExpressions.call(this, expressions);
-	    if (this.isMounted) { this.trigger('updated'); }
+	    if (canTrigger) { this.trigger('updated'); }
 
 	    return this
 
@@ -13194,9 +13261,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var this$1 = this;
 
 	    each(arguments, function (mix) {
-	      var instance,
-	        props = [],
-	        obj;
+	      var instance, obj;
+	      var props = [];
+
+	      // properties blacklisted and will not be bound to the tag instance
+	      var propsBlacklist = ['init', '__proto__'];
 
 	      mix = isString(mix) ? mixin$1(mix) : mix;
 
@@ -13216,7 +13285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      each(props, function (key) {
 	        // bind methods to this
 	        // allow mixins to override other properties/parent mixins
-	        if (key !== 'init') {
+	        if (!contains(propsBlacklist, key)) {
 	          // check for getters/setters
 	          var descriptor = Object.getOwnPropertyDescriptor(instance, key) || Object.getOwnPropertyDescriptor(proto, key);
 	          var hasGetterSetter = descriptor && (descriptor.get || descriptor.set);
@@ -13263,16 +13332,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      else { setAttr(root, attr.name, attr.value); }
 	    }]);
 
-	    // children in loop should inherit from true parent
-	    if (this._parent && isAnonymous) { inheritFrom.apply(this, [this._parent, propsInSyncWithParent]); }
-
 	    // initialiation
 	    updateOpts.apply(this, [isLoop, parent, isAnonymous, opts, instAttrs]);
 
 	    // add global mixins
 	    var globalMixin = mixin$1(GLOBAL_MIXIN);
 
-	    if (globalMixin) {
+	    if (globalMixin && !skipAnonymous) {
 	      for (var i in globalMixin) {
 	        if (globalMixin.hasOwnProperty(i)) {
 	          this$1.mixin(globalMixin[i]);
@@ -13282,32 +13348,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (impl.fn) { impl.fn.call(this, opts); }
 
-	    this.trigger('before-mount');
+	    if (!skipAnonymous) { this.trigger('before-mount'); }
 
 	    // parse layout after init. fn may calculate args for nested custom tags
-	    parseExpressions.apply(this, [dom, expressions, false]);
+	    parseExpressions.apply(this, [dom, expressions, isAnonymous]);
 
 	    this.update(item);
 
-	    if (isLoop && isAnonymous) {
-	      // update the root attribute for the looped elements
-	      this.root = root = dom.firstChild;
-	    } else {
+	    if (!isAnonymous) {
 	      while (dom.firstChild) { root.appendChild(dom.firstChild); }
-	      if (root.stub) { root = parent.root; }
 	    }
 
 	    defineProperty(this, 'root', root);
-	    this.isMounted = true;
+	    defineProperty(this, 'isMounted', true);
+
+	    if (skipAnonymous) { return }
 
 	    // if it's not a child tag we can trigger its mount event
-	    if (!this.parent || this.parent.isMounted) {
+	    if (!this.parent) {
 	      this.trigger('mount');
 	    }
-	    // otherwise we need to wait that the parent event gets triggered
-	    else { this.parent.one('mount', function () {
-	      this$1.trigger('mount');
-	    }); }
+	    // otherwise we need to wait that the parent "mount" or "updated" event gets triggered
+	    else {
+	      var p = getImmediateCustomParentTag(this.parent);
+	      p.one(!p.isMounted ? 'mount' : 'updated', function () {
+	        this$1.trigger('mount');
+	      });
+	    }
 
 	    return this
 
@@ -13326,7 +13393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      ptag,
 	      tagIndex = __TAGS_CACHE.indexOf(this);
 
-	    this.trigger('before-unmount');
+	    if (!skipAnonymous) { this.trigger('before-unmount'); }
 
 	    // clear all attributes coming from the mounted tag
 	    walkAttrs(impl.attrs, function (name) {
@@ -13336,10 +13403,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    // remove this tag instance from the global virtualDom variable
-	    if (~tagIndex)
+	    if (tagIndex !== -1)
 	      { __TAGS_CACHE.splice(tagIndex, 1); }
 
-	    if (p) {
+	    if (p || isVirtual) {
 	      if (parent) {
 	        ptag = getImmediateCustomParentTag(parent);
 
@@ -13356,16 +13423,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        while (el.firstChild) { el.removeChild(el.firstChild); }
 	      }
 
-	      if (!mustKeepRoot) {
-	        p.removeChild(el);
-	      } else {
-	        // the riot-tag and the data-is attributes aren't needed anymore, remove them
-	        remAttr(p, IS_DIRECTIVE);
-	      }
+	      if (p)
+	        { if (!mustKeepRoot) {
+	          p.removeChild(el);
+	        } else {
+	          // the riot-tag and the data-is attributes aren't needed anymore, remove them
+	          remAttr(p, IS_DIRECTIVE);
+	        } }
 	    }
 
-	    if (this._internal.virts) {
-	      each(this._internal.virts, function (v) {
+	    if (this.__.virts) {
+	      each(this.__.virts, function (v) {
 	        if (v.parentNode) { v.parentNode.removeChild(v); }
 	      });
 	    }
@@ -13374,9 +13442,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    unmountAll(expressions);
 	    each(instAttrs, function (a) { return a.expr && a.expr.unmount && a.expr.unmount(); });
 
-	    this.trigger('unmount');
-	    this.off('*');
-	    this.isMounted = false;
+	    // custom internal unmount function to avoid relying on the observable
+	    if (this.__.onUnmount) { this.__.onUnmount(); }
+
+	    if (!skipAnonymous) {
+	      this.trigger('unmount');
+	      this.off('*');
+	    }
+
+	    defineProperty(this, 'isMounted', false);
 
 	    delete this.root._tag;
 
@@ -13453,7 +13527,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // store the real parent tag
 	  // in some cases this could be different from the custom parent tag
 	  // for example in nested loops
-	  tag._parent = parent;
+	  tag.__.parent = parent;
 
 	  // add this tag to the custom parent tag
 	  arrayishAdd(ptag.tags, tagName, tag);
@@ -13476,7 +13550,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function getImmediateCustomParentTag(tag) {
 	  var ptag = tag;
-	  while (ptag._internal.isAnonymous) {
+	  while (ptag.__.isAnonymous) {
 	    if (!ptag.parent) { break }
 	    ptag = ptag.parent;
 	  }
@@ -13531,10 +13605,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param { String } key - property name
 	 * @param { Object } value - the value of the property to be set
 	 * @param { Boolean } ensureArray - ensure that the property remains an array
+	 * @param { Number } index - add the new item in a certain array position
 	 */
-	function arrayishAdd(obj, key, value, ensureArray) {
+	function arrayishAdd(obj, key, value, ensureArray, index) {
 	  var dest = obj[key];
 	  var isArr = isArray(dest);
+	  var hasIndex = !isUndefined(index);
 
 	  if (dest && dest === value) { return }
 
@@ -13542,9 +13618,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!dest && ensureArray) { obj[key] = [value]; }
 	  else if (!dest) { obj[key] = value; }
 	  // if it was an array and not yet set
-	  else if (!isArr || isArr && !contains(dest, value)) {
-	    if (isArr) { dest.push(value); }
-	    else { obj[key] = [dest, value]; }
+	  else {
+	    if (isArr) {
+	      var oldIndex = dest.indexOf(value);
+	      // this item never changed its position
+	      if (oldIndex === index) { return }
+	      // remove the item from its old position
+	      if (oldIndex !== -1) { dest.splice(oldIndex, 1); }
+	      // move or add the item
+	      if (hasIndex) {
+	        dest.splice(index, 0, value);
+	      } else {
+	        dest.push(value);
+	      }
+	    } else { obj[key] = [dest, value]; }
 	  }
 	}
 
@@ -13558,27 +13645,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	function arrayishRemove(obj, key, value, ensureArray) {
 	  if (isArray(obj[key])) {
-	    each(obj[key], function(item, i) {
-	      if (item === value) { obj[key].splice(i, 1); }
-	    });
+	    var index = obj[key].indexOf(value);
+	    if (index !== -1) { obj[key].splice(index, 1); }
 	    if (!obj[key].length) { delete obj[key]; }
 	    else if (obj[key].length === 1 && !ensureArray) { obj[key] = obj[key][0]; }
 	  } else
 	    { delete obj[key]; } // otherwise just delete the key
-	}
-
-	/**
-	 * Check whether a DOM node is in stub mode, useful for the riot 'if' directive
-	 * @param   { Object }  dom - DOM node we want to parse
-	 * @returns { Boolean } -
-	 */
-	function isInStub(dom) {
-	  while (dom) {
-	    if (dom.inStub)
-	      { return true }
-	    dom = dom.parentNode;
-	  }
-	  return false
 	}
 
 	/**
@@ -13599,8 +13671,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // clear the inner html
 	  root.innerHTML = '';
 
-	  var conf = { root: root, opts: opts };
-	  if (opts && opts.parent) { conf.parent = opts.parent; }
+	  var conf = extend({ root: root, opts: opts }, { parent: opts ? opts.parent : null });
 
 	  if (impl && root) { Tag$1.apply(tag, [impl, conf, innerHTML]); }
 
@@ -13613,6 +13684,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return tag
 	}
 
+	/**
+	 * makes a tag virtual and replaces a reference in the dom
+	 * @this Tag
+	 * @param { tag } the tag to make virtual
+	 * @param { ref } the dom reference location
+	 */
+	function makeReplaceVirtual(tag, ref) {
+	  var frag = createFrag();
+	  makeVirtual.call(tag, frag);
+	  ref.parentNode.replaceChild(frag, ref);
+	}
 
 	/**
 	 * Adds the elements for a virtual tag
@@ -13628,20 +13710,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    frag = createFrag(),
 	    sib, el;
 
-	  this._internal.head = this.root.insertBefore(head, this.root.firstChild);
-	  this._internal.tail = this.root.appendChild(tail);
+	  this.root.insertBefore(head, this.root.firstChild);
+	  this.root.appendChild(tail);
 
-	  el = this._internal.head;
+	  this.__.head = el = head;
+	  this.__.tail = tail;
 
 	  while (el) {
 	    sib = el.nextSibling;
 	    frag.appendChild(el);
-	    this$1._internal.virts.push(el); // hold for unmounting
+	    this$1.__.virts.push(el); // hold for unmounting
 	    el = sib;
 	  }
 
 	  if (target)
-	    { src.insertBefore(frag, target._internal.head); }
+	    { src.insertBefore(frag, target.__.head); }
 	  else
 	    { src.appendChild(frag); }
 	}
@@ -13655,7 +13738,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function moveVirtual(src, target) {
 	  var this$1 = this;
 
-	  var el = this._internal.head,
+	  var el = this.__.head,
 	    frag = createFrag(),
 	    sib;
 
@@ -13663,9 +13746,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    sib = el.nextSibling;
 	    frag.appendChild(el);
 	    el = sib;
-	    if (el === this$1._internal.tail) {
+	    if (el === this$1.__.tail) {
 	      frag.appendChild(el);
-	      src.insertBefore(frag, target._internal.head);
+	      src.insertBefore(frag, target.__.head);
 	      break
 	    }
 	  }
@@ -13703,8 +13786,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		cleanUpData: cleanUpData,
 		arrayishAdd: arrayishAdd,
 		arrayishRemove: arrayishRemove,
-		isInStub: isInStub,
 		mountTo: mountTo,
+		makeReplaceVirtual: makeReplaceVirtual,
 		makeVirtual: makeVirtual,
 		moveVirtual: moveVirtual,
 		selectTags: selectTags
@@ -13713,8 +13796,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Riot public api
 	 */
-	var settings = Object.create(brackets.settings);
-
+	var settings = settings$1;
 	var util = {
 	  tmpl: tmpl,
 	  brackets: brackets,
@@ -13738,19 +13820,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var unregister$$1 = unregister$1;
 	var observable = observable$1;
 
-	var riot$1 = {
+	var riot$1 = extend({}, core, {
+	  observable: observable$1,
 	  settings: settings,
 	  util: util,
-	  // core
-	  Tag: Tag$$1,
-	  tag: tag$$1,
-	  tag2: tag2$$1,
-	  mount: mount$$1,
-	  mixin: mixin$$1,
-	  update: update$$1,
-	  unregister: unregister$$1,
-	  observable: observable
-	};
+	});
 
 	exports.settings = settings;
 	exports.util = util;
@@ -13771,16 +13845,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 82:
+/***/ 84:
 /***/ function(module, exports, __webpack_require__) {
 
 	var mount, parser;
 
 	window.riot = __webpack_require__(10);
 
-	parser = __webpack_require__(83);
+	parser = __webpack_require__(85);
 
-	__webpack_require__(84);
+	__webpack_require__(86);
 
 	mount = (function(_this) {
 	  return function(flow) {
@@ -13794,7 +13868,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  simple: (function(_this) {
 	    return function() {
 	      var flow;
-	      flow = parser(__webpack_require__(85));
+	      flow = parser(__webpack_require__(87));
 	      return mount(flow);
 	    };
 	  })(this)
@@ -13803,7 +13877,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 83:
+/***/ 85:
 /***/ function(module, exports) {
 
 	var Sections, expressions,
@@ -13887,7 +13961,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 84:
+/***/ 86:
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -13905,7 +13979,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 85:
+/***/ 87:
 /***/ function(module, exports) {
 
 	module.exports = "[プロモーション画面]\r\nユーザーが見るものを書きます。\r\nユーザーがする行動を書きます。\r\n\r\n[ようこそ画面]\r\nユーザー情報を取得\r\nif ログインユーザー or ゲストユーザー\r\n  if ゲストユーザー\r\n    ゲスト機能を表示=>チャット画面\r\nelse if 管理者\r\n  =2段階認証=>管理画面\r\nelse\r\n  =>ログイン画面\r\n--\r\nユーザーがすること１ => その結果１\r\nユーザーがすること２ => その結果２\r\n\r\n[その結果１]\r\n結果\r\n\r\n[その結果２]\r\n結果\r\n\r\n[ログイン画面]\r\nログイン機能\r\nゲスト機能\r\n\r\n[チャット画面]\r\nチャット機能\r\n"

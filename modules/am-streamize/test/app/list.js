@@ -46,42 +46,42 @@ module.exports =
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(35);
+	module.exports = __webpack_require__(39);
 
 
 /***/ },
 
-/***/ 5:
+/***/ 12:
 /***/ function(module, exports) {
 
 	module.exports = require("riot");
 
 /***/ },
 
-/***/ 35:
+/***/ 39:
 /***/ function(module, exports, __webpack_require__) {
 
 	var generate, testcases;
 
-	generate = __webpack_require__(36);
+	generate = __webpack_require__(40);
 
-	testcases = __webpack_require__(43);
+	testcases = __webpack_require__(48);
 
 	generate(testcases);
 
 
 /***/ },
 
-/***/ 36:
+/***/ 40:
 /***/ function(module, exports, __webpack_require__) {
 
 	var Status;
 
-	window.riot = __webpack_require__(5);
+	window.riot = __webpack_require__(12);
 
-	Status = __webpack_require__(37);
+	Status = __webpack_require__(41);
 
-	__webpack_require__(38);
+	__webpack_require__(42);
 
 	module.exports = (function(_this) {
 	  return function(testPatterns, opts) {
@@ -100,7 +100,7 @@ module.exports =
 
 /***/ },
 
-/***/ 37:
+/***/ 41:
 /***/ function(module, exports) {
 
 	var Status;
@@ -120,6 +120,7 @@ module.exports =
 	    Status.executeIframe = [];
 	    Status.executablePath = {};
 	    Status.sumInit();
+	    Status.lastExecutePath = "";
 	    Status.paramMode = false;
 	    Status.showParameter = false;
 	    return riot.observable(Status);
@@ -137,6 +138,10 @@ module.exports =
 	    return Status.taskFinished() && Status.executeSum === Status.successSum;
 	  };
 
+	  Status.next = function() {
+	    return Status.trigger("finished");
+	  };
+
 	  return Status;
 
 	})();
@@ -148,19 +153,19 @@ module.exports =
 
 /***/ },
 
-/***/ 38:
+/***/ 42:
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	    var riot = __webpack_require__(5)
-	    __webpack_require__(39)
+	    var riot = __webpack_require__(12)
+	    __webpack_require__(43)
 
 	riot.tag2('test-list', '<test-status></test-status> <a onclick="{toRouteHash}">base</a> <a if="{Status.paramMode}" onclick="{toggleParameterMode}">toggle params</a> <recursive-item ref="item" data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe ref="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{Status.config}"></test-iframe>', 'test-list,[data-is="test-list"]{display:block;width:100%;background-color:white;font-size:14px} test-list>a,[data-is="test-list"]>a{border:1px solid #ccc} test-list a,[data-is="test-list"] a{color:blue;text-decoration:none;cursor:pointer;display:inline-block} test-list a:hover,[data-is="test-list"] a:hover{opacity:.4}', '', function(opts) {
 	var Status, bodyStyle, route;
 
-	Status = this.Status = __webpack_require__(37);
+	Status = this.Status = __webpack_require__(41);
 
-	route = __webpack_require__(41);
+	route = __webpack_require__(45);
 
 	bodyStyle = document.body.style;
 
@@ -173,7 +178,7 @@ module.exports =
 
 	this.check = (function(_this) {
 	  return function() {
-	    var executePath, params;
+	    var base, executePath, params, regex;
 	    _this.init();
 	    Status.sumInit();
 	    executePath = route.query().path;
@@ -182,9 +187,12 @@ module.exports =
 	    }
 	    executePath = decodeURIComponent(encodeURIComponent(decodeURIComponent(executePath)));
 	    if (!Status.executablePath[executePath]) {
-	      params = executePath.replace(/^[^#]+#/, "").split("/");
+	      regex = /^[^#]+#/;
+	      params = executePath.replace(regex, "").split("/");
 	      _this.refs.item.recursivelyCheck(params);
-	      Status.executablePath[executePath]();
+	      if (typeof (base = Status.executablePath)[executePath] === "function") {
+	        base[executePath]();
+	      }
 	      return;
 	      _this.instanceUrl = decodeURIComponent(executePath);
 	      _this.update();
@@ -244,7 +252,7 @@ module.exports =
 	});
 
 	riot.tag2('test-status', '<span class="test-count">{Status.successSum}/{Status.executeSum}</span> <span if="{Status.taskFinished()}" class="finished">✔︎</span> <span if="{Status.taskAllSuccess()}" class="all-success">💯</span>', 'test-status .finished,[data-is="test-status"] .finished{ color: #17e017; }', '', function(opts) {
-	this.Status = __webpack_require__(37).on("item-update", (function(_this) {
+	this.Status = __webpack_require__(41).on("item-update", (function(_this) {
 	  return function() {
 	    return _this.update();
 	  };
@@ -252,7 +260,9 @@ module.exports =
 	});
 
 	riot.tag2('recursive-item', '<list-line ref="lines" each="{data, key in list}" list="{this}" routing="{this.parent.opts.routing}"></list-line>', 'recursive-item,[data-is="recursive-item"]{ display: block; }', '', function(opts) {
-	var getLines;
+	var getLines, objectAssign;
+
+	objectAssign = __webpack_require__(46);
 
 	getLines = (function(_this) {
 	  return function() {
@@ -268,12 +278,10 @@ module.exports =
 
 	this.recursivelyCheck = (function(_this) {
 	  return function(params) {
-	    var lines;
-	    lines = getLines();
-	    return lines.forEach(function(line) {
+	    return getLines().forEach(function(line) {
 	      var copyParams;
 	      copyParams = [];
-	      Object.assign(copyParams, params);
+	      objectAssign(copyParams, params);
 	      return line.recursivelyCheckItem(copyParams);
 	    });
 	  };
@@ -281,24 +289,23 @@ module.exports =
 
 	this.recursivelyUpdate = (function(_this) {
 	  return function(routing) {
-	    getLines().forEach(function(line) {
+	    return getLines().forEach(function(line) {
 	      return line.recursivelyUpdate(routing);
 	    });
-	    return _this.update();
 	  };
 	})(this);
 
 	this.list = typeof opts.data === "object" ? opts.data : {};
 	});
 
-	riot.tag2('list-line', '<div class="line{isHover && \' hover\'}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error, warn: warn}"></span> <a class="tree" href="{routing}" onclick="{router}">{treeName}</a> <label each="{pattern, i in patterns}" class="{focus: pattern.focus}" data-id="{i}" onclick="{changePatternEvent}"> {pattern.name} </label> <a class="single" if="{url}" href="{routerExecutionPath}" onclick="{router}">{linkName}</a> </div> <recursive-item ref="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </div> <test-iframe ref="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{Status.config}"></test-iframe>', 'list-line .line>div>label,[data-is="list-line"] .line>div>label{cursor:pointer;border:1px solid rgba(255,128,0,0.6);padding:0 6px;text-align:center;display:inline-block} list-line .line>div>label.focus,[data-is="list-line"] .line>div>label.focus{background:#ff0} list-line .line>div>label:hover,[data-is="list-line"] .line>div>label:hover{opacity:.6} list-line .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[data-is="list-line"] .tree{color:#333;word-break:break-all} list-line .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .warn,[data-is="list-line"] .warn{color:gold} list-line .warn:after,[data-is="list-line"] .warn:after{content:"△"} list-line .error,[data-is="list-line"] .error{color:red} list-line .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
-	var Parser, Status, executeIframe, initialPattern, name, paramMode, path, patterns, ref, ref1, route, setObservableEvent, setRouter, toggleMode;
+	riot.tag2('list-line', '<section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error, warn: warn}"></span> <a class="tree" href="{routing}" onclick="{router}">{treeName}</a> <label each="{pattern, i in patterns}" class="{focus: pattern.focus}" data-id="{i}" onclick="{changePatternEvent}"> {pattern.name} </label> <a class="single" if="{url}" href="{routerExecutionPath}" onclick="{router}">{linkName}</a> </div> <recursive-item ref="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </section> <test-iframe ref="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{Status.config}"></test-iframe>', 'list-line,[data-is="list-line"]{display:block} list-line >.line,[data-is="list-line"] >.line{display:inline-block} list-line >.line.last-execute,[data-is="list-line"] >.line.last-execute{border:solid 1px;display:inline-block;padding:0 8px} list-line >.line div>label,[data-is="list-line"] >.line div>label{cursor:pointer;border:1px solid rgba(255,128,0,0.6);padding:0 6px;text-align:center;display:inline-block} list-line >.line div>label.focus,[data-is="list-line"] >.line div>label.focus{background:#ff0} list-line >.line div>label:hover,[data-is="list-line"] >.line div>label:hover{opacity:.6} list-line .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[data-is="list-line"] .tree{color:#333;word-break:break-all} list-line .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .warn,[data-is="list-line"] .warn{color:gold} list-line .warn:after,[data-is="list-line"] .warn:after{content:"△"} list-line .error,[data-is="list-line"] .error{color:red} list-line .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
+	var Parser, Status, checkLastExecute, executeIframe, initialPattern, name, paramMode, path, patterns, ref, ref1, route, setObservableEvent, setRouter, toggleMode;
 
-	Status = this.Status = __webpack_require__(37);
+	Status = this.Status = __webpack_require__(41);
 
-	Parser = __webpack_require__(42);
+	Parser = __webpack_require__(47);
 
-	route = __webpack_require__(41);
+	route = __webpack_require__(45);
 
 	setObservableEvent = (function(_this) {
 	  return function() {
@@ -317,6 +324,18 @@ module.exports =
 	  return function(path) {
 	    _this.routing = _this.initialRouting ? _this.initialRouting + "/" + path : path;
 	    return _this.routerExecutionPath = _this.url + Status.basePath + _this.routing;
+	  };
+	})(this);
+
+	checkLastExecute = (function(_this) {
+	  return function() {
+	    return Status.one('finished', function() {
+	      if (Status.lastExecutePath === _this.routerExecutionPath) {
+	        return checkLastExecute();
+	      } else {
+	        return _this.update();
+	      }
+	    });
 	  };
 	})(this);
 
@@ -354,6 +373,12 @@ module.exports =
 	  onExecute: false
 	};
 
+	this.getRouting = (function(_this) {
+	  return function() {
+	    return _this.initialRouting;
+	  };
+	})(this);
+
 	this.recursivelyUpdate = (function(_this) {
 	  return function(routing) {
 	    var ref2;
@@ -362,8 +387,7 @@ module.exports =
 	    if ((ref2 = _this.refs.item) != null) {
 	      ref2.recursivelyUpdate(_this.routing);
 	    }
-	    setObservableEvent();
-	    return _this.update();
+	    return setObservableEvent();
 	  };
 	})(this);
 
@@ -421,6 +445,9 @@ module.exports =
 	this.executeTask = (function(_this) {
 	  return function(callback) {
 	    _this.status.onExecute = true;
+	    Status.lastExecutePath = _this.routerExecutionPath;
+	    Status.next();
+	    checkLastExecute();
 	    _this.update();
 	    console.clear();
 	    ++Status.executeSum;
@@ -559,17 +586,17 @@ module.exports =
 
 /***/ },
 
-/***/ 39:
+/***/ 43:
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	    var riot = __webpack_require__(5)
+	    var riot = __webpack_require__(12)
 	    riot.tag2('test-iframe', '<span class="{isIos ? \'ios\' : \'no-ios\'}"> <iframe if="{!isElectron}" riot-src="{opts.url}"></iframe> <webview if="{isElectron}" riot-src="{opts.url}" nodeintegration></webview> </span>', 'test-iframe .ios,[data-is="test-iframe"] .ios{ display: block; -webkit-overflow-scrolling: touch; overflow: auto; position: fixed; top: 0; left: 0; width: 100%; height: 100%; } test-iframe iframe,[data-is="test-iframe"] iframe,test-iframe webview,[data-is="test-iframe"] webview{ background-color: white; border: none; width: 100%; height: 100%; } test-iframe .no-ios iframe,[data-is="test-iframe"] .no-ios iframe,test-iframe .no-ios webview,[data-is="test-iframe"] .no-ios webview{ position: fixed; left: 0px; top: 0px; }', '', function(opts) {
 	var WholeStatus, ref;
 
-	WholeStatus = __webpack_require__(37);
+	WholeStatus = __webpack_require__(41);
 
-	this.isIos = __webpack_require__(40).ios();
+	this.isIos = __webpack_require__(44).ios();
 
 	this.isElectron = typeof process !== "undefined" && process !== null ? (ref = process.versions) != null ? ref.electron : void 0 : void 0;
 
@@ -635,21 +662,28 @@ module.exports =
 
 /***/ },
 
-/***/ 40:
+/***/ 44:
 /***/ function(module, exports) {
 
 	module.exports = require("is_js");
 
 /***/ },
 
-/***/ 41:
+/***/ 45:
 /***/ function(module, exports) {
 
 	module.exports = require("riot-route");
 
 /***/ },
 
-/***/ 42:
+/***/ 46:
+/***/ function(module, exports) {
+
+	module.exports = require("object-assign");
+
+/***/ },
+
+/***/ 47:
 /***/ function(module, exports) {
 
 	var Parser;
@@ -673,7 +707,7 @@ module.exports =
 	    var name, paramMode, path, patternStr, patterns, ref, ref1, toggleMode;
 	    ref = str.match(/(.*)\[(.+)\]$/) || [], toggleMode = ref[0], name = ref[1], patternStr = ref[2];
 	    if (toggleMode) {
-	      patterns = patternStr.split(/\s*,\s*/).map(function(str) {
+	      patterns = patternStr.split(/\s*\|\s*/).map(function(str) {
 	        var paramMode, strInfo;
 	        strInfo = Parser.parseStr(str);
 	        paramMode = paramMode || strInfo.paramMode;
@@ -723,9 +757,9 @@ module.exports =
 	          } else {
 	            keyInfo = Parser.getStrInfo(key);
 	            valueInfo = Parser.getStrInfo(value);
-	            testUrl = testUrl.replace(/^\//, "") + ("/" + keyInfo.path);
-	            testName = testName.replace(/^\//, "") + ("/" + keyInfo.name);
-	            mockUrl = "?path=" + valueInfo.path + "#" + testUrl;
+	            testUrl = (testUrl + ("/" + keyInfo.path)).replace(/^\//, "");
+	            testName = (testName + ("/" + keyInfo.name)).replace(/^\//, "");
+	            mockUrl = valueInfo.path + "#" + testUrl;
 	            mockName = valueInfo.name;
 	            testUrl = "?path=" + testUrl;
 	            return taskList.push({
@@ -750,7 +784,7 @@ module.exports =
 
 /***/ },
 
-/***/ 43:
+/***/ 48:
 /***/ function(module, exports) {
 
 	module.exports = {

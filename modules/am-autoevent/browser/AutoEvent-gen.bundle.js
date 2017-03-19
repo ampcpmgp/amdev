@@ -1,5 +1,14 @@
-module.exports =
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["modules/am-autoevent/browser/AutoEvent-gen.bundle"] = factory();
+	else
+		root["modules/am-autoevent/browser/AutoEvent-gen.bundle"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -41,162 +50,8 @@ module.exports =
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(49);
-
-
-/***/ },
-
-/***/ 19:
-/***/ function(module, exports) {
-
-	module.exports = require("jquery");
-
-/***/ },
-
-/***/ 33:
-/***/ function(module, exports, __webpack_require__) {
-
-	var $, RE_STR, Test, actionFuncs, getRandomColor, getValue, jquery_stylesheet, parseValue;
-
-	$ = __webpack_require__(19);
-
-	jquery_stylesheet = __webpack_require__(34);
-
-	jquery_stylesheet($);
-
-	getRandomColor = (function(_this) {
-	  return function(opacity) {
-	    var getRandomNum;
-	    if (opacity == null) {
-	      opacity = 1;
-	    }
-	    getRandomNum = function() {
-	      return Math.floor(Math.random() * 256);
-	    };
-	    return "rgba(" + (getRandomNum()) + "," + (getRandomNum()) + "," + (getRandomNum()) + ", " + opacity + ")";
-	  };
-	})(this);
-
-	actionFuncs = {
-	  _border: (function(_this) {
-	    return function(selector) {
-	      selector = selector === true || !selector ? "*" : selector;
-	      if (typeof selector === "object") {
-	        selector = selector.join(",");
-	      }
-	      return $.stylesheet(selector).css("box-shadow", "0px 0px 0px 1px " + (getRandomColor()));
-	    };
-	  })(this),
-	  _color: (function(_this) {
-	    return function(selector) {
-	      selector = selector === true || !selector ? "*" : selector;
-	      if (typeof selector === "object") {
-	        selector = selector.join(",");
-	      }
-	      return $.stylesheet(selector).css("background", "" + (getRandomColor(0.1)));
-	    };
-	  })(this),
-	  _hide: (function(_this) {
-	    return function(selector) {
-	      if (typeof selector === "object") {
-	        selector = selector.join(",");
-	      }
-	      return $.stylesheet(selector).css("display", "none");
-	    };
-	  })(this),
-	  _auto: (function(_this) {
-	    return function() {
-	      return {
-	        AutoEvent: __webpack_require__(35)
-	      };
-	    };
-	  })(this)
-	};
-
-	getValue = (function(_this) {
-	  return function(arg) {
-	    if (typeof arg !== "object") {
-	      return arg;
-	    }
-	    arg = arg.map(parseValue);
-	    if (arg.length === 1) {
-	      return arg[0];
-	    } else {
-	      return arg;
-	    }
-	  };
-	})(this);
-
-	RE_STR = /^"(.*)"$/;
-
-	parseValue = (function(_this) {
-	  return function(val) {
-	    if (RE_STR.test(val)) {
-	      return val.match(RE_STR)[1];
-	    } else if (val === "true") {
-	      return true;
-	    } else if (val === "false") {
-	      return false;
-	    } else if (val === "null") {
-	      return null;
-	    } else if (val === "undefined") {
-	      return void 0;
-	    } else if (val.match(/^\d+$/)) {
-	      return Number(val);
-	    } else {
-	      return val;
-	    }
-	  };
-	})(this);
-
-	module.exports = Test = (function() {
-	  function Test() {}
-
-	  Test.start = function(testObj) {
-	    var action, arg, func, i, key, len, ref, ref1, results, value;
-	    if (testObj == null) {
-	      testObj = Test;
-	    }
-	    Test.actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/");
-	    Test.actionObj = {};
-	    ref = Test.actions;
-	    results = [];
-	    for (i = 0, len = ref.length; i < len; i++) {
-	      action = ref[i];
-	      ref1 = action.split("="), key = ref1[0], value = ref1[1];
-	      func = testObj[key] || Test[key];
-	      arg = !value || value.split(",");
-	      if (typeof func === "function") {
-	        func(getValue(arg));
-	      }
-	      if (typeof actionFuncs[key] === "function") {
-	        actionFuncs[key](value);
-	      }
-	      results.push(Test.actionObj[key] = value);
-	    }
-	    return results;
-	  };
-
-	  return Test;
-
-	})();
-
-
-/***/ },
-
-/***/ 34:
-/***/ function(module, exports) {
-
-	module.exports = require("jquery-stylesheet");
-
-/***/ },
-
-/***/ 35:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AutoEvent, AutoEventBase,
@@ -204,7 +59,7 @@ module.exports =
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 
-	AutoEventBase = __webpack_require__(36);
+	AutoEventBase = __webpack_require__(1);
 
 	module.exports = AutoEvent = (function(superClass) {
 	  extend(AutoEvent, superClass);
@@ -215,41 +70,31 @@ module.exports =
 	    return AutoEvent.__super__.constructor.apply(this, arguments);
 	  }
 
-	  AutoEvent.prototype.controller = function(loopNum, callback) {
-	    var curFuncNum, i;
-	    curFuncNum = 0;
-	    this.innerFuncs[this.funcs.length] = [];
-	    this.funcs.push((function(_this) {
-	      return function() {
-	        if (--loopNum) {
-	          curFuncNum = 0;
-	          return _this.funcs[0]();
-	        } else {
-	          if (callback) {
-	            return callback();
-	          } else {
-	            return _this.end();
-	          }
-	        }
-	      };
-	    })(this));
+	  AutoEvent.prototype.controller = function*(num) {
+	    var i;
 	    i = -1;
 	    while (this.funcs[++i]) {
 	      this.innerFuncs[i].push((function(_this) {
 	        return function() {
-	          var base, name;
-	          return typeof (base = _this.funcs)[name = ++curFuncNum] === "function" ? base[name]() : void 0;
+	          return _this.gen.next();
 	        };
 	      })(this));
 	    }
-	    return this.funcs[0]();
+	    while (num--) {
+	      i = -1;
+	      while (this.funcs[++i]) {
+	        yield this.funcs[i]();
+	      }
+	    }
+	    return this.end();
 	  };
 
-	  AutoEvent.prototype.start = function(loopNum, callback) {
+	  AutoEvent.prototype.start = function(loopNum) {
 	    if (loopNum == null) {
 	      loopNum = 1;
 	    }
-	    return this.controller(loopNum, callback);
+	    this.gen = this.controller(loopNum);
+	    return this.gen.next();
 	  };
 
 	  return AutoEvent;
@@ -258,8 +103,7 @@ module.exports =
 
 
 /***/ },
-
-/***/ 36:
+/* 1 */
 /***/ function(module, exports) {
 
 	var $, AutoEvent, trigger,
@@ -480,18 +324,7 @@ module.exports =
 	})();
 
 
-/***/ },
-
-/***/ 49:
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(33).start({
-	  params: (function(_this) {
-	    return function(arg) {};
-	  })(this)
-	});
-
-
 /***/ }
-
-/******/ });
+/******/ ])
+});
+;

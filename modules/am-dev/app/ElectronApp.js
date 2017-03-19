@@ -45,7 +45,7 @@ module.exports =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(15);
+	module.exports = __webpack_require__(18);
 
 
 /***/ },
@@ -53,62 +53,60 @@ module.exports =
 /* 2 */
 /***/ function(module, exports) {
 
-	module.exports = require("fs");
+	module.exports = require("lodash");
 
 /***/ },
 /* 3 */,
 /* 4 */
 /***/ function(module, exports) {
 
-	module.exports = require("jquery");
+	module.exports = require("fs");
 
 /***/ },
 /* 5 */,
 /* 6 */,
-/* 7 */
-/***/ function(module, exports) {
-
-	module.exports = require("lodash");
-
-/***/ },
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
+/* 7 */,
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = require("glob");
 
 /***/ },
+/* 9 */,
+/* 10 */,
+/* 11 */,
 /* 12 */,
-/* 13 */
+/* 13 */,
+/* 14 */,
+/* 15 */
 /***/ function(module, exports) {
 
 	module.exports = require("electron");
 
 /***/ },
-/* 14 */,
-/* 15 */
+/* 16 */,
+/* 17 */,
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $, ElectronApp, chokidar, fs, glob, ipcRenderer;
 
-	ipcRenderer = __webpack_require__(13).ipcRenderer;
+	ipcRenderer = __webpack_require__(15).ipcRenderer;
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(4);
 
-	$ = __webpack_require__(4);
+	$ = __webpack_require__(19);
 
-	chokidar = __webpack_require__(16);
+	chokidar = __webpack_require__(20);
 
-	glob = __webpack_require__(11);
+	glob = __webpack_require__(8);
 
 	module.exports = ElectronApp = (function() {
 	  ElectronApp.prototype._inspector = 1;
 
 	  ElectronApp.prototype.publishFlg = true;
 
-	  ElectronApp.prototype.liveReloadStopFlg = false;
+	  ElectronApp.prototype.liveReloadFlg = false;
 
 	  function ElectronApp() {}
 
@@ -154,7 +152,7 @@ module.exports =
 	      }
 	    }).on("change", (function(_this) {
 	      return function(path) {
-	        if (_this.liveReloadStopFlg) {
+	        if (!_this.liveReloadFlg) {
 	          return;
 	        }
 	        return location.reload();
@@ -166,10 +164,10 @@ module.exports =
 	    try {
 	      this.config = cson.load('.config.cson');
 	    } catch (error) {
-	      this.config = __webpack_require__(17);
+	      this.config = __webpack_require__(21);
 	    }
 	    this.option = this.config.server.port || 8091;
-	    return __webpack_require__(18).prototype.start(8091, 8091);
+	    return __webpack_require__(22).prototype.start(8091, 8091);
 	  };
 
 	  return ElectronApp;
@@ -178,37 +176,43 @@ module.exports =
 
 
 /***/ },
-/* 16 */
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = require("jquery");
+
+/***/ },
+/* 20 */
 /***/ function(module, exports) {
 
 	module.exports = require("chokidar");
 
 /***/ },
-/* 17 */
+/* 21 */
 /***/ function(module, exports) {
 
 	module.exports = {"browserWindow":{"x":0,"y":0,"width":1027,"height":968,"icon":"./web/favicon.ico","webPreferences":{"url":"/app/index.html","preload":"/app/preload.js"}},"cl":{"intervalMin":5},"server":{"port":8091}}
 
 /***/ },
-/* 18 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {var SimpleServer, chokidar, fs, glob, http, lodash, mime, sio,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(4);
 
-	http = __webpack_require__(19);
+	http = __webpack_require__(23);
 
-	chokidar = __webpack_require__(16);
+	chokidar = __webpack_require__(20);
 
-	mime = __webpack_require__(20);
+	mime = __webpack_require__(24);
 
-	sio = __webpack_require__(21);
+	sio = __webpack_require__(25);
 
-	glob = __webpack_require__(11);
+	glob = __webpack_require__(8);
 
-	lodash = __webpack_require__(7);
+	lodash = __webpack_require__(2);
 
 	module.exports = SimpleServer = (function() {
 	  function SimpleServer() {
@@ -400,19 +404,19 @@ module.exports =
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 19 */
+/* 23 */
 /***/ function(module, exports) {
 
 	module.exports = require("http");
 
 /***/ },
-/* 20 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = require("mime");
 
 /***/ },
-/* 21 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = require("socket.io");

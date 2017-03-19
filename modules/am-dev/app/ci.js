@@ -46,40 +46,40 @@ module.exports =
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(25);
+	module.exports = __webpack_require__(29);
 
 
 /***/ },
 
-/***/ 2:
+/***/ 4:
 /***/ function(module, exports) {
 
 	module.exports = require("fs");
 
 /***/ },
 
-/***/ 3:
+/***/ 9:
 /***/ function(module, exports) {
 
 	module.exports = require("child_process");
 
 /***/ },
 
-/***/ 24:
+/***/ 28:
 /***/ function(module, exports) {
 
 	module.exports = require("cson");
 
 /***/ },
 
-/***/ 25:
+/***/ 29:
 /***/ function(module, exports, __webpack_require__) {
 
 	var check, cl, commands, config, cson, exec, execSync, fs, interval, intervalMin, json, proc, ref, start;
 
-	cson = __webpack_require__(24);
+	cson = __webpack_require__(28);
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(4);
 
 	if (fs.existsSync(".config.cson")) {
 	  config = cson.load(".config.cson");
@@ -95,13 +95,13 @@ module.exports =
 
 	interval = intervalMin * 60000;
 
-	execSync = __webpack_require__(3).execSync;
+	execSync = __webpack_require__(9).execSync;
 
-	exec = __webpack_require__(3).exec;
+	exec = __webpack_require__(9).exec;
 
 	proc = null;
 
-	json = __webpack_require__(2).readFileSync("./package.json", {
+	json = __webpack_require__(4).readFileSync("./package.json", {
 	  encoding: "utf-8"
 	});
 

@@ -10655,7 +10655,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
+	var $, RE_STR, Test, actionFuncs, getRandomColor, getValue, jquery_stylesheet, parseValue;
 
 	$ = __webpack_require__(5);
 
@@ -10712,6 +10712,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	  })(this)
 	};
 
+	getValue = (function(_this) {
+	  return function(arg) {
+	    if (typeof arg !== "object") {
+	      return arg;
+	    }
+	    arg = arg.map(parseValue);
+	    if (arg.length === 1) {
+	      return arg[0];
+	    } else {
+	      return arg;
+	    }
+	  };
+	})(this);
+
+	RE_STR = /^"(.*)"$/;
+
+	parseValue = (function(_this) {
+	  return function(val) {
+	    if (RE_STR.test(val)) {
+	      return val.match(RE_STR)[1];
+	    } else if (val === "true") {
+	      return true;
+	    } else if (val === "false") {
+	      return false;
+	    } else if (val === "null") {
+	      return null;
+	    } else if (val === "undefined") {
+	      return void 0;
+	    } else if (val.match(/^\d+$/)) {
+	      return Number(val);
+	    } else {
+	      return val;
+	    }
+	  };
+	})(this);
+
 	module.exports = Test = (function() {
 	  function Test() {}
 
@@ -10730,7 +10766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      func = testObj[key] || Test[key];
 	      arg = !value || value.split(",");
 	      if (typeof func === "function") {
-	        func(arg.length === 1 ? arg[0] : arg);
+	        func(getValue(arg));
 	      }
 	      if (typeof actionFuncs[key] === "function") {
 	        actionFuncs[key](value);

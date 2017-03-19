@@ -45,67 +45,71 @@ module.exports =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(22);
+	module.exports = __webpack_require__(26);
 
 
 /***/ },
 /* 1 */,
-/* 2 */
+/* 2 */,
+/* 3 */,
+/* 4 */
 /***/ function(module, exports) {
 
 	module.exports = require("fs");
 
 /***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	module.exports = require("child_process");
-
-/***/ },
-/* 4 */,
 /* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */
+/* 6 */
 /***/ function(module, exports) {
 
 	module.exports = require("fs-extra");
 
 /***/ },
+/* 7 */,
+/* 8 */,
+/* 9 */
+/***/ function(module, exports) {
+
+	module.exports = require("child_process");
+
+/***/ },
+/* 10 */,
 /* 11 */,
 /* 12 */,
-/* 13 */
+/* 13 */,
+/* 14 */,
+/* 15 */
 /***/ function(module, exports) {
 
 	module.exports = require("electron");
 
 /***/ },
-/* 14 */,
-/* 15 */,
-/* 16 */
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */
 /***/ function(module, exports) {
 
 	module.exports = require("chokidar");
 
 /***/ },
-/* 17 */
+/* 21 */
 /***/ function(module, exports) {
 
 	module.exports = {"browserWindow":{"x":0,"y":0,"width":1027,"height":968,"icon":"./web/favicon.ico","webPreferences":{"url":"/app/index.html","preload":"/app/preload.js"}},"cl":{"intervalMin":5},"server":{"port":8091}}
 
 /***/ },
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Browser, browser;
 
-	Browser = __webpack_require__(23);
+	Browser = __webpack_require__(27);
 
 	browser = new Browser();
 
@@ -113,25 +117,25 @@ module.exports =
 
 
 /***/ },
-/* 23 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Browser, BrowserWindow, Watcher, app, chokidar, cson, exec, fork, fs, fse, ipcMain, mainWindow, ref,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	fse = __webpack_require__(10);
+	fse = __webpack_require__(6);
 
-	chokidar = __webpack_require__(16);
+	chokidar = __webpack_require__(20);
 
-	cson = __webpack_require__(24);
+	cson = __webpack_require__(28);
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(4);
 
-	exec = __webpack_require__(3).exec;
+	exec = __webpack_require__(9).exec;
 
-	fork = __webpack_require__(3).fork;
+	fork = __webpack_require__(9).fork;
 
-	ref = __webpack_require__(13), ipcMain = ref.ipcMain, app = ref.app, BrowserWindow = ref.BrowserWindow;
+	ref = __webpack_require__(15), ipcMain = ref.ipcMain, app = ref.app, BrowserWindow = ref.BrowserWindow;
 
 	mainWindow = null;
 
@@ -180,7 +184,7 @@ module.exports =
 	    try {
 	      this.config = cson.load(this.configCson);
 	    } catch (error) {
-	      this.config = __webpack_require__(17);
+	      this.config = __webpack_require__(21);
 	    }
 	    this.option = this.config.browserWindow;
 	    return this;
@@ -268,7 +272,7 @@ module.exports =
 
 
 /***/ },
-/* 24 */
+/* 28 */
 /***/ function(module, exports) {
 
 	module.exports = require("cson");

@@ -45,22 +45,17 @@ module.exports =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(27);
+	module.exports = __webpack_require__(31);
 
 
 /***/ },
 /* 1 */,
-/* 2 */
-/***/ function(module, exports) {
-
-	module.exports = require("fs");
-
-/***/ },
+/* 2 */,
 /* 3 */,
 /* 4 */
 /***/ function(module, exports) {
 
-	module.exports = require("jquery");
+	module.exports = require("fs");
 
 /***/ },
 /* 5 */,
@@ -77,7 +72,12 @@ module.exports =
 /* 16 */,
 /* 17 */,
 /* 18 */,
-/* 19 */,
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = require("jquery");
+
+/***/ },
 /* 20 */,
 /* 21 */,
 /* 22 */,
@@ -85,21 +85,25 @@ module.exports =
 /* 24 */,
 /* 25 */,
 /* 26 */,
-/* 27 */
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var fs, parser;
 
-	fs = __webpack_require__(2);
+	fs = __webpack_require__(4);
 
-	parser = __webpack_require__(28);
+	parser = __webpack_require__(32);
 
-	__webpack_require__(29).start({
+	__webpack_require__(33).start({
 	  simple: (function(_this) {
 	    return function() {
 	      var flow, json, result;
-	      flow = __webpack_require__(33);
-	      json = __webpack_require__(34);
+	      flow = __webpack_require__(37);
+	      json = __webpack_require__(38);
 	      result = parser(flow);
 	      return console.assert(JSON.stringify(result) === JSON.stringify(json), "simple flow is not same");
 	    };
@@ -110,7 +114,7 @@ module.exports =
 
 
 /***/ },
-/* 28 */
+/* 32 */
 /***/ function(module, exports) {
 
 	var Sections, expressions,
@@ -193,14 +197,14 @@ module.exports =
 
 
 /***/ },
-/* 29 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, Test, actionFuncs, getRandomColor, jquery_stylesheet;
+	var $, RE_STR, Test, actionFuncs, getRandomColor, getValue, jquery_stylesheet, parseValue;
 
-	$ = __webpack_require__(4);
+	$ = __webpack_require__(19);
 
-	jquery_stylesheet = __webpack_require__(30);
+	jquery_stylesheet = __webpack_require__(34);
 
 	jquery_stylesheet($);
 
@@ -247,11 +251,47 @@ module.exports =
 	  _auto: (function(_this) {
 	    return function() {
 	      return {
-	        AutoEvent: __webpack_require__(31)
+	        AutoEvent: __webpack_require__(35)
 	      };
 	    };
 	  })(this)
 	};
+
+	getValue = (function(_this) {
+	  return function(arg) {
+	    if (typeof arg !== "object") {
+	      return arg;
+	    }
+	    arg = arg.map(parseValue);
+	    if (arg.length === 1) {
+	      return arg[0];
+	    } else {
+	      return arg;
+	    }
+	  };
+	})(this);
+
+	RE_STR = /^"(.*)"$/;
+
+	parseValue = (function(_this) {
+	  return function(val) {
+	    if (RE_STR.test(val)) {
+	      return val.match(RE_STR)[1];
+	    } else if (val === "true") {
+	      return true;
+	    } else if (val === "false") {
+	      return false;
+	    } else if (val === "null") {
+	      return null;
+	    } else if (val === "undefined") {
+	      return void 0;
+	    } else if (val.match(/^\d+$/)) {
+	      return Number(val);
+	    } else {
+	      return val;
+	    }
+	  };
+	})(this);
 
 	module.exports = Test = (function() {
 	  function Test() {}
@@ -271,7 +311,7 @@ module.exports =
 	      func = testObj[key] || Test[key];
 	      arg = !value || value.split(",");
 	      if (typeof func === "function") {
-	        func(arg.length === 1 ? arg[0] : arg);
+	        func(getValue(arg));
 	      }
 	      if (typeof actionFuncs[key] === "function") {
 	        actionFuncs[key](value);
@@ -287,13 +327,13 @@ module.exports =
 
 
 /***/ },
-/* 30 */
+/* 34 */
 /***/ function(module, exports) {
 
 	module.exports = require("jquery-stylesheet");
 
 /***/ },
-/* 31 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AutoEvent, AutoEventBase,
@@ -301,7 +341,7 @@ module.exports =
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 
-	AutoEventBase = __webpack_require__(32);
+	AutoEventBase = __webpack_require__(36);
 
 	module.exports = AutoEvent = (function(superClass) {
 	  extend(AutoEvent, superClass);
@@ -355,7 +395,7 @@ module.exports =
 
 
 /***/ },
-/* 32 */
+/* 36 */
 /***/ function(module, exports) {
 
 	var $, AutoEvent, trigger,
@@ -577,13 +617,13 @@ module.exports =
 
 
 /***/ },
-/* 33 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = "[プロモーション画面]\r\nユーザーが見るものを書きます。\r\nユーザーがする行動を書きます。\r\n\r\n[ようこそ画面]\r\nユーザー情報を取得\r\nif ログインユーザー or ゲストユーザー\r\n  if ゲストユーザー\r\n    ゲスト機能を表示=>チャット画面\r\nelse if 管理者\r\n  =2段階認証=>管理画面\r\nelse\r\n  =>ログイン画面\r\n--\r\nユーザーがすること１ => その結果１\r\nユーザーがすること２ => その結果２\r\n\r\n[その結果１]\r\n結果\r\n\r\n[その結果２]\r\n結果\r\n\r\n[ログイン画面]\r\nログイン機能\r\nゲスト機能\r\n\r\n[チャット画面]\r\nチャット機能\r\n"
 
 /***/ },
-/* 34 */
+/* 38 */
 /***/ function(module, exports) {
 
 	module.exports = [

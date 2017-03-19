@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["modules/am-common/browser/Common"] = factory();
+		exports["modules/am-common/browser/Common.bundle"] = factory();
 	else
-		root["modules/am-common/browser/Common"] = factory();
+		root["modules/am-common/browser/Common.bundle"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -50,17 +50,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(31);
-
-
-/***/ },
-
-/***/ 31:
+/******/ ([
+/* 0 */
 /***/ function(module, exports) {
 
 	var Common,
@@ -130,7 +121,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }
-
-/******/ })
+/******/ ])
 });
 ;
