@@ -1,5 +1,5 @@
-const Test = require('am-coffee-time/browser/Test')
-const AutoEvent = require('am-autoevent/browser/AutoEvent-no-gen')
+import Test from 'am-coffee-time/browser/Test'
+import AutoEvent from 'am-autoevent/browser/AutoEvent-no-gen'
 const autoEvent = new AutoEvent()
 const $ = (selector) => document.querySelector(selector)
 const actions = {
