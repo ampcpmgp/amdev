@@ -12,20 +12,18 @@ module.exports = class Compiler
       libraryTarget: "commonjs2"
     module:
       loaders: [
-        {test: /\.coffee$/, loader: "coffee"}
+        {test: /\.coffee$/, loader: "coffee-loader"}
         {test: /\.cson$/, loader: "cson-loader"}
-        {test: /\.html$/, loader: "html"}
+        {test: /\.es$/, loader: "babel", query: {presets: ["es2015", "stage-0"]}}
         {test: /\.json$/, loader: "json"}
-        {test: /\.ya?ml$/, loader: "json!yaml"}
+        {test: /\.ya?ml$/, loader: "json!yaml-loader"}
         {test: /\.tag$/, exclude: /node_modules/, loader: "riot-tag-loader"}
-      ]
-      postLoaders: [
-        {test: /\.src\.coffee$/, loader: "raw"}
+        {test: /\.raw$/, loader: "raw-loader"}
       ]
     devtool: "cheap-module-eval-source-map"
     resolve:
       modulesDirectories: ["modules", "node_modules"]
-      extensions: [".coffee", ".tag", ".js", ""]
+      extensions: [".coffee", ".tag", ".es", ".js", ""]
   @nodeModules: do =>
     retObj = {}
     fs.readdirSync('node_modules')
@@ -68,20 +66,20 @@ module.exports = class Compiler
     @browserOption.entry = {}
     # TODO: 開発に必要なファイル軍だけをコンパイルする方針に変えたい
     require("glob").sync(
-      "./**/@(electron|app)/*.coffee"
+      "./**/@(electron|app)/*.@(coffee|es)"
       , {ignore: "./**/@(node_modules)/**"}
     )
-    .forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
+    .forEach((filepath) => @electronOption.entry[filepath.replace(/\.(coffee|es)$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
-      "./**/node/*.coffee"
+      "./**/node/*.@(coffee|es)"
       , {ignore: "./**/@(node_modules)/**"}
     )
-    .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
+    .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.(coffee|es)$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
-      "./**/@(web|browser)/*.coffee"
+      "./**/@(web|browser)/*.@(coffee|es)"
       , {ignore: "./**/@(node_modules)/**"}
     )
-    .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
+    .forEach((filepath) => @browserOption.entry[filepath.replace(/\.(coffee|es)$/, "").replace(/^\.\//, "")] = [filepath])
   @callback: (err, stats) =>
     return console.log(err) if (err)
     jsonStats = stats.toJson()
