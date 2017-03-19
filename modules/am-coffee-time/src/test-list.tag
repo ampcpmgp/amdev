@@ -120,7 +120,7 @@ require("./test-iframe.tag")
 </recursive-item>
 
 <list-line>
-  <div class="line{isHover && ' hover'}">
+  <section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error, warn: warn}"></span>
       <a class="tree" href={routing} onclick={router}>{treeName}</a>
@@ -130,11 +130,20 @@ require("./test-iframe.tag")
       <a class="single" if={url} href={routerExecutionPath} onclick={router}>{linkName}</a>
     </div>
     <recursive-item ref="item" if={!url} data={data} routing={routing} />
-  </div>
+  </section>
   <test-iframe ref="testFrame" if={url && status.onExecute} url={routerExecutionPath} config={Status.config}></test-iframe>
   <style type="less">
     :scope {
-      .line > div > label {
+      display: block;
+    }
+     > .line > {
+      display: inline-block;
+      &.last-execute {
+        border: solid 1px;
+        display: inline-block;
+        padding: 0px 8px;
+      }
+      div > label {
         cursor: pointer;
         border: 1px solid rgba(255,128,0,0.6);
         padding: 0 6px;
@@ -198,6 +207,13 @@ require("./test-iframe.tag")
     setRouter = (path) =>
       @routing = if @initialRouting then "#{@initialRouting}/#{path}" else path
       @routerExecutionPath = @url + Status.basePath + @routing
+    checkLastExecute = =>
+      Status.one('finished', () =>
+        if Status.lastExecutePath is @routerExecutionPath
+          checkLastExecute()
+        else
+          @update()
+      )
     executeIframe = =>
       Status.executeIframe.shift()?()
     {toggleMode, paramMode, name, path, patterns} = Parser.getStrInfo(@key)
@@ -249,6 +265,9 @@ require("./test-iframe.tag")
       executeIframe()
     @executeTask = (callback) =>
       @status.onExecute = true
+      Status.lastExecutePath = @routerExecutionPath
+      Status.next()
+      checkLastExecute()
       this.update()
       console.clear()
       ++Status.executeSum
