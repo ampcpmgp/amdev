@@ -5,7 +5,7 @@ const $ = (selector) => document.querySelector(selector)
 const actions = {
   lang: (type) => {
     autoEvent.wait(200).addEvent(() => {
-      $('before-login > span:first-child').innerHTML = '<div>言語は #{type} です</div>' + $('before-login > span:first-child').innerHTML
+      $('before-login > span:first-child').innerHTML = `<div>言語は ${type} です</div>` + $('before-login > span:first-child').innerHTML
     })
   },
   動作フロー確認用: () => console.log('動作フロー確認です'),
