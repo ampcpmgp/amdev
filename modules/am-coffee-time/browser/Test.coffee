@@ -23,6 +23,27 @@ actionFuncs =
     # TODO: autoevent連携
     AutoEvent: require("am-autoevent")
 
+getValue = (arg) =>
+  return arg if typeof arg isnt "object"
+
+  arg = arg.map parseValue
+
+  if arg.length is 1 then arg[0] else arg
+
+# Regexp for double quoted values
+RE_STR = /^"(.*)"$/
+
+# Parses the single value
+parseValue = (val) =>
+  if RE_STR.test val
+    val.match(RE_STR)[1]
+  else if val is "true" then true else if val is "false" then false
+  else if val is "null" then null else if val is "undefined" then undefined
+  else if val.match(/^\d+$/)
+    Number(val)
+  else
+    val
+
 module.exports = class Test
   @start: (testObj = @) =>
     @actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/")
@@ -31,6 +52,6 @@ module.exports = class Test
       [key, value] = action.split("=")
       func = testObj[key] or @[key]
       arg = !value or value.split(",")
-      func?(if arg.length is 1 then arg[0] else arg)
+      func?(getValue(arg))
       actionFuncs[key]?(value)
       @actionObj[key] = value

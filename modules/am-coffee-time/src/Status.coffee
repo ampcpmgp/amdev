@@ -12,6 +12,7 @@ module.exports = class Status
     @executablePath = {}
     @sumInit()
     #status
+    @lastExecutePath = ""
     @paramMode = false
     @showParameter = false
     #observable
@@ -22,6 +23,8 @@ module.exports = class Status
     @executeSum > 0 and @executeIframe.length is 0
   @taskAllSuccess: =>
     @taskFinished() and @executeSum is @successSum
+  @next: =>
+    @trigger("finished")
 
 Status.init()
 Status.firstTimeInit()

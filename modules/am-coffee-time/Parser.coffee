@@ -7,7 +7,7 @@ module.exports = class Parser
     [toggleMode, name, patternStr] = str.match(/(.*)\[(.+)\]$/) or []
     if toggleMode
       patterns =patternStr
-        .split(/\s*,\s*/)
+        .split(/\s*\|\s*/)
         .map((str) =>
           strInfo = @parseStr(str)
           paramMode = paramMode or strInfo.paramMode
@@ -35,9 +35,9 @@ module.exports = class Parser
           else
             keyInfo = @getStrInfo(key)
             valueInfo = @getStrInfo(value)
-            testUrl = testUrl.replace(/^\//, "") + "/#{keyInfo.path}"
-            testName = testName.replace(/^\//, "") + "/#{keyInfo.name}"
-            mockUrl = "?path=#{valueInfo.path}##{testUrl}"
+            testUrl = (testUrl + "/#{keyInfo.path}").replace(/^\//, "")
+            testName = (testName + "/#{keyInfo.name}").replace(/^\//, "")
+            mockUrl = "#{valueInfo.path}##{testUrl}"
             mockName = valueInfo.name
             testUrl = "?path=#{testUrl}"
             taskList.push({testName, testUrl, mockName, mockUrl})
