@@ -11,21 +11,17 @@ module.exports = class Compiler
       filename: "[name].js"
       libraryTarget: "commonjs2"
     module:
-      loaders: [
-        {test: /\.coffee$/, loader: "coffee"}
-        {test: /\.cson$/, loader: "cson-loader"}
-        {test: /\.html$/, loader: "html"}
-        {test: /\.json$/, loader: "json"}
-        {test: /\.ya?ml$/, loader: "json!yaml"}
-        {test: /\.tag$/, exclude: /node_modules/, loader: "riot-tag-loader"}
-      ]
-      postLoaders: [
-        {test: /\.src\.coffee$/, loader: "raw"}
+      rules: [
+        {test: /\.coffee$/, use: {loader: "coffee-loader"}}
+        {test: /\.cson$/,  use: {loader: "cson-loader"}}
+        {test: /\.ya?ml$/,  use: {loader: "yaml-loader"}}
+        {test: /\.tag$/,  use: {loader: "riot-tag-loader"}}
+        {test: /\.raw$/,  use: {loader: "raw-loader"}}
       ]
     devtool: "cheap-module-eval-source-map"
     resolve:
-      modulesDirectories: ["modules", "node_modules"]
-      extensions: [".coffee", ".tag", ".js", ""]
+      modules: ["modules", "node_modules"]
+      extensions: [".coffee", ".tag", ".js"]
   @nodeModules: do =>
     retObj = {}
     fs.readdirSync('node_modules')
@@ -45,7 +41,6 @@ module.exports = class Compiler
     @nodeOption.externals = @nodeModules
     @browserOption = _.cloneDeep(@baseOption)
     @browserOption.target = "web"
-    @browserOption.module.preLoaders = []
     @browserOption.output.library = "[name]"
     @browserOption.output.libraryTarget = "umd"
   @run: () =>
@@ -59,8 +54,8 @@ module.exports = class Compiler
     webpack(@browserOption).run((err, stats) => @callback(err,stats)) if @browserOption.entry
   @start: () =>
     @setFilePath()
-    webpack(@electronOption).watch({}, (err, stats) => @callback(err,stats)) if @electronOption.entry
-    webpack(@nodeOption).watch({}, (err, stats) => @callback(err,stats)) if @nodeOption.entry
+    # webpack(@electronOption).watch({}, (err, stats) => @callback(err,stats)) if @electronOption.entry
+    # webpack(@nodeOption).watch({}, (err, stats) => @callback(err,stats)) if @nodeOption.entry
     webpack(@browserOption).watch({}, (err, stats) => @callback(err,stats)) if @browserOption.entry
   @setFilePath: =>
     @electronOption.entry = {}
@@ -82,6 +77,7 @@ module.exports = class Compiler
       , {ignore: "./**/@(node_modules)/**"}
     )
     .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
+    console.log @browserOption.entry
   @callback: (err, stats) =>
     return console.log(err) if (err)
     jsonStats = stats.toJson()
