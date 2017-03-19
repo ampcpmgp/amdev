@@ -11151,7 +11151,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var actions = {
 	  lang: function lang(type) {
 	    autoEvent.wait(200).addEvent(function () {
-	      $('before-login > span:first-child').innerHTML = '<div>言語は #{type} です</div>' + $('before-login > span:first-child').innerHTML;
+	      $('before-login > span:first-child').innerHTML = '<div>\u8A00\u8A9E\u306F ' + type + ' \u3067\u3059</div>' + $('before-login > span:first-child').innerHTML;
 	    });
 	  },
 	  動作フロー確認用: function _() {
