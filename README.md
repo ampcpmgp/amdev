@@ -42,6 +42,7 @@ TODO: cliborを含んだ開発環境を作る
 clibor - http://www.amunsnet.com/
 clover - http://www.vector.co.jp/download/file/winnt/util/fh608107.html 3.2は不安定　( choco install clover )
 cerebro - https://github.com/KELiON/cerebro
+color picker - http://www.vector.co.jp/soft/dl/win95/art/se350616.html
 gapdebug - ios debug
 
 # atom package
