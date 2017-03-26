@@ -33,13 +33,16 @@ npm start
 ### my environment
 
 ```
+# install from bash
+python2 nvm
 # install chocolatey
-choco install -yf --allow-empty-checksums python2 nodist lhaplus notepadplusplus googlechrome firefox crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install virtualbox screentogif slack yarn autoit winmerge atom githubforwindows visualstudio2015community
+choco install -yf --allow-empty-checksums lhaplus notepadplusplus googlechrome firefox crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install virtualbox screentogif slack yarn autoit winmerge atom githubforwindows visualstudio2015community
 # download
 TODO: cliborを含んだ開発環境を作る
 clibor - http://www.amunsnet.com/
 clover - http://www.vector.co.jp/download/file/winnt/util/fh608107.html 3.2は不安定　( choco install clover )
 cerebro - https://github.com/KELiON/cerebro
+color picker - http://www.vector.co.jp/soft/dl/win95/art/se350616.html
 gapdebug - ios debug
 
 # atom package

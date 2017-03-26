@@ -41,8 +41,8 @@ require("./test-iframe.tag")
       executePath = decodeURIComponent(encodeURIComponent(decodeURIComponent(executePath)))
       unless Status.executablePath[executePath]
         regex = /^[^#]+#/
-        params = executePath.replace(regex, "").split("/")
-        @refs.item.recursivelyCheck(params)
+        paramStr = executePath.replace(regex, "")
+        @refs.item.recursivelyCheck(paramStr)
         Status.executablePath[executePath]?()
         return
         # TODO: 以下処理今後検討
@@ -102,11 +102,9 @@ require("./test-iframe.tag")
     getLines = =>
       lines = @refs.lines
       unless lines.length then [lines] else lines
-    @recursivelyCheck = (params) =>
+    @recursivelyCheck = (paramStr) =>
       getLines().forEach((line) =>
-        copyParams = []
-        objectAssign(copyParams, params)
-        line.recursivelyCheckItem(copyParams)
+        line.recursivelyCheckItem(paramStr)
         )
     @recursivelyUpdate = (routing) =>
       getLines().forEach((line) =>
@@ -309,21 +307,24 @@ require("./test-iframe.tag")
       @refs.item?.recursivelyUpdate(@routing)
       setObservableEvent()
     @changePatternEvent = (e) => @changePattern(e.currentTarget.dataset.id)
-    @recursivelyCheckItem = (params) =>
-      param = params.shift()
-      matchedPattern = @patterns?.filter((pattern, i) => param is pattern.path)?[0]
+    @recursivelyCheckItem = (paramStr) =>
+      matchedPattern = @patterns?.filter((pattern, i) =>
+        paramStr.indexOf(pattern.path) is 0
+      )?[0]
       if matchedPattern
+        paramStr = paramStr.replace(matchedPattern.path, "").replace(/^\//, "")
         @patterns.forEach((pattern, i) =>
           pattern.focus = false
           if matchedPattern is pattern
             @changePattern(i)
           )
         @update()
-      if param is @path or matchedPattern
-        if params
-          @refs.item?.recursivelyCheck(params)
+        if paramStr
+          @refs.item?.recursivelyCheck(paramStr)
         else
           setObservableEvent()
+      else if paramStr.indexOf(@path) is 0
+        @refs.item?.recursivelyCheck(paramStr.replace(@path, "").replace(/^\//, ""))
     Status.on("init", => @init())
     paramMode and Status.on("toggle-mode", =>
       @treeName =

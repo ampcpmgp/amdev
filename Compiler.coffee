@@ -14,6 +14,7 @@ module.exports = class Compiler
       rules: [
         {test: /\.coffee$/, use: {loader: "coffee-loader"}}
         {test: /\.cson$/,  use: {loader: "cson-loader"}}
+        {test: /\.es$/, use: {loader: "babel-loader", query: {presets: ["es2015", "stage-0"]}}
         {test: /\.ya?ml$/,  use: {loader: "yaml-loader"}}
         {test: /\.tag$/,  use: {loader: "riot-tag-loader"}}
         {test: /\.raw$/,  use: {loader: "raw-loader"}}
@@ -63,20 +64,17 @@ module.exports = class Compiler
     @browserOption.entry = {}
     # TODO: 開発に必要なファイル軍だけをコンパイルする方針に変えたい
     require("glob").sync(
-      "./**/@(electron|app)/*.coffee"
+      "./**/@(electron|app)/*.@(coffee|es)"
       , {ignore: "./**/@(node_modules)/**"}
-    )
-    .forEach((filepath) => @electronOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
+    ).forEach((filepath) => @electronOption.entry[filepath.replace(/\.(coffee|es)$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
-      "./**/node/*.coffee"
+      "./**/node/*.@(coffee|es)"
       , {ignore: "./**/@(node_modules)/**"}
-    )
-    .forEach((filepath) => @nodeOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
+    ).forEach((filepath) => @nodeOption.entry[filepath.replace(/\.(coffee|es)$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
-      "./**/@(web|browser)/*.coffee"
+      "./**/@(web|browser)/*.@(coffee|es)"
       , {ignore: "./**/@(node_modules)/**"}
-    )
-    .forEach((filepath) => @browserOption.entry[filepath.replace(/\.coffee$/, "").replace(/^\.\//, "")] = [filepath])
+    ).forEach((filepath) => @browserOption.entry[filepath.replace(/\.(coffee|es)$/, "").replace(/^\.\//, "")] = [filepath])
     console.log @browserOption.entry
   @callback: (err, stats) =>
     return console.log(err) if (err)
