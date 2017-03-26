@@ -7,6 +7,8 @@ coffeescriptを用い
 * electronアプリケーションモジュールの開発・テスト
 
 実装したいリスト
+* Rust開発のための土台
+  * rustコンパイラにも依存させる？うまくmodule切り分け出来るかも？
 * Bot開発のための土台
   * commandライン入力をelectron上で仮想的に実装
 * IoT開発のための土台
