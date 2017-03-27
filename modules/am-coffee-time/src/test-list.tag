@@ -270,18 +270,13 @@ require("./test-iframe.tag")
       console.clear()
       ++Status.executeSum
       @refs.testFrame.setConsoleEvent(
-        assert: (flg, msg) =>
-          if msg
-            console.assert(flg, msg)
-          else
-            console.assert(flg)
+        assert: (flg) =>
           unless flg
             @error = true
             @update()
             callback and callback()
         info: (msg) =>
           if msg is "finished" and not @error
-            console.info(msg)
             @success = true unless @warn
             ++Status.successSum
             @update()
