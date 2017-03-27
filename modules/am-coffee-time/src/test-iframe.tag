@@ -48,16 +48,16 @@
       else # browser
         iframeWindow = @root.querySelector("iframe").contentWindow
         if callbackObj
-          iframeWindow.console.__assert = iframeWindow.console.assert
+          __assert = iframeWindow.console.assert
           iframeWindow.console.assert = (args...) =>
-            iframeWindow.console.__assert(args...)
+            __assert(args...)
             callbackObj.assert(args[0])
           iframeWindow.onerror = (msg) =>
             callbackObj.error(msg)
             false
-          iframeWindow.console.__info = iframeWindow.console.info
+          __info = iframeWindow.console.info
           iframeWindow.console.info = (args...) =>
-            iframeWindow.console.__info(args...)
+            __info(args...)
             callbackObj.info(args[0])
         return unless WholeStatus.opts.files
         iframeWindow.addEventListener("load", =>
