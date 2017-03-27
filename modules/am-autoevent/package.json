@@ -1,6 +1,6 @@
 {
   "name": "am-autoevent",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "web client event",
   "main": "browser/AutoEvent-no-gen",
   "scripts": {
@@ -8,9 +8,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "am-coffee-time": "0.0.25",
+    "assert": "^1.4.1",
     "jquery": "^3.1.1"
   }
 }

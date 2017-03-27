@@ -120,7 +120,7 @@ require("./test-iframe.tag")
 <list-line>
   <section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
-      <span class="bold {success: success, error: error, warn: warn}"></span>
+      <span class="bold {success: success, error: error}"></span>
       <a class="tree" href={routing} onclick={router}>{treeName}</a>
       <label each={pattern, i in patterns} class={focus: pattern.focus} data-id={i} onclick={changePatternEvent}>
         {pattern.name}
@@ -179,12 +179,6 @@ require("./test-iframe.tag")
         content: "〇";
       }
     }
-    .warn {
-      color: gold;
-      &:after {
-        content: "△";
-      }
-    }
     .error {
       color: red;
       &:after {
@@ -240,7 +234,6 @@ require("./test-iframe.tag")
       @update()
     @init = =>
       @error = null
-      @warn = null
       @success = null
       @deleteIframe()
     @recursivelyExecuteTask = =>
@@ -270,19 +263,16 @@ require("./test-iframe.tag")
       console.clear()
       ++Status.executeSum
       @refs.testFrame.setConsoleEvent(
-        assert: (flg) =>
-          unless flg
-            @error = true
-            @update()
-            callback and callback()
         info: (msg) =>
           if msg is "finished" and not @error
-            @success = true unless @warn
+            @success = true
             ++Status.successSum
             @update()
             callback and callback()
         error: (msg) =>
-          @warn = true
+          @error = true
+          @update()
+          callback and callback()
       )
     @router = (e) =>
       route("path=" + e.target.getAttribute("href"))

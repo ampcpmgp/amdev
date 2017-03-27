@@ -1,3 +1,4 @@
+assert = require("assert")
 Test = require("am-coffee-time/browser/Test")
 WSClient = require("../browser/WSClient")
 
@@ -11,7 +12,7 @@ test =
       connectFlag = true
       console.info("finished")
     )
-    timeout = => console.assert(false, "websocket timeout") unless connectFlag
+    timeout = => assert(false, "websocket timeout") unless connectFlag
     setTimeout(timeout, 1500)
 
 
