@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "assert": "^1.4.1",
     "am-common": "^1.0.31",
     "chokidar": "^1.6.1",
     "glob": "^7.1.1",

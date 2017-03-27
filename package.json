@@ -12,6 +12,7 @@
     "electron": "electron ./electron/start.js"
   },
   "dependencies": {
+    "assert": "^1.4.1",
     "babel-core": "^6.24.0",
     "babel-loader": "6",
     "babel-preset-env": "^1.2.2",

@@ -1,4 +1,6 @@
 $ = (selector) => document.querySelector(selector)
+assert = require("assert")
+
 trigger = ($dom, eventType) =>
   event = document.createEvent("HTMLEvents")
   event.initEvent(eventType, false, true)
@@ -21,7 +23,7 @@ module.exports = class AutoEvent
       () =>
         $this = $(selector)
         if assertionMsg
-          console.assert($this, "#{selector} #{assertionMsg}")
+          assert($this, "#{selector} #{assertionMsg}")
           callback($this)
         else
           try
@@ -76,7 +78,7 @@ module.exports = class AutoEvent
       now = Date.now()
       testTimer = setInterval( =>
         withInTimeFlg = Date.now() - now < @timeoutMsec
-        console.assert(withInTimeFlg, """timeout for "#{selector}" selector""")
+        assert(withInTimeFlg, """timeout for "#{selector}" selector""")
         return stopTimer() unless withInTimeFlg
         if exists
           if $(selector) then executeFunc()
