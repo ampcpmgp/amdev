@@ -2,6 +2,10 @@ $ = require("jquery")
 jquery_stylesheet = require("jquery-stylesheet")
 jquery_stylesheet($)
 
+console.assert = (args...) =>
+  result = args[0]
+  throw new Error(args[1..]) unless result
+
 getRandomColor = (opacity = 1) =>
   getRandomNum = => Math.floor(Math.random() * 256)
   "rgba(#{getRandomNum()},#{getRandomNum()},#{getRandomNum()}, #{opacity})"

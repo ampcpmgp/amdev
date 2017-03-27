@@ -49,12 +49,10 @@
         iframeWindow = @root.querySelector("iframe").contentWindow
         if callbackObj
           __assert = iframeWindow.console.assert
-          iframeWindow.console.assert = (args...) =>
-            __assert(args...)
-            callbackObj.assert(args[0])
-          iframeWindow.onerror = (msg) =>
-            callbackObj.error(msg)
+          iframeWindow.addEventListener("error", (event) =>
+            callbackObj.error()
             false
+          )
           __info = iframeWindow.console.info
           iframeWindow.console.info = (args...) =>
             __info(args...)
