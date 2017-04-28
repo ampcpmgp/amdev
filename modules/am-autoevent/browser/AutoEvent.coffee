@@ -78,8 +78,8 @@ module.exports = class AutoEvent
       now = Date.now()
       testTimer = setInterval( =>
         withInTimeFlg = Date.now() - now < @timeoutMsec
+        stopTimer() unless withInTimeFlg
         assert(withInTimeFlg, """timeout for "#{selector}" selector""")
-        return stopTimer() unless withInTimeFlg
         if exists
           if $(selector) then executeFunc()
         else
