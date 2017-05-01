@@ -2,7 +2,7 @@
   <button type="button" onclick={restart}>Browser restart</button>
   <button type="button" onclick={Status.toggleliveReloadFlg}>
     livereload:
-    <span>{ea.liveReloadFlg ? "on": "off"}</span>
+    <span>{localStorage.liveReloadFlg === "true" ? "on": "off"}</span>
   </button>
   <button type="button" onclick={Status.togglePublishFlg}>
     publish:
