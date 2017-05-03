@@ -7,9 +7,15 @@
       <span class="name">{moduleName}</span>
       <button if={false} type="button" name="button" data-name={moduleName} onclick={yarn}>yarn</button>
     </div>
-    <button class="browser" if={exsitsBrowserModule(moduleName)} data-name={moduleName} onclick={openBrowser}>
-      open browser
-    </button>
+    <section class="test">
+      test:
+      <button class="browser" if={exsitsBrowserModule(moduleName)} data-name={moduleName} onclick={openBrowser}>
+        browser
+      </button>
+      <a class="browser" if={exsitsAppModule(moduleName)} href={getAppTestLinkPage(moduleName)}>
+        app
+      </a>
+    </section>
     <div class="update">
       version update:
       <button type="button" data-type="patch" data-name={moduleName} onclick={npmPublish}>patch</button>
@@ -28,8 +34,11 @@
           border-radius: 20px;
         }
       }
-      > button.browser {
-        background: rgba(255, 255, 0, 0.4);
+      > section.test {
+        > button.browser {
+          background: rgba(255, 255, 0, 0.4);
+        }
+
       }
     }
   </style>
@@ -39,9 +48,12 @@
     exec = require("child_process").exec
     ModuleCompiler = require("./ModuleCompiler")
     Status = require("./Status")
-    getBrowserTestPage = (moduleName) => "#{@getDirName(moduleName)}/web/list.html"
+    getBrowserTestPage = (moduleName) => "#{@getDirName(moduleName)}/test/web/list.html"
+    getAppTestPage = (moduleName) => "#{@getDirName(moduleName)}/test/app/list.html"
     @getDirName = (moduleName) => "./modules/#{moduleName}"
     @exsitsBrowserModule = (moduleName) => fs.existsSync(getBrowserTestPage(moduleName))
+    @exsitsAppModule = (moduleName) => fs.existsSync(getAppTestPage(moduleName))
+    @getAppTestLinkPage = (moduleName) => ".#{getAppTestPage(moduleName)}"
     @openBrowser = (e) =>
       shell.openExternal("http://localhost:#{ea.config.server.port}/#{getBrowserTestPage(e.currentTarget.dataset.name)}")
     @modules = fs.readdirSync("./modules/")
