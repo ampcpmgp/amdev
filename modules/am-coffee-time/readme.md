@@ -25,7 +25,7 @@ testListPage.html
 
 testListPage.coffee
 ```coffee
-generate = require("am-coffee-time")
+generate = require("am-coffee-time").default
 testcases =
   #event: url
   "click=.config": "/url.html"
