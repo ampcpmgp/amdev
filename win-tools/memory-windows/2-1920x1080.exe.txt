@@ -6,6 +6,9 @@ GitHub.exe,GitHub=======>467,364,1224,675
 chrome.exe,Google Chrome=======>4,1,1062,975
 chrome.exe,Google Chrome=======>1945,0,1202,959
 chrome.exe,Google Chrome=======>560,0,1281,1032
+firefox.exe,Mozilla Firefox=======>4,1,1062,975
+firefox.exe,Mozilla Firefox=======>1945,0,1202,959
+firefox.exe,Mozilla Firefox=======>560,0,1281,1032
 LINE.exe,LINE=======>2767,57,629,588
 slack.exe,Slack=======>666,54,1096,978
 cmd.exe,npm=======>1931,525,993,519

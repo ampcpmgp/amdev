@@ -45,14 +45,16 @@ All passed the test by putting the console.info after it was true ("finished").
 #### sample code
 ```coffee
 Test = require("am-coffee-time/browser/Test")
+assert = require("assert")
+
 Test.start(
   click: (type) =>
     el = document.querySelector(type)
-    console.assert(el)
+    assert(el)
     el.click()
   update: ([type, value]) =>
     el = document.querySelector("input[name=#{type}]")
-    console.assert(el)
+    assert(el)
     el.value = value
 )
 

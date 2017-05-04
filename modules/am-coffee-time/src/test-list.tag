@@ -41,8 +41,8 @@ require("./test-iframe.tag")
       executePath = decodeURIComponent(encodeURIComponent(decodeURIComponent(executePath)))
       unless Status.executablePath[executePath]
         regex = /^[^#]+#/
-        params = executePath.replace(regex, "").split("/")
-        @refs.item.recursivelyCheck(params)
+        paramStr = executePath.replace(regex, "")
+        @refs.item.recursivelyCheck(paramStr)
         Status.executablePath[executePath]?()
         return
         # TODO: 以下処理今後検討
@@ -102,11 +102,9 @@ require("./test-iframe.tag")
     getLines = =>
       lines = @refs.lines
       unless lines.length then [lines] else lines
-    @recursivelyCheck = (params) =>
+    @recursivelyCheck = (paramStr) =>
       getLines().forEach((line) =>
-        copyParams = []
-        objectAssign(copyParams, params)
-        line.recursivelyCheckItem(copyParams)
+        line.recursivelyCheckItem(paramStr)
         )
     @recursivelyUpdate = (routing) =>
       getLines().forEach((line) =>
@@ -122,7 +120,7 @@ require("./test-iframe.tag")
 <list-line>
   <section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
-      <span class="bold {success: success, error: error, warn: warn}"></span>
+      <span class="bold {success: success, error: error}"></span>
       <a class="tree" href={routing} onclick={router}>{treeName}</a>
       <label each={pattern, i in patterns} class={focus: pattern.focus} data-id={i} onclick={changePatternEvent}>
         {pattern.name}
@@ -181,12 +179,6 @@ require("./test-iframe.tag")
         content: "〇";
       }
     }
-    .warn {
-      color: gold;
-      &:after {
-        content: "△";
-      }
-    }
     .error {
       color: red;
       &:after {
@@ -242,7 +234,6 @@ require("./test-iframe.tag")
       @update()
     @init = =>
       @error = null
-      @warn = null
       @success = null
       @deleteIframe()
     @recursivelyExecuteTask = =>
@@ -272,24 +263,16 @@ require("./test-iframe.tag")
       console.clear()
       ++Status.executeSum
       @refs.testFrame.setConsoleEvent(
-        assert: (flg, msg) =>
-          if msg
-            console.assert(flg, msg)
-          else
-            console.assert(flg)
-          unless flg
-            @error = true
-            @update()
-            callback and callback()
         info: (msg) =>
           if msg is "finished" and not @error
-            console.info(msg)
-            @success = true unless @warn
+            @success = true
             ++Status.successSum
             @update()
             callback and callback()
         error: (msg) =>
-          @warn = true
+          @error = true
+          @update()
+          callback and callback()
       )
     @router = (e) =>
       route("path=" + e.target.getAttribute("href"))
@@ -309,21 +292,24 @@ require("./test-iframe.tag")
       @refs.item?.recursivelyUpdate(@routing)
       setObservableEvent()
     @changePatternEvent = (e) => @changePattern(e.currentTarget.dataset.id)
-    @recursivelyCheckItem = (params) =>
-      param = params.shift()
-      matchedPattern = @patterns?.filter((pattern, i) => param is pattern.path)?[0]
+    @recursivelyCheckItem = (paramStr) =>
+      matchedPattern = @patterns?.filter((pattern, i) =>
+        paramStr.indexOf(pattern.path) is 0
+      )?[0]
       if matchedPattern
+        paramStr = paramStr.replace(matchedPattern.path, "").replace(/^\//, "")
         @patterns.forEach((pattern, i) =>
           pattern.focus = false
           if matchedPattern is pattern
             @changePattern(i)
           )
         @update()
-      if param is @path or matchedPattern
-        if params
-          @refs.item?.recursivelyCheck(params)
+        if paramStr
+          @refs.item?.recursivelyCheck(paramStr)
         else
           setObservableEvent()
+      else if paramStr.indexOf(@path) is 0
+        @refs.item?.recursivelyCheck(paramStr.replace(@path, "").replace(/^\//, ""))
     Status.on("init", => @init())
     paramMode and Status.on("toggle-mode", =>
       @treeName =

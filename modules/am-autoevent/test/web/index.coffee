@@ -21,7 +21,6 @@ func = (Klass) =>
       console.info "finished"
     )
 
-
 require("am-coffee-time/browser/Test").start(
   test:  =>
     func(AutoEvent)
@@ -37,11 +36,10 @@ require("am-coffee-time/browser/Test").start(
     setTimeout(createTimeoutBox, 500)
   clickAssert: (assertFlg) =>
     ae = new AutoEvent
-    ae.register().wait(300).click(".box", assertFlg is "true").start()
+    ae.register().wait(300).click(".box555", assertFlg is true).start()
   select: (value) =>
     ae = new AutoEvent
     ae.register().wait(300).selectValue("select", value).start()
-    $ERROR_IS_OKAY
   scroll: =>
     scrollTest2.scrollTop = 30
     console.info "finished"
