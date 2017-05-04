@@ -5,6 +5,9 @@
   <div class="module" each={moduleName in modules}>
     <div class="name-box">
       <span class="name">{moduleName}</span>
+      <button if={exsitsGhPage(moduleName)} class="gh-pages" data-name={moduleName} onclick={openBrowserForGhPage}>
+        gh-page
+      </button>
       <button if={false} type="button" name="button" data-name={moduleName} onclick={yarn}>yarn</button>
     </div>
     <section class="test">
@@ -50,12 +53,16 @@
     Status = require("./Status")
     getBrowserTestPage = (moduleName) => "#{@getDirName(moduleName)}/test/web/list.html"
     getAppTestPage = (moduleName) => "#{@getDirName(moduleName)}/test/app/list.html"
+    getGhPage = (moduleName) => "#{@getDirName(moduleName)}/web/index.html"
     @getDirName = (moduleName) => "./modules/#{moduleName}"
     @exsitsBrowserModule = (moduleName) => fs.existsSync(getBrowserTestPage(moduleName))
+    @exsitsGhPage = (moduleName) => fs.existsSync(getBrowserTestPage(moduleName))
     @exsitsAppModule = (moduleName) => fs.existsSync(getAppTestPage(moduleName))
     @getAppTestLinkPage = (moduleName) => ".#{getAppTestPage(moduleName)}"
     @openBrowser = (e) =>
       shell.openExternal("http://localhost:#{ea.config.server.port}/#{getBrowserTestPage(e.currentTarget.dataset.name)}")
+    @openBrowserForGhPage = (e) =>
+      shell.openExternal("http://localhost:#{ea.config.server.port}/#{getGhPage(e.currentTarget.dataset.name)}")
     @modules = fs.readdirSync("./modules/")
     @yarn = (e) =>
       exec(

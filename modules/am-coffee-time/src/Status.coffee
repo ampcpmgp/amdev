@@ -1,3 +1,5 @@
+riot = require("riot")
+
 module.exports = class Status
   @sumInit: =>
     @successSum = 0
