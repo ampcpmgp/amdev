@@ -61,17 +61,13 @@ module.exports =
 	  function Status() {
 	    this.togglePublishFlg = bind(this.togglePublishFlg, this);
 	    this.toggleliveReloadFlg = bind(this.toggleliveReloadFlg, this);
-	    this.init = bind(this.init, this);
+	    this.publishFlg = true;
+	    localStorage.liveReloadFlg = "true";
+	    riot.observable(this);
 	  }
 
-	  Status.prototype.init = function() {
-	    this.publishFlg = true;
-	    this;
-	    return riot.observable(this);
-	  };
-
 	  Status.prototype.toggleliveReloadFlg = function() {
-	    window.ea.liveReloadFlg = !window.ea.liveReloadFlg;
+	    localStorage.liveReloadFlg = !localStorage.liveReloadFlg;
 	    return this.trigger("update");
 	  };
 
@@ -84,7 +80,7 @@ module.exports =
 
 	})();
 
-	module.exports = new Status().init();
+	module.exports = new Status();
 
 
 /***/ }

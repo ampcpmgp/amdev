@@ -119,8 +119,6 @@ module.exports =
 
 	  ElectronApp.prototype.publishFlg = true;
 
-	  ElectronApp.prototype.liveReloadFlg = false;
-
 	  function ElectronApp() {}
 
 	  ElectronApp.prototype.start = function() {
@@ -165,7 +163,7 @@ module.exports =
 	      }
 	    }).on("change", (function(_this) {
 	      return function(path) {
-	        if (!_this.liveReloadFlg) {
+	        if (localStorage.liveReloadFlg !== "true") {
 	          return;
 	        }
 	        return location.reload();
@@ -179,8 +177,8 @@ module.exports =
 	    } catch (error) {
 	      this.config = __webpack_require__(21);
 	    }
-	    this.option = this.config.server.port || 8091;
-	    return __webpack_require__(22).prototype.start(8091, 8091);
+	    this.port = this.config.server.port || 8091;
+	    return __webpack_require__(22).prototype.start(this.port, this.port);
 	  };
 
 	  return ElectronApp;

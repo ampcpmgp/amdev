@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["modules/am-coffee-time/web/list"] = factory();
+		exports["modules/am-data-friends/test/web/list"] = factory();
 	else
-		root["modules/am-coffee-time/web/list"] = factory();
+		root["modules/am-data-friends/test/web/list"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -54,7 +54,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(37);
+	module.exports = __webpack_require__(40);
 
 
 /***/ },
@@ -5148,31 +5148,30 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 34 */,
 /* 35 */,
 /* 36 */,
-/* 37 */
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	var generate, testcases;
 
-	var _generate = __webpack_require__(14);
+	generate = __webpack_require__(14);
 
-	var _generate2 = _interopRequireDefault(_generate);
+	testcases = __webpack_require__(41);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	generate(testcases);
 
-	var patterns = {
-	  '全パターン': {
-	    '動作フロー確認用': {
-	      '結果=成功': './app.html',
-	      '結果=失敗': './app.html'
-	    },
-	    'ID入力=melon': {
-	      'PW入力=google': './app.html',
-	      'PW入力=apple': './app.html'
-	    },
-	    'スイッチ[日本語(lang=ja) | 英語(lang=en) | 中国語(lang=ch)]': '多言語化(./app.html)'
-	  }
+
+/***/ },
+/* 41 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"am-module": {
+			"pattern-name": "path"
+		}
 	};
-	(0, _generate2.default)(patterns);
 
 /***/ }
 /******/ ])

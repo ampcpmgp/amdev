@@ -41,24 +41,67 @@ module.exports =
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(54);
+	module.exports = __webpack_require__(35);
 
 
 /***/ },
-
-/***/ 12:
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */
 /***/ function(module, exports) {
 
 	module.exports = require("riot");
 
 /***/ },
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
 
-/***/ 36:
+	var generate, testcases;
+
+	generate = __webpack_require__(36);
+
+	testcases = __webpack_require__(44);
+
+	generate(testcases);
+
+
+/***/ },
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Status;
@@ -85,8 +128,7 @@ module.exports =
 
 
 /***/ },
-
-/***/ 37:
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Status, riot;
@@ -140,8 +182,7 @@ module.exports =
 
 
 /***/ },
-
-/***/ 38:
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -556,8 +597,7 @@ module.exports =
 	  
 
 /***/ },
-
-/***/ 39:
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -634,29 +674,25 @@ module.exports =
 	  
 
 /***/ },
-
-/***/ 40:
+/* 40 */
 /***/ function(module, exports) {
 
 	module.exports = require("is_js");
 
 /***/ },
-
-/***/ 41:
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = require("riot-route");
 
 /***/ },
-
-/***/ 42:
+/* 42 */
 /***/ function(module, exports) {
 
 	module.exports = require("object-assign");
 
 /***/ },
-
-/***/ 43:
+/* 43 */
 /***/ function(module, exports) {
 
 	var Parser;
@@ -756,32 +792,14 @@ module.exports =
 
 
 /***/ },
-
-/***/ 54:
-/***/ function(module, exports, __webpack_require__) {
-
-	var generate, testcases;
-
-	generate = __webpack_require__(36);
-
-	testcases = __webpack_require__(55);
-
-	generate(testcases);
-
-
-/***/ },
-
-/***/ 55:
+/* 44 */
 /***/ function(module, exports) {
 
 	module.exports = {
-		"node-streamize": {
-			"parser": {
-				"simple": "./index.html"
-			}
+		"am-module": {
+			"param": "./index.html"
 		}
 	};
 
 /***/ }
-
-/******/ });
+/******/ ]);

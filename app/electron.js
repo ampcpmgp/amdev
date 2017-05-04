@@ -396,17 +396,13 @@ module.exports =
 	  function Status() {
 	    this.togglePublishFlg = bind(this.togglePublishFlg, this);
 	    this.toggleliveReloadFlg = bind(this.toggleliveReloadFlg, this);
-	    this.init = bind(this.init, this);
+	    this.publishFlg = true;
+	    localStorage.liveReloadFlg = "true";
+	    riot.observable(this);
 	  }
 
-	  Status.prototype.init = function() {
-	    this.publishFlg = true;
-	    this;
-	    return riot.observable(this);
-	  };
-
 	  Status.prototype.toggleliveReloadFlg = function() {
-	    window.ea.liveReloadFlg = !window.ea.liveReloadFlg;
+	    localStorage.liveReloadFlg = !localStorage.liveReloadFlg;
 	    return this.trigger("update");
 	  };
 
@@ -419,7 +415,7 @@ module.exports =
 
 	})();
 
-	module.exports = new Status().init();
+	module.exports = new Status();
 
 
 /***/ },
@@ -466,7 +462,7 @@ module.exports =
 
 	
 	    var riot = __webpack_require__(12)
-	    riot.tag2('control-buttons', '<button type="button" onclick="{restart}">Browser restart</button> <button type="button" onclick="{Status.toggleliveReloadFlg}"> livereload: <span>{ea.liveReloadFlg ? ⁗on⁗: ⁗off⁗}</span> </button> <button type="button" onclick="{Status.togglePublishFlg}"> publish: <span>{Status.publishFlg ? ⁗on⁗: ⁗off⁗}</span> </button>', 'control-buttons >button:first-child,[data-is="control-buttons"] >button:first-child{display:block}', '', function(opts) {
+	    riot.tag2('control-buttons', '<button type="button" onclick="{restart}">Browser restart</button> <button type="button" onclick="{Status.toggleliveReloadFlg}"> livereload: <span>{localStorage.liveReloadFlg === ⁗true⁗ ? ⁗on⁗: ⁗off⁗}</span> </button> <button type="button" onclick="{Status.togglePublishFlg}"> publish: <span>{Status.publishFlg ? ⁗on⁗: ⁗off⁗}</span> </button>', 'control-buttons >button:first-child,[data-is="control-buttons"] >button:first-child{display:block}', '', function(opts) {
 	var Status;
 
 	Status = this.Status = __webpack_require__(10);
@@ -499,20 +495,76 @@ module.exports =
 
 	
 	    var riot = __webpack_require__(12)
-	    riot.tag2('npm-modules', '<div class=""> npm modules: </div> <div class="module" each="{moduleName in modules}"> <div class="name-box"> <span class="name">{moduleName}</span> <button if="{false}" type="button" name="button" data-name="{moduleName}" onclick="{yarn}">yarn</button> </div> <div class="update"> version update: <button type="button" data-type="patch" data-name="{moduleName}" onclick="{npmPublish}">patch</button> <button type="button" data-type="minor" data-name="{moduleName}" onclick="{npmPublish}">minor</button> <button type="button" data-type="major" data-name="{moduleName}" onclick="{npmPublish}">major</button> </div> </div>', 'npm-modules >.module,[data-is="npm-modules"] >.module{border:1px solid #ccc} npm-modules >.module>.name-box .name,[data-is="npm-modules"] >.module>.name-box .name{display:inline-block;padding:0 6px;border:1px solid deepskyblue;border-radius:20px}', '', function(opts) {
-	var ModuleCompiler, Status, exec, fs, getDirName;
-
-	exec = __webpack_require__(9).exec;
+	    riot.tag2('npm-modules', '<div class=""> npm modules: </div> <div class="module" each="{moduleName in modules}"> <div class="name-box"> <span class="name">{moduleName}</span> <button if="{exsitsGhPage(moduleName)}" class="gh-pages" data-name="{moduleName}" onclick="{openBrowserForGhPage}"> gh-page </button> <button if="{false}" type="button" name="button" data-name="{moduleName}" onclick="{yarn}">yarn</button> </div> <section class="test"> test: <button class="browser" if="{exsitsBrowserModule(moduleName)}" data-name="{moduleName}" onclick="{openBrowser}"> browser </button> <a class="browser" if="{exsitsAppModule(moduleName)}" href="{getAppTestLinkPage(moduleName)}"> app </a> </section> <div class="update"> version update: <button type="button" data-type="patch" data-name="{moduleName}" onclick="{npmPublish}">patch</button> <button type="button" data-type="minor" data-name="{moduleName}" onclick="{npmPublish}">minor</button> <button type="button" data-type="major" data-name="{moduleName}" onclick="{npmPublish}">major</button> </div> </div>', 'npm-modules >.module,[data-is="npm-modules"] >.module{border:1px solid #ccc} npm-modules >.module>.name-box>.name,[data-is="npm-modules"] >.module>.name-box>.name{display:inline-block;padding:0 6px;border:1px solid deepskyblue;border-radius:20px} npm-modules >.module>section.test>button.browser,[data-is="npm-modules"] >.module>section.test>button.browser{background:rgba(255,255,0,0.4)}', '', function(opts) {
+	var ModuleCompiler, Status, exec, fs, getAppTestPage, getBrowserTestPage, getGhPage, shell;
 
 	fs = __webpack_require__(4);
+
+	shell = __webpack_require__(15).shell;
+
+	exec = __webpack_require__(9).exec;
 
 	ModuleCompiler = __webpack_require__(1);
 
 	Status = __webpack_require__(10);
 
-	getDirName = (function(_this) {
+	getBrowserTestPage = (function(_this) {
+	  return function(moduleName) {
+	    return (_this.getDirName(moduleName)) + "/test/web/list.html";
+	  };
+	})(this);
+
+	getAppTestPage = (function(_this) {
+	  return function(moduleName) {
+	    return (_this.getDirName(moduleName)) + "/test/app/list.html";
+	  };
+	})(this);
+
+	getGhPage = (function(_this) {
+	  return function(moduleName) {
+	    return (_this.getDirName(moduleName)) + "/web/index.html";
+	  };
+	})(this);
+
+	this.getDirName = (function(_this) {
 	  return function(moduleName) {
 	    return "./modules/" + moduleName;
+	  };
+	})(this);
+
+	this.exsitsBrowserModule = (function(_this) {
+	  return function(moduleName) {
+	    return fs.existsSync(getBrowserTestPage(moduleName));
+	  };
+	})(this);
+
+	this.exsitsGhPage = (function(_this) {
+	  return function(moduleName) {
+	    return fs.existsSync(getBrowserTestPage(moduleName));
+	  };
+	})(this);
+
+	this.exsitsAppModule = (function(_this) {
+	  return function(moduleName) {
+	    return fs.existsSync(getAppTestPage(moduleName));
+	  };
+	})(this);
+
+	this.getAppTestLinkPage = (function(_this) {
+	  return function(moduleName) {
+	    return "." + (getAppTestPage(moduleName));
+	  };
+	})(this);
+
+	this.openBrowser = (function(_this) {
+	  return function(e) {
+	    return shell.openExternal("http://localhost:" + ea.config.server.port + "/" + (getBrowserTestPage(e.currentTarget.dataset.name)));
+	  };
+	})(this);
+
+	this.openBrowserForGhPage = (function(_this) {
+	  return function(e) {
+	    return shell.openExternal("http://localhost:" + ea.config.server.port + "/" + (getGhPage(e.currentTarget.dataset.name)));
 	  };
 	})(this);
 
@@ -520,7 +572,7 @@ module.exports =
 
 	this.yarn = (function(_this) {
 	  return function(e) {
-	    return exec("cd " + (getDirName(e.currentTarget.dataset.name)) + " && yarn", function(e, out, err) {
+	    return exec("cd " + (_this.getDirName(e.currentTarget.dataset.name)) + " && yarn", function(e, out, err) {
 	      if (err) {
 	        return console.log(err);
 	      }
@@ -539,7 +591,7 @@ module.exports =
 	      if (!Status.publishFlg) {
 	        return console.log("compile finished. and not publish.");
 	      }
-	      return exec("cd " + (getDirName(moduleName)) + " && npm version " + type + " && npm publish", function(e, out, err) {
+	      return exec("cd " + (_this.getDirName(moduleName)) + " && npm version " + type + " && npm publish", function(e, out, err) {
 	        if (err) {
 	          return console.log(err);
 	        }

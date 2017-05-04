@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["modules/am-coffee-time/web/list"] = factory();
+		exports["sample/am-/test/web/list"] = factory();
 	else
-		root["modules/am-coffee-time/web/list"] = factory();
+		root["sample/am-/test/web/list"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -50,18 +50,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(37);
+	module.exports = __webpack_require__(101);
 
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */
+
+/***/ 4:
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -247,16 +246,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */
+
+/***/ 14:
 /***/ function(module, exports, __webpack_require__) {
 
 	var Status;
@@ -283,7 +274,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 15 */
+
+/***/ 15:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* Riot v3.3.2, @license MIT */
@@ -2990,7 +2982,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 16 */
+
+/***/ 16:
 /***/ function(module, exports, __webpack_require__) {
 
 	var Status, riot;
@@ -3044,7 +3037,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 17 */
+
+/***/ 17:
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -3459,7 +3453,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  
 
 /***/ },
-/* 18 */
+
+/***/ 18:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {
@@ -3537,7 +3532,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 19 */
+
+/***/ 19:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -4450,7 +4446,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 20 */
+
+/***/ 20:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4801,7 +4798,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 21 */
+
+/***/ 21:
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function(window, undefined) {var observable = function(el) {
@@ -4939,7 +4937,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(typeof window != 'undefined' ? window : undefined);
 
 /***/ },
-/* 22 */
+
+/***/ 22:
 /***/ function(module, exports) {
 
 	/*
@@ -5035,7 +5034,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 23 */
+
+/***/ 23:
 /***/ function(module, exports) {
 
 	var Parser;
@@ -5135,46 +5135,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */
+
+/***/ 101:
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	var generate, testcases;
 
-	var _generate = __webpack_require__(14);
+	generate = __webpack_require__(14);
 
-	var _generate2 = _interopRequireDefault(_generate);
+	testcases = __webpack_require__(102);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	generate(testcases);
 
-	var patterns = {
-	  '全パターン': {
-	    '動作フロー確認用': {
-	      '結果=成功': './app.html',
-	      '結果=失敗': './app.html'
-	    },
-	    'ID入力=melon': {
-	      'PW入力=google': './app.html',
-	      'PW入力=apple': './app.html'
-	    },
-	    'スイッチ[日本語(lang=ja) | 英語(lang=en) | 中国語(lang=ch)]': '多言語化(./app.html)'
-	  }
+
+/***/ },
+
+/***/ 102:
+/***/ function(module, exports) {
+
+	module.exports = {
+		"am-module": {
+			"pattern-name": "path"
+		}
 	};
-	(0, _generate2.default)(patterns);
 
 /***/ }
-/******/ ])
+
+/******/ })
 });
 ;

@@ -54,40 +54,230 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(8);
+	module.exports = __webpack_require__(13);
 
 
 /***/ },
 /* 1 */,
 /* 2 */,
 /* 3 */,
-/* 4 */,
+/* 4 */
+/***/ function(module, exports) {
+
+	// shim for using process in browser
+	var process = module.exports = {};
+
+	// cached from whatever global is present so that test runners that stub it
+	// don't break things.  But we need to wrap it in a try catch in case it is
+	// wrapped in strict mode code which doesn't define any globals.  It's inside a
+	// function because try/catches deoptimize in certain engines.
+
+	var cachedSetTimeout;
+	var cachedClearTimeout;
+
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
+	(function () {
+	    try {
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
+	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
+	    }
+	    try {
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
+	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
+	    }
+	} ())
+	function runTimeout(fun) {
+	    if (cachedSetTimeout === setTimeout) {
+	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
+	        return setTimeout(fun, 0);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedSetTimeout(fun, 0);
+	    } catch(e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+	            return cachedSetTimeout.call(null, fun, 0);
+	        } catch(e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+	            return cachedSetTimeout.call(this, fun, 0);
+	        }
+	    }
+
+
+	}
+	function runClearTimeout(marker) {
+	    if (cachedClearTimeout === clearTimeout) {
+	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
+	        return clearTimeout(marker);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedClearTimeout(marker);
+	    } catch (e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+	            return cachedClearTimeout.call(null, marker);
+	        } catch (e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+	            return cachedClearTimeout.call(this, marker);
+	        }
+	    }
+
+
+
+	}
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+
+	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = runTimeout(cleanUpNextTick);
+	    draining = true;
+
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    runClearTimeout(timeout);
+	}
+
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        runTimeout(drainQueue);
+	    }
+	};
+
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+
+	function noop() {}
+
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+
+	process.cwd = function () { return '/' };
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function() { return 0; };
+
+
+/***/ },
 /* 5 */,
 /* 6 */,
 /* 7 */,
-/* 8 */
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var generate, testcases;
 
-	generate = __webpack_require__(9);
+	generate = __webpack_require__(14);
 
-	testcases = __webpack_require__(20);
+	testcases = __webpack_require__(24);
 
 	generate(testcases);
 
 
 /***/ },
-/* 9 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Status;
 
-	window.riot = __webpack_require__(10);
+	window.riot = __webpack_require__(15);
 
-	Status = __webpack_require__(11);
+	Status = __webpack_require__(16);
 
-	__webpack_require__(12);
+	__webpack_require__(17);
 
 	module.exports = (function(_this) {
 	  return function(testPatterns, opts) {
@@ -105,7 +295,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* Riot v3.3.2, @license MIT */
@@ -2812,10 +3002,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
-/***/ function(module, exports) {
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
 
-	var Status;
+	var Status, riot;
+
+	riot = __webpack_require__(15);
 
 	module.exports = Status = (function() {
 	  function Status() {}
@@ -2864,19 +3056,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	    var riot = __webpack_require__(10)
-	    __webpack_require__(13)
+	    var riot = __webpack_require__(15)
+	    __webpack_require__(18)
 
 	riot.tag2('test-list', '<test-status></test-status> <a onclick="{toRouteHash}">base</a> <a if="{Status.paramMode}" onclick="{toggleParameterMode}">toggle params</a> <recursive-item ref="item" data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe ref="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{Status.config}"></test-iframe>', 'test-list,[data-is="test-list"]{display:block;width:100%;background-color:white;font-size:14px} test-list>a,[data-is="test-list"]>a{border:1px solid #ccc} test-list a,[data-is="test-list"] a{color:blue;text-decoration:none;cursor:pointer;display:inline-block} test-list a:hover,[data-is="test-list"] a:hover{opacity:.4}', '', function(opts) {
 	var Status, bodyStyle, route;
 
-	Status = this.Status = __webpack_require__(11);
+	Status = this.Status = __webpack_require__(16);
 
-	route = __webpack_require__(16);
+	route = __webpack_require__(20);
 
 	bodyStyle = document.body.style;
 
@@ -2889,7 +3081,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	this.check = (function(_this) {
 	  return function() {
-	    var base, executePath, params, regex;
+	    var base, executePath, paramStr, regex;
 	    _this.init();
 	    Status.sumInit();
 	    executePath = route.query().path;
@@ -2899,8 +3091,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    executePath = decodeURIComponent(encodeURIComponent(decodeURIComponent(executePath)));
 	    if (!Status.executablePath[executePath]) {
 	      regex = /^[^#]+#/;
-	      params = executePath.replace(regex, "").split("/");
-	      _this.refs.item.recursivelyCheck(params);
+	      paramStr = executePath.replace(regex, "");
+	      _this.refs.item.recursivelyCheck(paramStr);
 	      if (typeof (base = Status.executablePath)[executePath] === "function") {
 	        base[executePath]();
 	      }
@@ -2963,7 +3155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	riot.tag2('test-status', '<span class="test-count">{Status.successSum}/{Status.executeSum}</span> <span if="{Status.taskFinished()}" class="finished">✔︎</span> <span if="{Status.taskAllSuccess()}" class="all-success">💯</span>', 'test-status .finished,[data-is="test-status"] .finished{ color: #17e017; }', '', function(opts) {
-	this.Status = __webpack_require__(11).on("item-update", (function(_this) {
+	this.Status = __webpack_require__(16).on("item-update", (function(_this) {
 	  return function() {
 	    return _this.update();
 	  };
@@ -2973,7 +3165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	riot.tag2('recursive-item', '<list-line ref="lines" each="{data, key in list}" list="{this}" routing="{this.parent.opts.routing}"></list-line>', 'recursive-item,[data-is="recursive-item"]{ display: block; }', '', function(opts) {
 	var getLines, objectAssign;
 
-	objectAssign = __webpack_require__(18);
+	objectAssign = __webpack_require__(22);
 
 	getLines = (function(_this) {
 	  return function() {
@@ -2988,12 +3180,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(this);
 
 	this.recursivelyCheck = (function(_this) {
-	  return function(params) {
+	  return function(paramStr) {
 	    return getLines().forEach(function(line) {
-	      var copyParams;
-	      copyParams = [];
-	      objectAssign(copyParams, params);
-	      return line.recursivelyCheckItem(copyParams);
+	      return line.recursivelyCheckItem(paramStr);
 	    });
 	  };
 	})(this);
@@ -3009,14 +3198,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	this.list = typeof opts.data === "object" ? opts.data : {};
 	});
 
-	riot.tag2('list-line', '<section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error, warn: warn}"></span> <a class="tree" href="{routing}" onclick="{router}">{treeName}</a> <label each="{pattern, i in patterns}" class="{focus: pattern.focus}" data-id="{i}" onclick="{changePatternEvent}"> {pattern.name} </label> <a class="single" if="{url}" href="{routerExecutionPath}" onclick="{router}">{linkName}</a> </div> <recursive-item ref="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </section> <test-iframe ref="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{Status.config}"></test-iframe>', 'list-line,[data-is="list-line"]{display:block} list-line >.line,[data-is="list-line"] >.line{display:inline-block} list-line >.line.last-execute,[data-is="list-line"] >.line.last-execute{border:solid 1px;display:inline-block;padding:0 8px} list-line >.line div>label,[data-is="list-line"] >.line div>label{cursor:pointer;border:1px solid rgba(255,128,0,0.6);padding:0 6px;text-align:center;display:inline-block} list-line >.line div>label.focus,[data-is="list-line"] >.line div>label.focus{background:#ff0} list-line >.line div>label:hover,[data-is="list-line"] >.line div>label:hover{opacity:.6} list-line .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[data-is="list-line"] .tree{color:#333;word-break:break-all} list-line .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .warn,[data-is="list-line"] .warn{color:gold} list-line .warn:after,[data-is="list-line"] .warn:after{content:"△"} list-line .error,[data-is="list-line"] .error{color:red} list-line .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
+	riot.tag2('list-line', '<section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error}"></span> <a class="tree" href="{routing}" onclick="{router}">{treeName}</a> <label each="{pattern, i in patterns}" class="{focus: pattern.focus}" data-id="{i}" onclick="{changePatternEvent}"> {pattern.name} </label> <a class="single" if="{url}" href="{routerExecutionPath}" onclick="{router}">{linkName}</a> </div> <recursive-item ref="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </section> <test-iframe ref="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{Status.config}"></test-iframe>', 'list-line,[data-is="list-line"]{display:block} list-line >.line,[data-is="list-line"] >.line{display:inline-block} list-line >.line.last-execute,[data-is="list-line"] >.line.last-execute{border:solid 1px;display:inline-block;padding:0 8px} list-line >.line div>label,[data-is="list-line"] >.line div>label{cursor:pointer;border:1px solid rgba(255,128,0,0.6);padding:0 6px;text-align:center;display:inline-block} list-line >.line div>label.focus,[data-is="list-line"] >.line div>label.focus{background:#ff0} list-line >.line div>label:hover,[data-is="list-line"] >.line div>label:hover{opacity:.6} list-line .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[data-is="list-line"] .tree{color:#333;word-break:break-all} list-line .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .error,[data-is="list-line"] .error{color:red} list-line .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
 	var Parser, Status, checkLastExecute, executeIframe, initialPattern, name, paramMode, path, patterns, ref, ref1, route, setObservableEvent, setRouter, toggleMode;
 
-	Status = this.Status = __webpack_require__(11);
+	Status = this.Status = __webpack_require__(16);
 
-	Parser = __webpack_require__(19);
+	Parser = __webpack_require__(23);
 
-	route = __webpack_require__(16);
+	route = __webpack_require__(20);
 
 	setObservableEvent = (function(_this) {
 	  return function() {
@@ -3112,7 +3301,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	this.init = (function(_this) {
 	  return function() {
 	    _this.error = null;
-	    _this.warn = null;
 	    _this.success = null;
 	    return _this.deleteIframe();
 	  };
@@ -3163,31 +3351,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    console.clear();
 	    ++Status.executeSum;
 	    return _this.refs.testFrame.setConsoleEvent({
-	      assert: function(flg, msg) {
-	        if (msg) {
-	          console.assert(flg, msg);
-	        } else {
-	          console.assert(flg);
-	        }
-	        if (!flg) {
-	          _this.error = true;
-	          _this.update();
-	          return callback && callback();
-	        }
-	      },
 	      info: function(msg) {
 	        if (msg === "finished" && !_this.error) {
-	          console.info(msg);
-	          if (!_this.warn) {
-	            _this.success = true;
-	          }
+	          _this.success = true;
 	          ++Status.successSum;
 	          _this.update();
 	          return callback && callback();
 	        }
 	      },
 	      error: function(msg) {
-	        return _this.warn = true;
+	        _this.error = true;
+	        _this.update();
+	        return callback && callback();
 	      }
 	    });
 	  };
@@ -3240,13 +3415,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(this);
 
 	this.recursivelyCheckItem = (function(_this) {
-	  return function(params) {
-	    var matchedPattern, param, ref2, ref3, ref4;
-	    param = params.shift();
+	  return function(paramStr) {
+	    var matchedPattern, ref2, ref3, ref4, ref5;
 	    matchedPattern = (ref2 = _this.patterns) != null ? (ref3 = ref2.filter(function(pattern, i) {
-	      return param === pattern.path;
+	      return paramStr.indexOf(pattern.path) === 0;
 	    })) != null ? ref3[0] : void 0 : void 0;
 	    if (matchedPattern) {
+	      paramStr = paramStr.replace(matchedPattern.path, "").replace(/^\//, "");
 	      _this.patterns.forEach(function(pattern, i) {
 	        pattern.focus = false;
 	        if (matchedPattern === pattern) {
@@ -3254,13 +3429,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      });
 	      _this.update();
-	    }
-	    if (param === _this.path || matchedPattern) {
-	      if (params) {
-	        return (ref4 = _this.refs.item) != null ? ref4.recursivelyCheck(params) : void 0;
+	      if (paramStr) {
+	        return (ref4 = _this.refs.item) != null ? ref4.recursivelyCheck(paramStr) : void 0;
 	      } else {
 	        return setObservableEvent();
 	      }
+	    } else if (paramStr.indexOf(_this.path) === 0) {
+	      return (ref5 = _this.refs.item) != null ? ref5.recursivelyCheck(paramStr.replace(_this.path, "").replace(/^\//, "")) : void 0;
 	    }
 	  };
 	})(this);
@@ -3296,17 +3471,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  
 
 /***/ },
-/* 13 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {
-	    var riot = __webpack_require__(10)
+	    var riot = __webpack_require__(15)
 	    riot.tag2('test-iframe', '<span class="{isIos ? \'ios\' : \'no-ios\'}"> <iframe if="{!isElectron}" riot-src="{opts.url}"></iframe> <webview if="{isElectron}" riot-src="{opts.url}" nodeintegration></webview> </span>', 'test-iframe .ios,[data-is="test-iframe"] .ios{ display: block; -webkit-overflow-scrolling: touch; overflow: auto; position: fixed; top: 0; left: 0; width: 100%; height: 100%; } test-iframe iframe,[data-is="test-iframe"] iframe,test-iframe webview,[data-is="test-iframe"] webview{ background-color: white; border: none; width: 100%; height: 100%; } test-iframe .no-ios iframe,[data-is="test-iframe"] .no-ios iframe,test-iframe .no-ios webview,[data-is="test-iframe"] .no-ios webview{ position: fixed; left: 0px; top: 0px; }', '', function(opts) {
-	var WholeStatus, ref;
+	var WholeStatus, ref,
+	  slice = [].slice;
 
-	WholeStatus = __webpack_require__(11);
+	WholeStatus = __webpack_require__(16);
 
-	this.isIos = __webpack_require__(15).ios();
+	this.isIos = __webpack_require__(19).ios();
 
 	this.isElectron = typeof process !== "undefined" && process !== null ? (ref = process.versions) != null ? ref.electron : void 0 : void 0;
 
@@ -3334,15 +3510,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      iframeWindow = _this.root.querySelector("iframe").contentWindow;
 	      if (callbackObj) {
-	        iframeWindow.console.assert = function(flg, msg) {
-	          return callbackObj.assert(flg, msg);
-	        };
-	        iframeWindow.onerror = function(msg) {
-	          callbackObj.error(msg);
+	        iframeWindow.addEventListener("error", function(event) {
+	          callbackObj.error();
 	          return false;
-	        };
-	        iframeWindow.console.info = function(msg) {
-	          return callbackObj.info(msg);
+	        });
+	        iframeWindow.console.__info = iframeWindow.console.info;
+	        iframeWindow.console.info = function() {
+	          var args, ref1;
+	          args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+	          (ref1 = iframeWindow.console).__info.apply(ref1, args);
+	          return callbackObj.info(args[0]);
 	        };
 	      }
 	      if (!WholeStatus.opts.files) {
@@ -3369,196 +3546,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    
 	  
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	// shim for using process in browser
-	var process = module.exports = {};
-
-	// cached from whatever global is present so that test runners that stub it
-	// don't break things.  But we need to wrap it in a try catch in case it is
-	// wrapped in strict mode code which doesn't define any globals.  It's inside a
-	// function because try/catches deoptimize in certain engines.
-
-	var cachedSetTimeout;
-	var cachedClearTimeout;
-
-	function defaultSetTimout() {
-	    throw new Error('setTimeout has not been defined');
-	}
-	function defaultClearTimeout () {
-	    throw new Error('clearTimeout has not been defined');
-	}
-	(function () {
-	    try {
-	        if (typeof setTimeout === 'function') {
-	            cachedSetTimeout = setTimeout;
-	        } else {
-	            cachedSetTimeout = defaultSetTimout;
-	        }
-	    } catch (e) {
-	        cachedSetTimeout = defaultSetTimout;
-	    }
-	    try {
-	        if (typeof clearTimeout === 'function') {
-	            cachedClearTimeout = clearTimeout;
-	        } else {
-	            cachedClearTimeout = defaultClearTimeout;
-	        }
-	    } catch (e) {
-	        cachedClearTimeout = defaultClearTimeout;
-	    }
-	} ())
-	function runTimeout(fun) {
-	    if (cachedSetTimeout === setTimeout) {
-	        //normal enviroments in sane situations
-	        return setTimeout(fun, 0);
-	    }
-	    // if setTimeout wasn't available but was latter defined
-	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-	        cachedSetTimeout = setTimeout;
-	        return setTimeout(fun, 0);
-	    }
-	    try {
-	        // when when somebody has screwed with setTimeout but no I.E. maddness
-	        return cachedSetTimeout(fun, 0);
-	    } catch(e){
-	        try {
-	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-	            return cachedSetTimeout.call(null, fun, 0);
-	        } catch(e){
-	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-	            return cachedSetTimeout.call(this, fun, 0);
-	        }
-	    }
-
-
-	}
-	function runClearTimeout(marker) {
-	    if (cachedClearTimeout === clearTimeout) {
-	        //normal enviroments in sane situations
-	        return clearTimeout(marker);
-	    }
-	    // if clearTimeout wasn't available but was latter defined
-	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-	        cachedClearTimeout = clearTimeout;
-	        return clearTimeout(marker);
-	    }
-	    try {
-	        // when when somebody has screwed with setTimeout but no I.E. maddness
-	        return cachedClearTimeout(marker);
-	    } catch (e){
-	        try {
-	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-	            return cachedClearTimeout.call(null, marker);
-	        } catch (e){
-	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-	            return cachedClearTimeout.call(this, marker);
-	        }
-	    }
-
-
-
-	}
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-
-	function cleanUpNextTick() {
-	    if (!draining || !currentQueue) {
-	        return;
-	    }
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
-	}
-
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = runTimeout(cleanUpNextTick);
-	    draining = true;
-
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    runClearTimeout(timeout);
-	}
-
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        runTimeout(drainQueue);
-	    }
-	};
-
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-
-	function noop() {}
-
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
-
-/***/ },
-/* 15 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -4471,14 +4462,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 16 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-	var observable = _interopDefault(__webpack_require__(17));
+	var observable = _interopDefault(__webpack_require__(21));
 
 	/**
 	 * Simple client-side router
@@ -4822,7 +4813,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 17 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function(window, undefined) {var observable = function(el) {
@@ -4960,7 +4951,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(typeof window != 'undefined' ? window : undefined);
 
 /***/ },
-/* 18 */
+/* 22 */
 /***/ function(module, exports) {
 
 	/*
@@ -5056,7 +5047,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 19 */
+/* 23 */
 /***/ function(module, exports) {
 
 	var Parser;
@@ -5156,7 +5147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 20 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -5164,10 +5155,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			"エラーでOK": {
 				"timeout=100": "./index.html",
 				"clickAssert=true": "./index.html",
-				"select=6": "./index.html"
+				"select=6": "./index.html",
+				"test": "./index.html"
 			},
 			"エラーじゃダメ": {
-				"test": "./index.html",
 				"testNoGen": "./index.html",
 				"timeout=5000": "./index.html",
 				"clickAssert=false": "./index.html",

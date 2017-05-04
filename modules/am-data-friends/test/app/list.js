@@ -46,7 +46,7 @@ module.exports =
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(54);
+	module.exports = __webpack_require__(46);
 
 
 /***/ },
@@ -757,28 +757,26 @@ module.exports =
 
 /***/ },
 
-/***/ 54:
+/***/ 46:
 /***/ function(module, exports, __webpack_require__) {
 
 	var generate, testcases;
 
 	generate = __webpack_require__(36);
 
-	testcases = __webpack_require__(55);
+	testcases = __webpack_require__(47);
 
 	generate(testcases);
 
 
 /***/ },
 
-/***/ 55:
+/***/ 47:
 /***/ function(module, exports) {
 
 	module.exports = {
-		"node-streamize": {
-			"parser": {
-				"simple": "./index.html"
-			}
+		"am-module": {
+			"param": "./index.html"
 		}
 	};
 
