@@ -20,10 +20,10 @@ This page displays the test pattern. Throwing events to mock pages and collabora
 testListPage.html
 ```html
 <script type="application/x-yaml" for="test-list">
-  click=.config: /url.html
+  click=.config: ./url.html
   click=.edit:
-    input=name,takasi: /url.html
-    input=age,94: /url.html
+    input=name,takasi: ./url.html
+    input=age,94: ./url.html
     description(input=param): pageName(./index.html)
   langSwitch[ja | en | zh-cn | zh-tw]: langPage(./lang.html)
 </script>
