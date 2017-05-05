@@ -19,22 +19,21 @@ This page displays the test pattern. Throwing events to mock pages and collabora
 
 testListPage.html
 ```html
+<script type="application/x-yaml" for="test-list">
+  click=.config: /url.html
+  click=.edit:
+    input=name,takasi: /url.html
+    input=age,94: /url.html
+    description(input=param): pageName(./index.html)
+  langSwitch[ja | en | zh-cn | zh-tw]: langPage(./lang.html)
+</script>
 <test-list></test-list>
-<script src="./testListPage.js">
+<script src="./test.js">
 ```
 
-testListPage.coffee
-```coffee
-generate = require("am-coffee-time").default
-testcases =
-  #event: url
-  "click=.config": "/url.html"
-  "click=.edit":
-    "input=name,takasi": "/url.html"
-    "input=age,94": "/url.html"
-    "description(input=param)": "pageName(./index.html)"
-  "langSwitch[ja | en | zh-cn | zh-tw]": "langPage(./lang.html)"
-generate(testcases)
+test.js
+```javascript
+import 'am-coffee-time/browser/parse'
 ```
 
 ### mock pages

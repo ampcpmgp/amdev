@@ -5,6 +5,63 @@
     <title></title>
   </head>
   <body>
+    <script type="application/x-yaml" for="test-list">
+      am-coffee-time:
+        int=1: ./index.html
+        bool=false: ./index.html
+        types=555,true: ./index.html
+        typecheck="111",3: ./index.html
+        nullcheck=null/undefinedCheck=undefined: ./index.html
+        params1:  ./index.html
+        _color:  ./index.html
+        _color=.child:  ./index.html
+        _border:  ./index.html
+        root:  ./index.html
+        _hide=.child:  ./index.html
+        テストパターン(test=1): テストページ(./index.html)
+        タスクリスト一覧: ./index.html
+        多言語切り替え[新言語(lang=new) | 旧言語(lang=old)]: ./index.html
+        多言語切り替え[日本語(lang=ja) | 英語(lang=en/lang2=en) | lang=zh-cn | lang=zh-tw]:
+          test: ./index.html
+          _color=*:
+            _hide=div: ./index.html
+            テスト(test): テスト(./index.html)
+        test:
+          3:
+            4:
+              5:
+                6:
+                  1:
+                    2:
+                      3:
+                        4:
+                          5:
+                            6:
+                              1:
+                                2:
+                                  3:
+                                    4:
+                                      5:
+                                        6:
+                                          1:
+                                            2:
+                                              3:
+                                                4:
+                                                  5:
+                                                    6:
+                                                      1:
+                                                        2:
+                                                          3:
+                                                            4:
+                                                              5:
+                                                                6:
+                                                                  1:
+                                                                    2:
+                                                                      3:
+                                                                        4:
+                                                                          5:
+                                                                            6: ./index.html
+    </script>
     <test-list></test-list>
     <script src="./list.js"></script>
   </body>
