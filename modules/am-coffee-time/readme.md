@@ -19,7 +19,7 @@ This page displays the test pattern. Throwing events to mock pages and collabora
 
 testListPage.html
 ```html
-<script type="application/x-yaml" for="test-list">
+<script type="text/yaml" for="test-list">
   click=.config: ./url.html
   click=.edit:
     input=name,takasi: ./url.html
