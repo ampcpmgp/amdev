@@ -1,14 +1,12 @@
-import riot from 'riot'
-
 import Status from '../src/Status'
 import '../src/test-list.tag'
 
-window.riot = riot
+window.riot = require('riot')
 
 const generate = (testPatterns, opts = {}) => {
   Status.opts = opts
   return {
-    list: riot.mount('test-list', {testPatterns})
+    list: window.riot.mount('test-list', {testPatterns})
   }
 }
 
