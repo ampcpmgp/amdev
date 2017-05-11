@@ -45,7 +45,7 @@ parseValue = (val) =>
     val
 
 module.exports = class Test
-  @start: (testObj = @) =>
+  @start: (testObj = {}) =>
     @actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/")
     @actionObj = {}
     for action in @actions
