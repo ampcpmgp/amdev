@@ -45,13 +45,12 @@ parseValue = (val) =>
     val
 
 module.exports = class Test
-  @start: (testObj = @) =>
+  @start: (testObj = {}) =>
     @actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/")
     @actionObj = {}
     for action in @actions
       [key, value] = action.split("=")
-      func = testObj[key] or @[key]
       arg = !value or value.split(",")
-      func?(getValue(arg))
+      testObj[key]?(getValue(arg))
       actionFuncs[key]?(value)
       @actionObj[key] = value
