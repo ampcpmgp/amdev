@@ -125,7 +125,7 @@ require("./test-iframe.tag")
       <label each={pattern, i in patterns} class={focus: pattern.focus} data-id={i} onclick={changePatternEvent}>
         {pattern.name}
       </label>
-      <a class="single" if={url} href={routerExecutionPath} onclick={router}>{linkName}</a>
+      <a class="single" if={routerExecutionPath} href={routerExecutionPath} onclick={router}>{linkName}</a>
     </div>
     <recursive-item ref="item" if={!url} data={data} routing={routing} />
   </section>
@@ -198,7 +198,19 @@ require("./test-iframe.tag")
       Status.executablePath[@routerExecutionPath] = () => @executeTask() if @url
     setRouter = (path) =>
       @routing = if @initialRouting then "#{@initialRouting}/#{path}" else path
-      @routerExecutionPath = @url + Status.basePath + @routing
+      @routerExecutionPath =
+        if @url
+          @url + Status.basePath + @routing
+        else
+          key = Object.keys(@data)?[0]
+          {name, path} = Parser.parseStr(key)
+          if name is "default"
+            keyPath = path
+            {path} = Parser.parseStr(@data[key])
+            console.log path + Status.basePath + @routing + "/" + keyPath
+            path + Status.basePath + @routing + "/" + keyPath
+          else
+              null
     checkLastExecute = =>
       Status.one('finished', () =>
         if Status.lastExecutePath is @routerExecutionPath
