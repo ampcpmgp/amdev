@@ -3,6 +3,7 @@ atom.exe,Atom=======>779,0,1107,987
 clover.exe,Clover=======>2406,519,796,498
 clover.exe,Clover=======>2406,26,796,498
 GitHub.exe,GitHub=======>467,364,1224,675
+GitHub Desktop.exe,GitHub Desktop=======>467,364,1224,675
 chrome.exe,Google Chrome=======>4,1,1062,975
 chrome.exe,Google Chrome=======>1945,0,1202,959
 chrome.exe,Google Chrome=======>560,0,1281,1032
