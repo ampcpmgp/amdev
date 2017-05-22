@@ -196,18 +196,19 @@ require("./test-iframe.tag")
     setObservableEvent = =>
       Status.executablePath[@routing] =  () => @multiExecuteTask()
       Status.executablePath[@routerExecutionPath] = () => @executeTask() if @url
-    setRouter = (path) =>
+    setRouter = (name, path) =>
       @routing = if @initialRouting then "#{@initialRouting}/#{path}" else path
       @routerExecutionPath =
         if @url
+          @linkName = name
           @url + Status.basePath + @routing
         else
           key = Object.keys(@data)?[0]
           {name, path} = Parser.parseStr(key)
           if name is "default"
             keyPath = path
-            {path} = Parser.parseStr(@data[key])
-            console.log path + Status.basePath + @routing + "/" + keyPath
+            {name, path} = Parser.parseStr(@data[key])
+            @linkName = name
             path + Status.basePath + @routing + "/" + keyPath
           else
               null
@@ -231,14 +232,13 @@ require("./test-iframe.tag")
     else
       @path = path
     {name, path} = if typeof @data is "object" then {} else Parser.getStrInfo(@data)
-    @linkName = name
     @url = path
-    setRouter(@path)
+    setRouter(name, @path)
     @status = {onExecute: false}
     @getRouting = => @initialRouting
     @recursivelyUpdate = (routing) =>
       @initialRouting = routing
-      setRouter(@path)
+      setRouter(name, @path)
       @refs.item?.recursivelyUpdate(@routing)
       setObservableEvent()
     @deleteIframe = =>
@@ -300,7 +300,7 @@ require("./test-iframe.tag")
       nextPattern = @patterns[nextId]
       nextPattern.focus = true
       @path = nextPattern.path
-      setRouter(@path)
+      setRouter(name, @path)
       @refs.item?.recursivelyUpdate(@routing)
       setObservableEvent()
     @changePatternEvent = (e) => @changePattern(e.currentTarget.dataset.id)
