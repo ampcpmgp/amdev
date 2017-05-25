@@ -55,7 +55,12 @@ module.exports = class SimpleServer
       if type is "text/html"
         data = data.toString("utf8") + "<script src='#{@livereloadPath}'></script>"
         data = Buffer.from(data)
-      res.end(data)
+      if path is ".//modules/am-coffee-time/test/web/a"
+        setTimeout(() =>
+          res.end(data)
+        , 4000)
+      else
+        res.end(data)
     else if url is @livereloadPath
       data = fs.readFileSync(@livereloadJs)
       type = mime.lookup(@livereloadJs)
