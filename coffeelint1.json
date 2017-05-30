@@ -1,0 +1,19 @@
+{
+  "indentation" : {
+    "level" : "error",
+    "value" : 2
+  },
+  "no_unnecessary_fat_arrows" : {
+    "level" : "ignore"
+  },
+  "no_unnecessary_fat_arrows" : {
+    "level" : "ignore"
+  },
+  "no_private_function_fat_arrows" : {
+    "level" : "ignore"
+  },
+  "max_line_length": {
+    "value" : 250,
+    "level" : "error"
+  }
+}
