@@ -95,6 +95,7 @@ require("./test-iframe.tag")
   <style scope>
     :scope {
       display: block;
+      border-left: 1px solid #ccc;
     }
   </style>
   <script type="coffee">
@@ -168,7 +169,7 @@ require("./test-iframe.tag")
       padding-left: 6px;
     }
     .line {
-      margin-left: 10px;
+      margin-left: 14px;
     }
     .line.hover {
       background: rgba(0, 0, 255, 0.05);
