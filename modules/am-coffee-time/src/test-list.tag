@@ -1,4 +1,5 @@
 require("./test-iframe.tag")
+require("./open-close-icon.tag")
 
 <test-list>
   <test-status />
@@ -12,6 +13,7 @@ require("./test-iframe.tag")
       width: 100%;
       background-color: white;
       font-size: 14px;
+      padding-left: 12px;
       > a {
         border: 1px solid #ccc;
       }
@@ -92,7 +94,7 @@ require("./test-iframe.tag")
 
 <recursive-item>
   <list-line ref="lines" each={data, key in list} list={this} routing={this.parent.opts.routing} />
-  <style scope>
+  <style scope type="less">
     :scope {
       display: block;
       border-left: 1px solid #ccc;
@@ -119,6 +121,7 @@ require("./test-iframe.tag")
 </recursive-item>
 
 <list-line>
+  <open-close-icon length="16" stroke="#333" if={!url} callback={toggleItem} />
   <section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error}"></span>
@@ -128,12 +131,18 @@ require("./test-iframe.tag")
       </label>
       <a class="single" if={url} href={routerExecutionPath} onclick={router}>{linkName}</a>
     </div>
-    <recursive-item ref="item" if={!url} data={data} routing={routing} />
+    <recursive-item ref="item" style="display: {isItemOpen ? 'block' : 'none'}" if={!url} data={data} routing={routing} />
   </section>
   <test-iframe ref="testFrame" if={url && status.onExecute} url={routerExecutionPath} config={Status.config}></test-iframe>
   <style type="less">
     :scope {
       display: block;
+      position: relative;
+    }
+    > open-close-icon {
+      position: absolute;
+      top: 0;
+      left: -8px;
     }
      > .line > {
       display: inline-block;
@@ -222,8 +231,12 @@ require("./test-iframe.tag")
     {name, path} = if typeof @data is "object" then {} else Parser.getStrInfo(@data)
     @linkName = name
     @url = path
+    @isItemOpen = true
     setRouter(@path)
     @status = {onExecute: false}
+    @toggleItem = =>
+      @isItemOpen = not @isItemOpen
+      @update()
     @getRouting = => @initialRouting
     @recursivelyUpdate = (routing) =>
       @initialRouting = routing

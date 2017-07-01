@@ -4,6 +4,10 @@
     <webview if={isElectron} src={opts.url} nodeintegration></webview>
   </span>
   <style scoped>
+    :scope {
+      z-index: 100000;
+      position: relative;
+    }
     .ios {
       display: block;
       -webkit-overflow-scrolling: touch;
