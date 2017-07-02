@@ -98,7 +98,7 @@ require("./open-close-icon.tag")
 </test-status>
 
 <recursive-item>
-  <list-line ref="lines" each={data, key in list} depth={parent.opts.depth} />
+  <list-line ref="lines" each={data, key in opts.data} depth={parent.opts.depth} />
   <style scope type="less">
     :scope {
       display: block;
@@ -118,10 +118,6 @@ require("./open-close-icon.tag")
       getLines().forEach((line) =>
         line.recursivelyUpdate(routing)
       )
-    @list = if typeof opts.data is "object"
-      opts.data
-     else
-      {}
   </script>
 </recursive-item>
 
