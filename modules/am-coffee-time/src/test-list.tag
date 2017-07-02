@@ -211,7 +211,6 @@ require("./open-close-icon.tag")
     Status = @Status = require("./Status")
     Parser = require("../Parser")
     route = require("riot-route")
-    keyboardjs = require("keyboardjs")
     setObservableEvent = =>
       Status.executablePath[@routing] =  () => @multiExecuteTask()
       Status.executablePath[@routerExecutionPath] = () => @executeTask() if @url
