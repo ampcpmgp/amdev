@@ -17,13 +17,13 @@ module.exports = class Compiler
         {test: /\.es$/, loader: "babel", query: {presets: ["es2015", "stage-0"]}}
         {test: /\.json$/, loader: "json"}
         {test: /\.ya?ml$/, loader: "json!yaml-loader"}
-        {test: /\.tag$/, exclude: /node_modules/, loader: "riot-tag-loader"}
+        {test: /\.tag\.html$/, exclude: /node_modules/, loader: "riot-tag-loader"}
         {test: /\.raw$/, loader: "raw-loader"}
       ]
     devtool: "cheap-module-eval-source-map"
     resolve:
       modulesDirectories: ["modules", "node_modules"]
-      extensions: [".coffee", ".tag", ".es", ".js", ""]
+      extensions: [".coffee", ".tag.html", ".es", ".js", ""]
   @nodeModules: do =>
     retObj = {}
     fs.readdirSync('node_modules')

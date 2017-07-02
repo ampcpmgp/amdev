@@ -1,5 +1,5 @@
 import Status from '../src/Status'
-import '../src/test-list.tag'
+import '../src/test-list'
 
 window.riot = require('riot')
 
