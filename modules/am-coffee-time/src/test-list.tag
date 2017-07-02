@@ -245,7 +245,6 @@ require("./open-close-icon.tag")
     @toggleItem = =>
       @isItemOpen = not @isItemOpen
       @update()
-    @getRouting = => @initialRouting
     @recursivelyUpdate = (routing) =>
       @initialRouting = routing
       setRouter(@path)
