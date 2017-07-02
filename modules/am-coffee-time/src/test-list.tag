@@ -98,7 +98,7 @@ require("./open-close-icon.tag")
 </test-status>
 
 <recursive-item>
-  <list-line ref="lines" each={data, key in opts.data} depth={parent.opts.depth} />
+  <list-line ref="lines" each={data, key in opts.data} depth={parent.opts.depth} routing={this.parent.opts.routing} />
   <style scope type="less">
     :scope {
       display: block;
