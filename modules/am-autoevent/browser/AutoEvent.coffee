@@ -1,6 +1,10 @@
 $ = (selector) => document.querySelector(selector)
 assert = require("assert")
 
+click = ($dom) =>
+  event = new MouseEvent("click")
+  $dom.dispatchEvent(event)
+
 trigger = ($dom, eventType) =>
   event = document.createEvent("HTMLEvents")
   event.initEvent(eventType, false, true)
@@ -58,7 +62,7 @@ module.exports = class AutoEvent
       selector
       assertionMsg: "can't click" if assertFlg
       callback: ($this) =>
-        $this.click()
+        click($this)
     })
   waitEvent: (callback) =>
     @funcs.push(callback)
