@@ -5,7 +5,7 @@ require("./open-close-icon.tag")
   <test-status />
   <a onclick={toRouteHash}>base</a>
   <a if={Status.paramMode} onclick={toggleParameterMode}>toggle params</a>
-  <recursive-item ref="item" data={opts.testPatterns} routing="" />
+  <recursive-item ref="item" data={opts.testPatterns} routing="" depth="1" />
   <test-iframe ref="testFrame" if={instanceUrl} url={instanceUrl} config={Status.config}></test-iframe>
   <style type="less">
     :scope {
@@ -31,6 +31,7 @@ require("./open-close-icon.tag")
   <script type="coffee">
     Status = @Status = require("./Status")
     route = require("riot-route")
+    keyboardjs = require("keyboardjs")
     bodyStyle = document.body.style
     @init = =>
       @instanceUrl = null
@@ -74,7 +75,11 @@ require("./open-close-icon.tag")
     window.addEventListener("popstate", =>
       unless location.href.match("\\" + Status.thisBasePath)
         history.replaceState("", null, Status.thisBasePath)
-    )
+      )
+    # keyboard event
+    keyboardjs.bind("0", => Status.allApen())
+    for depth in [1..9]
+      do (depth) => keyboardjs.bind("#{depth}", => Status.close(depth))
   </script>
 </test-list>
 
@@ -93,7 +98,7 @@ require("./open-close-icon.tag")
 </test-status>
 
 <recursive-item>
-  <list-line ref="lines" each={data, key in list} list={this} routing={this.parent.opts.routing} />
+  <list-line ref="lines" each={data, key in list} depth={parent.opts.depth} />
   <style scope type="less">
     :scope {
       display: block;
@@ -121,7 +126,7 @@ require("./open-close-icon.tag")
 </recursive-item>
 
 <list-line>
-  <open-close-icon length="16" stroke="#333" if={!url} callback={toggleItem} />
+  <open-close-icon ref="icon" length="16" stroke="#333" if={!url} callback={toggleItem} />
   <section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error}"></span>
@@ -131,7 +136,10 @@ require("./open-close-icon.tag")
       </label>
       <a class="single" if={url} href={routerExecutionPath} onclick={router}>{linkName}</a>
     </div>
-    <recursive-item ref="item" style="display: {isItemOpen ? 'block' : 'none'}" if={!url} data={data} routing={routing} />
+    <recursive-item
+      depth={opts.depth - 0 + 1}
+      ref="item" if={!url} data={data} routing={routing}
+      style="display: {isItemOpen ? 'block' : 'none'}" />
   </section>
   <test-iframe ref="testFrame" if={url && status.onExecute} url={routerExecutionPath} config={Status.config}></test-iframe>
   <style type="less">
@@ -203,6 +211,7 @@ require("./open-close-icon.tag")
     Status = @Status = require("./Status")
     Parser = require("../Parser")
     route = require("riot-route")
+    keyboardjs = require("keyboardjs")
     setObservableEvent = =>
       Status.executablePath[@routing] =  () => @multiExecuteTask()
       Status.executablePath[@routerExecutionPath] = () => @executeTask() if @url
@@ -217,7 +226,7 @@ require("./open-close-icon.tag")
           @update()
       )
     executeIframe = =>
-      Status.executeIframe.shift()?()
+      Status.iframeListToExecute.shift()?()
     {toggleMode, paramMode, name, path, patterns} = Parser.getStrInfo(@key)
     @initialRouting = opts.routing
     @treeName = name
@@ -260,12 +269,12 @@ require("./open-close-icon.tag")
           for line in lines
             line.recursivelyExecuteTask()
       else
-        Status.executeIframe.push(=> @executeTask( =>
+        Status.iframeListToExecute.push(=> @executeTask( =>
           @deleteIframe()
           executeIframe()
         ))
     @multiExecuteTask = =>
-      Status.executeIframe.length = 0
+      Status.iframeListToExecute.length = 0
       @recursivelyExecuteTask()
       executeIframe()
     @executeTask = (callback) =>
@@ -325,6 +334,8 @@ require("./open-close-icon.tag")
       else if paramStr.indexOf(@path) is 0
         @refs.item?.recursivelyCheck(paramStr.replace(@path, "").replace(/^\//, ""))
     Status.on("init", => @init())
+    Status.on("all-open", => @refs.icon?.setStatus(true))
+    Status.on("close-depth-#{opts.depth}", => @refs.icon?.setStatus(false))
     paramMode and Status.on("toggle-mode", =>
       @treeName =
         if @key is @treeName

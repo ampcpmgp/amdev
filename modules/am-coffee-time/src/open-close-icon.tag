@@ -26,10 +26,12 @@
     this.stroke = "#000"
     this.minus = true
     this.setStatus = (minusFlg) =>
-      this.minus = minusFlg
+      currentMinusStatus = this.minus
+      nextMinusStatus = this.minus = minusFlg
+      currentMinusStatus isnt nextMinusStatus and opts.callback?()
       this.update()
     this.clickHandler = () =>
       this.minus = not this.minus
-      this.opts.callback?()
+      opts.callback?()
   </script>
 </open-close-icon>
