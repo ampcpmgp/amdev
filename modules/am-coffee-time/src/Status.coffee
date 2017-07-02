@@ -34,6 +34,7 @@ module.exports = class Status
     @trigger("all-open")
   @close: (depth) =>
     return if @isRunning()
+    @allApen()
     @trigger("close-depth-#{depth}")
 
 Status.init()
