@@ -21,17 +21,6 @@ autoEvent.register()
 ```
 
 ## Methods
-[register](#register)
-[click](#click)
-[setValue](#setValue)
-[setHtml](#setHtml)
-[exists](#exists)
-[notExists](#notExists)
-[addEvent](#addEvent)
-[wait](#wait)
-[waitSelector](#waitSelector)
-[start](#start)
-
 
 ### #First
 #### register()
