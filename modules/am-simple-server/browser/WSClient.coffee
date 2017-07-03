@@ -27,7 +27,6 @@ module.exports = class WSClient
       console.info("websocket connected")
       @_reloadDate = Date.now()
     @ws.on("reload", => @reload() if not @disconnectedFlg)
-    @ws.on("css reload", (css) => $("body").append("<style type=\"text/css\">#{css}</style>"))
     @ws.on("test", (msg) => console.log msg)
     @ws.on("disconnect", =>
       @disconnectedFlg = true
