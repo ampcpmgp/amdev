@@ -8,7 +8,6 @@ glob = require("glob")
 module.exports = class ElectronApp
   _inspector: 1
   publishFlg: true
-  liveReloadFlg: false
   constructor: ->
   start: ->
     @init()
@@ -36,7 +35,7 @@ module.exports = class ElectronApp
           pollInterval: 10
       )
       .on("change", (path) =>
-        return unless @liveReloadFlg
+        return unless localStorage.liveReloadFlg is "true"
         location.reload()
       )
   serverStart: ->
@@ -45,5 +44,5 @@ module.exports = class ElectronApp
       @config = cson.load('.config.cson')
     catch
       @config = require("../electron/config.cson")
-    @option = @config.server.port || 8091
-    require("am-simple-server").prototype.start(8091, 8091)
+    @port = @config.server.port || 8091
+    require("am-simple-server").prototype.start(@port, @port)

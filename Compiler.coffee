@@ -15,14 +15,15 @@ module.exports = class Compiler
         {test: /\.coffee$/, use: {loader: "coffee-loader"}}
         {test: /\.cson$/,  use: {loader: "cson-loader"}}
         {test: /\.es$/, use: {loader: "babel-loader", query: {presets: ["es2015", "stage-0"]}}
+        {test: /\.json$/, loader: "json"}
         {test: /\.ya?ml$/,  use: {loader: "yaml-loader"}}
-        {test: /\.tag$/,  use: {loader: "riot-tag-loader"}}
+        {test: /\.tag\.html$/,  use: {loader: "riot-tag-loader"}}
         {test: /\.raw$/,  use: {loader: "raw-loader"}}
       ]
     devtool: "cheap-module-eval-source-map"
     resolve:
       modules: ["modules", "node_modules"]
-      extensions: [".coffee", ".tag", ".js"]
+      extensions: [".coffee", ".tag.html", ".es", ".js"]
   @nodeModules: do =>
     retObj = {}
     fs.readdirSync('node_modules')

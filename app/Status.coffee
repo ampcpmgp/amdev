@@ -1,13 +1,13 @@
 class Status
-  init: =>
+  constructor: ->
     @publishFlg = true
-    @
+    localStorage.liveReloadFlg = "true"
     riot.observable(@)
   toggleliveReloadFlg: =>
-    window.ea.liveReloadFlg = not window.ea.liveReloadFlg
+    localStorage.liveReloadFlg = not localStorage.liveReloadFlg
     @trigger("update")
   togglePublishFlg: =>
     @publishFlg = not @publishFlg
     @trigger("update")
 
-module.exports = new Status().init()
+module.exports = new Status()

@@ -87,7 +87,7 @@ module.exports = class SimpleServer
       curDate = Date.now()
       diff = curDate - @wsEventReload_prevDate
       @wsEventReload_prevDate = curDate
-      if diff < 1000 then return
+      if diff < 2000 then return
       setTimeout(() =>
         @checkReloadList()
         @sendReloadEvent(socket) for socket in @reloadList

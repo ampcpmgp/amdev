@@ -21,15 +21,6 @@ autoEvent.register()
 ```
 
 ## Methods
-[register](#register)  
-[click](#click)  
-[setValue](#setValue)  
-[setHtml](#setHtml)  
-[addEvent](#addEvent)  
-[wait](#wait)  
-[waitSelector](#waitSelector)  
-[start](#start)  
-
 
 ### #First
 #### register()
@@ -38,13 +29,19 @@ initialize, and enable to set event
 ### #Synchronous processing
 
 #### click(selector, assertFlg = true)
-first selector clicked, if assertFlg is true and not find selector, stop processing.
+first selector clicked, if assertFlg is true and not find selector, throw error.
 
 #### setValue(selector, value, assertFlg = true)
 first selector set value.
 
 #### setHtml(selector, value, assertFlg = true)
 first selector set html
+
+#### exists(selector)
+if not find selector, throw error.
+
+#### notExists(selector)
+if find selector, throw error.
 
 #### addEvent(callback)
 add event callback function

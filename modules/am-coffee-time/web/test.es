@@ -1,5 +1,7 @@
 import Test from 'am-coffee-time/browser/Test'
 import AutoEvent from 'am-autoevent/browser/AutoEvent-no-gen'
+import assert from 'assert'
+
 const autoEvent = new AutoEvent()
 const $ = (selector) => document.querySelector(selector)
 const actions = {
@@ -10,8 +12,8 @@ const actions = {
   },
   動作フロー確認用: () => console.log('動作フロー確認です'),
   結果: (値) => {
-    if (値.match('成功')) console.assert(true)
-    else if (値.match('失敗')) console.assert(false, '失敗です')
+    if (値.match('成功')) assert(true)
+    else if (値.match('失敗')) assert(false, '失敗です')
   },
   ID入力: (value) => {
     autoEvent
@@ -21,7 +23,7 @@ const actions = {
     autoEvent
       .wait(400).setValue('[name="pw"]', value)
       .wait(400).click('[name="check"]')
-      .wait(400).addEvent(() => console.assert($('after-login'), 'after-login not found'))
+      .wait(400).addEvent(() => assert($('after-login'), 'after-login not found'))
   }
 }
 autoEvent.register()

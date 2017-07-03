@@ -1,4 +1,10 @@
 $ = (selector) => document.querySelector(selector)
+assert = require("assert")
+
+click = ($dom) =>
+  event = new MouseEvent("click")
+  $dom.dispatchEvent(event)
+
 trigger = ($dom, eventType) =>
   event = document.createEvent("HTMLEvents")
   event.initEvent(eventType, false, true)
@@ -16,12 +22,12 @@ module.exports = class AutoEvent
     innerFunc = @innerFuncs[@funcNum]
     innerFunc.push(callback)
     @
-  addSelectorEvent: ({selector, assertionMsg, callback}) =>
+  addSelectorEvent: ({selector, assertionMsg, notExists, callback = =>}) =>
     @addEvent(
       () =>
         $this = $(selector)
         if assertionMsg
-          console.assert($this, "#{selector} #{assertionMsg}")
+          assert((if notExists then not $this else $this), "#{selector} #{assertionMsg}")
           callback($this)
         else
           try
@@ -56,7 +62,7 @@ module.exports = class AutoEvent
       selector
       assertionMsg: "can't click" if assertFlg
       callback: ($this) =>
-        $this.click()
+        click($this)
     })
   waitEvent: (callback) =>
     @funcs.push(callback)
@@ -64,6 +70,17 @@ module.exports = class AutoEvent
   wait: (msec) =>
     func = @_createFuncInWait()
     @waitEvent( => setTimeout(func, msec))
+  exists: (selector) =>
+    @addSelectorEvent({
+      selector
+      assertionMsg: "not exists"
+    })
+  notExists: (selector) =>
+    @addSelectorEvent({
+      selector
+      notExists: true
+      assertionMsg: "is exists"
+    })
   waitSelector: (selector, exists=true) =>
     func = @_createFuncInWait()
     testTimer = null
@@ -76,8 +93,8 @@ module.exports = class AutoEvent
       now = Date.now()
       testTimer = setInterval( =>
         withInTimeFlg = Date.now() - now < @timeoutMsec
-        console.assert(withInTimeFlg, """timeout for "#{selector}" selector""")
-        return stopTimer() unless withInTimeFlg
+        stopTimer() unless withInTimeFlg
+        assert(withInTimeFlg, """timeout for "#{selector}" selector""")
         if exists
           if $(selector) then executeFunc()
         else

@@ -17,25 +17,42 @@ This page displays the test pattern. Throwing events to mock pages and collabora
 
 #### sample code
 
-testListPage.html
+list.html
 ```html
+<script type="text/yaml" for="test-list">
+  click=.config: ./index.html
+  click=.edit:
+    default: ./index.html #default is used as parent node.
+    input=name,takasi: ./index.html
+    input=age,94: ./index.html
+    description(input=param): pageName(./other.html)
+  langSwitch[ja | en | zh-cn | zh-tw]: langPage(./lang.html)
+</script>
 <test-list></test-list>
-<script src="./testListPage.js">
+<script src="./list.js">
 ```
 
-testListPage.coffee
-```coffee
-generate = require("am-coffee-time")
-testcases =
-  #event: url
-  "click=.config": "/url.html"
-  "click=.edit":
-    "input=name,takasi": "/url.html"
-    "input=age,94": "/url.html"
-    "description(input=param)": "pageName(./index.html)"
-  "langSwitch[ja | en | zh-cn | zh-tw]": "langPage(./lang.html)"
+list.js
+```javascript
+import 'am-coffee-time/browser/parse'
+```
+
+##### sample code 2 (when preparing json data yourself)
+
+list.html
+```html
+<test-list></test-list>
+<script src="./list.js"></script>
+```
+
+list.js
+```javascript
+import generate from 'am-coffee-time'
+import testcases from './cases.yml'
+
 generate(testcases)
 ```
+
 
 ### mock pages
 This module watch event of console.assert.
@@ -45,14 +62,16 @@ All passed the test by putting the console.info after it was true ("finished").
 #### sample code
 ```coffee
 Test = require("am-coffee-time/browser/Test")
+assert = require("assert")
+
 Test.start(
   click: (type) =>
     el = document.querySelector(type)
-    console.assert(el)
+    assert(el)
     el.click()
   update: ([type, value]) =>
     el = document.querySelector("input[name=#{type}]")
-    console.assert(el)
+    assert(el)
     el.value = value
 )
 
