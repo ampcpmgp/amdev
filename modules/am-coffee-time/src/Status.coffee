@@ -15,7 +15,6 @@ module.exports = class Status
     @sumInit()
     #status
     @lastExecutePath = ""
-    @paramMode = false
     @showParameter = false
     #observable
     riot.observable(@)
