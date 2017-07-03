@@ -23,7 +23,7 @@ require("./test-iframe")
   <help ref="help" />
   <test-status />
   <a onclick={toRouteHash}>base</a>
-  <a if={Status.paramMode} onclick={toggleParameterMode}>toggle params</a>
+  <a onclick={toggleParameterMode}>sho all parameters</a>
   <recursive-item ref="item" data={opts.testPatterns} routing="" depth="1" />
   <test-iframe ref="testFrame" if={instanceUrl} url={instanceUrl} config={Status.config}></test-iframe>
   <style type="less">
@@ -160,7 +160,6 @@ require("./test-iframe")
     }
   </style>
   <script type="coffee">
-    objectAssign = require("object-assign")
     getLines = =>
       lines = @refs.lines
       unless lines.length then [lines] else lines
@@ -176,7 +175,7 @@ require("./test-iframe")
 </recursive-item>
 
 <list-line>
-  <open-close-icon ref="icon" length="16" stroke="#333" if={!url} callback={toggleItem} />
+  <open-close-icon ref="icon" length="16" stroke="#333" if={!singleTaskUrl} callback={toggleItem} />
   <section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error}"></span>
@@ -184,14 +183,14 @@ require("./test-iframe")
       <label each={pattern, i in patterns} class={focus: pattern.focus} data-id={i} onclick={changePatternEvent}>
         {pattern.name}
       </label>
-      <a class="single" if={url} href={routerExecutionPath} onclick={router}>{linkName}</a>
+      <a class="single" if={singleTaskUrl} href={routerExecutionPath} onclick={router}>{singleTaskName}</a>
     </div>
     <recursive-item
       depth={opts.depth - 0 + 1}
-      ref="item" if={!url} data={data} routing={routing}
+      ref="item" if={!singleTaskUrl} data={data} routing={routing}
       style="display: {isItemOpen ? 'block' : 'none'}" />
   </section>
-  <test-iframe ref="testFrame" if={url && status.onExecute} url={routerExecutionPath} config={Status.config}></test-iframe>
+  <test-iframe ref="testFrame" if={singleTaskUrl && status.onExecute} url={routerExecutionPath} config={Status.config}></test-iframe>
   <style type="less">
     :scope {
       display: block;
@@ -263,10 +262,10 @@ require("./test-iframe")
     route = require("riot-route")
     setObservableEvent = =>
       Status.executablePath[@routing] =  () => @multiExecuteTask()
-      Status.executablePath[@routerExecutionPath] = () => @executeTask() if @url
+      Status.executablePath[@routerExecutionPath] = () => @executeTask() if @singleTaskUrl
     setRouter = (path) =>
       @routing = if @initialRouting then "#{@initialRouting}/#{path}" else path
-      @routerExecutionPath = @url + Status.basePath + @routing
+      @routerExecutionPath = @singleTaskUrl + Status.basePath + @routing
     checkLastExecute = =>
       Status.one('finished', () =>
         if Status.lastExecutePath is @routerExecutionPath
@@ -276,19 +275,19 @@ require("./test-iframe")
       )
     executeIframe = =>
       Status.iframeListToExecute.shift()?()
-    {toggleMode, paramMode, name, path, patterns} = Parser.getStrInfo(@key)
+    keyStrInfo = Parser.getStrInfo(@key)
     @initialRouting = opts.routing
-    @treeName = name
-    if toggleMode
-      initialPattern = patterns[0]
+    @treeName = keyStrInfo.name
+    if keyStrInfo.toggleMode
+      initialPattern = keyStrInfo.patterns[0]
       initialPattern.focus = true
       @path = initialPattern.path
-      @patterns = patterns
+      @patterns = keyStrInfo.patterns
     else
-      @path = path
-    {name, path} = if typeof @data is "object" then {} else Parser.getStrInfo(@data)
-    @linkName = name
-    @url = path
+      @path = keyStrInfo.path
+    valStrInfo = if typeof @data is "object" then {} else Parser.getStrInfo(@data)
+    @singleTaskName = valStrInfo.name
+    @singleTaskUrl = valStrInfo.path
     @isItemOpen = true
     setRouter(@path)
     @status = {onExecute: false}
@@ -384,24 +383,23 @@ require("./test-iframe")
     Status.on("init", => @init())
     Status.on("all-open", => @refs.icon?.setStatus(true))
     Status.on("close-depth-#{opts.depth}", => @refs.icon?.setStatus(false))
-    paramMode and Status.on("toggle-mode", =>
+    keyStrInfo.paramMode and Status.on("toggle-mode", =>
       @treeName =
         if @key is @treeName
           @treeName = @_treeName or @treeName
         else
           @_treeName = @treeName
           @treeName = @key
-      @linkName =
-        if @data is @linkName
-          @linkName = @_linkName or @linkName
+      @singleTaskName =
+        if @data is @singleTaskName
+          @singleTaskName = @_singleTaskName or @singleTaskName
         else
-          @_linkName = @linkName
-          @linkName = @data
+          @_singleTaskName = @singleTaskName
+          @singleTaskName = @data
       @update()
       )
     Status.itemStatuses.push(@status)
     setObservableEvent()
-    Status.paramMode = paramMode or Status.paramMode
     @on("update", => Status.trigger("item-update"))
   </script>
 </list-line>
