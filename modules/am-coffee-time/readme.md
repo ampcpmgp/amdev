@@ -22,6 +22,7 @@ testListPage.html
 <script type="text/yaml" for="test-list">
   click=.config: ./url.html
   click=.edit:
+    default: ./url.html #default is used as parent node.
     input=name,takasi: ./url.html
     input=age,94: ./url.html
     description(input=param): pageName(./index.html)

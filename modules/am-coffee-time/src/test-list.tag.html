@@ -23,7 +23,7 @@ require("./test-iframe")
   <help ref="help" />
   <test-status />
   <a onclick={toRouteHash}>base</a>
-  <a onclick={toggleParameterMode}>sho all parameters</a>
+  <a onclick={toggleParameterMode}>show all parameters</a>
   <recursive-item ref="item" data={opts.testPatterns} routing="" depth="1" />
   <test-iframe ref="testFrame" if={instanceUrl} url={instanceUrl} config={Status.config}></test-iframe>
   <style type="less">
