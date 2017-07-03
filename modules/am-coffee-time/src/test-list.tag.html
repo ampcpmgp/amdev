@@ -152,7 +152,11 @@ require("./test-iframe")
 </test-status>
 
 <recursive-item>
-  <list-line ref="lines" each={data, key in opts.data} depth={parent.opts.depth} routing={this.parent.opts.routing} />
+  <list-line ref="lines"
+    if={getStrInfo(key).name !== 'default'}
+    depth={parent.opts.depth}
+    routing={parent.opts.routing}
+    each={data, key in opts.data} />
   <style scope type="less">
     :scope {
       display: block;
@@ -160,6 +164,7 @@ require("./test-iframe")
     }
   </style>
   <script type="coffee">
+    @getStrInfo = require("../Parser").getStrInfo
     getLines = =>
       lines = @refs.lines
       unless lines.length then [lines] else lines
@@ -187,7 +192,7 @@ require("./test-iframe")
     </div>
     <recursive-item
       depth={opts.depth - 0 + 1}
-      ref="item" if={!singleTaskUrl} data={data} routing={routing}
+      ref="item" if={typeof data === 'object'} data={data} routing={routing}
       style="display: {isItemOpen ? 'block' : 'none'}" />
   </section>
   <test-iframe
@@ -279,6 +284,7 @@ require("./test-iframe")
       )
     executeIframe = =>
       Status.iframeListToExecute.shift()?()
+    #親から渡されるkey情報に基づく設定
     keyStrInfo = Parser.getStrInfo(@key)
     @initialRouting = opts.routing
     @treeName = keyStrInfo.name
@@ -289,7 +295,14 @@ require("./test-iframe")
       @patterns = keyStrInfo.patterns
     else
       @path = keyStrInfo.path
-    valStrInfo = if typeof @data is "object" then {} else Parser.getStrInfo(@data)
+    #親から渡されるvalue情報に基づく設定
+    valStrInfo =
+      if typeof @data is "object"
+        if @data.default
+          Parser.getStrInfo(@data.default)
+        else
+          {}
+      else Parser.getStrInfo(@data)
     @singleTaskName = valStrInfo.name
     @singleTaskUrl = valStrInfo.path
     @isItemOpen = true
