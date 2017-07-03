@@ -44,36 +44,36 @@ module.exports =
 /******/ ({
 
 /***/ 0:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(48);
+	module.exports = __webpack_require__(51);
 
 
-/***/ },
+/***/ }),
 
 /***/ 4:
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("fs");
 
-/***/ },
+/***/ }),
 
 /***/ 9:
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("child_process");
 
-/***/ },
+/***/ }),
 
 /***/ 28:
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("cson");
 
-/***/ },
+/***/ }),
 
-/***/ 48:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 51:
+/***/ (function(module, exports, __webpack_require__) {
 
 	var check, cl, commands, config, cson, exec, execSync, fs, interval, intervalMin, json, proc, ref, start;
 
@@ -149,6 +149,6 @@ module.exports =
 	start();
 
 
-/***/ }
+/***/ })
 
 /******/ });

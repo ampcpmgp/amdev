@@ -43,12 +43,12 @@ module.exports =
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(35);
 
 
-/***/ },
+/***/ }),
 /* 1 */,
 /* 2 */,
 /* 3 */,
@@ -61,11 +61,11 @@ module.exports =
 /* 10 */,
 /* 11 */,
 /* 12 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("riot");
 
-/***/ },
+/***/ }),
 /* 13 */,
 /* 14 */,
 /* 15 */,
@@ -89,47 +89,51 @@ module.exports =
 /* 33 */,
 /* 34 */,
 /* 35 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var generate, testcases;
 
-	generate = __webpack_require__(36);
+	generate = __webpack_require__(36)["default"];
 
-	testcases = __webpack_require__(44);
+	testcases = __webpack_require__(46);
 
 	generate(testcases);
 
 
-/***/ },
+/***/ }),
 /* 36 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	var Status;
+	'use strict';
 
-	window.riot = __webpack_require__(12);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	Status = __webpack_require__(37);
+	var _Status = __webpack_require__(37);
+
+	var _Status2 = _interopRequireDefault(_Status);
 
 	__webpack_require__(38);
 
-	module.exports = (function(_this) {
-	  return function(testPatterns, opts) {
-	    if (opts == null) {
-	      opts = {};
-	    }
-	    Status.opts = opts;
-	    return {
-	      list: riot.mount("test-list", {
-	        testPatterns: testPatterns
-	      })
-	    };
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	window.riot = __webpack_require__(12);
+
+	var generate = function generate(testPatterns) {
+	  var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	  _Status2.default.opts = opts;
+	  return {
+	    list: window.riot.mount('test-list', { testPatterns: testPatterns })
 	  };
-	})(this);
+	};
 
+	exports.default = generate;
 
-/***/ },
+/***/ }),
 /* 37 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var Status, riot;
 
@@ -147,13 +151,18 @@ module.exports =
 	    Status.thisBasePath = "?";
 	    Status.basePath = "#";
 	    Status.itemStatuses = [];
-	    Status.executeIframe = [];
+	    Status.iframeListToExecute = [];
 	    Status.executablePath = {};
 	    Status.sumInit();
 	    Status.lastExecutePath = "";
-	    Status.paramMode = false;
 	    Status.showParameter = false;
 	    return riot.observable(Status);
+	  };
+
+	  Status.isRunning = function() {
+	    return Status.iframeListToExecute.length !== 0 && Status.itemStatuses.some(function(item) {
+	      return item.onExecute;
+	    });
 	  };
 
 	  Status.firstTimeInit = function() {
@@ -161,7 +170,7 @@ module.exports =
 	  };
 
 	  Status.taskFinished = function() {
-	    return Status.executeSum > 0 && Status.executeIframe.length === 0;
+	    return Status.executeSum > 0 && Status.iframeListToExecute.length === 0;
 	  };
 
 	  Status.taskAllSuccess = function() {
@@ -170,6 +179,21 @@ module.exports =
 
 	  Status.next = function() {
 	    return Status.trigger("finished");
+	  };
+
+	  Status.allApen = function() {
+	    if (Status.isRunning()) {
+	      return;
+	    }
+	    return Status.trigger("all-open");
+	  };
+
+	  Status.close = function(depth) {
+	    if (Status.isRunning()) {
+	      return;
+	    }
+	    Status.allApen();
+	    return Status.trigger("close-depth-" + depth);
 	  };
 
 	  return Status;
@@ -181,20 +205,24 @@ module.exports =
 	Status.firstTimeInit();
 
 
-/***/ },
+/***/ }),
 /* 38 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	
 	    var riot = __webpack_require__(12)
 	    __webpack_require__(39)
+	__webpack_require__(40)
+	__webpack_require__(41)
 
-	riot.tag2('test-list', '<test-status></test-status> <a onclick="{toRouteHash}">base</a> <a if="{Status.paramMode}" onclick="{toggleParameterMode}">toggle params</a> <recursive-item ref="item" data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe ref="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{Status.config}"></test-iframe>', 'test-list,[data-is="test-list"]{display:block;width:100%;background-color:white;font-size:14px} test-list>a,[data-is="test-list"]>a{border:1px solid #ccc} test-list a,[data-is="test-list"] a{color:blue;text-decoration:none;cursor:pointer;display:inline-block} test-list a:hover,[data-is="test-list"] a:hover{opacity:.4}', '', function(opts) {
-	var Status, bodyStyle, route;
+	riot.tag2('test-list', '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" style="width:0;height:0;position:absolute;overflow:hidden;"> <defs> <symbol viewbox="0 0 1024 1024" aria-labelledby="fmsi-ant-question-circle-title" id="si-ant-question-circle"> <title id="fmsi-ant-question-circle-title">icon question-circle</title> <path d="M512 0Q373 0 255 68.5T68.5 255 0 512t68.5 257T255 955.5t257 68.5 257-68.5T955.5 769t68.5-257-68.5-257T769 68.5 512 0zm30 802q0 13-9 22.5t-23 9.5q-13 0-22.5-9.5T478 802t9.5-22.5T510 770q14 0 23 9.5t9 22.5zm66-220q-36 19-51 35t-15 46v11q0 13-9 22.5t-23 9.5q-13 0-22.5-9.5T478 674v-11q0-48 24.5-79.5T578 525q35-18 55.5-52.5T654 398q0-60-42-102t-102-42q-62 0-103 37-30 28-38 68-2 11-11 18.5t-20 7.5q-16 0-25.5-11.5T306 347q12-62 59-104 59-53 145-53 87 0 147.5 61T718 398q0 58-29.5 107.5T608 582z"></path> </symbol> </defs> </svg> <div class="header"> <svg class="logo"> <text x="0" y="16" font-size="18" fill="white">AM: coffee time ☕</text> </svg> <svg class="question" onclick="{showHelp}"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#si-ant-question-circle" fill="white"></use> </svg> </div> <div class="phantom-header"></div> <help ref="help"></help> <test-status></test-status> <a onclick="{toRouteHash}">base</a> <a onclick="{toggleParameterMode}">show all parameters</a> <recursive-item ref="item" data="{opts.testPatterns}" routing="" depth="1"></recursive-item> <test-iframe ref="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{Status.config}"></test-iframe>', 'test-list,[data-is="test-list"]{display:block;width:100%;background-color:white;font-size:14px;padding-left:12px;box-sizing:border-box} test-list>.header,[data-is="test-list"]>.header{width:100%;height:30px;background:#333;position:fixed;top:0;left:0;display:flex;align-items:center;justify-content:space-between;z-index:10} test-list>.header>svg,[data-is="test-list"]>.header>svg{height:20px;padding:4px} test-list>.header>svg.logo>text,[data-is="test-list"]>.header>svg.logo>text{font-family:"Playfair Display","Georgia",serif} test-list>.header>svg.question,[data-is="test-list"]>.header>svg.question{width:20px;margin-right:6px;cursor:pointer} test-list>.phantom-header,[data-is="test-list"]>.phantom-header{height:30px;content:" ";width:100%} test-list>a,[data-is="test-list"]>a{border:1px solid #ccc} test-list a,[data-is="test-list"] a{color:blue;text-decoration:none;cursor:pointer;display:inline-block} test-list a:hover,[data-is="test-list"] a:hover{opacity:.4}', '', function(opts) {
+	var Status, bodyStyle, depth, fn, i, keyboardjs, route;
 
 	Status = this.Status = __webpack_require__(37);
 
-	route = __webpack_require__(41);
+	route = __webpack_require__(43);
+
+	keyboardjs = __webpack_require__(44);
 
 	bodyStyle = document.body.style;
 
@@ -245,6 +273,12 @@ module.exports =
 	  };
 	})(this);
 
+	this.showHelp = (function(_this) {
+	  return function() {
+	    return _this.refs.help.open();
+	  };
+	})(this);
+
 	Status.on("item-update", (function(_this) {
 	  return function() {
 	    var i, itemStatus, len, onExecute, ref;
@@ -278,6 +312,35 @@ module.exports =
 	    }
 	  };
 	})(this));
+
+	keyboardjs.bind("?", (function(_this) {
+	  return function() {
+	    return _this.showHelp();
+	  };
+	})(this));
+
+	keyboardjs.bind("esc", (function(_this) {
+	  return function() {
+	    return _this.refs.help.close();
+	  };
+	})(this));
+
+	keyboardjs.bind("0", (function(_this) {
+	  return function() {
+	    return Status.allApen();
+	  };
+	})(this));
+
+	fn = (function(_this) {
+	  return function(depth) {
+	    return keyboardjs.bind("" + depth, function() {
+	      return Status.close(depth);
+	    });
+	  };
+	})(this);
+	for (depth = i = 1; i <= 9; depth = ++i) {
+	  fn(depth);
+	}
 	});
 
 	riot.tag2('test-status', '<span class="test-count">{Status.successSum}/{Status.executeSum}</span> <span if="{Status.taskFinished()}" class="finished">✔︎</span> <span if="{Status.taskAllSuccess()}" class="all-success">💯</span>', 'test-status .finished,[data-is="test-status"] .finished{ color: #17e017; }', '', function(opts) {
@@ -288,10 +351,10 @@ module.exports =
 	})(this));
 	});
 
-	riot.tag2('recursive-item', '<list-line ref="lines" each="{data, key in list}" list="{this}" routing="{this.parent.opts.routing}"></list-line>', 'recursive-item,[data-is="recursive-item"]{ display: block; }', '', function(opts) {
-	var getLines, objectAssign;
+	riot.tag2('recursive-item', '<list-line ref="lines" if="{getStrInfo(key).name !== \'default\'}" depth="{parent.opts.depth}" routing="{parent.opts.routing}" each="{data, key in opts.data}"></list-line>', 'recursive-item,[data-is="recursive-item"]{display:block;border-left:1px solid #ccc}', '', function(opts) {
+	var getLines;
 
-	objectAssign = __webpack_require__(42);
+	this.getStrInfo = __webpack_require__(45).getStrInfo;
 
 	getLines = (function(_this) {
 	  return function() {
@@ -320,26 +383,24 @@ module.exports =
 	    });
 	  };
 	})(this);
-
-	this.list = typeof opts.data === "object" ? opts.data : {};
 	});
 
-	riot.tag2('list-line', '<section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error}"></span> <a class="tree" href="{routing}" onclick="{router}">{treeName}</a> <label each="{pattern, i in patterns}" class="{focus: pattern.focus}" data-id="{i}" onclick="{changePatternEvent}"> {pattern.name} </label> <a class="single" if="{url}" href="{routerExecutionPath}" onclick="{router}">{linkName}</a> </div> <recursive-item ref="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </section> <test-iframe ref="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{Status.config}"></test-iframe>', 'list-line,[data-is="list-line"]{display:block} list-line >.line,[data-is="list-line"] >.line{display:inline-block} list-line >.line.last-execute,[data-is="list-line"] >.line.last-execute{border:solid 1px;display:inline-block;padding:0 8px} list-line >.line div>label,[data-is="list-line"] >.line div>label{cursor:pointer;border:1px solid rgba(255,128,0,0.6);padding:0 6px;text-align:center;display:inline-block} list-line >.line div>label.focus,[data-is="list-line"] >.line div>label.focus{background:#ff0} list-line >.line div>label:hover,[data-is="list-line"] >.line div>label:hover{opacity:.6} list-line .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[data-is="list-line"] .tree{color:#333;word-break:break-all} list-line .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .error,[data-is="list-line"] .error{color:red} list-line .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
-	var Parser, Status, checkLastExecute, executeIframe, initialPattern, name, paramMode, path, patterns, ref, ref1, route, setObservableEvent, setRouter, toggleMode;
+	riot.tag2('list-line', '<open-close-icon ref="icon" length="16" stroke="#333" if="{!singleTaskUrl}" callback="{toggleItem}"></open-close-icon> <section class="{line: 1,hover: isHover, last-execute: singleTaskExecutionPath === Status.lastExecutePath}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error}"></span> <a class="tree" href="{routing}" onclick="{router}">{treeName}</a> <label each="{pattern, i in patterns}" class="{focus: pattern.focus}" data-id="{i}" onclick="{changePatternEvent}"> {pattern.name} </label> <a class="single" if="{singleTaskUrl}" href="{singleTaskExecutionPath}" onclick="{router}">{singleTaskName}</a> </div> <recursive-item depth="{opts.depth - 0 + 1}" ref="item" if="{typeof data === \'object\'}" data="{data}" routing="{routing}" riot-style="display: {isItemOpen ? \'block\' : \'none\'}"></recursive-item> </section> <test-iframe ref="testFrame" if="{singleTaskUrl && status.onExecute}" url="{singleTaskExecutionPath}" config="{Status.config}"></test-iframe>', 'list-line,[data-is="list-line"]{display:block;position:relative} list-line >open-close-icon,[data-is="list-line"] >open-close-icon{position:absolute;top:0;left:-8px} list-line >.line,[data-is="list-line"] >.line{display:inline-block} list-line >.line.last-execute,[data-is="list-line"] >.line.last-execute{border:solid 1px;display:inline-block;padding:0 8px} list-line >.line div>label,[data-is="list-line"] >.line div>label{cursor:pointer;border:1px solid rgba(255,128,0,0.6);padding:0 6px;text-align:center;display:inline-block} list-line >.line div>label.focus,[data-is="list-line"] >.line div>label.focus{background:#ff0} list-line >.line div>label:hover,[data-is="list-line"] >.line div>label:hover{opacity:.6} list-line .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[data-is="list-line"] .tree{color:#333;word-break:break-all} list-line .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[data-is="list-line"] .line{margin-left:14px} list-line .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .error,[data-is="list-line"] .error{color:red} list-line .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
+	var Parser, Status, checkLastExecute, executeIframe, initialPattern, keyStrInfo, route, setObservableEvent, setRouter, valStrInfo;
 
 	Status = this.Status = __webpack_require__(37);
 
-	Parser = __webpack_require__(43);
+	Parser = __webpack_require__(45);
 
-	route = __webpack_require__(41);
+	route = __webpack_require__(43);
 
 	setObservableEvent = (function(_this) {
 	  return function() {
 	    Status.executablePath[_this.routing] = function() {
 	      return _this.multiExecuteTask();
 	    };
-	    return Status.executablePath[_this.routerExecutionPath] = function() {
-	      if (_this.url) {
+	    return Status.executablePath[_this.singleTaskExecutionPath] = function() {
+	      if (_this.singleTaskUrl) {
 	        return _this.executeTask();
 	      }
 	    };
@@ -349,14 +410,14 @@ module.exports =
 	setRouter = (function(_this) {
 	  return function(path) {
 	    _this.routing = _this.initialRouting ? _this.initialRouting + "/" + path : path;
-	    return _this.routerExecutionPath = _this.url + Status.basePath + _this.routing;
+	    return _this.singleTaskExecutionPath = _this.singleTaskUrl + Status.basePath + _this.routing;
 	  };
 	})(this);
 
 	checkLastExecute = (function(_this) {
 	  return function() {
 	    return Status.one('finished', function() {
-	      if (Status.lastExecutePath === _this.routerExecutionPath) {
+	      if (Status.lastExecutePath === _this.singleTaskExecutionPath) {
 	        return checkLastExecute();
 	      } else {
 	        return _this.update();
@@ -368,30 +429,32 @@ module.exports =
 	executeIframe = (function(_this) {
 	  return function() {
 	    var base;
-	    return typeof (base = Status.executeIframe.shift()) === "function" ? base() : void 0;
+	    return typeof (base = Status.iframeListToExecute.shift()) === "function" ? base() : void 0;
 	  };
 	})(this);
 
-	ref = Parser.getStrInfo(this.key), toggleMode = ref.toggleMode, paramMode = ref.paramMode, name = ref.name, path = ref.path, patterns = ref.patterns;
+	keyStrInfo = Parser.getStrInfo(this.key);
 
 	this.initialRouting = opts.routing;
 
-	this.treeName = name;
+	this.treeName = keyStrInfo.name;
 
-	if (toggleMode) {
-	  initialPattern = patterns[0];
+	if (keyStrInfo.toggleMode) {
+	  initialPattern = keyStrInfo.patterns[0];
 	  initialPattern.focus = true;
 	  this.path = initialPattern.path;
-	  this.patterns = patterns;
+	  this.patterns = keyStrInfo.patterns;
 	} else {
-	  this.path = path;
+	  this.path = keyStrInfo.path;
 	}
 
-	ref1 = typeof this.data === "object" ? {} : Parser.getStrInfo(this.data), name = ref1.name, path = ref1.path;
+	valStrInfo = typeof this.data === "object" ? this.data["default"] ? Parser.getStrInfo(this.data["default"]) : {} : Parser.getStrInfo(this.data);
 
-	this.linkName = name;
+	this.singleTaskName = valStrInfo.name;
 
-	this.url = path;
+	this.singleTaskUrl = valStrInfo.path;
+
+	this.isItemOpen = true;
 
 	setRouter(this.path);
 
@@ -399,19 +462,20 @@ module.exports =
 	  onExecute: false
 	};
 
-	this.getRouting = (function(_this) {
+	this.toggleItem = (function(_this) {
 	  return function() {
-	    return _this.initialRouting;
+	    _this.isItemOpen = !_this.isItemOpen;
+	    return _this.update();
 	  };
 	})(this);
 
 	this.recursivelyUpdate = (function(_this) {
 	  return function(routing) {
-	    var ref2;
+	    var ref;
 	    _this.initialRouting = routing;
 	    setRouter(_this.path);
-	    if ((ref2 = _this.refs.item) != null) {
-	      ref2.recursivelyUpdate(_this.routing);
+	    if ((ref = _this.refs.item) != null) {
+	      ref.recursivelyUpdate(_this.routing);
 	    }
 	    return setObservableEvent();
 	  };
@@ -449,7 +513,7 @@ module.exports =
 	        return results;
 	      }
 	    } else {
-	      return Status.executeIframe.push(function() {
+	      return Status.iframeListToExecute.push(function() {
 	        return _this.executeTask(function() {
 	          _this.deleteIframe();
 	          return executeIframe();
@@ -461,7 +525,7 @@ module.exports =
 
 	this.multiExecuteTask = (function(_this) {
 	  return function() {
-	    Status.executeIframe.length = 0;
+	    Status.iframeListToExecute.length = 0;
 	    _this.recursivelyExecuteTask();
 	    return executeIframe();
 	  };
@@ -470,7 +534,7 @@ module.exports =
 	this.executeTask = (function(_this) {
 	  return function(callback) {
 	    _this.status.onExecute = true;
-	    Status.lastExecutePath = _this.routerExecutionPath;
+	    Status.lastExecutePath = _this.singleTaskExecutionPath;
 	    Status.next();
 	    checkLastExecute();
 	    _this.update();
@@ -519,7 +583,7 @@ module.exports =
 
 	this.changePattern = (function(_this) {
 	  return function(nextId) {
-	    var nextPattern, ref2;
+	    var nextPattern, ref;
 	    _this.patterns.forEach(function(pattern) {
 	      return pattern.focus = false;
 	    });
@@ -527,8 +591,8 @@ module.exports =
 	    nextPattern.focus = true;
 	    _this.path = nextPattern.path;
 	    setRouter(_this.path);
-	    if ((ref2 = _this.refs.item) != null) {
-	      ref2.recursivelyUpdate(_this.routing);
+	    if ((ref = _this.refs.item) != null) {
+	      ref.recursivelyUpdate(_this.routing);
 	    }
 	    return setObservableEvent();
 	  };
@@ -542,10 +606,10 @@ module.exports =
 
 	this.recursivelyCheckItem = (function(_this) {
 	  return function(paramStr) {
-	    var matchedPattern, ref2, ref3, ref4, ref5;
-	    matchedPattern = (ref2 = _this.patterns) != null ? (ref3 = ref2.filter(function(pattern, i) {
+	    var matchedPattern, ref, ref1, ref2, ref3;
+	    matchedPattern = (ref = _this.patterns) != null ? (ref1 = ref.filter(function(pattern, i) {
 	      return paramStr.indexOf(pattern.path) === 0;
-	    })) != null ? ref3[0] : void 0 : void 0;
+	    })) != null ? ref1[0] : void 0 : void 0;
 	    if (matchedPattern) {
 	      paramStr = paramStr.replace(matchedPattern.path, "").replace(/^\//, "");
 	      _this.patterns.forEach(function(pattern, i) {
@@ -556,12 +620,12 @@ module.exports =
 	      });
 	      _this.update();
 	      if (paramStr) {
-	        return (ref4 = _this.refs.item) != null ? ref4.recursivelyCheck(paramStr) : void 0;
+	        return (ref2 = _this.refs.item) != null ? ref2.recursivelyCheck(paramStr) : void 0;
 	      } else {
 	        return setObservableEvent();
 	      }
 	    } else if (paramStr.indexOf(_this.path) === 0) {
-	      return (ref5 = _this.refs.item) != null ? ref5.recursivelyCheck(paramStr.replace(_this.path, "").replace(/^\//, "")) : void 0;
+	      return (ref3 = _this.refs.item) != null ? ref3.recursivelyCheck(paramStr.replace(_this.path, "").replace(/^\//, "")) : void 0;
 	    }
 	  };
 	})(this);
@@ -572,10 +636,24 @@ module.exports =
 	  };
 	})(this));
 
-	paramMode && Status.on("toggle-mode", (function(_this) {
+	Status.on("all-open", (function(_this) {
+	  return function() {
+	    var ref;
+	    return (ref = _this.refs.icon) != null ? ref.setStatus(true) : void 0;
+	  };
+	})(this));
+
+	Status.on("close-depth-" + opts.depth, (function(_this) {
+	  return function() {
+	    var ref;
+	    return (ref = _this.refs.icon) != null ? ref.setStatus(false) : void 0;
+	  };
+	})(this));
+
+	keyStrInfo.paramMode && Status.on("toggle-mode", (function(_this) {
 	  return function() {
 	    _this.treeName = _this.key === _this.treeName ? _this.treeName = _this._treeName || _this.treeName : (_this._treeName = _this.treeName, _this.treeName = _this.key);
-	    _this.linkName = _this.data === _this.linkName ? _this.linkName = _this._linkName || _this.linkName : (_this._linkName = _this.linkName, _this.linkName = _this.data);
+	    _this.singleTaskName = _this.data === _this.singleTaskName ? _this.singleTaskName = _this._singleTaskName || _this.singleTaskName : (_this._singleTaskName = _this.singleTaskName, _this.singleTaskName = _this.data);
 	    return _this.update();
 	  };
 	})(this));
@@ -583,8 +661,6 @@ module.exports =
 	Status.itemStatuses.push(this.status);
 
 	setObservableEvent();
-
-	Status.paramMode = paramMode || Status.paramMode;
 
 	this.on("update", (function(_this) {
 	  return function() {
@@ -596,19 +672,80 @@ module.exports =
 	    
 	  
 
-/***/ },
+/***/ }),
 /* 39 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	
 	    var riot = __webpack_require__(12)
-	    riot.tag2('test-iframe', '<span class="{isIos ? \'ios\' : \'no-ios\'}"> <iframe if="{!isElectron}" riot-src="{opts.url}"></iframe> <webview if="{isElectron}" riot-src="{opts.url}" nodeintegration></webview> </span>', 'test-iframe .ios,[data-is="test-iframe"] .ios{ display: block; -webkit-overflow-scrolling: touch; overflow: auto; position: fixed; top: 0; left: 0; width: 100%; height: 100%; } test-iframe iframe,[data-is="test-iframe"] iframe,test-iframe webview,[data-is="test-iframe"] webview{ background-color: white; border: none; width: 100%; height: 100%; } test-iframe .no-ios iframe,[data-is="test-iframe"] .no-ios iframe,test-iframe .no-ios webview,[data-is="test-iframe"] .no-ios webview{ position: fixed; left: 0px; top: 0px; }', '', function(opts) {
+	    riot.tag2('open-close-icon', '<svg xmlns="http://www.w3.org/2000/svg" onclick="{clickHandler}" riot-width="{opts.length || length}" riot-height="{opts.length || length}" viewbox="0 0 24 24" fill="none" riot-stroke="{opts.stroke || stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect> <g if="{minus}"> <line x1="8" y1="12" x2="16" y2="12"></line> </g> <g if="{!minus}"> <line x1="12" y1="8" x2="12" y2="16"></line> <line x1="8" y1="12" x2="16" y2="12"></line> </g> </svg>', 'open-close-icon>svg,[data-is="open-close-icon"]>svg{background:white;cursor:pointer}', '', function(opts) {
+	this.length = 24;
+
+	this.stroke = "#000";
+
+	this.minus = true;
+
+	this.setStatus = (function(_this) {
+	  return function(minusFlg) {
+	    var currentMinusStatus, nextMinusStatus;
+	    currentMinusStatus = _this.minus;
+	    nextMinusStatus = _this.minus = minusFlg;
+	    currentMinusStatus !== nextMinusStatus && (typeof opts.callback === "function" ? opts.callback() : void 0);
+	    return _this.update();
+	  };
+	})(this);
+
+	this.clickHandler = (function(_this) {
+	  return function() {
+	    _this.minus = !_this.minus;
+	    return typeof opts.callback === "function" ? opts.callback() : void 0;
+	  };
+	})(this);
+	});
+
+	    
+	  
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	
+	    var riot = __webpack_require__(12)
+	    riot.tag2('help', '<section class="inner {isOpen ? \'show\' : \'hide\'}"> <header> Keyboard Shortcuts </header> <div> <kbd>1</kbd>-<kbd>9</kbd><span class="detail">Fold [1 - 9] depth tree node.</span> </div> <div> <kbd>0</kbd><span class="detail">Unfold all tree node.</span> </div> </section> <section class="background {isOpen ? \'show\' : \'hide\'}" onclick="{close}"></section>', 'help>section.show,[data-is="help"]>section.show{display:block} help>section.hide,[data-is="help"]>section.hide{display:none} help>.inner,[data-is="help"]>.inner{position:fixed;top:40px;left:50%;transform:translate(-50%, 0);width:80%;min-height:40%;background:white;z-index:30;padding:16px;border-radius:10px;transition:1s} help>.inner>header,[data-is="help"]>.inner>header{padding:16px;margin:-16px -16px 16px;border-bottom:1px solid #ccc} help>.inner>div>kbd,[data-is="help"]>.inner>div>kbd{display:inline-block;padding:3px 5px;font:11px "SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace;line-height:10px;color:#444d56;vertical-align:middle;background-color:#fafbfc;border:solid 1px #d1d5da;border-bottom-color:#c6cbd1;border-radius:3px;box-shadow:inset 0 -1px 0 #c6cbd1} help>.inner>div>.detail,[data-is="help"]>.inner>div>.detail{margin-left:10px;font-size:12px;color:#333} help>.background,[data-is="help"]>.background{background:rgba(0,0,0,0.4);width:100%;height:100%;position:fixed;top:0;left:0;z-index:20}', '', function(opts) {
+	this.isOpen = false;
+
+	this.open = (function(_this) {
+	  return function() {
+	    _this.isOpen = true;
+	    return _this.update();
+	  };
+	})(this);
+
+	this.close = (function(_this) {
+	  return function() {
+	    _this.isOpen = false;
+	    return _this.update();
+	  };
+	})(this);
+	});
+
+	    
+	  
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	
+	    var riot = __webpack_require__(12)
+	    riot.tag2('test-iframe', '<span class="{isIos ? \'ios\' : \'no-ios\'}"> <iframe if="{!isElectron}" riot-src="{opts.url}"></iframe> <webview if="{isElectron}" riot-src="{opts.url}" nodeintegration></webview> </span>', 'test-iframe,[data-is="test-iframe"]{ z-index: 100000; position: relative; } test-iframe .ios,[data-is="test-iframe"] .ios{ display: block; -webkit-overflow-scrolling: touch; overflow: auto; position: fixed; top: 0; left: 0; width: 100%; height: 100%; } test-iframe iframe,[data-is="test-iframe"] iframe,test-iframe webview,[data-is="test-iframe"] webview{ background-color: white; border: none; width: 100%; height: 100%; } test-iframe .no-ios iframe,[data-is="test-iframe"] .no-ios iframe,test-iframe .no-ios webview,[data-is="test-iframe"] .no-ios webview{ position: fixed; left: 0px; top: 0px; }', '', function(opts) {
 	var WholeStatus, ref,
 	  slice = [].slice;
 
 	WholeStatus = __webpack_require__(37);
 
-	this.isIos = __webpack_require__(40).ios();
+	this.isIos = __webpack_require__(42).ios();
 
 	this.isElectron = typeof process !== "undefined" && process !== null ? (ref = process.versions) != null ? ref.electron : void 0 : void 0;
 
@@ -673,27 +810,27 @@ module.exports =
 	    
 	  
 
-/***/ },
-/* 40 */
-/***/ function(module, exports) {
+/***/ }),
+/* 42 */
+/***/ (function(module, exports) {
 
 	module.exports = require("is_js");
 
-/***/ },
-/* 41 */
-/***/ function(module, exports) {
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
 
 	module.exports = require("riot-route");
 
-/***/ },
-/* 42 */
-/***/ function(module, exports) {
+/***/ }),
+/* 44 */
+/***/ (function(module, exports) {
 
-	module.exports = require("object-assign");
+	module.exports = require("keyboardjs");
 
-/***/ },
-/* 43 */
-/***/ function(module, exports) {
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
 
 	var Parser;
 
@@ -711,6 +848,17 @@ module.exports =
 	      path: path
 	    };
 	  };
+
+
+	  /**
+	   * getStrInfo 第一引数で指定されたkey stringの情報を得る
+	   * @param  {string} str testPatternのkey string
+	   * @return info.toggleMode 2個以上の選択可能な切り替えが出来るkey stringである。 - [ja | en | ch]
+	   * @return info.paramMode 表示用のテキストの他に、パラメーターを渡すkey stringである。 - dispString(param=kakarotto)
+	   * @return name 表示用のテキスト
+	   * @return path parameterに使われるパス
+	   * @return patterns toggleMode時に使われる、選択可能なパターン配列。
+	   */
 
 	  Parser.getStrInfo = function(str) {
 	    var name, paramMode, path, patternStr, patterns, ref, ref1, toggleMode;
@@ -791,9 +939,9 @@ module.exports =
 	})();
 
 
-/***/ },
-/* 44 */
-/***/ function(module, exports) {
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
 
 	module.exports = {
 		"am-module": {
@@ -801,5 +949,5 @@ module.exports =
 		}
 	};
 
-/***/ }
+/***/ })
 /******/ ]);

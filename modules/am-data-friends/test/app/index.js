@@ -44,22 +44,22 @@ module.exports =
 /******/ ({
 
 /***/ 0:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(45);
+	module.exports = __webpack_require__(47);
 
 
-/***/ },
+/***/ }),
 
 /***/ 19:
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("jquery");
 
-/***/ },
+/***/ }),
 
 /***/ 30:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var $, RE_STR, Test, actionFuncs, getRandomColor, getValue, jquery_stylesheet, parseValue;
 
@@ -158,9 +158,9 @@ module.exports =
 	  function Test() {}
 
 	  Test.start = function(testObj) {
-	    var action, arg, func, i, key, len, ref, ref1, results, value;
+	    var action, arg, i, key, len, ref, ref1, results, value;
 	    if (testObj == null) {
-	      testObj = Test;
+	      testObj = {};
 	    }
 	    Test.actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/");
 	    Test.actionObj = {};
@@ -169,10 +169,9 @@ module.exports =
 	    for (i = 0, len = ref.length; i < len; i++) {
 	      action = ref[i];
 	      ref1 = action.split("="), key = ref1[0], value = ref1[1];
-	      func = testObj[key] || Test[key];
 	      arg = !value || value.split(",");
-	      if (typeof func === "function") {
-	        func(getValue(arg));
+	      if (typeof testObj[key] === "function") {
+	        testObj[key](getValue(arg));
 	      }
 	      if (typeof actionFuncs[key] === "function") {
 	        actionFuncs[key](value);
@@ -187,17 +186,17 @@ module.exports =
 	})();
 
 
-/***/ },
+/***/ }),
 
 /***/ 31:
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("jquery-stylesheet");
 
-/***/ },
+/***/ }),
 
 /***/ 32:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var AutoEvent, AutoEventBase,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
@@ -257,12 +256,12 @@ module.exports =
 	})(AutoEventBase);
 
 
-/***/ },
+/***/ }),
 
 /***/ 33:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	var $, AutoEvent, assert, trigger,
+	var $, AutoEvent, assert, click, trigger,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 	$ = (function(_this) {
@@ -272,6 +271,14 @@ module.exports =
 	})(this);
 
 	assert = __webpack_require__(34);
+
+	click = (function(_this) {
+	  return function($dom) {
+	    var event;
+	    event = new MouseEvent("click");
+	    return $dom.dispatchEvent(event);
+	  };
+	})(this);
 
 	trigger = (function(_this) {
 	  return function($dom, eventType) {
@@ -287,6 +294,8 @@ module.exports =
 	    this.end = bind(this.end, this);
 	    this._createFuncInWait = bind(this._createFuncInWait, this);
 	    this.waitSelector = bind(this.waitSelector, this);
+	    this.notExists = bind(this.notExists, this);
+	    this.exists = bind(this.exists, this);
 	    this.wait = bind(this.wait, this);
 	    this.waitEvent = bind(this.waitEvent, this);
 	    this.click = bind(this.click, this);
@@ -316,14 +325,16 @@ module.exports =
 	  };
 
 	  AutoEvent.prototype.addSelectorEvent = function(arg) {
-	    var assertionMsg, callback, selector;
-	    selector = arg.selector, assertionMsg = arg.assertionMsg, callback = arg.callback;
+	    var assertionMsg, callback, notExists, ref, selector;
+	    selector = arg.selector, assertionMsg = arg.assertionMsg, notExists = arg.notExists, callback = (ref = arg.callback) != null ? ref : (function(_this) {
+	      return function() {};
+	    })(this);
 	    return this.addEvent((function(_this) {
 	      return function() {
 	        var $this;
 	        $this = $(selector);
 	        if (assertionMsg) {
-	          assert($this, selector + " " + assertionMsg);
+	          assert((notExists ? !$this : $this), selector + " " + assertionMsg);
 	          return callback($this);
 	        } else {
 	          try {
@@ -392,7 +403,7 @@ module.exports =
 	      assertionMsg: assertFlg ? "can't click" : void 0,
 	      callback: (function(_this) {
 	        return function($this) {
-	          return $this.click();
+	          return click($this);
 	        };
 	      })(this)
 	    });
@@ -411,6 +422,21 @@ module.exports =
 	        return setTimeout(func, msec);
 	      };
 	    })(this));
+	  };
+
+	  AutoEvent.prototype.exists = function(selector) {
+	    return this.addSelectorEvent({
+	      selector: selector,
+	      assertionMsg: "not exists"
+	    });
+	  };
+
+	  AutoEvent.prototype.notExists = function(selector) {
+	    return this.addSelectorEvent({
+	      selector: selector,
+	      notExists: true,
+	      assertionMsg: "is exists"
+	    });
 	  };
 
 	  AutoEvent.prototype.waitSelector = function(selector, exists) {
@@ -482,17 +508,17 @@ module.exports =
 	})();
 
 
-/***/ },
+/***/ }),
 
 /***/ 34:
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("assert");
 
-/***/ },
+/***/ }),
 
-/***/ 45:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 47:
+/***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(30).start({
 	  params: (function(_this) {
@@ -501,6 +527,6 @@ module.exports =
 	});
 
 
-/***/ }
+/***/ })
 
 /******/ });

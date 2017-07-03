@@ -50,18 +50,20 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/******/ ({
 
-	module.exports = __webpack_require__(33);
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(74);
 
 
-/***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
 
-	var $, AutoEvent, assert, trigger,
+/***/ 1:
+/***/ (function(module, exports, __webpack_require__) {
+
+	var $, AutoEvent, assert, click, trigger,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 	$ = (function(_this) {
@@ -71,6 +73,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(this);
 
 	assert = __webpack_require__(2);
+
+	click = (function(_this) {
+	  return function($dom) {
+	    var event;
+	    event = new MouseEvent("click");
+	    return $dom.dispatchEvent(event);
+	  };
+	})(this);
 
 	trigger = (function(_this) {
 	  return function($dom, eventType) {
@@ -86,6 +96,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.end = bind(this.end, this);
 	    this._createFuncInWait = bind(this._createFuncInWait, this);
 	    this.waitSelector = bind(this.waitSelector, this);
+	    this.notExists = bind(this.notExists, this);
+	    this.exists = bind(this.exists, this);
 	    this.wait = bind(this.wait, this);
 	    this.waitEvent = bind(this.waitEvent, this);
 	    this.click = bind(this.click, this);
@@ -115,14 +127,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  AutoEvent.prototype.addSelectorEvent = function(arg) {
-	    var assertionMsg, callback, selector;
-	    selector = arg.selector, assertionMsg = arg.assertionMsg, callback = arg.callback;
+	    var assertionMsg, callback, notExists, ref, selector;
+	    selector = arg.selector, assertionMsg = arg.assertionMsg, notExists = arg.notExists, callback = (ref = arg.callback) != null ? ref : (function(_this) {
+	      return function() {};
+	    })(this);
 	    return this.addEvent((function(_this) {
 	      return function() {
 	        var $this;
 	        $this = $(selector);
 	        if (assertionMsg) {
-	          assert($this, selector + " " + assertionMsg);
+	          assert((notExists ? !$this : $this), selector + " " + assertionMsg);
 	          return callback($this);
 	        } else {
 	          try {
@@ -191,7 +205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      assertionMsg: assertFlg ? "can't click" : void 0,
 	      callback: (function(_this) {
 	        return function($this) {
-	          return $this.click();
+	          return click($this);
 	        };
 	      })(this)
 	    });
@@ -210,6 +224,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return setTimeout(func, msec);
 	      };
 	    })(this));
+	  };
+
+	  AutoEvent.prototype.exists = function(selector) {
+	    return this.addSelectorEvent({
+	      selector: selector,
+	      assertionMsg: "not exists"
+	    });
+	  };
+
+	  AutoEvent.prototype.notExists = function(selector) {
+	    return this.addSelectorEvent({
+	      selector: selector,
+	      notExists: true,
+	      assertionMsg: "is exists"
+	    });
 	  };
 
 	  AutoEvent.prototype.waitSelector = function(selector, exists) {
@@ -281,9 +310,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 
 
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
@@ -778,9 +808,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+
+/***/ 3:
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
 	//
@@ -1371,9 +1402,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(4)))
 
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
+/***/ }),
+
+/***/ 4:
+/***/ (function(module, exports) {
 
 	// shim for using process in browser
 	var process = module.exports = {};
@@ -1545,6 +1577,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	process.removeListener = noop;
 	process.removeAllListeners = noop;
 	process.emit = noop;
+	process.prependListener = noop;
+	process.prependOnceListener = noop;
+
+	process.listeners = function (name) { return [] }
 
 	process.binding = function (name) {
 	    throw new Error('process.binding is not supported');
@@ -1557,9 +1593,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	process.umask = function() { return 0; };
 
 
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports) {
 
 	module.exports = function isBuffer(arg) {
 	  return arg && typeof arg === 'object'
@@ -1568,9 +1605,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    && typeof arg.readUInt8 === 'function';
 	}
 
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, exports) {
 
 	if (typeof Object.create === 'function') {
 	  // implementation from standard node.js 'util' module
@@ -1597,10 +1635,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 
-/***/ },
-/* 7 */,
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+
+/***/ 8:
+/***/ (function(module, exports, __webpack_require__) {
 
 	var AutoEvent, AutoEventBase,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
@@ -1660,23 +1698,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(AutoEventBase);
 
 
-/***/ },
-/* 9 */,
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+
+/***/ 10:
+/***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * jQuery JavaScript Library v3.1.1
+	 * jQuery JavaScript Library v3.2.1
 	 * https://jquery.com/
 	 *
 	 * Includes Sizzle.js
 	 * https://sizzlejs.com/
 	 *
-	 * Copyright jQuery Foundation and other contributors
+	 * Copyright JS Foundation and other contributors
 	 * Released under the MIT license
 	 * https://jquery.org/license
 	 *
-	 * Date: 2016-09-22T22:30Z
+	 * Date: 2017-03-20T18:59Z
 	 */
 	( function( global, factory ) {
 
@@ -1755,7 +1793,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	var
-		version = "3.1.1",
+		version = "3.2.1",
 
 		// Define a local copy of jQuery
 		jQuery = function( selector, context ) {
@@ -1903,11 +1941,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 					// Recurse if we're merging plain objects or arrays
 					if ( deep && copy && ( jQuery.isPlainObject( copy ) ||
-						( copyIsArray = jQuery.isArray( copy ) ) ) ) {
+						( copyIsArray = Array.isArray( copy ) ) ) ) {
 
 						if ( copyIsArray ) {
 							copyIsArray = false;
-							clone = src && jQuery.isArray( src ) ? src : [];
+							clone = src && Array.isArray( src ) ? src : [];
 
 						} else {
 							clone = src && jQuery.isPlainObject( src ) ? src : {};
@@ -1945,8 +1983,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		isFunction: function( obj ) {
 			return jQuery.type( obj ) === "function";
 		},
-
-		isArray: Array.isArray,
 
 		isWindow: function( obj ) {
 			return obj != null && obj === obj.window;
@@ -2020,10 +2056,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		// Microsoft forgot to hump their vendor prefix (#9572)
 		camelCase: function( string ) {
 			return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
-		},
-
-		nodeName: function( elem, name ) {
-			return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
 		},
 
 		each: function( obj, callback ) {
@@ -4510,6 +4542,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var rneedsContext = jQuery.expr.match.needsContext;
 
+
+
+	function nodeName( elem, name ) {
+
+	  return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
+
+	};
 	var rsingleTag = ( /^<([a-z][^\/\0>:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?>(?:<\/\1>|)$/i );
 
 
@@ -4861,7 +4900,18 @@ return /******/ (function(modules) { // webpackBootstrap
 			return siblings( elem.firstChild );
 		},
 		contents: function( elem ) {
-			return elem.contentDocument || jQuery.merge( [], elem.childNodes );
+	        if ( nodeName( elem, "iframe" ) ) {
+	            return elem.contentDocument;
+	        }
+
+	        // Support: IE 9 - 11 only, iOS 7 only, Android Browser <=4.3 only
+	        // Treat the template element as a regular one in browsers that
+	        // don't support it.
+	        if ( nodeName( elem, "template" ) ) {
+	            elem = elem.content || elem;
+	        }
+
+	        return jQuery.merge( [], elem.childNodes );
 		}
 	}, function( name, fn ) {
 		jQuery.fn[ name ] = function( until, selector ) {
@@ -4959,7 +5009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			fire = function() {
 
 				// Enforce single-firing
-				locked = options.once;
+				locked = locked || options.once;
 
 				// Execute callbacks for all pending executions,
 				// respecting firingIndex overrides and runtime changes
@@ -5128,7 +5178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		throw ex;
 	}
 
-	function adoptValue( value, resolve, reject ) {
+	function adoptValue( value, resolve, reject, noValue ) {
 		var method;
 
 		try {
@@ -5144,9 +5194,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			// Other non-thenables
 			} else {
 
-				// Support: Android 4.0 only
-				// Strict mode functions invoked without .call/.apply get global-object context
-				resolve.call( undefined, value );
+				// Control `resolve` arguments by letting Array#slice cast boolean `noValue` to integer:
+				// * false: [ value ].slice( 0 ) => resolve( value )
+				// * true: [ value ].slice( 1 ) => resolve()
+				resolve.apply( undefined, [ value ].slice( noValue ) );
 			}
 
 		// For Promises/A+, convert exceptions into rejections
@@ -5156,7 +5207,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			// Support: Android 4.0 only
 			// Strict mode functions invoked without .call/.apply get global-object context
-			reject.call( undefined, value );
+			reject.apply( undefined, [ value ] );
 		}
 	}
 
@@ -5481,7 +5532,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			// Single- and empty arguments are adopted like Promise.resolve
 			if ( remaining <= 1 ) {
-				adoptValue( singleValue, master.done( updateFunc( i ) ).resolve, master.reject );
+				adoptValue( singleValue, master.done( updateFunc( i ) ).resolve, master.reject,
+					!remaining );
 
 				// Use .then() to unwrap secondary thenables (cf. gh-3000)
 				if ( master.state() === "pending" ||
@@ -5552,15 +5604,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		// A counter to track how many items to wait for before
 		// the ready event fires. See #6781
 		readyWait: 1,
-
-		// Hold (or release) the ready event
-		holdReady: function( hold ) {
-			if ( hold ) {
-				jQuery.readyWait++;
-			} else {
-				jQuery.ready( true );
-			}
-		},
 
 		// Handle when the DOM is ready
 		ready: function( wait ) {
@@ -5797,7 +5840,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			if ( key !== undefined ) {
 
 				// Support array or space separated string of keys
-				if ( jQuery.isArray( key ) ) {
+				if ( Array.isArray( key ) ) {
 
 					// If key is an array of keys...
 					// We always set camelCase keys, so remove that.
@@ -6023,7 +6066,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				// Speed up dequeue by getting out quickly if this is just a lookup
 				if ( data ) {
-					if ( !queue || jQuery.isArray( data ) ) {
+					if ( !queue || Array.isArray( data ) ) {
 						queue = dataPriv.access( elem, type, jQuery.makeArray( data ) );
 					} else {
 						queue.push( data );
@@ -6400,7 +6443,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			ret = [];
 		}
 
-		if ( tag === undefined || tag && jQuery.nodeName( context, tag ) ) {
+		if ( tag === undefined || tag && nodeName( context, tag ) ) {
 			return jQuery.merge( [ context ], ret );
 		}
 
@@ -7007,7 +7050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				// For checkbox, fire native event so checked state will be right
 				trigger: function() {
-					if ( this.type === "checkbox" && this.click && jQuery.nodeName( this, "input" ) ) {
+					if ( this.type === "checkbox" && this.click && nodeName( this, "input" ) ) {
 						this.click();
 						return false;
 					}
@@ -7015,7 +7058,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				// For cross-browser consistency, don't fire native .click() on links
 				_default: function( event ) {
-					return jQuery.nodeName( event.target, "a" );
+					return nodeName( event.target, "a" );
 				}
 			},
 
@@ -7292,11 +7335,12 @@ return /******/ (function(modules) { // webpackBootstrap
 		rscriptTypeMasked = /^true\/(.*)/,
 		rcleanScript = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
 
+	// Prefer a tbody over its parent table for containing new rows
 	function manipulationTarget( elem, content ) {
-		if ( jQuery.nodeName( elem, "table" ) &&
-			jQuery.nodeName( content.nodeType !== 11 ? content : content.firstChild, "tr" ) ) {
+		if ( nodeName( elem, "table" ) &&
+			nodeName( content.nodeType !== 11 ? content : content.firstChild, "tr" ) ) {
 
-			return elem.getElementsByTagName( "tbody" )[ 0 ] || elem;
+			return jQuery( ">tbody", elem )[ 0 ] || elem;
 		}
 
 		return elem;
@@ -7826,12 +7870,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function curCSS( elem, name, computed ) {
 		var width, minWidth, maxWidth, ret,
+
+			// Support: Firefox 51+
+			// Retrieving style before computed somehow
+			// fixes an issue with getting wrong values
+			// on detached elements
 			style = elem.style;
 
 		computed = computed || getStyles( elem );
 
-		// Support: IE <=9 only
-		// getPropertyValue is only needed for .css('filter') (#12537)
+		// getPropertyValue is needed for:
+		//   .css('filter') (IE 9 only, #12537)
+		//   .css('--customProperty) (#3144)
 		if ( computed ) {
 			ret = computed.getPropertyValue( name ) || computed[ name ];
 
@@ -7897,6 +7947,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		// except "table", "table-cell", or "table-caption"
 		// See here for display values: https://developer.mozilla.org/en-US/docs/CSS/display
 		rdisplayswap = /^(none|table(?!-c[ea]).+)/,
+		rcustomProp = /^--/,
 		cssShow = { position: "absolute", visibility: "hidden", display: "block" },
 		cssNormalTransform = {
 			letterSpacing: "0",
@@ -7924,6 +7975,16 @@ return /******/ (function(modules) { // webpackBootstrap
 				return name;
 			}
 		}
+	}
+
+	// Return a property mapped along what jQuery.cssProps suggests or to
+	// a vendor prefixed property.
+	function finalPropName( name ) {
+		var ret = jQuery.cssProps[ name ];
+		if ( !ret ) {
+			ret = jQuery.cssProps[ name ] = vendorPropName( name ) || name;
+		}
+		return ret;
 	}
 
 	function setPositiveNumber( elem, value, subtract ) {
@@ -7986,43 +8047,30 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function getWidthOrHeight( elem, name, extra ) {
 
-		// Start with offset property, which is equivalent to the border-box value
-		var val,
-			valueIsBorderBox = true,
+		// Start with computed style
+		var valueIsBorderBox,
 			styles = getStyles( elem ),
+			val = curCSS( elem, name, styles ),
 			isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box";
 
-		// Support: IE <=11 only
-		// Running getBoundingClientRect on a disconnected node
-		// in IE throws an error.
-		if ( elem.getClientRects().length ) {
-			val = elem.getBoundingClientRect()[ name ];
+		// Computed unit is not pixels. Stop here and return.
+		if ( rnumnonpx.test( val ) ) {
+			return val;
 		}
 
-		// Some non-html elements return undefined for offsetWidth, so check for null/undefined
-		// svg - https://bugzilla.mozilla.org/show_bug.cgi?id=649285
-		// MathML - https://bugzilla.mozilla.org/show_bug.cgi?id=491668
-		if ( val <= 0 || val == null ) {
+		// Check for style in case a browser which returns unreliable values
+		// for getComputedStyle silently falls back to the reliable elem.style
+		valueIsBorderBox = isBorderBox &&
+			( support.boxSizingReliable() || val === elem.style[ name ] );
 
-			// Fall back to computed then uncomputed css if necessary
-			val = curCSS( elem, name, styles );
-			if ( val < 0 || val == null ) {
-				val = elem.style[ name ];
-			}
-
-			// Computed unit is not pixels. Stop here and return.
-			if ( rnumnonpx.test( val ) ) {
-				return val;
-			}
-
-			// Check for style in case a browser which returns unreliable values
-			// for getComputedStyle silently falls back to the reliable elem.style
-			valueIsBorderBox = isBorderBox &&
-				( support.boxSizingReliable() || val === elem.style[ name ] );
-
-			// Normalize "", auto, and prepare for extra
-			val = parseFloat( val ) || 0;
+		// Fall back to offsetWidth/Height when value is "auto"
+		// This happens for inline elements with no explicit setting (gh-3571)
+		if ( val === "auto" ) {
+			val = elem[ "offset" + name[ 0 ].toUpperCase() + name.slice( 1 ) ];
 		}
+
+		// Normalize "", auto, and prepare for extra
+		val = parseFloat( val ) || 0;
 
 		// Use the active box-sizing model to add/subtract irrelevant styles
 		return ( val +
@@ -8087,10 +8135,15 @@ return /******/ (function(modules) { // webpackBootstrap
 			// Make sure that we're working with the right name
 			var ret, type, hooks,
 				origName = jQuery.camelCase( name ),
+				isCustomProp = rcustomProp.test( name ),
 				style = elem.style;
 
-			name = jQuery.cssProps[ origName ] ||
-				( jQuery.cssProps[ origName ] = vendorPropName( origName ) || origName );
+			// Make sure that we're working with the right name. We don't
+			// want to query the value if it is a CSS custom property
+			// since they are user-defined.
+			if ( !isCustomProp ) {
+				name = finalPropName( origName );
+			}
 
 			// Gets hook for the prefixed version, then unprefixed version
 			hooks = jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];
@@ -8126,7 +8179,11 @@ return /******/ (function(modules) { // webpackBootstrap
 				if ( !hooks || !( "set" in hooks ) ||
 					( value = hooks.set( elem, value, extra ) ) !== undefined ) {
 
-					style[ name ] = value;
+					if ( isCustomProp ) {
+						style.setProperty( name, value );
+					} else {
+						style[ name ] = value;
+					}
 				}
 
 			} else {
@@ -8145,11 +8202,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		css: function( elem, name, extra, styles ) {
 			var val, num, hooks,
-				origName = jQuery.camelCase( name );
+				origName = jQuery.camelCase( name ),
+				isCustomProp = rcustomProp.test( name );
 
-			// Make sure that we're working with the right name
-			name = jQuery.cssProps[ origName ] ||
-				( jQuery.cssProps[ origName ] = vendorPropName( origName ) || origName );
+			// Make sure that we're working with the right name. We don't
+			// want to modify the value if it is a CSS custom property
+			// since they are user-defined.
+			if ( !isCustomProp ) {
+				name = finalPropName( origName );
+			}
 
 			// Try prefixed name followed by the unprefixed name
 			hooks = jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];
@@ -8174,6 +8235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				num = parseFloat( val );
 				return extra === true || isFinite( num ) ? num || 0 : val;
 			}
+
 			return val;
 		}
 	} );
@@ -8273,7 +8335,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					map = {},
 					i = 0;
 
-				if ( jQuery.isArray( name ) ) {
+				if ( Array.isArray( name ) ) {
 					styles = getStyles( elem );
 					len = name.length;
 
@@ -8411,13 +8473,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	var
-		fxNow, timerId,
+		fxNow, inProgress,
 		rfxtypes = /^(?:toggle|show|hide)$/,
 		rrun = /queueHooks$/;
 
-	function raf() {
-		if ( timerId ) {
-			window.requestAnimationFrame( raf );
+	function schedule() {
+		if ( inProgress ) {
+			if ( document.hidden === false && window.requestAnimationFrame ) {
+				window.requestAnimationFrame( schedule );
+			} else {
+				window.setTimeout( schedule, jQuery.fx.interval );
+			}
+
 			jQuery.fx.tick();
 		}
 	}
@@ -8644,7 +8711,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			name = jQuery.camelCase( index );
 			easing = specialEasing[ name ];
 			value = props[ index ];
-			if ( jQuery.isArray( value ) ) {
+			if ( Array.isArray( value ) ) {
 				easing = value[ 1 ];
 				value = props[ index ] = value[ 0 ];
 			}
@@ -8703,12 +8770,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				deferred.notifyWith( elem, [ animation, percent, remaining ] );
 
+				// If there's more to do, yield
 				if ( percent < 1 && length ) {
 					return remaining;
-				} else {
-					deferred.resolveWith( elem, [ animation ] );
-					return false;
 				}
+
+				// If this was an empty animation, synthesize a final progress notification
+				if ( !length ) {
+					deferred.notifyWith( elem, [ animation, 1, 0 ] );
+				}
+
+				// Resolve the animation and report its conclusion
+				deferred.resolveWith( elem, [ animation ] );
+				return false;
 			},
 			animation = deferred.promise( {
 				elem: elem,
@@ -8773,6 +8847,13 @@ return /******/ (function(modules) { // webpackBootstrap
 			animation.opts.start.call( elem, animation );
 		}
 
+		// Attach callbacks from options
+		animation
+			.progress( animation.opts.progress )
+			.done( animation.opts.done, animation.opts.complete )
+			.fail( animation.opts.fail )
+			.always( animation.opts.always );
+
 		jQuery.fx.timer(
 			jQuery.extend( tick, {
 				elem: elem,
@@ -8781,11 +8862,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			} )
 		);
 
-		// attach callbacks from options
-		return animation.progress( animation.opts.progress )
-			.done( animation.opts.done, animation.opts.complete )
-			.fail( animation.opts.fail )
-			.always( animation.opts.always );
+		return animation;
 	}
 
 	jQuery.Animation = jQuery.extend( Animation, {
@@ -8836,8 +8913,8 @@ return /******/ (function(modules) { // webpackBootstrap
 			easing: fn && easing || easing && !jQuery.isFunction( easing ) && easing
 		};
 
-		// Go to the end state if fx are off or if document is hidden
-		if ( jQuery.fx.off || document.hidden ) {
+		// Go to the end state if fx are off
+		if ( jQuery.fx.off ) {
 			opt.duration = 0;
 
 		} else {
@@ -9029,7 +9106,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		for ( ; i < timers.length; i++ ) {
 			timer = timers[ i ];
 
-			// Checks the timer has not already been removed
+			// Run the timer and safely remove it when done (allowing for external removal)
 			if ( !timer() && timers[ i ] === timer ) {
 				timers.splice( i--, 1 );
 			}
@@ -9043,30 +9120,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	jQuery.fx.timer = function( timer ) {
 		jQuery.timers.push( timer );
-		if ( timer() ) {
-			jQuery.fx.start();
-		} else {
-			jQuery.timers.pop();
-		}
+		jQuery.fx.start();
 	};
 
 	jQuery.fx.interval = 13;
 	jQuery.fx.start = function() {
-		if ( !timerId ) {
-			timerId = window.requestAnimationFrame ?
-				window.requestAnimationFrame( raf ) :
-				window.setInterval( jQuery.fx.tick, jQuery.fx.interval );
+		if ( inProgress ) {
+			return;
 		}
+
+		inProgress = true;
+		schedule();
 	};
 
 	jQuery.fx.stop = function() {
-		if ( window.cancelAnimationFrame ) {
-			window.cancelAnimationFrame( timerId );
-		} else {
-			window.clearInterval( timerId );
-		}
-
-		timerId = null;
+		inProgress = null;
 	};
 
 	jQuery.fx.speeds = {
@@ -9183,7 +9251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			type: {
 				set: function( elem, value ) {
 					if ( !support.radioValue && value === "radio" &&
-						jQuery.nodeName( elem, "input" ) ) {
+						nodeName( elem, "input" ) ) {
 						var val = elem.value;
 						elem.setAttribute( "type", value );
 						if ( val ) {
@@ -9614,7 +9682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else if ( typeof val === "number" ) {
 					val += "";
 
-				} else if ( jQuery.isArray( val ) ) {
+				} else if ( Array.isArray( val ) ) {
 					val = jQuery.map( val, function( value ) {
 						return value == null ? "" : value + "";
 					} );
@@ -9673,7 +9741,7 @@ return /******/ (function(modules) { // webpackBootstrap
 								// Don't return options that are disabled or in a disabled optgroup
 								!option.disabled &&
 								( !option.parentNode.disabled ||
-									!jQuery.nodeName( option.parentNode, "optgroup" ) ) ) {
+									!nodeName( option.parentNode, "optgroup" ) ) ) {
 
 							// Get the specific value for the option
 							value = jQuery( option ).val();
@@ -9725,7 +9793,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	jQuery.each( [ "radio", "checkbox" ], function() {
 		jQuery.valHooks[ this ] = {
 			set: function( elem, value ) {
-				if ( jQuery.isArray( value ) ) {
+				if ( Array.isArray( value ) ) {
 					return ( elem.checked = jQuery.inArray( jQuery( elem ).val(), value ) > -1 );
 				}
 			}
@@ -10020,7 +10088,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function buildParams( prefix, obj, traditional, add ) {
 		var name;
 
-		if ( jQuery.isArray( obj ) ) {
+		if ( Array.isArray( obj ) ) {
 
 			// Serialize array item.
 			jQuery.each( obj, function( i, v ) {
@@ -10072,7 +10140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			};
 
 		// If an array was passed in, assume that it is an array of form elements.
-		if ( jQuery.isArray( a ) || ( a.jquery && !jQuery.isPlainObject( a ) ) ) {
+		if ( Array.isArray( a ) || ( a.jquery && !jQuery.isPlainObject( a ) ) ) {
 
 			// Serialize the form elements
 			jQuery.each( a, function() {
@@ -10118,7 +10186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return null;
 				}
 
-				if ( jQuery.isArray( val ) ) {
+				if ( Array.isArray( val ) ) {
 					return jQuery.map( val, function( val ) {
 						return { name: elem.name, value: val.replace( rCRLF, "\r\n" ) };
 					} );
@@ -11543,13 +11611,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-	/**
-	 * Gets a window from an element
-	 */
-	function getWindow( elem ) {
-		return jQuery.isWindow( elem ) ? elem : elem.nodeType === 9 && elem.defaultView;
-	}
-
 	jQuery.offset = {
 		setOffset: function( elem, options, i ) {
 			var curPosition, curLeft, curCSSTop, curTop, curOffset, curCSSLeft, calculatePosition,
@@ -11614,13 +11675,14 @@ return /******/ (function(modules) { // webpackBootstrap
 					} );
 			}
 
-			var docElem, win, rect, doc,
+			var doc, docElem, rect, win,
 				elem = this[ 0 ];
 
 			if ( !elem ) {
 				return;
 			}
 
+			// Return zeros for disconnected and hidden (display: none) elements (gh-2310)
 			// Support: IE <=11 only
 			// Running getBoundingClientRect on a
 			// disconnected node in IE throws an error
@@ -11630,20 +11692,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			rect = elem.getBoundingClientRect();
 
-			// Make sure element is not hidden (display: none)
-			if ( rect.width || rect.height ) {
-				doc = elem.ownerDocument;
-				win = getWindow( doc );
-				docElem = doc.documentElement;
+			doc = elem.ownerDocument;
+			docElem = doc.documentElement;
+			win = doc.defaultView;
 
-				return {
-					top: rect.top + win.pageYOffset - docElem.clientTop,
-					left: rect.left + win.pageXOffset - docElem.clientLeft
-				};
-			}
-
-			// Return zeros for disconnected and hidden elements (gh-2310)
-			return rect;
+			return {
+				top: rect.top + win.pageYOffset - docElem.clientTop,
+				left: rect.left + win.pageXOffset - docElem.clientLeft
+			};
 		},
 
 		position: function() {
@@ -11669,7 +11725,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				// Get correct offsets
 				offset = this.offset();
-				if ( !jQuery.nodeName( offsetParent[ 0 ], "html" ) ) {
+				if ( !nodeName( offsetParent[ 0 ], "html" ) ) {
 					parentOffset = offsetParent.offset();
 				}
 
@@ -11716,7 +11772,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		jQuery.fn[ method ] = function( val ) {
 			return access( this, function( elem, method, val ) {
-				var win = getWindow( elem );
+
+				// Coalesce documents and windows
+				var win;
+				if ( jQuery.isWindow( elem ) ) {
+					win = elem;
+				} else if ( elem.nodeType === 9 ) {
+					win = elem.defaultView;
+				}
 
 				if ( val === undefined ) {
 					return win ? win[ prop ] : elem[ method ];
@@ -11825,7 +11888,16 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 	} );
 
+	jQuery.holdReady = function( hold ) {
+		if ( hold ) {
+			jQuery.readyWait++;
+		} else {
+			jQuery.ready( true );
+		}
+	};
+	jQuery.isArray = Array.isArray;
 	jQuery.parseJSON = JSON.parse;
+	jQuery.nodeName = nodeName;
 
 
 
@@ -11882,14 +11954,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-
 	return jQuery;
 	} );
 
 
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+
+/***/ 11:
+/***/ (function(module, exports, __webpack_require__) {
 
 	var $, RE_STR, Test, actionFuncs, getRandomColor, getValue, jquery_stylesheet, parseValue;
 
@@ -11988,9 +12060,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Test() {}
 
 	  Test.start = function(testObj) {
-	    var action, arg, func, i, key, len, ref, ref1, results, value;
+	    var action, arg, i, key, len, ref, ref1, results, value;
 	    if (testObj == null) {
-	      testObj = Test;
+	      testObj = {};
 	    }
 	    Test.actions = decodeURIComponent(location.hash.replace(/^#+/, "")).split("/");
 	    Test.actionObj = {};
@@ -11999,10 +12071,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    for (i = 0, len = ref.length; i < len; i++) {
 	      action = ref[i];
 	      ref1 = action.split("="), key = ref1[0], value = ref1[1];
-	      func = testObj[key] || Test[key];
 	      arg = !value || value.split(",");
-	      if (typeof func === "function") {
-	        func(getValue(arg));
+	      if (typeof testObj[key] === "function") {
+	        testObj[key](getValue(arg));
 	      }
 	      if (typeof actionFuncs[key] === "function") {
 	        actionFuncs[key](value);
@@ -12017,9 +12088,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 
 
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
+/***/ }),
+
+/***/ 12:
+/***/ (function(module, exports) {
 
 	/**
 	 * jQuery plugin for adding, removing and making changes to CSS rules
@@ -12449,13 +12521,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	// vi:sw=2:ts=2
 
 
-/***/ },
-/* 13 */,
-/* 14 */,
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
 
-	/* Riot v3.3.2, @license MIT */
+/***/ 16:
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* Riot v3.6.1, @license MIT */
 	(function (global, factory) {
 		 true ? factory(exports) :
 		typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -12473,15 +12544,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	var LOOP_NO_REORDER_DIRECTIVE = 'no-reorder';
 	var SHOW_DIRECTIVE = 'show';
 	var HIDE_DIRECTIVE = 'hide';
+	var RIOT_EVENTS_KEY = '__riot-events__';
 	var T_STRING = 'string';
 	var T_OBJECT = 'object';
 	var T_UNDEF  = 'undefined';
 	var T_FUNCTION = 'function';
 	var XLINK_NS = 'http://www.w3.org/1999/xlink';
+	var SVG_NS = 'http://www.w3.org/2000/svg';
 	var XLINK_REGEX = /^xlink:(\w+)/;
 	var WIN = typeof window === T_UNDEF ? undefined : window;
 	var RE_SPECIAL_TAGS = /^(?:t(?:body|head|foot|[rhd])|caption|col(?:group)?|opt(?:ion|group))$/;
 	var RE_SPECIAL_TAGS_NO_OPTION = /^(?:t(?:body|head|foot|[rhd])|caption|col(?:group)?)$/;
+	var RE_EVENTS_PREFIX = /^on/;
 	var RE_RESERVED_NAMES = /^(?:_(?:item|id|parent)|update|root|(?:un)?mount|mixin|is(?:Mounted|Loop)|tags|refs|parent|opts|trigger|o(?:n|ff|ne))$/;
 	var RE_HTML_ATTRS = /([-\w]+) ?= ?(?:"([^"]*)|'([^']*)|({[^}]*}))/g;
 	var CASE_SENSITIVE_ATTRIBUTES = { 'viewbox': 'viewBox' };
@@ -12591,7 +12665,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns { Object } dom nodes found
 	 */
 	function $$(selector, ctx) {
-	  return (ctx || document).querySelectorAll(selector)
+	  return Array.prototype.slice.call((ctx || document).querySelectorAll(selector))
 	}
 
 	/**
@@ -12621,12 +12695,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Check if a DOM node is an svg tag
+	 * @param   { HTMLElement }  el - node we want to test
+	 * @returns {Boolean} true if it's an svg node
+	 */
+	function isSvg(el) {
+	  return !!el.ownerSVGElement
+	}
+
+	/**
 	 * Create a generic DOM node
 	 * @param   { String } name - name of the DOM node we want to create
+	 * @param   { Boolean } isSvg - true if we need to use an svg node
 	 * @returns { Object } DOM node just created
 	 */
 	function mkEl(name) {
-	  return document.createElement(name)
+	  return name === 'svg' ? document.createElementNS(SVG_NS, name) : document.createElement(name)
 	}
 
 	/**
@@ -12647,12 +12731,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Toggle the visibility of any DOM node
+	 * @param   { Object }  dom - DOM node we want to hide
+	 * @param   { Boolean } show - do we want to show it?
+	 */
+
+	function toggleVisibility(dom, show) {
+	  dom.style.display = show ? '' : 'none';
+	  dom['hidden'] = show ? false : true;
+	}
+
+	/**
 	 * Remove any DOM attribute from a node
 	 * @param   { Object } dom - DOM node we want to update
 	 * @param   { String } name - name of the property we want to remove
 	 */
 	function remAttr(dom, name) {
 	  dom.removeAttribute(name);
+	}
+
+	/**
+	 * Convert a style object to a string
+	 * @param   { Object } style - style object we need to parse
+	 * @returns { String } resulting css string
+	 * @example
+	 * styleObjectToString({ color: 'red', height: '10px'}) // => 'color: red; height: 10px'
+	 */
+	function styleObjectToString(style) {
+	  return Object.keys(style).reduce(function (acc, prop) {
+	    return (acc + " " + prop + ": " + (style[prop]) + ";")
+	  }, '')
 	}
 
 	/**
@@ -12730,9 +12838,12 @@ return /******/ (function(modules) { // webpackBootstrap
 		$: $,
 		createFrag: createFrag,
 		createDOMPlaceholder: createDOMPlaceholder,
+		isSvg: isSvg,
 		mkEl: mkEl,
 		setInnerHTML: setInnerHTML,
+		toggleVisibility: toggleVisibility,
 		remAttr: remAttr,
+		styleObjectToString: styleObjectToString,
 		getAttr: getAttr,
 		setAttr: setAttr,
 		safeInsert: safeInsert,
@@ -12800,8 +12911,87 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * The riot template engine
-	 * @version v3.0.3
+	 * @version v3.0.8
 	 */
+
+	var skipRegex = (function () { //eslint-disable-line no-unused-vars
+
+	  var beforeReChars = '[{(,;:?=|&!^~>%*/';
+
+	  var beforeReWords = [
+	    'case',
+	    'default',
+	    'do',
+	    'else',
+	    'in',
+	    'instanceof',
+	    'prefix',
+	    'return',
+	    'typeof',
+	    'void',
+	    'yield'
+	  ];
+
+	  var wordsLastChar = beforeReWords.reduce(function (s, w) {
+	    return s + w.slice(-1)
+	  }, '');
+
+	  var RE_REGEX = /^\/(?=[^*>/])[^[/\\]*(?:(?:\\.|\[(?:\\.|[^\]\\]*)*\])[^[\\/]*)*?\/[gimuy]*/;
+	  var RE_VN_CHAR = /[$\w]/;
+
+	  function prev (code, pos) {
+	    while (--pos >= 0 && /\s/.test(code[pos])){  }
+	    return pos
+	  }
+
+	  function _skipRegex (code, start) {
+
+	    var re = /.*/g;
+	    var pos = re.lastIndex = start++;
+	    var match = re.exec(code)[0].match(RE_REGEX);
+
+	    if (match) {
+	      var next = pos + match[0].length;
+
+	      pos = prev(code, pos);
+	      var c = code[pos];
+
+	      if (pos < 0 || ~beforeReChars.indexOf(c)) {
+	        return next
+	      }
+
+	      if (c === '.') {
+
+	        if (code[pos - 1] === '.') {
+	          start = next;
+	        }
+
+	      } else if (c === '+' || c === '-') {
+
+	        if (code[--pos] !== c ||
+	            (pos = prev(code, pos)) < 0 ||
+	            !RE_VN_CHAR.test(code[pos])) {
+	          start = next;
+	        }
+
+	      } else if (~wordsLastChar.indexOf(c)) {
+
+	        var end = pos + 1;
+
+	        while (--pos >= 0 && RE_VN_CHAR.test(code[pos])){  }
+	        if (~beforeReWords.indexOf(code.slice(pos + 1, end))) {
+	          start = next;
+	        }
+	      }
+	    }
+
+	    return start
+	  }
+
+	  return _skipRegex
+
+	})();
+
 	/**
 	 * riot.util.brackets
 	 *
@@ -12825,16 +13015,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    S_QBLOCKS = R_STRINGS.source + '|' +
 	      /(?:\breturn\s+|(?:[$\w\)\]]|\+\+|--)\s*(\/)(?![*\/]))/.source + '|' +
-	      /\/(?=[^*\/])[^[\/\\]*(?:(?:\[(?:\\.|[^\]\\]*)*\]|\\.)[^[\/\\]*)*?(\/)[gim]*/.source,
+	      /\/(?=[^*\/])[^[\/\\]*(?:(?:\[(?:\\.|[^\]\\]*)*\]|\\.)[^[\/\\]*)*?([^<]\/)[gim]*/.source,
 
 	    UNSUPPORTED = RegExp('[\\' + 'x00-\\x1F<>a-zA-Z0-9\'",;\\\\]'),
 
 	    NEED_ESCAPE = /(?=[[\]()*+?.^$|])/g,
 
+	    S_QBLOCK2 = R_STRINGS.source + '|' + /(\/)(?![*\/])/.source,
+
 	    FINDBRACES = {
-	      '(': RegExp('([()])|'   + S_QBLOCKS, REGLOB),
-	      '[': RegExp('([[\\]])|' + S_QBLOCKS, REGLOB),
-	      '{': RegExp('([{}])|'   + S_QBLOCKS, REGLOB)
+	      '(': RegExp('([()])|'   + S_QBLOCK2, REGLOB),
+	      '[': RegExp('([[\\]])|' + S_QBLOCK2, REGLOB),
+	      '{': RegExp('([{}])|'   + S_QBLOCK2, REGLOB)
 	    },
 
 	    DEFAULT = '{ }';
@@ -12845,7 +13037,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /{[^}]*}/,
 	    /\\([{}])/g,
 	    /\\({)|{/g,
-	    RegExp('\\\\(})|([[({])|(})|' + S_QBLOCKS, REGLOB),
+	    RegExp('\\\\(})|([[({])|(})|' + S_QBLOCK2, REGLOB),
 	    DEFAULT,
 	    /^\s*{\^?\s*([$\w]+)(?:\s*,\s*(\S+))?\s+in\s+(\S.*)\s*}/,
 	    /(^|[^\\]){=[\S\s]*?}/
@@ -12879,7 +13071,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    arr[4] = _rewrite(arr[1].length > 1 ? /{[\S\s]*?}/ : _pairs[4], arr);
 	    arr[5] = _rewrite(pair.length > 3 ? /\\({|})/g : _pairs[5], arr);
 	    arr[6] = _rewrite(_pairs[6], arr);
-	    arr[7] = RegExp('\\\\(' + arr[3] + ')|([[({])|(' + arr[3] + ')|' + S_QBLOCKS, REGLOB);
+	    arr[7] = RegExp('\\\\(' + arr[3] + ')|([[({])|(' + arr[3] + ')|' + S_QBLOCK2, REGLOB);
 	    arr[8] = pair;
 	    return arr
 	  }
@@ -12900,19 +13092,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	      pos,
 	      re = _bp[6];
 
+	    var qblocks = [];
+	    var prevStr = '';
+	    var mark, lastIndex;
+
 	    isexpr = start = re.lastIndex = 0;
 
 	    while ((match = re.exec(str))) {
 
+	      lastIndex = re.lastIndex;
 	      pos = match.index;
 
 	      if (isexpr) {
 
 	        if (match[2]) {
-	          re.lastIndex = skipBraces(str, match[2], re.lastIndex);
+
+	          var ch = match[2];
+	          var rech = FINDBRACES[ch];
+	          var ix = 1;
+
+	          rech.lastIndex = lastIndex;
+	          while ((match = rech.exec(str))) {
+	            if (match[1]) {
+	              if (match[1] === ch) { ++ix; }
+	              else if (!--ix) { break }
+	            } else {
+	              rech.lastIndex = pushQBlock(match.index, rech.lastIndex, match[2]);
+	            }
+	          }
+	          re.lastIndex = ix ? str.length : rech.lastIndex;
 	          continue
 	        }
+
 	        if (!match[3]) {
+	          re.lastIndex = pushQBlock(pos, lastIndex, match[4]);
 	          continue
 	        }
 	      }
@@ -12929,9 +13142,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      unescapeStr(str.slice(start));
 	    }
 
+	    parts.qblocks = qblocks;
+
 	    return parts
 
 	    function unescapeStr (s) {
+	      if (prevStr) {
+	        s = prevStr + s;
+	        prevStr = '';
+	      }
 	      if (tmpl || isexpr) {
 	        parts.push(s && s.replace(_bp[5], '$1'));
 	      } else {
@@ -12939,18 +13158,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 
-	    function skipBraces (s, ch, ix) {
-	      var
-	        match,
-	        recch = FINDBRACES[ch];
-
-	      recch.lastIndex = ix;
-	      ix = 1;
-	      while ((match = recch.exec(s))) {
-	        if (match[1] &&
-	          !(match[1] === ch ? ++ix : --ix)) { break }
+	    function pushQBlock(_pos, _lastIndex, slash) { //eslint-disable-line
+	      if (slash) {
+	        _lastIndex = skipRegex(str, _pos);
 	      }
-	      return ix ? s.length : recch.lastIndex
+
+	      if (tmpl && _lastIndex > _pos + 2) {
+	        mark = '\u2057' + qblocks.length + '~';
+	        qblocks.push(str.slice(_pos, _lastIndex));
+	        prevStr += str.slice(start, _pos) + mark;
+	        start = _lastIndex;
+	      }
+	      return _lastIndex
 	    }
 	  };
 
@@ -13001,10 +13220,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /* istanbul ignore next: in the browser riot is always in the scope */
 	  _brackets.settings = typeof riot !== 'undefined' && riot.settings || {};
 	  _brackets.set = _reset;
+	  _brackets.skipRegex = skipRegex;
 
 	  _brackets.R_STRINGS = R_STRINGS;
 	  _brackets.R_MLCOMMS = R_MLCOMMS;
 	  _brackets.S_QBLOCKS = S_QBLOCKS;
+	  _brackets.S_QBLOCK2 = S_QBLOCK2;
 
 	  return _brackets
 
@@ -13026,7 +13247,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function _tmpl (str, data) {
 	    if (!str) { return str }
 
-	    return (_cache[str] || (_cache[str] = _create(str))).call(data, _logErr)
+	    return (_cache[str] || (_cache[str] = _create(str))).call(
+	      data, _logErr.bind({
+	        data: data,
+	        tmpl: str
+	      })
+	    )
 	  }
 
 	  _tmpl.hasExpr = brackets.hasExpr;
@@ -13050,10 +13276,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      typeof console !== 'undefined' &&
 	      typeof console.error === 'function'
 	    ) {
-	      if (err.riotData.tagName) {
-	        console.error('Riot template error thrown in the <%s> tag', err.riotData.tagName);
-	      }
-	      console.error(err);
+	      console.error(err.message);
+	      console.log('<%s> %s', err.riotData.tagName || 'Unknown tag', this.tmpl); // eslint-disable-line
+	      console.log(this.data); // eslint-disable-line
 	    }
 	  }
 
@@ -13065,18 +13290,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return new Function('E', expr + ';')    // eslint-disable-line no-new-func
 	  }
 
-	  var
-	    CH_IDEXPR = String.fromCharCode(0x2057),
-	    RE_CSNAME = /^(?:(-?[_A-Za-z\xA0-\xFF][-\w\xA0-\xFF]*)|\u2057(\d+)~):/,
-	    RE_QBLOCK = RegExp(brackets.S_QBLOCKS, 'g'),
-	    RE_DQUOTE = /\u2057/g,
-	    RE_QBMARK = /\u2057(\d+)~/g;
+	  var RE_DQUOTE = /\u2057/g;
+	  var RE_QBMARK = /\u2057(\d+)~/g;
 
 	  function _getTmpl (str) {
-	    var
-	      qstr = [],
-	      expr,
-	      parts = brackets.split(str.replace(RE_DQUOTE, '"'), 1);
+	    var parts = brackets.split(str.replace(RE_DQUOTE, '"'), 1);
+	    var qstr = parts.qblocks;
+	    var expr;
 
 	    if (parts.length > 2 || parts[0]) {
 	      var i, j, list = [];
@@ -13107,7 +13327,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      expr = _parseExpr(parts[1], 0, qstr);
 	    }
 
-	    if (qstr[0]) {
+	    if (qstr.length) {
 	      expr = expr.replace(RE_QBMARK, function (_, pos) {
 	        return qstr[pos]
 	          .replace(/\r/g, '\\r')
@@ -13117,6 +13337,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return expr
 	  }
 
+	  var RE_CSNAME = /^(?:(-?[_A-Za-z\xA0-\xFF][-\w\xA0-\xFF]*)|\u2057(\d+)~):/;
 	  var
 	    RE_BREND = {
 	      '(': /[()]/g,
@@ -13127,11 +13348,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function _parseExpr (expr, asText, qstr) {
 
 	    expr = expr
-	          .replace(RE_QBLOCK, function (s, div) {
-	            return s.length > 2 && !div ? CH_IDEXPR + (qstr.push(s) - 1) + '~' : s
-	          })
-	          .replace(/\s+/g, ' ').trim()
-	          .replace(/\ ?([[\({},?\.:])\ ?/g, '$1');
+	      .replace(/\s+/g, ' ').trim()
+	      .replace(/\ ?([[\({},?\.:])\ ?/g, '$1');
 
 	    if (expr) {
 	      var
@@ -13222,7 +13440,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return expr
 	  }
 
-	  _tmpl.version = brackets.version = 'v3.0.3';
+	  _tmpl.version = brackets.version = 'v3.0.8';
 
 	  return _tmpl
 
@@ -13451,10 +13669,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	var settings$1 = extend(Object.create(brackets.settings), {
-	  skipAnonymousTags: true
+	  skipAnonymousTags: true,
+	  // handle the auto updates on any DOM event
+	  autoUpdate: true
 	});
-
-	var EVENTS_PREFIX_REGEX = /^on/;
 
 	/**
 	 * Trigger DOM events
@@ -13484,6 +13702,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  handler.call(this, e);
 
+	  // avoid auto updates
+	  if (!settings$1.autoUpdate) { return }
+
 	  if (!e.preventUpdate) {
 	    var p = getImmediateCustomParentTag(this);
 	    // fixes #2083
@@ -13503,29 +13724,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	    cb = handleEvent.bind(tag, dom, handler);
 
 	  // avoid to bind twice the same event
+	  // possible fix for #2332
 	  dom[name] = null;
 
 	  // normalize event name
-	  eventName = name.replace(EVENTS_PREFIX_REGEX, '');
+	  eventName = name.replace(RE_EVENTS_PREFIX, '');
 
-	  // cache the callback directly on the DOM node
-	  if (!dom._riotEvents) { dom._riotEvents = {}; }
+	  // cache the listener into the listeners array
+	  if (!contains(tag.__.listeners, dom)) { tag.__.listeners.push(dom); }
+	  if (!dom[RIOT_EVENTS_KEY]) { dom[RIOT_EVENTS_KEY] = {}; }
+	  if (dom[RIOT_EVENTS_KEY][name]) { dom.removeEventListener(eventName, dom[RIOT_EVENTS_KEY][name]); }
 
-	  if (dom._riotEvents[name])
-	    { dom.removeEventListener(eventName, dom._riotEvents[name]); }
-
-	  dom._riotEvents[name] = cb;
+	  dom[RIOT_EVENTS_KEY][name] = cb;
 	  dom.addEventListener(eventName, cb, false);
 	}
 
 	/**
 	 * Update dynamically created data-is tags with changing expressions
 	 * @param { Object } expr - expression tag and expression info
-	 * @param { Tag } parent - parent for tag creation
+	 * @param { Tag }    parent - parent for tag creation
+	 * @param { String } tagName - tag implementation we want to use
 	 */
-	function updateDataIs(expr, parent) {
-	  var tagName = tmpl(expr.value, parent),
-	    conf, isVirtual, head, ref;
+	function updateDataIs(expr, parent, tagName) {
+	  var conf, isVirtual, head, ref;
 
 	  if (expr.tag && expr.tagName === tagName) {
 	    expr.tag.update();
@@ -13535,7 +13756,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  isVirtual = expr.dom.tagName === 'VIRTUAL';
 	  // sync _parent to accommodate changing tagnames
 	  if (expr.tag) {
-
 	    // need placeholder before unmount
 	    if(isVirtual) {
 	      head = expr.tag.__.head;
@@ -13545,6 +13765,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    expr.tag.unmount(true);
 	  }
+
+	  if (!isString(tagName)) { return }
 
 	  expr.impl = __TAG_IMPL[tagName];
 	  conf = {root: expr.dom, parent: parent, hasImpl: true, tagName: tagName};
@@ -13567,6 +13789,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Nomalize any attribute removing the "riot-" prefix
+	 * @param   { String } attrName - original attribute name
+	 * @returns { String } valid html attribute name
+	 */
+	function normalizeAttrName(attrName) {
+	  if (!attrName) { return null }
+	  attrName = attrName.replace(ATTRS_PREFIX, '');
+	  if (CASE_SENSITIVE_ATTRIBUTES[attrName]) { attrName = CASE_SENSITIVE_ATTRIBUTES[attrName]; }
+	  return attrName
+	}
+
+	/**
 	 * Update on single tag expression
 	 * @this Tag
 	 * @param { Object } expr - expression logic
@@ -13576,46 +13810,69 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (this.root && getAttr(this.root,'virtualized')) { return }
 
 	  var dom = expr.dom,
-	    attrName = expr.attr,
+	    // remove the riot- prefix
+	    attrName = normalizeAttrName(expr.attr),
 	    isToggle = contains([SHOW_DIRECTIVE, HIDE_DIRECTIVE], attrName),
-	    value = tmpl(expr.expr, this),
-	    isValueAttr = attrName === 'riot-value',
 	    isVirtual = expr.root && expr.root.tagName === 'VIRTUAL',
 	    parent = dom && (expr.parent || dom.parentNode),
-	    old;
+	    // detect the style attributes
+	    isStyleAttr = attrName === 'style',
+	    isClassAttr = attrName === 'class',
+	    hasValue,
+	    isObj,
+	    value;
 
-	  if (expr.bool)
-	    { value = value ? attrName : false; }
-	  else if (isUndefined(value) || value === null)
-	    { value = ''; }
-
-	  if (expr._riot_id) { // if it's a tag
+	  // if it's a tag we could totally skip the rest
+	  if (expr._riot_id) {
 	    if (expr.isMounted) {
 	      expr.update();
-
 	    // if it hasn't been mounted yet, do that now.
 	    } else {
 	      expr.mount();
-
-	      if (isVirtual)
-	        { makeReplaceVirtual(expr, expr.root); }
-
+	      if (isVirtual) {
+	        makeReplaceVirtual(expr, expr.root);
+	      }
 	    }
 	    return
 	  }
+	  // if this expression has the update method it means it can handle the DOM changes by itself
+	  if (expr.update) { return expr.update() }
 
-	  old = expr.value;
-	  expr.value = value;
+	  // ...it seems to be a simple expression so we try to calculat its value
+	  value = tmpl(expr.expr, isToggle ? extend({}, Object.create(this.parent), this) : this);
+	  hasValue = !isBlank(value);
+	  isObj = isObject(value);
 
-	  if (expr.update) {
-	    expr.update();
-	    return
+	  // convert the style/class objects to strings
+	  if (isObj) {
+	    isObj = !isClassAttr && !isStyleAttr;
+	    if (isClassAttr) {
+	      value = tmpl(JSON.stringify(value), this);
+	    } else if (isStyleAttr) {
+	      value = styleObjectToString(value);
+	    }
 	  }
 
-	  if (expr.isRtag && value) { return updateDataIs(expr, this) }
-	  if (old === value) { return }
-	  // no change, so nothing more to do
-	  if (isValueAttr && dom.value === value) { return }
+	  // remove original attribute
+	  if (expr.attr && (!expr.isAttrRemoved || !hasValue || value === false)) {
+	    remAttr(dom, expr.attr);
+	    expr.isAttrRemoved = true;
+	  }
+
+	  // for the boolean attributes we don't need the value
+	  // we can convert it to checked=true to checked=checked
+	  if (expr.bool) { value = value ? attrName : false; }
+	  if (expr.isRtag) { return updateDataIs(expr, this, value) }
+	  if (expr.wasParsedOnce && expr.value === value) { return }
+
+	  // update the expression value
+	  expr.value = value;
+	  expr.wasParsedOnce = true;
+
+	  // if the value is an object we can not do much more with it
+	  if (isObj && !isToggle) { return }
+	  // avoid to render undefined/null values
+	  if (isBlank(value)) { value = ''; }
 
 	  // textarea and text nodes have no attribute name
 	  if (!attrName) {
@@ -13636,38 +13893,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return
 	  }
 
-	  // remove original attribute
-	  if (!expr.isAttrRemoved || !value) {
-	    remAttr(dom, attrName);
-	    expr.isAttrRemoved = true;
-	  }
 
 	  // event handler
 	  if (isFunction(value)) {
 	    setEventHandler(attrName, value, dom, this);
 	  // show / hide
 	  } else if (isToggle) {
-	    if (attrName === HIDE_DIRECTIVE) { value = !value; }
-	    dom.style.display = value ? '' : 'none';
-	  // field value
-	  } else if (isValueAttr) {
-	    dom.value = value;
-	  // <img src="{ expr }">
-	  } else if (startsWith(attrName, ATTRS_PREFIX) && attrName !== IS_DIRECTIVE) {
-	    attrName = attrName.slice(ATTRS_PREFIX.length);
-	    if (CASE_SENSITIVE_ATTRIBUTES[attrName])
-	      { attrName = CASE_SENSITIVE_ATTRIBUTES[attrName]; }
-	    if (value != null)
-	      { setAttr(dom, attrName, value); }
+	    toggleVisibility(dom, attrName === HIDE_DIRECTIVE ? !value : value);
+	  // handle attributes
 	  } else {
 	    if (expr.bool) {
 	      dom[attrName] = value;
-	      if (!value) { return }
 	    }
 
-	    if (value === 0 || value && typeof value !== T_OBJECT) {
+	    if (attrName === 'value' && dom.value !== value) {
+	      dom.value = value;
+	    }
+
+	    if (hasValue && value !== false) {
 	      setAttr(dom, attrName, value);
 	    }
+
+	    // make sure that in case of style changes
+	    // the element stays hidden
+	    if (isStyleAttr && dom.hidden) { toggleVisibility(dom, false); }
 	  }
 	}
 
@@ -13685,7 +13934,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    remAttr(dom, CONDITIONAL_DIRECTIVE);
 	    this.tag = tag;
 	    this.expr = expr;
-	    this.stub = document.createTextNode('');
+	    this.stub = createDOMPlaceholder();
 	    this.pristine = dom;
 
 	    var p = dom.parentNode;
@@ -13695,31 +13944,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this
 	  },
 	  update: function update() {
-	    var newValue = tmpl(this.expr, this.tag);
+	    this.value = tmpl(this.expr, this.tag);
 
-	    if (newValue && !this.current) { // insert
+	    if (this.value && !this.current) { // insert
 	      this.current = this.pristine.cloneNode(true);
 	      this.stub.parentNode.insertBefore(this.current, this.stub);
-
 	      this.expressions = [];
 	      parseExpressions.apply(this.tag, [this.current, this.expressions, true]);
-	    } else if (!newValue && this.current) { // remove
+	    } else if (!this.value && this.current) { // remove
 	      unmountAll(this.expressions);
 	      if (this.current._tag) {
 	        this.current._tag.unmount();
-	      } else if (this.current.parentNode)
-	        { this.current.parentNode.removeChild(this.current); }
+	      } else if (this.current.parentNode) {
+	        this.current.parentNode.removeChild(this.current);
+	      }
 	      this.current = null;
 	      this.expressions = [];
 	    }
 
-	    if (newValue) { updateAllExpressions.call(this.tag, this.expressions); }
+	    if (this.value) { updateAllExpressions.call(this.tag, this.expressions); }
 	  },
 	  unmount: function unmount() {
 	    unmountAll(this.expressions || []);
-	    delete this.pristine;
-	    delete this.parentNode;
-	    delete this.stub;
 	  }
 	};
 
@@ -13730,54 +13976,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.rawValue = attrValue;
 	    this.parent = parent;
 	    this.hasExp = tmpl.hasExpr(attrValue);
-	    this.firstRun = true;
-
 	    return this
 	  },
 	  update: function update() {
-	    var value = this.rawValue;
-	    if (this.hasExp)
-	      { value = tmpl(this.rawValue, this.parent); }
-
-	    // if nothing changed, we're done
-	    if (!this.firstRun && value === this.value) { return }
-
+	    var old = this.value;
 	    var customParent = this.parent && getImmediateCustomParentTag(this.parent);
-
 	    // if the referenced element is a custom tag, then we set the tag itself, rather than DOM
-	    var tagOrDom = this.tag || this.dom;
+	    var tagOrDom = this.dom.__ref || this.tag || this.dom;
+
+	    this.value = this.hasExp ? tmpl(this.rawValue, this.parent) : this.rawValue;
 
 	    // the name changed, so we need to remove it from the old key (if present)
-	    if (!isBlank(this.value) && customParent)
-	      { arrayishRemove(customParent.refs, this.value, tagOrDom); }
-
-	    if (isBlank(value)) {
-	      // if the value is blank, we remove it
-	      remAttr(this.dom, this.attr);
-	    } else {
+	    if (!isBlank(old) && customParent) { arrayishRemove(customParent.refs, old, tagOrDom); }
+	    if (!isBlank(this.value) && isString(this.value)) {
 	      // add it to the refs of parent tag (this behavior was changed >=3.0)
 	      if (customParent) { arrayishAdd(
 	        customParent.refs,
-	        value,
+	        this.value,
 	        tagOrDom,
 	        // use an array if it's a looped node and the ref is not an expression
 	        null,
 	        this.parent.__.index
 	      ); }
-	      // set the actual DOM attr
-	      setAttr(this.dom, this.attr, value);
+
+	      if (this.value !== old) {
+	        setAttr(this.dom, this.attr, this.value);
+	      }
+	    } else {
+	      remAttr(this.dom, this.attr);
 	    }
 
-	    this.value = value;
-	    this.firstRun = false;
+	    // cache the ref bound to this dom node
+	    // to reuse it in future (see also #2329)
+	    if (!this.dom.__ref) { this.dom.__ref = tagOrDom; }
 	  },
 	  unmount: function unmount() {
 	    var tagOrDom = this.tag || this.dom;
 	    var customParent = this.parent && getImmediateCustomParentTag(this.parent);
 	    if (!isBlank(this.value) && customParent)
 	      { arrayishRemove(customParent.refs, this.value, tagOrDom); }
-	    delete this.dom;
-	    delete this.parent;
 	  }
 	};
 
@@ -13921,10 +14158,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  expr.update = function updateEach() {
 	    // get the new items collection
-	    var items = tmpl(expr.val, parent),
-	      frag = createFrag(),
+	    expr.value = tmpl(expr.val, parent);
+
+	    var frag = createFrag(),
+	      items = expr.value,
 	      isObject$$1 = !isArray(items) && !isString(items),
 	      root = placeholder.parentNode;
+
+	    // if this DOM was removed the update here is useless
+	    // this condition fixes also a weird async issue on IE in our unit test
+	    if (!root) { return }
 
 	    // object loop. any changes cause full redraw
 	    if (isObject$$1) {
@@ -14017,6 +14260,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // clone the items array
 	    oldItems = items.slice();
 
+	    // this condition is weird u
 	    root.insertBefore(frag, placeholder);
 	  };
 
@@ -14109,8 +14353,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // If this element had an if-attr, that's the parent for all child elements
 	    return {parent: parent}
 	  }, tree);
-
-	  return { tree: tree, root: root }
 	}
 
 	/**
@@ -14125,12 +14367,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var this$1 = this;
 
 	  each(attrs, function (attr) {
+	    if (!attr) { return false }
+
 	    var name = attr.name, bool = isBoolAttr(name), expr;
 
 	    if (contains(REF_DIRECTIVES, name)) {
 	      expr =  Object.create(RefExpr).init(dom, this$1, name, attr.value);
 	    } else if (tmpl.hasExpr(attr.value)) {
-	      expr = {dom: dom, expr: attr.value, attr: attr.name, bool: bool};
+	      expr = {dom: dom, expr: attr.value, attr: name, bool: bool};
 	    }
 
 	    fn(attr, expr);
@@ -14150,6 +14394,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var rootEls = { tr: 'tbody', th: 'tr', td: 'tr', col: 'colgroup' };
 	var tblTags = IE_VERSION && IE_VERSION < 10 ? RE_SPECIAL_TAGS : RE_SPECIAL_TAGS_NO_OPTION;
 	var GENERIC = 'div';
+	var SVG = 'svg';
 
 
 	/*
@@ -14212,12 +14457,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param   { String } tmpl  - The template coming from the custom tag definition
 	 * @param   { String } html - HTML content that comes from the DOM element where you
 	 *           will mount the tag, mostly the original tag in the page
+	 * @param   { Boolean } isSvg - true if the root node is an svg
 	 * @returns { HTMLElement } DOM element with _tmpl_ merged through `YIELD` with the _html_.
 	 */
-	function mkdom(tmpl, html) {
+	function mkdom(tmpl, html, isSvg$$1) {
 	  var match   = tmpl && tmpl.match(/^\s*<([-\w]+)/),
 	    tagName = match && match[1].toLowerCase(),
-	    el = mkEl(GENERIC);
+	    el = mkEl(isSvg$$1 ? SVG : GENERIC);
 
 	  // replace all the yield tags with the tag inner html
 	  tmpl = replaceYield(tmpl, html);
@@ -14319,10 +14565,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function mount$1(selector, tagName, opts) {
 	  var tags = [];
+	  var elem, allTags;
 
 	  function pushTagsTo(root) {
 	    if (root.tagName) {
-	      var riotTag = getAttr(root, IS_DIRECTIVE);
+	      var riotTag = getAttr(root, IS_DIRECTIVE), tag;
 
 	      // have tagName? force riot-tag to be the same
 	      if (tagName && riotTag !== tagName) {
@@ -14330,7 +14577,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        setAttr(root, IS_DIRECTIVE, tagName);
 	      }
 
-	      var tag = mountTo(root, riotTag || root.tagName.toLowerCase(), opts);
+	      tag = mountTo(root, riotTag || root.tagName.toLowerCase(), opts);
 
 	      if (tag)
 	        { tags.push(tag); }
@@ -14345,9 +14592,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    opts = tagName;
 	    tagName = 0;
 	  }
-
-	  var elem;
-	  var allTags;
 
 	  // crawl the DOM to find the tag
 	  if (isString(selector)) {
@@ -14405,7 +14649,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function mixin$1(name, mix, g) {
 	  // Unnamed global
 	  if (isObject(name)) {
-	    mixin$1(("__unnamed_" + (mixins_id++)), name, true);
+	    mixin$1(("__" + (mixins_id++) + "__"), name, true);
 	    return
 	  }
 
@@ -14414,7 +14658,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // Getter
 	  if (!mix) {
 	    if (isUndefined(store[name]))
-	      { throw new Error('Unregistered mixin: ' + name) }
+	      { throw new Error(("Unregistered mixin: " + name)) }
 
 	    return store[name]
 	  }
@@ -14434,10 +14678,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function unregister$1(name) {
-	  delete __TAG_IMPL[name];
+	  __TAG_IMPL[name] = null;
 	}
 
-	var version = 'v3.3.2';
+	var version$1 = 'v3.6.1';
 
 
 	var core = Object.freeze({
@@ -14448,7 +14692,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		mixin: mixin$1,
 		update: update$1,
 		unregister: unregister$1,
-		version: version
+		version: version$1
 	});
 
 	// counter to give a unique id to all the Tag instances
@@ -14473,7 +14717,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var ctx = !isAnonymous && isLoop ? this : parent || this;
 	  each(instAttrs, function (attr) {
 	    if (attr.expr) { updateAllExpressions.call(ctx, [attr.expr]); }
-	    opts[toCamel(attr.name)] = attr.expr ? attr.expr.value : attr.value;
+	    // normalize the attribute names
+	    opts[toCamel(attr.name).replace(ATTRS_PREFIX, '')] = attr.expr ? attr.expr.value : attr.value;
 	  });
 	}
 
@@ -14489,7 +14734,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if ( impl === void 0 ) impl = {};
 	  if ( conf === void 0 ) conf = {};
 
-
 	  var opts = extend({}, conf.opts),
 	    parent = conf.parent,
 	    isLoop = conf.isLoop,
@@ -14503,6 +14747,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    root = conf.root,
 	    tagName = conf.tagName || getTagName(root),
 	    isVirtual = tagName === 'virtual',
+	    isInline = !isVirtual && !impl.tmpl,
 	    propsInSyncWithParent = [],
 	    dom;
 
@@ -14521,6 +14766,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    tagName: tagName,
 	    index: index,
 	    isLoop: isLoop,
+	    isInline: isInline,
+	    // tags having event listeners
+	    // it would be better to use weak maps here but we can not introduce breaking changes now
+	    listeners: [],
 	    // these vars will be needed only for the virtual tags
 	    virts: [],
 	    tail: null,
@@ -14539,7 +14788,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  defineProperty(this, 'tags', {});
 	  defineProperty(this, 'refs', {});
 
-	  dom = isLoop && isAnonymous ? root : mkdom(impl.tmpl, innerHTML, isLoop);
+	  if (isInline || isLoop && isAnonymous) {
+	    dom = root;
+	  } else {
+	    if (!isVirtual) { root.innerHTML = ''; }
+	    dom = mkdom(impl.tmpl, innerHTML, isSvg(root));
+	  }
 
 	  /**
 	   * Update the tag expressions and options
@@ -14555,7 +14809,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    data = cleanUpData(data);
 	    extend(this, data);
 	    updateOpts.apply(this, [isLoop, parent, isAnonymous, nextOpts, instAttrs]);
-	    if (this.isMounted && isFunction(this.shouldUpdate) && !this.shouldUpdate(data, nextOpts)) { return this }
+
+	    if (canTrigger && this.isMounted && isFunction(this.shouldUpdate) && !this.shouldUpdate(data, nextOpts)) {
+	      return this
+	    }
 
 	    // inherit properties from the parent, but only for isAnonymous tags
 	    if (isLoop && isAnonymous) { inheritFrom.apply(this, [this.parent, propsInSyncWithParent]); }
@@ -14670,7 +14927,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.update(item);
 
-	    if (!isAnonymous) {
+	    if (!isAnonymous && !isInline) {
 	      while (dom.firstChild) { root.appendChild(dom.firstChild); }
 	    }
 
@@ -14714,7 +14971,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    walkAttrs(impl.attrs, function (name) {
 	      if (startsWith(name, ATTRS_PREFIX))
 	        { name = name.slice(ATTRS_PREFIX.length); }
+
 	      remAttr(root, name);
+	    });
+
+	    // remove all the event listeners
+	    this.__.listeners.forEach(function (dom) {
+	      Object.keys(dom[RIOT_EVENTS_KEY]).forEach(function (eventName) {
+	        dom.removeEventListener(eventName, dom[RIOT_EVENTS_KEY][eventName]);
+	      });
 	    });
 
 	    // remove this tag instance from the global virtualDom variable
@@ -14731,20 +14996,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	          });
 	        } else {
 	          arrayishRemove(ptag.tags, tagName, this);
-	          if(parent !== ptag) // remove from _parent too
-	            { arrayishRemove(parent.tags, tagName, this); }
+	          // remove from _parent too
+	          if(parent !== ptag) {
+	            arrayishRemove(parent.tags, tagName, this);
+	          }
 	        }
 	      } else {
-	        while (el.firstChild) { el.removeChild(el.firstChild); }
+	        // remove the tag contents
+	        setInnerHTML(el, '');
 	      }
 
-	      if (p)
-	        { if (!mustKeepRoot) {
-	          p.removeChild(el);
-	        } else {
-	          // the riot-tag and the data-is attributes aren't needed anymore, remove them
-	          remAttr(p, IS_DIRECTIVE);
-	        } }
+	      if (p && !mustKeepRoot) { p.removeChild(el); }
 	    }
 
 	    if (this.__.virts) {
@@ -14851,10 +15113,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (ptag !== parent)
 	    { arrayishAdd(parent.tags, tagName, tag); }
 
-	  // empty the child node once we got its template
-	  // to avoid that its children get compiled multiple times
-	  opts.root.innerHTML = '';
-
 	  return tag
 	}
 
@@ -14879,6 +15137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function unmountAll(expressions) {
 	  each(expressions, function(expr) {
 	    if (expr instanceof Tag$1) { expr.unmount(true); }
+	    else if (expr.tagName) { expr.tag.unmount(true); }
 	    else if (expr.unmount) { expr.unmount(); }
 	  });
 	}
@@ -14982,9 +15241,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    tag = ctx || (implClass ? Object.create(implClass.prototype) : {}),
 	    // cache the inner HTML to fix #855
 	    innerHTML = root._innerHTML = root._innerHTML || root.innerHTML;
-
-	  // clear the inner html
-	  root.innerHTML = '';
 
 	  var conf = extend({ root: root, opts: opts }, { parent: opts ? opts.parent : null });
 
@@ -15133,6 +15389,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var mixin$$1 = mixin$1;
 	var update$$1 = update$1;
 	var unregister$$1 = unregister$1;
+	var version$$1 = version$1;
 	var observable = observable$1;
 
 	var riot$1 = extend({}, core, {
@@ -15150,6 +15407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.mixin = mixin$$1;
 	exports.update = update$$1;
 	exports.unregister = unregister$$1;
+	exports.version = version$$1;
 	exports.observable = observable;
 	exports['default'] = riot$1;
 
@@ -15158,36 +15416,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	})));
 
 
-/***/ },
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+
+/***/ 74:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _riot = __webpack_require__(15);
+	var _riot = __webpack_require__(16);
 
 	var _riot2 = _interopRequireDefault(_riot);
 
-	__webpack_require__(34);
+	__webpack_require__(75);
 
-	__webpack_require__(35);
+	__webpack_require__(76);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15196,9 +15438,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	window.riot.mount('*');
 
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+
+/***/ 75:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -15247,16 +15490,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return console.info('finished');
 	});
 
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+
+/***/ 76:
+/***/ (function(module, exports, __webpack_require__) {
 
 	
-	    var riot = __webpack_require__(15)
+	    var riot = __webpack_require__(16)
 	    riot.tag2('app', '<before-login if="{!Status.isLogin}"></before-login> <after-login if="{Status.isLogin}"></after-login>', 'app,[data-is="app"]{display:flex;align-items:center;justify-content:center;height:100%}', '', function(opts) {
 	var Status;
 
-	Status = this.Status = __webpack_require__(36);
+	Status = this.Status = __webpack_require__(77);
 
 	Status.on("update", (function(_this) {
 	  return function() {
@@ -15268,7 +15512,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	riot.tag2('before-login', '<span>パスワードはappleです。ログインしてください。</span> <label for="id"> <span>ID:</span> <input type="text" name="id" ref="id" value=""> </label> <label for="pw"> <span>PW:</span> <input type="password" name="pw" ref="pw" value=""> </label> <input type="button" name="check" value="login" onclick="{check}"> <span class="error">{errorMsg}</span>', 'before-login,[data-is="before-login"]{height:300px;border:1px solid #555;padding:0 20px;display:flex;align-items:center;justify-content:center;flex-direction:column} before-login>*,[data-is="before-login"]>*{padding:4px 0} before-login label,[data-is="before-login"] label{display:flex;justify-content:space-between;width:210px} before-login .error,[data-is="before-login"] .error{height:24px;color:rgba(255,32,32,0.6)}', '', function(opts) {
 	var Status;
 
-	Status = __webpack_require__(36);
+	Status = __webpack_require__(77);
 
 	this.errorMsg = "";
 
@@ -15296,9 +15540,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    
 	  
 
-/***/ },
-/* 36 */
-/***/ function(module, exports) {
+/***/ }),
+
+/***/ 77:
+/***/ (function(module, exports) {
 
 	var Status;
 
@@ -15318,7 +15563,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	Status.init();
 
 
-/***/ }
-/******/ ])
+/***/ })
+
+/******/ })
 });
 ;

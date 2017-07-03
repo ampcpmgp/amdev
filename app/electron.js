@@ -43,14 +43,14 @@ module.exports =
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(11);
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var ModuleCompiler, _, fs, webpack,
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
@@ -157,27 +157,27 @@ module.exports =
 	ModuleCompiler.config();
 
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("lodash");
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("webpack");
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("fs");
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var Compiler, _, fs, fse, path, webpack;
 
@@ -221,7 +221,7 @@ module.exports =
 	          test: /\.ya?ml$/,
 	          loader: "json!yaml-loader"
 	        }, {
-	          test: /\.tag$/,
+	          test: /\.tag\.html$/,
 	          exclude: /node_modules/,
 	          loader: "riot-tag-loader"
 	        }, {
@@ -233,7 +233,7 @@ module.exports =
 	    devtool: "cheap-module-eval-source-map",
 	    resolve: {
 	      modulesDirectories: ["modules", "node_modules"],
-	      extensions: [".coffee", ".tag", ".es", ".js", ""]
+	      extensions: [".coffee", ".tag.html", ".es", ".js", ""]
 	    }
 	  };
 
@@ -361,33 +361,33 @@ module.exports =
 	Compiler._config();
 
 
-/***/ },
+/***/ }),
 /* 6 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("fs-extra");
 
-/***/ },
+/***/ }),
 /* 7 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("path");
 
-/***/ },
+/***/ }),
 /* 8 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("glob");
 
-/***/ },
+/***/ }),
 /* 9 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("child_process");
 
-/***/ },
+/***/ }),
 /* 10 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	var Status,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -418,9 +418,9 @@ module.exports =
 	module.exports = new Status();
 
 
-/***/ },
+/***/ }),
 /* 11 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var start;
 
@@ -435,15 +435,15 @@ module.exports =
 	document.addEventListener("DOMContentLoaded", start);
 
 
-/***/ },
+/***/ }),
 /* 12 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("riot");
 
-/***/ },
+/***/ }),
 /* 13 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	
 	    var riot = __webpack_require__(12)
@@ -456,9 +456,9 @@ module.exports =
 	    
 	  
 
-/***/ },
+/***/ }),
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	
 	    var riot = __webpack_require__(12)
@@ -483,15 +483,15 @@ module.exports =
 	    
 	  
 
-/***/ },
+/***/ }),
 /* 15 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("electron");
 
-/***/ },
+/***/ }),
 /* 16 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	
 	    var riot = __webpack_require__(12)
@@ -606,5 +606,5 @@ module.exports =
 	    
 	  
 
-/***/ }
+/***/ })
 /******/ ]);

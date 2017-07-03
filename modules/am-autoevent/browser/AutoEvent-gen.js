@@ -52,16 +52,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(7);
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	var $, AutoEvent, assert, trigger,
+	var $, AutoEvent, assert, click, trigger,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 	$ = (function(_this) {
@@ -71,6 +71,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(this);
 
 	assert = __webpack_require__(2);
+
+	click = (function(_this) {
+	  return function($dom) {
+	    var event;
+	    event = new MouseEvent("click");
+	    return $dom.dispatchEvent(event);
+	  };
+	})(this);
 
 	trigger = (function(_this) {
 	  return function($dom, eventType) {
@@ -86,6 +94,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.end = bind(this.end, this);
 	    this._createFuncInWait = bind(this._createFuncInWait, this);
 	    this.waitSelector = bind(this.waitSelector, this);
+	    this.notExists = bind(this.notExists, this);
+	    this.exists = bind(this.exists, this);
 	    this.wait = bind(this.wait, this);
 	    this.waitEvent = bind(this.waitEvent, this);
 	    this.click = bind(this.click, this);
@@ -115,14 +125,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  AutoEvent.prototype.addSelectorEvent = function(arg) {
-	    var assertionMsg, callback, selector;
-	    selector = arg.selector, assertionMsg = arg.assertionMsg, callback = arg.callback;
+	    var assertionMsg, callback, notExists, ref, selector;
+	    selector = arg.selector, assertionMsg = arg.assertionMsg, notExists = arg.notExists, callback = (ref = arg.callback) != null ? ref : (function(_this) {
+	      return function() {};
+	    })(this);
 	    return this.addEvent((function(_this) {
 	      return function() {
 	        var $this;
 	        $this = $(selector);
 	        if (assertionMsg) {
-	          assert($this, selector + " " + assertionMsg);
+	          assert((notExists ? !$this : $this), selector + " " + assertionMsg);
 	          return callback($this);
 	        } else {
 	          try {
@@ -191,7 +203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      assertionMsg: assertFlg ? "can't click" : void 0,
 	      callback: (function(_this) {
 	        return function($this) {
-	          return $this.click();
+	          return click($this);
 	        };
 	      })(this)
 	    });
@@ -210,6 +222,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return setTimeout(func, msec);
 	      };
 	    })(this));
+	  };
+
+	  AutoEvent.prototype.exists = function(selector) {
+	    return this.addSelectorEvent({
+	      selector: selector,
+	      assertionMsg: "not exists"
+	    });
+	  };
+
+	  AutoEvent.prototype.notExists = function(selector) {
+	    return this.addSelectorEvent({
+	      selector: selector,
+	      notExists: true,
+	      assertionMsg: "is exists"
+	    });
 	  };
 
 	  AutoEvent.prototype.waitSelector = function(selector, exists) {
@@ -281,9 +308,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
@@ -778,9 +805,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
 	//
@@ -1371,9 +1398,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(4)))
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	// shim for using process in browser
 	var process = module.exports = {};
@@ -1545,6 +1572,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	process.removeListener = noop;
 	process.removeAllListeners = noop;
 	process.emit = noop;
+	process.prependListener = noop;
+	process.prependOnceListener = noop;
+
+	process.listeners = function (name) { return [] }
 
 	process.binding = function (name) {
 	    throw new Error('process.binding is not supported');
@@ -1557,9 +1588,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	process.umask = function() { return 0; };
 
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = function isBuffer(arg) {
 	  return arg && typeof arg === 'object'
@@ -1568,9 +1599,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    && typeof arg.readUInt8 === 'function';
 	}
 
-/***/ },
+/***/ }),
 /* 6 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	if (typeof Object.create === 'function') {
 	  // implementation from standard node.js 'util' module
@@ -1597,9 +1628,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 
-/***/ },
+/***/ }),
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var AutoEvent, AutoEventBase,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
@@ -1649,7 +1680,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(AutoEventBase);
 
 
-/***/ }
+/***/ })
 /******/ ])
 });
 ;

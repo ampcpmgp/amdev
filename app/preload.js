@@ -43,35 +43,35 @@ module.exports =
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(17);
 
 
-/***/ },
+/***/ }),
 /* 1 */,
 /* 2 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("lodash");
 
-/***/ },
+/***/ }),
 /* 3 */,
 /* 4 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("fs");
 
-/***/ },
+/***/ }),
 /* 5 */,
 /* 6 */,
 /* 7 */,
 /* 8 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("glob");
 
-/***/ },
+/***/ }),
 /* 9 */,
 /* 10 */,
 /* 11 */,
@@ -79,14 +79,14 @@ module.exports =
 /* 13 */,
 /* 14 */,
 /* 15 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("electron");
 
-/***/ },
+/***/ }),
 /* 16 */,
 /* 17 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var start;
 
@@ -98,9 +98,9 @@ module.exports =
 	document.addEventListener("DOMContentLoaded", start);
 
 
-/***/ },
+/***/ }),
 /* 18 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var $, ElectronApp, chokidar, fs, glob, ipcRenderer;
 
@@ -186,27 +186,27 @@ module.exports =
 	})();
 
 
-/***/ },
+/***/ }),
 /* 19 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("jquery");
 
-/***/ },
+/***/ }),
 /* 20 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("chokidar");
 
-/***/ },
+/***/ }),
 /* 21 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = {"browserWindow":{"x":0,"y":0,"width":1027,"height":968,"icon":"./web/favicon.ico","webPreferences":{"url":"/app/index.html","preload":"/app/preload.js"}},"cl":{"intervalMin":5},"server":{"port":8091}}
 
-/***/ },
+/***/ }),
 /* 22 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {var SimpleServer, chokidar, fs, glob, http, lodash, mime, sio,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -362,7 +362,7 @@ module.exports =
 	        curDate = Date.now();
 	        diff = curDate - _this.wsEventReload_prevDate;
 	        _this.wsEventReload_prevDate = curDate;
-	        if (diff < 1000) {
+	        if (diff < 2000) {
 	          return;
 	        }
 	        return setTimeout(function() {
@@ -414,23 +414,23 @@ module.exports =
 
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
-/***/ },
+/***/ }),
 /* 23 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("http");
 
-/***/ },
+/***/ }),
 /* 24 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("mime");
 
-/***/ },
+/***/ }),
 /* 25 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = require("socket.io");
 
-/***/ }
+/***/ })
 /******/ ]);

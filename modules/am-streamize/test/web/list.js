@@ -53,15 +53,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ({
 
 /***/ 0:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(98);
+	module.exports = __webpack_require__(142);
 
 
-/***/ },
+/***/ }),
 
 /***/ 4:
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	// shim for using process in browser
 	var process = module.exports = {};
@@ -233,6 +233,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	process.removeListener = noop;
 	process.removeAllListeners = noop;
 	process.emit = noop;
+	process.prependListener = noop;
+	process.prependOnceListener = noop;
+
+	process.listeners = function (name) { return [] }
 
 	process.binding = function (name) {
 	    throw new Error('process.binding is not supported');
@@ -245,40 +249,119 @@ return /******/ (function(modules) { // webpackBootstrap
 	process.umask = function() { return 0; };
 
 
-/***/ },
+/***/ }),
 
 /***/ 14:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	var Status;
+	'use strict';
 
-	window.riot = __webpack_require__(15);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	Status = __webpack_require__(16);
+	var _Status = __webpack_require__(15);
+
+	var _Status2 = _interopRequireDefault(_Status);
 
 	__webpack_require__(17);
 
-	module.exports = (function(_this) {
-	  return function(testPatterns, opts) {
-	    if (opts == null) {
-	      opts = {};
-	    }
-	    Status.opts = opts;
-	    return {
-	      list: riot.mount("test-list", {
-	        testPatterns: testPatterns
-	      })
-	    };
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	window.riot = __webpack_require__(16);
+
+	var generate = function generate(testPatterns) {
+	  var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	  _Status2.default.opts = opts;
+	  return {
+	    list: window.riot.mount('test-list', { testPatterns: testPatterns })
 	  };
-	})(this);
+	};
 
+	exports.default = generate;
 
-/***/ },
+/***/ }),
 
 /***/ 15:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	/* Riot v3.3.2, @license MIT */
+	var Status, riot;
+
+	riot = __webpack_require__(16);
+
+	module.exports = Status = (function() {
+	  function Status() {}
+
+	  Status.sumInit = function() {
+	    Status.successSum = 0;
+	    return Status.executeSum = 0;
+	  };
+
+	  Status.init = function() {
+	    Status.thisBasePath = "?";
+	    Status.basePath = "#";
+	    Status.itemStatuses = [];
+	    Status.iframeListToExecute = [];
+	    Status.executablePath = {};
+	    Status.sumInit();
+	    Status.lastExecutePath = "";
+	    Status.showParameter = false;
+	    return riot.observable(Status);
+	  };
+
+	  Status.isRunning = function() {
+	    return Status.iframeListToExecute.length !== 0 && Status.itemStatuses.some(function(item) {
+	      return item.onExecute;
+	    });
+	  };
+
+	  Status.firstTimeInit = function() {
+	    return Status.opts = {};
+	  };
+
+	  Status.taskFinished = function() {
+	    return Status.executeSum > 0 && Status.iframeListToExecute.length === 0;
+	  };
+
+	  Status.taskAllSuccess = function() {
+	    return Status.taskFinished() && Status.executeSum === Status.successSum;
+	  };
+
+	  Status.next = function() {
+	    return Status.trigger("finished");
+	  };
+
+	  Status.allApen = function() {
+	    if (Status.isRunning()) {
+	      return;
+	    }
+	    return Status.trigger("all-open");
+	  };
+
+	  Status.close = function(depth) {
+	    if (Status.isRunning()) {
+	      return;
+	    }
+	    Status.allApen();
+	    return Status.trigger("close-depth-" + depth);
+	  };
+
+	  return Status;
+
+	})();
+
+	Status.init();
+
+	Status.firstTimeInit();
+
+
+/***/ }),
+
+/***/ 16:
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* Riot v3.6.1, @license MIT */
 	(function (global, factory) {
 		 true ? factory(exports) :
 		typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -296,15 +379,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	var LOOP_NO_REORDER_DIRECTIVE = 'no-reorder';
 	var SHOW_DIRECTIVE = 'show';
 	var HIDE_DIRECTIVE = 'hide';
+	var RIOT_EVENTS_KEY = '__riot-events__';
 	var T_STRING = 'string';
 	var T_OBJECT = 'object';
 	var T_UNDEF  = 'undefined';
 	var T_FUNCTION = 'function';
 	var XLINK_NS = 'http://www.w3.org/1999/xlink';
+	var SVG_NS = 'http://www.w3.org/2000/svg';
 	var XLINK_REGEX = /^xlink:(\w+)/;
 	var WIN = typeof window === T_UNDEF ? undefined : window;
 	var RE_SPECIAL_TAGS = /^(?:t(?:body|head|foot|[rhd])|caption|col(?:group)?|opt(?:ion|group))$/;
 	var RE_SPECIAL_TAGS_NO_OPTION = /^(?:t(?:body|head|foot|[rhd])|caption|col(?:group)?)$/;
+	var RE_EVENTS_PREFIX = /^on/;
 	var RE_RESERVED_NAMES = /^(?:_(?:item|id|parent)|update|root|(?:un)?mount|mixin|is(?:Mounted|Loop)|tags|refs|parent|opts|trigger|o(?:n|ff|ne))$/;
 	var RE_HTML_ATTRS = /([-\w]+) ?= ?(?:"([^"]*)|'([^']*)|({[^}]*}))/g;
 	var CASE_SENSITIVE_ATTRIBUTES = { 'viewbox': 'viewBox' };
@@ -414,7 +500,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns { Object } dom nodes found
 	 */
 	function $$(selector, ctx) {
-	  return (ctx || document).querySelectorAll(selector)
+	  return Array.prototype.slice.call((ctx || document).querySelectorAll(selector))
 	}
 
 	/**
@@ -444,12 +530,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Check if a DOM node is an svg tag
+	 * @param   { HTMLElement }  el - node we want to test
+	 * @returns {Boolean} true if it's an svg node
+	 */
+	function isSvg(el) {
+	  return !!el.ownerSVGElement
+	}
+
+	/**
 	 * Create a generic DOM node
 	 * @param   { String } name - name of the DOM node we want to create
+	 * @param   { Boolean } isSvg - true if we need to use an svg node
 	 * @returns { Object } DOM node just created
 	 */
 	function mkEl(name) {
-	  return document.createElement(name)
+	  return name === 'svg' ? document.createElementNS(SVG_NS, name) : document.createElement(name)
 	}
 
 	/**
@@ -470,12 +566,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Toggle the visibility of any DOM node
+	 * @param   { Object }  dom - DOM node we want to hide
+	 * @param   { Boolean } show - do we want to show it?
+	 */
+
+	function toggleVisibility(dom, show) {
+	  dom.style.display = show ? '' : 'none';
+	  dom['hidden'] = show ? false : true;
+	}
+
+	/**
 	 * Remove any DOM attribute from a node
 	 * @param   { Object } dom - DOM node we want to update
 	 * @param   { String } name - name of the property we want to remove
 	 */
 	function remAttr(dom, name) {
 	  dom.removeAttribute(name);
+	}
+
+	/**
+	 * Convert a style object to a string
+	 * @param   { Object } style - style object we need to parse
+	 * @returns { String } resulting css string
+	 * @example
+	 * styleObjectToString({ color: 'red', height: '10px'}) // => 'color: red; height: 10px'
+	 */
+	function styleObjectToString(style) {
+	  return Object.keys(style).reduce(function (acc, prop) {
+	    return (acc + " " + prop + ": " + (style[prop]) + ";")
+	  }, '')
 	}
 
 	/**
@@ -553,9 +673,12 @@ return /******/ (function(modules) { // webpackBootstrap
 		$: $,
 		createFrag: createFrag,
 		createDOMPlaceholder: createDOMPlaceholder,
+		isSvg: isSvg,
 		mkEl: mkEl,
 		setInnerHTML: setInnerHTML,
+		toggleVisibility: toggleVisibility,
 		remAttr: remAttr,
+		styleObjectToString: styleObjectToString,
 		getAttr: getAttr,
 		setAttr: setAttr,
 		safeInsert: safeInsert,
@@ -623,8 +746,87 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * The riot template engine
-	 * @version v3.0.3
+	 * @version v3.0.8
 	 */
+
+	var skipRegex = (function () { //eslint-disable-line no-unused-vars
+
+	  var beforeReChars = '[{(,;:?=|&!^~>%*/';
+
+	  var beforeReWords = [
+	    'case',
+	    'default',
+	    'do',
+	    'else',
+	    'in',
+	    'instanceof',
+	    'prefix',
+	    'return',
+	    'typeof',
+	    'void',
+	    'yield'
+	  ];
+
+	  var wordsLastChar = beforeReWords.reduce(function (s, w) {
+	    return s + w.slice(-1)
+	  }, '');
+
+	  var RE_REGEX = /^\/(?=[^*>/])[^[/\\]*(?:(?:\\.|\[(?:\\.|[^\]\\]*)*\])[^[\\/]*)*?\/[gimuy]*/;
+	  var RE_VN_CHAR = /[$\w]/;
+
+	  function prev (code, pos) {
+	    while (--pos >= 0 && /\s/.test(code[pos])){  }
+	    return pos
+	  }
+
+	  function _skipRegex (code, start) {
+
+	    var re = /.*/g;
+	    var pos = re.lastIndex = start++;
+	    var match = re.exec(code)[0].match(RE_REGEX);
+
+	    if (match) {
+	      var next = pos + match[0].length;
+
+	      pos = prev(code, pos);
+	      var c = code[pos];
+
+	      if (pos < 0 || ~beforeReChars.indexOf(c)) {
+	        return next
+	      }
+
+	      if (c === '.') {
+
+	        if (code[pos - 1] === '.') {
+	          start = next;
+	        }
+
+	      } else if (c === '+' || c === '-') {
+
+	        if (code[--pos] !== c ||
+	            (pos = prev(code, pos)) < 0 ||
+	            !RE_VN_CHAR.test(code[pos])) {
+	          start = next;
+	        }
+
+	      } else if (~wordsLastChar.indexOf(c)) {
+
+	        var end = pos + 1;
+
+	        while (--pos >= 0 && RE_VN_CHAR.test(code[pos])){  }
+	        if (~beforeReWords.indexOf(code.slice(pos + 1, end))) {
+	          start = next;
+	        }
+	      }
+	    }
+
+	    return start
+	  }
+
+	  return _skipRegex
+
+	})();
+
 	/**
 	 * riot.util.brackets
 	 *
@@ -648,16 +850,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    S_QBLOCKS = R_STRINGS.source + '|' +
 	      /(?:\breturn\s+|(?:[$\w\)\]]|\+\+|--)\s*(\/)(?![*\/]))/.source + '|' +
-	      /\/(?=[^*\/])[^[\/\\]*(?:(?:\[(?:\\.|[^\]\\]*)*\]|\\.)[^[\/\\]*)*?(\/)[gim]*/.source,
+	      /\/(?=[^*\/])[^[\/\\]*(?:(?:\[(?:\\.|[^\]\\]*)*\]|\\.)[^[\/\\]*)*?([^<]\/)[gim]*/.source,
 
 	    UNSUPPORTED = RegExp('[\\' + 'x00-\\x1F<>a-zA-Z0-9\'",;\\\\]'),
 
 	    NEED_ESCAPE = /(?=[[\]()*+?.^$|])/g,
 
+	    S_QBLOCK2 = R_STRINGS.source + '|' + /(\/)(?![*\/])/.source,
+
 	    FINDBRACES = {
-	      '(': RegExp('([()])|'   + S_QBLOCKS, REGLOB),
-	      '[': RegExp('([[\\]])|' + S_QBLOCKS, REGLOB),
-	      '{': RegExp('([{}])|'   + S_QBLOCKS, REGLOB)
+	      '(': RegExp('([()])|'   + S_QBLOCK2, REGLOB),
+	      '[': RegExp('([[\\]])|' + S_QBLOCK2, REGLOB),
+	      '{': RegExp('([{}])|'   + S_QBLOCK2, REGLOB)
 	    },
 
 	    DEFAULT = '{ }';
@@ -668,7 +872,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /{[^}]*}/,
 	    /\\([{}])/g,
 	    /\\({)|{/g,
-	    RegExp('\\\\(})|([[({])|(})|' + S_QBLOCKS, REGLOB),
+	    RegExp('\\\\(})|([[({])|(})|' + S_QBLOCK2, REGLOB),
 	    DEFAULT,
 	    /^\s*{\^?\s*([$\w]+)(?:\s*,\s*(\S+))?\s+in\s+(\S.*)\s*}/,
 	    /(^|[^\\]){=[\S\s]*?}/
@@ -702,7 +906,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    arr[4] = _rewrite(arr[1].length > 1 ? /{[\S\s]*?}/ : _pairs[4], arr);
 	    arr[5] = _rewrite(pair.length > 3 ? /\\({|})/g : _pairs[5], arr);
 	    arr[6] = _rewrite(_pairs[6], arr);
-	    arr[7] = RegExp('\\\\(' + arr[3] + ')|([[({])|(' + arr[3] + ')|' + S_QBLOCKS, REGLOB);
+	    arr[7] = RegExp('\\\\(' + arr[3] + ')|([[({])|(' + arr[3] + ')|' + S_QBLOCK2, REGLOB);
 	    arr[8] = pair;
 	    return arr
 	  }
@@ -723,19 +927,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	      pos,
 	      re = _bp[6];
 
+	    var qblocks = [];
+	    var prevStr = '';
+	    var mark, lastIndex;
+
 	    isexpr = start = re.lastIndex = 0;
 
 	    while ((match = re.exec(str))) {
 
+	      lastIndex = re.lastIndex;
 	      pos = match.index;
 
 	      if (isexpr) {
 
 	        if (match[2]) {
-	          re.lastIndex = skipBraces(str, match[2], re.lastIndex);
+
+	          var ch = match[2];
+	          var rech = FINDBRACES[ch];
+	          var ix = 1;
+
+	          rech.lastIndex = lastIndex;
+	          while ((match = rech.exec(str))) {
+	            if (match[1]) {
+	              if (match[1] === ch) { ++ix; }
+	              else if (!--ix) { break }
+	            } else {
+	              rech.lastIndex = pushQBlock(match.index, rech.lastIndex, match[2]);
+	            }
+	          }
+	          re.lastIndex = ix ? str.length : rech.lastIndex;
 	          continue
 	        }
+
 	        if (!match[3]) {
+	          re.lastIndex = pushQBlock(pos, lastIndex, match[4]);
 	          continue
 	        }
 	      }
@@ -752,9 +977,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      unescapeStr(str.slice(start));
 	    }
 
+	    parts.qblocks = qblocks;
+
 	    return parts
 
 	    function unescapeStr (s) {
+	      if (prevStr) {
+	        s = prevStr + s;
+	        prevStr = '';
+	      }
 	      if (tmpl || isexpr) {
 	        parts.push(s && s.replace(_bp[5], '$1'));
 	      } else {
@@ -762,18 +993,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 
-	    function skipBraces (s, ch, ix) {
-	      var
-	        match,
-	        recch = FINDBRACES[ch];
-
-	      recch.lastIndex = ix;
-	      ix = 1;
-	      while ((match = recch.exec(s))) {
-	        if (match[1] &&
-	          !(match[1] === ch ? ++ix : --ix)) { break }
+	    function pushQBlock(_pos, _lastIndex, slash) { //eslint-disable-line
+	      if (slash) {
+	        _lastIndex = skipRegex(str, _pos);
 	      }
-	      return ix ? s.length : recch.lastIndex
+
+	      if (tmpl && _lastIndex > _pos + 2) {
+	        mark = '\u2057' + qblocks.length + '~';
+	        qblocks.push(str.slice(_pos, _lastIndex));
+	        prevStr += str.slice(start, _pos) + mark;
+	        start = _lastIndex;
+	      }
+	      return _lastIndex
 	    }
 	  };
 
@@ -824,10 +1055,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /* istanbul ignore next: in the browser riot is always in the scope */
 	  _brackets.settings = typeof riot !== 'undefined' && riot.settings || {};
 	  _brackets.set = _reset;
+	  _brackets.skipRegex = skipRegex;
 
 	  _brackets.R_STRINGS = R_STRINGS;
 	  _brackets.R_MLCOMMS = R_MLCOMMS;
 	  _brackets.S_QBLOCKS = S_QBLOCKS;
+	  _brackets.S_QBLOCK2 = S_QBLOCK2;
 
 	  return _brackets
 
@@ -849,7 +1082,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function _tmpl (str, data) {
 	    if (!str) { return str }
 
-	    return (_cache[str] || (_cache[str] = _create(str))).call(data, _logErr)
+	    return (_cache[str] || (_cache[str] = _create(str))).call(
+	      data, _logErr.bind({
+	        data: data,
+	        tmpl: str
+	      })
+	    )
 	  }
 
 	  _tmpl.hasExpr = brackets.hasExpr;
@@ -873,10 +1111,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      typeof console !== 'undefined' &&
 	      typeof console.error === 'function'
 	    ) {
-	      if (err.riotData.tagName) {
-	        console.error('Riot template error thrown in the <%s> tag', err.riotData.tagName);
-	      }
-	      console.error(err);
+	      console.error(err.message);
+	      console.log('<%s> %s', err.riotData.tagName || 'Unknown tag', this.tmpl); // eslint-disable-line
+	      console.log(this.data); // eslint-disable-line
 	    }
 	  }
 
@@ -888,18 +1125,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return new Function('E', expr + ';')    // eslint-disable-line no-new-func
 	  }
 
-	  var
-	    CH_IDEXPR = String.fromCharCode(0x2057),
-	    RE_CSNAME = /^(?:(-?[_A-Za-z\xA0-\xFF][-\w\xA0-\xFF]*)|\u2057(\d+)~):/,
-	    RE_QBLOCK = RegExp(brackets.S_QBLOCKS, 'g'),
-	    RE_DQUOTE = /\u2057/g,
-	    RE_QBMARK = /\u2057(\d+)~/g;
+	  var RE_DQUOTE = /\u2057/g;
+	  var RE_QBMARK = /\u2057(\d+)~/g;
 
 	  function _getTmpl (str) {
-	    var
-	      qstr = [],
-	      expr,
-	      parts = brackets.split(str.replace(RE_DQUOTE, '"'), 1);
+	    var parts = brackets.split(str.replace(RE_DQUOTE, '"'), 1);
+	    var qstr = parts.qblocks;
+	    var expr;
 
 	    if (parts.length > 2 || parts[0]) {
 	      var i, j, list = [];
@@ -930,7 +1162,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      expr = _parseExpr(parts[1], 0, qstr);
 	    }
 
-	    if (qstr[0]) {
+	    if (qstr.length) {
 	      expr = expr.replace(RE_QBMARK, function (_, pos) {
 	        return qstr[pos]
 	          .replace(/\r/g, '\\r')
@@ -940,6 +1172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return expr
 	  }
 
+	  var RE_CSNAME = /^(?:(-?[_A-Za-z\xA0-\xFF][-\w\xA0-\xFF]*)|\u2057(\d+)~):/;
 	  var
 	    RE_BREND = {
 	      '(': /[()]/g,
@@ -950,11 +1183,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function _parseExpr (expr, asText, qstr) {
 
 	    expr = expr
-	          .replace(RE_QBLOCK, function (s, div) {
-	            return s.length > 2 && !div ? CH_IDEXPR + (qstr.push(s) - 1) + '~' : s
-	          })
-	          .replace(/\s+/g, ' ').trim()
-	          .replace(/\ ?([[\({},?\.:])\ ?/g, '$1');
+	      .replace(/\s+/g, ' ').trim()
+	      .replace(/\ ?([[\({},?\.:])\ ?/g, '$1');
 
 	    if (expr) {
 	      var
@@ -1045,7 +1275,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return expr
 	  }
 
-	  _tmpl.version = brackets.version = 'v3.0.3';
+	  _tmpl.version = brackets.version = 'v3.0.8';
 
 	  return _tmpl
 
@@ -1274,10 +1504,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	var settings$1 = extend(Object.create(brackets.settings), {
-	  skipAnonymousTags: true
+	  skipAnonymousTags: true,
+	  // handle the auto updates on any DOM event
+	  autoUpdate: true
 	});
-
-	var EVENTS_PREFIX_REGEX = /^on/;
 
 	/**
 	 * Trigger DOM events
@@ -1307,6 +1537,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  handler.call(this, e);
 
+	  // avoid auto updates
+	  if (!settings$1.autoUpdate) { return }
+
 	  if (!e.preventUpdate) {
 	    var p = getImmediateCustomParentTag(this);
 	    // fixes #2083
@@ -1326,29 +1559,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	    cb = handleEvent.bind(tag, dom, handler);
 
 	  // avoid to bind twice the same event
+	  // possible fix for #2332
 	  dom[name] = null;
 
 	  // normalize event name
-	  eventName = name.replace(EVENTS_PREFIX_REGEX, '');
+	  eventName = name.replace(RE_EVENTS_PREFIX, '');
 
-	  // cache the callback directly on the DOM node
-	  if (!dom._riotEvents) { dom._riotEvents = {}; }
+	  // cache the listener into the listeners array
+	  if (!contains(tag.__.listeners, dom)) { tag.__.listeners.push(dom); }
+	  if (!dom[RIOT_EVENTS_KEY]) { dom[RIOT_EVENTS_KEY] = {}; }
+	  if (dom[RIOT_EVENTS_KEY][name]) { dom.removeEventListener(eventName, dom[RIOT_EVENTS_KEY][name]); }
 
-	  if (dom._riotEvents[name])
-	    { dom.removeEventListener(eventName, dom._riotEvents[name]); }
-
-	  dom._riotEvents[name] = cb;
+	  dom[RIOT_EVENTS_KEY][name] = cb;
 	  dom.addEventListener(eventName, cb, false);
 	}
 
 	/**
 	 * Update dynamically created data-is tags with changing expressions
 	 * @param { Object } expr - expression tag and expression info
-	 * @param { Tag } parent - parent for tag creation
+	 * @param { Tag }    parent - parent for tag creation
+	 * @param { String } tagName - tag implementation we want to use
 	 */
-	function updateDataIs(expr, parent) {
-	  var tagName = tmpl(expr.value, parent),
-	    conf, isVirtual, head, ref;
+	function updateDataIs(expr, parent, tagName) {
+	  var conf, isVirtual, head, ref;
 
 	  if (expr.tag && expr.tagName === tagName) {
 	    expr.tag.update();
@@ -1358,7 +1591,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  isVirtual = expr.dom.tagName === 'VIRTUAL';
 	  // sync _parent to accommodate changing tagnames
 	  if (expr.tag) {
-
 	    // need placeholder before unmount
 	    if(isVirtual) {
 	      head = expr.tag.__.head;
@@ -1368,6 +1600,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    expr.tag.unmount(true);
 	  }
+
+	  if (!isString(tagName)) { return }
 
 	  expr.impl = __TAG_IMPL[tagName];
 	  conf = {root: expr.dom, parent: parent, hasImpl: true, tagName: tagName};
@@ -1390,6 +1624,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Nomalize any attribute removing the "riot-" prefix
+	 * @param   { String } attrName - original attribute name
+	 * @returns { String } valid html attribute name
+	 */
+	function normalizeAttrName(attrName) {
+	  if (!attrName) { return null }
+	  attrName = attrName.replace(ATTRS_PREFIX, '');
+	  if (CASE_SENSITIVE_ATTRIBUTES[attrName]) { attrName = CASE_SENSITIVE_ATTRIBUTES[attrName]; }
+	  return attrName
+	}
+
+	/**
 	 * Update on single tag expression
 	 * @this Tag
 	 * @param { Object } expr - expression logic
@@ -1399,46 +1645,69 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (this.root && getAttr(this.root,'virtualized')) { return }
 
 	  var dom = expr.dom,
-	    attrName = expr.attr,
+	    // remove the riot- prefix
+	    attrName = normalizeAttrName(expr.attr),
 	    isToggle = contains([SHOW_DIRECTIVE, HIDE_DIRECTIVE], attrName),
-	    value = tmpl(expr.expr, this),
-	    isValueAttr = attrName === 'riot-value',
 	    isVirtual = expr.root && expr.root.tagName === 'VIRTUAL',
 	    parent = dom && (expr.parent || dom.parentNode),
-	    old;
+	    // detect the style attributes
+	    isStyleAttr = attrName === 'style',
+	    isClassAttr = attrName === 'class',
+	    hasValue,
+	    isObj,
+	    value;
 
-	  if (expr.bool)
-	    { value = value ? attrName : false; }
-	  else if (isUndefined(value) || value === null)
-	    { value = ''; }
-
-	  if (expr._riot_id) { // if it's a tag
+	  // if it's a tag we could totally skip the rest
+	  if (expr._riot_id) {
 	    if (expr.isMounted) {
 	      expr.update();
-
 	    // if it hasn't been mounted yet, do that now.
 	    } else {
 	      expr.mount();
-
-	      if (isVirtual)
-	        { makeReplaceVirtual(expr, expr.root); }
-
+	      if (isVirtual) {
+	        makeReplaceVirtual(expr, expr.root);
+	      }
 	    }
 	    return
 	  }
+	  // if this expression has the update method it means it can handle the DOM changes by itself
+	  if (expr.update) { return expr.update() }
 
-	  old = expr.value;
-	  expr.value = value;
+	  // ...it seems to be a simple expression so we try to calculat its value
+	  value = tmpl(expr.expr, isToggle ? extend({}, Object.create(this.parent), this) : this);
+	  hasValue = !isBlank(value);
+	  isObj = isObject(value);
 
-	  if (expr.update) {
-	    expr.update();
-	    return
+	  // convert the style/class objects to strings
+	  if (isObj) {
+	    isObj = !isClassAttr && !isStyleAttr;
+	    if (isClassAttr) {
+	      value = tmpl(JSON.stringify(value), this);
+	    } else if (isStyleAttr) {
+	      value = styleObjectToString(value);
+	    }
 	  }
 
-	  if (expr.isRtag && value) { return updateDataIs(expr, this) }
-	  if (old === value) { return }
-	  // no change, so nothing more to do
-	  if (isValueAttr && dom.value === value) { return }
+	  // remove original attribute
+	  if (expr.attr && (!expr.isAttrRemoved || !hasValue || value === false)) {
+	    remAttr(dom, expr.attr);
+	    expr.isAttrRemoved = true;
+	  }
+
+	  // for the boolean attributes we don't need the value
+	  // we can convert it to checked=true to checked=checked
+	  if (expr.bool) { value = value ? attrName : false; }
+	  if (expr.isRtag) { return updateDataIs(expr, this, value) }
+	  if (expr.wasParsedOnce && expr.value === value) { return }
+
+	  // update the expression value
+	  expr.value = value;
+	  expr.wasParsedOnce = true;
+
+	  // if the value is an object we can not do much more with it
+	  if (isObj && !isToggle) { return }
+	  // avoid to render undefined/null values
+	  if (isBlank(value)) { value = ''; }
 
 	  // textarea and text nodes have no attribute name
 	  if (!attrName) {
@@ -1459,38 +1728,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return
 	  }
 
-	  // remove original attribute
-	  if (!expr.isAttrRemoved || !value) {
-	    remAttr(dom, attrName);
-	    expr.isAttrRemoved = true;
-	  }
 
 	  // event handler
 	  if (isFunction(value)) {
 	    setEventHandler(attrName, value, dom, this);
 	  // show / hide
 	  } else if (isToggle) {
-	    if (attrName === HIDE_DIRECTIVE) { value = !value; }
-	    dom.style.display = value ? '' : 'none';
-	  // field value
-	  } else if (isValueAttr) {
-	    dom.value = value;
-	  // <img src="{ expr }">
-	  } else if (startsWith(attrName, ATTRS_PREFIX) && attrName !== IS_DIRECTIVE) {
-	    attrName = attrName.slice(ATTRS_PREFIX.length);
-	    if (CASE_SENSITIVE_ATTRIBUTES[attrName])
-	      { attrName = CASE_SENSITIVE_ATTRIBUTES[attrName]; }
-	    if (value != null)
-	      { setAttr(dom, attrName, value); }
+	    toggleVisibility(dom, attrName === HIDE_DIRECTIVE ? !value : value);
+	  // handle attributes
 	  } else {
 	    if (expr.bool) {
 	      dom[attrName] = value;
-	      if (!value) { return }
 	    }
 
-	    if (value === 0 || value && typeof value !== T_OBJECT) {
+	    if (attrName === 'value' && dom.value !== value) {
+	      dom.value = value;
+	    }
+
+	    if (hasValue && value !== false) {
 	      setAttr(dom, attrName, value);
 	    }
+
+	    // make sure that in case of style changes
+	    // the element stays hidden
+	    if (isStyleAttr && dom.hidden) { toggleVisibility(dom, false); }
 	  }
 	}
 
@@ -1508,7 +1769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    remAttr(dom, CONDITIONAL_DIRECTIVE);
 	    this.tag = tag;
 	    this.expr = expr;
-	    this.stub = document.createTextNode('');
+	    this.stub = createDOMPlaceholder();
 	    this.pristine = dom;
 
 	    var p = dom.parentNode;
@@ -1518,31 +1779,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return this
 	  },
 	  update: function update() {
-	    var newValue = tmpl(this.expr, this.tag);
+	    this.value = tmpl(this.expr, this.tag);
 
-	    if (newValue && !this.current) { // insert
+	    if (this.value && !this.current) { // insert
 	      this.current = this.pristine.cloneNode(true);
 	      this.stub.parentNode.insertBefore(this.current, this.stub);
-
 	      this.expressions = [];
 	      parseExpressions.apply(this.tag, [this.current, this.expressions, true]);
-	    } else if (!newValue && this.current) { // remove
+	    } else if (!this.value && this.current) { // remove
 	      unmountAll(this.expressions);
 	      if (this.current._tag) {
 	        this.current._tag.unmount();
-	      } else if (this.current.parentNode)
-	        { this.current.parentNode.removeChild(this.current); }
+	      } else if (this.current.parentNode) {
+	        this.current.parentNode.removeChild(this.current);
+	      }
 	      this.current = null;
 	      this.expressions = [];
 	    }
 
-	    if (newValue) { updateAllExpressions.call(this.tag, this.expressions); }
+	    if (this.value) { updateAllExpressions.call(this.tag, this.expressions); }
 	  },
 	  unmount: function unmount() {
 	    unmountAll(this.expressions || []);
-	    delete this.pristine;
-	    delete this.parentNode;
-	    delete this.stub;
 	  }
 	};
 
@@ -1553,54 +1811,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.rawValue = attrValue;
 	    this.parent = parent;
 	    this.hasExp = tmpl.hasExpr(attrValue);
-	    this.firstRun = true;
-
 	    return this
 	  },
 	  update: function update() {
-	    var value = this.rawValue;
-	    if (this.hasExp)
-	      { value = tmpl(this.rawValue, this.parent); }
-
-	    // if nothing changed, we're done
-	    if (!this.firstRun && value === this.value) { return }
-
+	    var old = this.value;
 	    var customParent = this.parent && getImmediateCustomParentTag(this.parent);
-
 	    // if the referenced element is a custom tag, then we set the tag itself, rather than DOM
-	    var tagOrDom = this.tag || this.dom;
+	    var tagOrDom = this.dom.__ref || this.tag || this.dom;
+
+	    this.value = this.hasExp ? tmpl(this.rawValue, this.parent) : this.rawValue;
 
 	    // the name changed, so we need to remove it from the old key (if present)
-	    if (!isBlank(this.value) && customParent)
-	      { arrayishRemove(customParent.refs, this.value, tagOrDom); }
-
-	    if (isBlank(value)) {
-	      // if the value is blank, we remove it
-	      remAttr(this.dom, this.attr);
-	    } else {
+	    if (!isBlank(old) && customParent) { arrayishRemove(customParent.refs, old, tagOrDom); }
+	    if (!isBlank(this.value) && isString(this.value)) {
 	      // add it to the refs of parent tag (this behavior was changed >=3.0)
 	      if (customParent) { arrayishAdd(
 	        customParent.refs,
-	        value,
+	        this.value,
 	        tagOrDom,
 	        // use an array if it's a looped node and the ref is not an expression
 	        null,
 	        this.parent.__.index
 	      ); }
-	      // set the actual DOM attr
-	      setAttr(this.dom, this.attr, value);
+
+	      if (this.value !== old) {
+	        setAttr(this.dom, this.attr, this.value);
+	      }
+	    } else {
+	      remAttr(this.dom, this.attr);
 	    }
 
-	    this.value = value;
-	    this.firstRun = false;
+	    // cache the ref bound to this dom node
+	    // to reuse it in future (see also #2329)
+	    if (!this.dom.__ref) { this.dom.__ref = tagOrDom; }
 	  },
 	  unmount: function unmount() {
 	    var tagOrDom = this.tag || this.dom;
 	    var customParent = this.parent && getImmediateCustomParentTag(this.parent);
 	    if (!isBlank(this.value) && customParent)
 	      { arrayishRemove(customParent.refs, this.value, tagOrDom); }
-	    delete this.dom;
-	    delete this.parent;
 	  }
 	};
 
@@ -1744,10 +1993,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  expr.update = function updateEach() {
 	    // get the new items collection
-	    var items = tmpl(expr.val, parent),
-	      frag = createFrag(),
+	    expr.value = tmpl(expr.val, parent);
+
+	    var frag = createFrag(),
+	      items = expr.value,
 	      isObject$$1 = !isArray(items) && !isString(items),
 	      root = placeholder.parentNode;
+
+	    // if this DOM was removed the update here is useless
+	    // this condition fixes also a weird async issue on IE in our unit test
+	    if (!root) { return }
 
 	    // object loop. any changes cause full redraw
 	    if (isObject$$1) {
@@ -1840,6 +2095,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // clone the items array
 	    oldItems = items.slice();
 
+	    // this condition is weird u
 	    root.insertBefore(frag, placeholder);
 	  };
 
@@ -1932,8 +2188,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // If this element had an if-attr, that's the parent for all child elements
 	    return {parent: parent}
 	  }, tree);
-
-	  return { tree: tree, root: root }
 	}
 
 	/**
@@ -1948,12 +2202,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var this$1 = this;
 
 	  each(attrs, function (attr) {
+	    if (!attr) { return false }
+
 	    var name = attr.name, bool = isBoolAttr(name), expr;
 
 	    if (contains(REF_DIRECTIVES, name)) {
 	      expr =  Object.create(RefExpr).init(dom, this$1, name, attr.value);
 	    } else if (tmpl.hasExpr(attr.value)) {
-	      expr = {dom: dom, expr: attr.value, attr: attr.name, bool: bool};
+	      expr = {dom: dom, expr: attr.value, attr: name, bool: bool};
 	    }
 
 	    fn(attr, expr);
@@ -1973,6 +2229,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var rootEls = { tr: 'tbody', th: 'tr', td: 'tr', col: 'colgroup' };
 	var tblTags = IE_VERSION && IE_VERSION < 10 ? RE_SPECIAL_TAGS : RE_SPECIAL_TAGS_NO_OPTION;
 	var GENERIC = 'div';
+	var SVG = 'svg';
 
 
 	/*
@@ -2035,12 +2292,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param   { String } tmpl  - The template coming from the custom tag definition
 	 * @param   { String } html - HTML content that comes from the DOM element where you
 	 *           will mount the tag, mostly the original tag in the page
+	 * @param   { Boolean } isSvg - true if the root node is an svg
 	 * @returns { HTMLElement } DOM element with _tmpl_ merged through `YIELD` with the _html_.
 	 */
-	function mkdom(tmpl, html) {
+	function mkdom(tmpl, html, isSvg$$1) {
 	  var match   = tmpl && tmpl.match(/^\s*<([-\w]+)/),
 	    tagName = match && match[1].toLowerCase(),
-	    el = mkEl(GENERIC);
+	    el = mkEl(isSvg$$1 ? SVG : GENERIC);
 
 	  // replace all the yield tags with the tag inner html
 	  tmpl = replaceYield(tmpl, html);
@@ -2142,10 +2400,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function mount$1(selector, tagName, opts) {
 	  var tags = [];
+	  var elem, allTags;
 
 	  function pushTagsTo(root) {
 	    if (root.tagName) {
-	      var riotTag = getAttr(root, IS_DIRECTIVE);
+	      var riotTag = getAttr(root, IS_DIRECTIVE), tag;
 
 	      // have tagName? force riot-tag to be the same
 	      if (tagName && riotTag !== tagName) {
@@ -2153,7 +2412,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        setAttr(root, IS_DIRECTIVE, tagName);
 	      }
 
-	      var tag = mountTo(root, riotTag || root.tagName.toLowerCase(), opts);
+	      tag = mountTo(root, riotTag || root.tagName.toLowerCase(), opts);
 
 	      if (tag)
 	        { tags.push(tag); }
@@ -2168,9 +2427,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    opts = tagName;
 	    tagName = 0;
 	  }
-
-	  var elem;
-	  var allTags;
 
 	  // crawl the DOM to find the tag
 	  if (isString(selector)) {
@@ -2228,7 +2484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function mixin$1(name, mix, g) {
 	  // Unnamed global
 	  if (isObject(name)) {
-	    mixin$1(("__unnamed_" + (mixins_id++)), name, true);
+	    mixin$1(("__" + (mixins_id++) + "__"), name, true);
 	    return
 	  }
 
@@ -2237,7 +2493,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // Getter
 	  if (!mix) {
 	    if (isUndefined(store[name]))
-	      { throw new Error('Unregistered mixin: ' + name) }
+	      { throw new Error(("Unregistered mixin: " + name)) }
 
 	    return store[name]
 	  }
@@ -2257,10 +2513,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function unregister$1(name) {
-	  delete __TAG_IMPL[name];
+	  __TAG_IMPL[name] = null;
 	}
 
-	var version = 'v3.3.2';
+	var version$1 = 'v3.6.1';
 
 
 	var core = Object.freeze({
@@ -2271,7 +2527,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		mixin: mixin$1,
 		update: update$1,
 		unregister: unregister$1,
-		version: version
+		version: version$1
 	});
 
 	// counter to give a unique id to all the Tag instances
@@ -2296,7 +2552,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var ctx = !isAnonymous && isLoop ? this : parent || this;
 	  each(instAttrs, function (attr) {
 	    if (attr.expr) { updateAllExpressions.call(ctx, [attr.expr]); }
-	    opts[toCamel(attr.name)] = attr.expr ? attr.expr.value : attr.value;
+	    // normalize the attribute names
+	    opts[toCamel(attr.name).replace(ATTRS_PREFIX, '')] = attr.expr ? attr.expr.value : attr.value;
 	  });
 	}
 
@@ -2312,7 +2569,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if ( impl === void 0 ) impl = {};
 	  if ( conf === void 0 ) conf = {};
 
-
 	  var opts = extend({}, conf.opts),
 	    parent = conf.parent,
 	    isLoop = conf.isLoop,
@@ -2326,6 +2582,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    root = conf.root,
 	    tagName = conf.tagName || getTagName(root),
 	    isVirtual = tagName === 'virtual',
+	    isInline = !isVirtual && !impl.tmpl,
 	    propsInSyncWithParent = [],
 	    dom;
 
@@ -2344,6 +2601,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    tagName: tagName,
 	    index: index,
 	    isLoop: isLoop,
+	    isInline: isInline,
+	    // tags having event listeners
+	    // it would be better to use weak maps here but we can not introduce breaking changes now
+	    listeners: [],
 	    // these vars will be needed only for the virtual tags
 	    virts: [],
 	    tail: null,
@@ -2362,7 +2623,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  defineProperty(this, 'tags', {});
 	  defineProperty(this, 'refs', {});
 
-	  dom = isLoop && isAnonymous ? root : mkdom(impl.tmpl, innerHTML, isLoop);
+	  if (isInline || isLoop && isAnonymous) {
+	    dom = root;
+	  } else {
+	    if (!isVirtual) { root.innerHTML = ''; }
+	    dom = mkdom(impl.tmpl, innerHTML, isSvg(root));
+	  }
 
 	  /**
 	   * Update the tag expressions and options
@@ -2378,7 +2644,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    data = cleanUpData(data);
 	    extend(this, data);
 	    updateOpts.apply(this, [isLoop, parent, isAnonymous, nextOpts, instAttrs]);
-	    if (this.isMounted && isFunction(this.shouldUpdate) && !this.shouldUpdate(data, nextOpts)) { return this }
+
+	    if (canTrigger && this.isMounted && isFunction(this.shouldUpdate) && !this.shouldUpdate(data, nextOpts)) {
+	      return this
+	    }
 
 	    // inherit properties from the parent, but only for isAnonymous tags
 	    if (isLoop && isAnonymous) { inheritFrom.apply(this, [this.parent, propsInSyncWithParent]); }
@@ -2493,7 +2762,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.update(item);
 
-	    if (!isAnonymous) {
+	    if (!isAnonymous && !isInline) {
 	      while (dom.firstChild) { root.appendChild(dom.firstChild); }
 	    }
 
@@ -2537,7 +2806,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    walkAttrs(impl.attrs, function (name) {
 	      if (startsWith(name, ATTRS_PREFIX))
 	        { name = name.slice(ATTRS_PREFIX.length); }
+
 	      remAttr(root, name);
+	    });
+
+	    // remove all the event listeners
+	    this.__.listeners.forEach(function (dom) {
+	      Object.keys(dom[RIOT_EVENTS_KEY]).forEach(function (eventName) {
+	        dom.removeEventListener(eventName, dom[RIOT_EVENTS_KEY][eventName]);
+	      });
 	    });
 
 	    // remove this tag instance from the global virtualDom variable
@@ -2554,20 +2831,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	          });
 	        } else {
 	          arrayishRemove(ptag.tags, tagName, this);
-	          if(parent !== ptag) // remove from _parent too
-	            { arrayishRemove(parent.tags, tagName, this); }
+	          // remove from _parent too
+	          if(parent !== ptag) {
+	            arrayishRemove(parent.tags, tagName, this);
+	          }
 	        }
 	      } else {
-	        while (el.firstChild) { el.removeChild(el.firstChild); }
+	        // remove the tag contents
+	        setInnerHTML(el, '');
 	      }
 
-	      if (p)
-	        { if (!mustKeepRoot) {
-	          p.removeChild(el);
-	        } else {
-	          // the riot-tag and the data-is attributes aren't needed anymore, remove them
-	          remAttr(p, IS_DIRECTIVE);
-	        } }
+	      if (p && !mustKeepRoot) { p.removeChild(el); }
 	    }
 
 	    if (this.__.virts) {
@@ -2674,10 +2948,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (ptag !== parent)
 	    { arrayishAdd(parent.tags, tagName, tag); }
 
-	  // empty the child node once we got its template
-	  // to avoid that its children get compiled multiple times
-	  opts.root.innerHTML = '';
-
 	  return tag
 	}
 
@@ -2702,6 +2972,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function unmountAll(expressions) {
 	  each(expressions, function(expr) {
 	    if (expr instanceof Tag$1) { expr.unmount(true); }
+	    else if (expr.tagName) { expr.tag.unmount(true); }
 	    else if (expr.unmount) { expr.unmount(); }
 	  });
 	}
@@ -2805,9 +3076,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    tag = ctx || (implClass ? Object.create(implClass.prototype) : {}),
 	    // cache the inner HTML to fix #855
 	    innerHTML = root._innerHTML = root._innerHTML || root.innerHTML;
-
-	  // clear the inner html
-	  root.innerHTML = '';
 
 	  var conf = extend({ root: root, opts: opts }, { parent: opts ? opts.parent : null });
 
@@ -2956,6 +3224,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var mixin$$1 = mixin$1;
 	var update$$1 = update$1;
 	var unregister$$1 = unregister$1;
+	var version$$1 = version$1;
 	var observable = observable$1;
 
 	var riot$1 = extend({}, core, {
@@ -2973,6 +3242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.mixin = mixin$$1;
 	exports.update = update$$1;
 	exports.unregister = unregister$$1;
+	exports.version = version$$1;
 	exports.observable = observable;
 	exports['default'] = riot$1;
 
@@ -2981,76 +3251,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	})));
 
 
-/***/ },
-
-/***/ 16:
-/***/ function(module, exports, __webpack_require__) {
-
-	var Status, riot;
-
-	riot = __webpack_require__(15);
-
-	module.exports = Status = (function() {
-	  function Status() {}
-
-	  Status.sumInit = function() {
-	    Status.successSum = 0;
-	    return Status.executeSum = 0;
-	  };
-
-	  Status.init = function() {
-	    Status.thisBasePath = "?";
-	    Status.basePath = "#";
-	    Status.itemStatuses = [];
-	    Status.executeIframe = [];
-	    Status.executablePath = {};
-	    Status.sumInit();
-	    Status.lastExecutePath = "";
-	    Status.paramMode = false;
-	    Status.showParameter = false;
-	    return riot.observable(Status);
-	  };
-
-	  Status.firstTimeInit = function() {
-	    return Status.opts = {};
-	  };
-
-	  Status.taskFinished = function() {
-	    return Status.executeSum > 0 && Status.executeIframe.length === 0;
-	  };
-
-	  Status.taskAllSuccess = function() {
-	    return Status.taskFinished() && Status.executeSum === Status.successSum;
-	  };
-
-	  Status.next = function() {
-	    return Status.trigger("finished");
-	  };
-
-	  return Status;
-
-	})();
-
-	Status.init();
-
-	Status.firstTimeInit();
-
-
-/***/ },
+/***/ }),
 
 /***/ 17:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	
-	    var riot = __webpack_require__(15)
+	    var riot = __webpack_require__(16)
 	    __webpack_require__(18)
+	__webpack_require__(19)
+	__webpack_require__(20)
 
-	riot.tag2('test-list', '<test-status></test-status> <a onclick="{toRouteHash}">base</a> <a if="{Status.paramMode}" onclick="{toggleParameterMode}">toggle params</a> <recursive-item ref="item" data="{opts.testPatterns}" routing=""></recursive-item> <test-iframe ref="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{Status.config}"></test-iframe>', 'test-list,[data-is="test-list"]{display:block;width:100%;background-color:white;font-size:14px} test-list>a,[data-is="test-list"]>a{border:1px solid #ccc} test-list a,[data-is="test-list"] a{color:blue;text-decoration:none;cursor:pointer;display:inline-block} test-list a:hover,[data-is="test-list"] a:hover{opacity:.4}', '', function(opts) {
-	var Status, bodyStyle, route;
+	riot.tag2('test-list', '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" style="width:0;height:0;position:absolute;overflow:hidden;"> <defs> <symbol viewbox="0 0 1024 1024" aria-labelledby="fmsi-ant-question-circle-title" id="si-ant-question-circle"> <title id="fmsi-ant-question-circle-title">icon question-circle</title> <path d="M512 0Q373 0 255 68.5T68.5 255 0 512t68.5 257T255 955.5t257 68.5 257-68.5T955.5 769t68.5-257-68.5-257T769 68.5 512 0zm30 802q0 13-9 22.5t-23 9.5q-13 0-22.5-9.5T478 802t9.5-22.5T510 770q14 0 23 9.5t9 22.5zm66-220q-36 19-51 35t-15 46v11q0 13-9 22.5t-23 9.5q-13 0-22.5-9.5T478 674v-11q0-48 24.5-79.5T578 525q35-18 55.5-52.5T654 398q0-60-42-102t-102-42q-62 0-103 37-30 28-38 68-2 11-11 18.5t-20 7.5q-16 0-25.5-11.5T306 347q12-62 59-104 59-53 145-53 87 0 147.5 61T718 398q0 58-29.5 107.5T608 582z"></path> </symbol> </defs> </svg> <div class="header"> <svg class="logo"> <text x="0" y="16" font-size="18" fill="white">AM: coffee time ☕</text> </svg> <svg class="question" onclick="{showHelp}"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#si-ant-question-circle" fill="white"></use> </svg> </div> <div class="phantom-header"></div> <help ref="help"></help> <test-status></test-status> <a onclick="{toRouteHash}">base</a> <a onclick="{toggleParameterMode}">show all parameters</a> <recursive-item ref="item" data="{opts.testPatterns}" routing="" depth="1"></recursive-item> <test-iframe ref="testFrame" if="{instanceUrl}" url="{instanceUrl}" config="{Status.config}"></test-iframe>', 'test-list,[data-is="test-list"]{display:block;width:100%;background-color:white;font-size:14px;padding-left:12px;box-sizing:border-box} test-list>.header,[data-is="test-list"]>.header{width:100%;height:30px;background:#333;position:fixed;top:0;left:0;display:flex;align-items:center;justify-content:space-between;z-index:10} test-list>.header>svg,[data-is="test-list"]>.header>svg{height:20px;padding:4px} test-list>.header>svg.logo>text,[data-is="test-list"]>.header>svg.logo>text{font-family:"Playfair Display","Georgia",serif} test-list>.header>svg.question,[data-is="test-list"]>.header>svg.question{width:20px;margin-right:6px;cursor:pointer} test-list>.phantom-header,[data-is="test-list"]>.phantom-header{height:30px;content:" ";width:100%} test-list>a,[data-is="test-list"]>a{border:1px solid #ccc} test-list a,[data-is="test-list"] a{color:blue;text-decoration:none;cursor:pointer;display:inline-block} test-list a:hover,[data-is="test-list"] a:hover{opacity:.4}', '', function(opts) {
+	var Status, bodyStyle, depth, fn, i, keyboardjs, route;
 
-	Status = this.Status = __webpack_require__(16);
+	Status = this.Status = __webpack_require__(15);
 
-	route = __webpack_require__(20);
+	route = __webpack_require__(22);
+
+	keyboardjs = __webpack_require__(24);
 
 	bodyStyle = document.body.style;
 
@@ -3101,6 +3320,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	})(this);
 
+	this.showHelp = (function(_this) {
+	  return function() {
+	    return _this.refs.help.open();
+	  };
+	})(this);
+
 	Status.on("item-update", (function(_this) {
 	  return function() {
 	    var i, itemStatus, len, onExecute, ref;
@@ -3134,20 +3359,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  };
 	})(this));
+
+	keyboardjs.bind("?", (function(_this) {
+	  return function() {
+	    return _this.showHelp();
+	  };
+	})(this));
+
+	keyboardjs.bind("esc", (function(_this) {
+	  return function() {
+	    return _this.refs.help.close();
+	  };
+	})(this));
+
+	keyboardjs.bind("0", (function(_this) {
+	  return function() {
+	    return Status.allApen();
+	  };
+	})(this));
+
+	fn = (function(_this) {
+	  return function(depth) {
+	    return keyboardjs.bind("" + depth, function() {
+	      return Status.close(depth);
+	    });
+	  };
+	})(this);
+	for (depth = i = 1; i <= 9; depth = ++i) {
+	  fn(depth);
+	}
 	});
 
 	riot.tag2('test-status', '<span class="test-count">{Status.successSum}/{Status.executeSum}</span> <span if="{Status.taskFinished()}" class="finished">✔︎</span> <span if="{Status.taskAllSuccess()}" class="all-success">💯</span>', 'test-status .finished,[data-is="test-status"] .finished{ color: #17e017; }', '', function(opts) {
-	this.Status = __webpack_require__(16).on("item-update", (function(_this) {
+	this.Status = __webpack_require__(15).on("item-update", (function(_this) {
 	  return function() {
 	    return _this.update();
 	  };
 	})(this));
 	});
 
-	riot.tag2('recursive-item', '<list-line ref="lines" each="{data, key in list}" list="{this}" routing="{this.parent.opts.routing}"></list-line>', 'recursive-item,[data-is="recursive-item"]{ display: block; }', '', function(opts) {
-	var getLines, objectAssign;
+	riot.tag2('recursive-item', '<list-line ref="lines" if="{getStrInfo(key).name !== \'default\'}" depth="{parent.opts.depth}" routing="{parent.opts.routing}" each="{data, key in opts.data}"></list-line>', 'recursive-item,[data-is="recursive-item"]{display:block;border-left:1px solid #ccc}', '', function(opts) {
+	var getLines;
 
-	objectAssign = __webpack_require__(22);
+	this.getStrInfo = __webpack_require__(29).getStrInfo;
 
 	getLines = (function(_this) {
 	  return function() {
@@ -3176,26 +3430,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	  };
 	})(this);
-
-	this.list = typeof opts.data === "object" ? opts.data : {};
 	});
 
-	riot.tag2('list-line', '<section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error}"></span> <a class="tree" href="{routing}" onclick="{router}">{treeName}</a> <label each="{pattern, i in patterns}" class="{focus: pattern.focus}" data-id="{i}" onclick="{changePatternEvent}"> {pattern.name} </label> <a class="single" if="{url}" href="{routerExecutionPath}" onclick="{router}">{linkName}</a> </div> <recursive-item ref="item" if="{!url}" data="{data}" routing="{routing}"></recursive-item> </section> <test-iframe ref="testFrame" if="{url && status.onExecute}" url="{routerExecutionPath}" config="{Status.config}"></test-iframe>', 'list-line,[data-is="list-line"]{display:block} list-line >.line,[data-is="list-line"] >.line{display:inline-block} list-line >.line.last-execute,[data-is="list-line"] >.line.last-execute{border:solid 1px;display:inline-block;padding:0 8px} list-line >.line div>label,[data-is="list-line"] >.line div>label{cursor:pointer;border:1px solid rgba(255,128,0,0.6);padding:0 6px;text-align:center;display:inline-block} list-line >.line div>label.focus,[data-is="list-line"] >.line div>label.focus{background:#ff0} list-line >.line div>label:hover,[data-is="list-line"] >.line div>label:hover{opacity:.6} list-line .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[data-is="list-line"] .tree{color:#333;word-break:break-all} list-line .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[data-is="list-line"] .line{margin-left:10px} list-line .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .error,[data-is="list-line"] .error{color:red} list-line .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
-	var Parser, Status, checkLastExecute, executeIframe, initialPattern, name, paramMode, path, patterns, ref, ref1, route, setObservableEvent, setRouter, toggleMode;
+	riot.tag2('list-line', '<open-close-icon ref="icon" length="16" stroke="#333" if="{!singleTaskUrl}" callback="{toggleItem}"></open-close-icon> <section class="{line: 1,hover: isHover, last-execute: singleTaskExecutionPath === Status.lastExecutePath}"> <div class="" onmouseover="{mouseOn}" onmouseout="{mouseOut}"> <span class="bold {success: success, error: error}"></span> <a class="tree" href="{routing}" onclick="{router}">{treeName}</a> <label each="{pattern, i in patterns}" class="{focus: pattern.focus}" data-id="{i}" onclick="{changePatternEvent}"> {pattern.name} </label> <a class="single" if="{singleTaskUrl}" href="{singleTaskExecutionPath}" onclick="{router}">{singleTaskName}</a> </div> <recursive-item depth="{opts.depth - 0 + 1}" ref="item" if="{typeof data === \'object\'}" data="{data}" routing="{routing}" riot-style="display: {isItemOpen ? \'block\' : \'none\'}"></recursive-item> </section> <test-iframe ref="testFrame" if="{singleTaskUrl && status.onExecute}" url="{singleTaskExecutionPath}" config="{Status.config}"></test-iframe>', 'list-line,[data-is="list-line"]{display:block;position:relative} list-line >open-close-icon,[data-is="list-line"] >open-close-icon{position:absolute;top:0;left:-8px} list-line >.line,[data-is="list-line"] >.line{display:inline-block} list-line >.line.last-execute,[data-is="list-line"] >.line.last-execute{border:solid 1px;display:inline-block;padding:0 8px} list-line >.line div>label,[data-is="list-line"] >.line div>label{cursor:pointer;border:1px solid rgba(255,128,0,0.6);padding:0 6px;text-align:center;display:inline-block} list-line >.line div>label.focus,[data-is="list-line"] >.line div>label.focus{background:#ff0} list-line >.line div>label:hover,[data-is="list-line"] >.line div>label:hover{opacity:.6} list-line .bold,[data-is="list-line"] .bold{font-weight:bold} list-line .tree,[data-is="list-line"] .tree{color:#333;word-break:break-all} list-line .single,[data-is="list-line"] .single{padding-left:6px} list-line .line,[data-is="list-line"] .line{margin-left:14px} list-line .line.hover,[data-is="list-line"] .line.hover{background:rgba(0,0,255,0.05)} list-line .success,[data-is="list-line"] .success{color:blue} list-line .success:after,[data-is="list-line"] .success:after{content:"〇"} list-line .error,[data-is="list-line"] .error{color:red} list-line .error:after,[data-is="list-line"] .error:after{content:"×"} list-line .step,[data-is="list-line"] .step{color:#333;margin-right:10px}', '', function(opts) {
+	var Parser, Status, checkLastExecute, executeIframe, initialPattern, keyStrInfo, route, setObservableEvent, setRouter, valStrInfo;
 
-	Status = this.Status = __webpack_require__(16);
+	Status = this.Status = __webpack_require__(15);
 
-	Parser = __webpack_require__(23);
+	Parser = __webpack_require__(29);
 
-	route = __webpack_require__(20);
+	route = __webpack_require__(22);
 
 	setObservableEvent = (function(_this) {
 	  return function() {
 	    Status.executablePath[_this.routing] = function() {
 	      return _this.multiExecuteTask();
 	    };
-	    return Status.executablePath[_this.routerExecutionPath] = function() {
-	      if (_this.url) {
+	    return Status.executablePath[_this.singleTaskExecutionPath] = function() {
+	      if (_this.singleTaskUrl) {
 	        return _this.executeTask();
 	      }
 	    };
@@ -3205,14 +3457,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	setRouter = (function(_this) {
 	  return function(path) {
 	    _this.routing = _this.initialRouting ? _this.initialRouting + "/" + path : path;
-	    return _this.routerExecutionPath = _this.url + Status.basePath + _this.routing;
+	    return _this.singleTaskExecutionPath = _this.singleTaskUrl + Status.basePath + _this.routing;
 	  };
 	})(this);
 
 	checkLastExecute = (function(_this) {
 	  return function() {
 	    return Status.one('finished', function() {
-	      if (Status.lastExecutePath === _this.routerExecutionPath) {
+	      if (Status.lastExecutePath === _this.singleTaskExecutionPath) {
 	        return checkLastExecute();
 	      } else {
 	        return _this.update();
@@ -3224,30 +3476,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	executeIframe = (function(_this) {
 	  return function() {
 	    var base;
-	    return typeof (base = Status.executeIframe.shift()) === "function" ? base() : void 0;
+	    return typeof (base = Status.iframeListToExecute.shift()) === "function" ? base() : void 0;
 	  };
 	})(this);
 
-	ref = Parser.getStrInfo(this.key), toggleMode = ref.toggleMode, paramMode = ref.paramMode, name = ref.name, path = ref.path, patterns = ref.patterns;
+	keyStrInfo = Parser.getStrInfo(this.key);
 
 	this.initialRouting = opts.routing;
 
-	this.treeName = name;
+	this.treeName = keyStrInfo.name;
 
-	if (toggleMode) {
-	  initialPattern = patterns[0];
+	if (keyStrInfo.toggleMode) {
+	  initialPattern = keyStrInfo.patterns[0];
 	  initialPattern.focus = true;
 	  this.path = initialPattern.path;
-	  this.patterns = patterns;
+	  this.patterns = keyStrInfo.patterns;
 	} else {
-	  this.path = path;
+	  this.path = keyStrInfo.path;
 	}
 
-	ref1 = typeof this.data === "object" ? {} : Parser.getStrInfo(this.data), name = ref1.name, path = ref1.path;
+	valStrInfo = typeof this.data === "object" ? this.data["default"] ? Parser.getStrInfo(this.data["default"]) : {} : Parser.getStrInfo(this.data);
 
-	this.linkName = name;
+	this.singleTaskName = valStrInfo.name;
 
-	this.url = path;
+	this.singleTaskUrl = valStrInfo.path;
+
+	this.isItemOpen = true;
 
 	setRouter(this.path);
 
@@ -3255,19 +3509,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onExecute: false
 	};
 
-	this.getRouting = (function(_this) {
+	this.toggleItem = (function(_this) {
 	  return function() {
-	    return _this.initialRouting;
+	    _this.isItemOpen = !_this.isItemOpen;
+	    return _this.update();
 	  };
 	})(this);
 
 	this.recursivelyUpdate = (function(_this) {
 	  return function(routing) {
-	    var ref2;
+	    var ref;
 	    _this.initialRouting = routing;
 	    setRouter(_this.path);
-	    if ((ref2 = _this.refs.item) != null) {
-	      ref2.recursivelyUpdate(_this.routing);
+	    if ((ref = _this.refs.item) != null) {
+	      ref.recursivelyUpdate(_this.routing);
 	    }
 	    return setObservableEvent();
 	  };
@@ -3305,7 +3560,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return results;
 	      }
 	    } else {
-	      return Status.executeIframe.push(function() {
+	      return Status.iframeListToExecute.push(function() {
 	        return _this.executeTask(function() {
 	          _this.deleteIframe();
 	          return executeIframe();
@@ -3317,7 +3572,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	this.multiExecuteTask = (function(_this) {
 	  return function() {
-	    Status.executeIframe.length = 0;
+	    Status.iframeListToExecute.length = 0;
 	    _this.recursivelyExecuteTask();
 	    return executeIframe();
 	  };
@@ -3326,7 +3581,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	this.executeTask = (function(_this) {
 	  return function(callback) {
 	    _this.status.onExecute = true;
-	    Status.lastExecutePath = _this.routerExecutionPath;
+	    Status.lastExecutePath = _this.singleTaskExecutionPath;
 	    Status.next();
 	    checkLastExecute();
 	    _this.update();
@@ -3375,7 +3630,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	this.changePattern = (function(_this) {
 	  return function(nextId) {
-	    var nextPattern, ref2;
+	    var nextPattern, ref;
 	    _this.patterns.forEach(function(pattern) {
 	      return pattern.focus = false;
 	    });
@@ -3383,8 +3638,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    nextPattern.focus = true;
 	    _this.path = nextPattern.path;
 	    setRouter(_this.path);
-	    if ((ref2 = _this.refs.item) != null) {
-	      ref2.recursivelyUpdate(_this.routing);
+	    if ((ref = _this.refs.item) != null) {
+	      ref.recursivelyUpdate(_this.routing);
 	    }
 	    return setObservableEvent();
 	  };
@@ -3398,10 +3653,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	this.recursivelyCheckItem = (function(_this) {
 	  return function(paramStr) {
-	    var matchedPattern, ref2, ref3, ref4, ref5;
-	    matchedPattern = (ref2 = _this.patterns) != null ? (ref3 = ref2.filter(function(pattern, i) {
+	    var matchedPattern, ref, ref1, ref2, ref3;
+	    matchedPattern = (ref = _this.patterns) != null ? (ref1 = ref.filter(function(pattern, i) {
 	      return paramStr.indexOf(pattern.path) === 0;
-	    })) != null ? ref3[0] : void 0 : void 0;
+	    })) != null ? ref1[0] : void 0 : void 0;
 	    if (matchedPattern) {
 	      paramStr = paramStr.replace(matchedPattern.path, "").replace(/^\//, "");
 	      _this.patterns.forEach(function(pattern, i) {
@@ -3412,12 +3667,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	      _this.update();
 	      if (paramStr) {
-	        return (ref4 = _this.refs.item) != null ? ref4.recursivelyCheck(paramStr) : void 0;
+	        return (ref2 = _this.refs.item) != null ? ref2.recursivelyCheck(paramStr) : void 0;
 	      } else {
 	        return setObservableEvent();
 	      }
 	    } else if (paramStr.indexOf(_this.path) === 0) {
-	      return (ref5 = _this.refs.item) != null ? ref5.recursivelyCheck(paramStr.replace(_this.path, "").replace(/^\//, "")) : void 0;
+	      return (ref3 = _this.refs.item) != null ? ref3.recursivelyCheck(paramStr.replace(_this.path, "").replace(/^\//, "")) : void 0;
 	    }
 	  };
 	})(this);
@@ -3428,10 +3683,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	})(this));
 
-	paramMode && Status.on("toggle-mode", (function(_this) {
+	Status.on("all-open", (function(_this) {
+	  return function() {
+	    var ref;
+	    return (ref = _this.refs.icon) != null ? ref.setStatus(true) : void 0;
+	  };
+	})(this));
+
+	Status.on("close-depth-" + opts.depth, (function(_this) {
+	  return function() {
+	    var ref;
+	    return (ref = _this.refs.icon) != null ? ref.setStatus(false) : void 0;
+	  };
+	})(this));
+
+	keyStrInfo.paramMode && Status.on("toggle-mode", (function(_this) {
 	  return function() {
 	    _this.treeName = _this.key === _this.treeName ? _this.treeName = _this._treeName || _this.treeName : (_this._treeName = _this.treeName, _this.treeName = _this.key);
-	    _this.linkName = _this.data === _this.linkName ? _this.linkName = _this._linkName || _this.linkName : (_this._linkName = _this.linkName, _this.linkName = _this.data);
+	    _this.singleTaskName = _this.data === _this.singleTaskName ? _this.singleTaskName = _this._singleTaskName || _this.singleTaskName : (_this._singleTaskName = _this.singleTaskName, _this.singleTaskName = _this.data);
 	    return _this.update();
 	  };
 	})(this));
@@ -3439,8 +3708,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Status.itemStatuses.push(this.status);
 
 	setObservableEvent();
-
-	Status.paramMode = paramMode || Status.paramMode;
 
 	this.on("update", (function(_this) {
 	  return function() {
@@ -3452,20 +3719,83 @@ return /******/ (function(modules) { // webpackBootstrap
 	    
 	  
 
-/***/ },
+/***/ }),
 
 /***/ 18:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
+
+	
+	    var riot = __webpack_require__(16)
+	    riot.tag2('open-close-icon', '<svg xmlns="http://www.w3.org/2000/svg" onclick="{clickHandler}" riot-width="{opts.length || length}" riot-height="{opts.length || length}" viewbox="0 0 24 24" fill="none" riot-stroke="{opts.stroke || stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect> <g if="{minus}"> <line x1="8" y1="12" x2="16" y2="12"></line> </g> <g if="{!minus}"> <line x1="12" y1="8" x2="12" y2="16"></line> <line x1="8" y1="12" x2="16" y2="12"></line> </g> </svg>', 'open-close-icon>svg,[data-is="open-close-icon"]>svg{background:white;cursor:pointer}', '', function(opts) {
+	this.length = 24;
+
+	this.stroke = "#000";
+
+	this.minus = true;
+
+	this.setStatus = (function(_this) {
+	  return function(minusFlg) {
+	    var currentMinusStatus, nextMinusStatus;
+	    currentMinusStatus = _this.minus;
+	    nextMinusStatus = _this.minus = minusFlg;
+	    currentMinusStatus !== nextMinusStatus && (typeof opts.callback === "function" ? opts.callback() : void 0);
+	    return _this.update();
+	  };
+	})(this);
+
+	this.clickHandler = (function(_this) {
+	  return function() {
+	    _this.minus = !_this.minus;
+	    return typeof opts.callback === "function" ? opts.callback() : void 0;
+	  };
+	})(this);
+	});
+
+	    
+	  
+
+/***/ }),
+
+/***/ 19:
+/***/ (function(module, exports, __webpack_require__) {
+
+	
+	    var riot = __webpack_require__(16)
+	    riot.tag2('help', '<section class="inner {isOpen ? \'show\' : \'hide\'}"> <header> Keyboard Shortcuts </header> <div> <kbd>1</kbd>-<kbd>9</kbd><span class="detail">Fold [1 - 9] depth tree node.</span> </div> <div> <kbd>0</kbd><span class="detail">Unfold all tree node.</span> </div> </section> <section class="background {isOpen ? \'show\' : \'hide\'}" onclick="{close}"></section>', 'help>section.show,[data-is="help"]>section.show{display:block} help>section.hide,[data-is="help"]>section.hide{display:none} help>.inner,[data-is="help"]>.inner{position:fixed;top:40px;left:50%;transform:translate(-50%, 0);width:80%;min-height:40%;background:white;z-index:30;padding:16px;border-radius:10px;transition:1s} help>.inner>header,[data-is="help"]>.inner>header{padding:16px;margin:-16px -16px 16px;border-bottom:1px solid #ccc} help>.inner>div>kbd,[data-is="help"]>.inner>div>kbd{display:inline-block;padding:3px 5px;font:11px "SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace;line-height:10px;color:#444d56;vertical-align:middle;background-color:#fafbfc;border:solid 1px #d1d5da;border-bottom-color:#c6cbd1;border-radius:3px;box-shadow:inset 0 -1px 0 #c6cbd1} help>.inner>div>.detail,[data-is="help"]>.inner>div>.detail{margin-left:10px;font-size:12px;color:#333} help>.background,[data-is="help"]>.background{background:rgba(0,0,0,0.4);width:100%;height:100%;position:fixed;top:0;left:0;z-index:20}', '', function(opts) {
+	this.isOpen = false;
+
+	this.open = (function(_this) {
+	  return function() {
+	    _this.isOpen = true;
+	    return _this.update();
+	  };
+	})(this);
+
+	this.close = (function(_this) {
+	  return function() {
+	    _this.isOpen = false;
+	    return _this.update();
+	  };
+	})(this);
+	});
+
+	    
+	  
+
+/***/ }),
+
+/***/ 20:
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {
-	    var riot = __webpack_require__(15)
-	    riot.tag2('test-iframe', '<span class="{isIos ? \'ios\' : \'no-ios\'}"> <iframe if="{!isElectron}" riot-src="{opts.url}"></iframe> <webview if="{isElectron}" riot-src="{opts.url}" nodeintegration></webview> </span>', 'test-iframe .ios,[data-is="test-iframe"] .ios{ display: block; -webkit-overflow-scrolling: touch; overflow: auto; position: fixed; top: 0; left: 0; width: 100%; height: 100%; } test-iframe iframe,[data-is="test-iframe"] iframe,test-iframe webview,[data-is="test-iframe"] webview{ background-color: white; border: none; width: 100%; height: 100%; } test-iframe .no-ios iframe,[data-is="test-iframe"] .no-ios iframe,test-iframe .no-ios webview,[data-is="test-iframe"] .no-ios webview{ position: fixed; left: 0px; top: 0px; }', '', function(opts) {
+	    var riot = __webpack_require__(16)
+	    riot.tag2('test-iframe', '<span class="{isIos ? \'ios\' : \'no-ios\'}"> <iframe if="{!isElectron}" riot-src="{opts.url}"></iframe> <webview if="{isElectron}" riot-src="{opts.url}" nodeintegration></webview> </span>', 'test-iframe,[data-is="test-iframe"]{ z-index: 100000; position: relative; } test-iframe .ios,[data-is="test-iframe"] .ios{ display: block; -webkit-overflow-scrolling: touch; overflow: auto; position: fixed; top: 0; left: 0; width: 100%; height: 100%; } test-iframe iframe,[data-is="test-iframe"] iframe,test-iframe webview,[data-is="test-iframe"] webview{ background-color: white; border: none; width: 100%; height: 100%; } test-iframe .no-ios iframe,[data-is="test-iframe"] .no-ios iframe,test-iframe .no-ios webview,[data-is="test-iframe"] .no-ios webview{ position: fixed; left: 0px; top: 0px; }', '', function(opts) {
 	var WholeStatus, ref,
 	  slice = [].slice;
 
-	WholeStatus = __webpack_require__(16);
+	WholeStatus = __webpack_require__(15);
 
-	this.isIos = __webpack_require__(19).ios();
+	this.isIos = __webpack_require__(21).ios();
 
 	this.isElectron = typeof process !== "undefined" && process !== null ? (ref = process.versions) != null ? ref.electron : void 0 : void 0;
 
@@ -3531,10 +3861,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
-/***/ },
+/***/ }),
 
-/***/ 19:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 21:
+/***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
 	 * is.js 0.8.0
@@ -4445,16 +4775,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ },
+/***/ }),
 
-/***/ 20:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 22:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-	var observable = _interopDefault(__webpack_require__(21));
+	var observable = _interopDefault(__webpack_require__(23));
 
 	/**
 	 * Simple client-side router
@@ -4779,12 +5109,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	route.start = function (autoExec) {
 	  if (!started) {
 	    if (win) {
-	      if (document.readyState === 'complete') { start(autoExec); }
-	      // the timeout is needed to solve
-	      // a weird safari bug https://github.com/riot/route/issues/33
-	      else { win[ADD_EVENT_LISTENER]('load', function() {
-	        setTimeout(function() { start(autoExec); }, 1);
-	      }); }
+	      if (document.readyState === 'interactive' || document.readyState === 'complete') {
+	        start(autoExec);
+	      }
+	      else {
+	        document.onreadystatechange = function () {
+	          if (document.readyState === 'interactive') {
+	            // the timeout is needed to solve
+	            // a weird safari bug https://github.com/riot/route/issues/33
+	            setTimeout(function() { start(autoExec); }, 1);
+	          }
+	        };
+	      }
 	    }
 	    started = true;
 	  }
@@ -4797,10 +5133,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = route;
 
 
-/***/ },
+/***/ }),
 
-/***/ 21:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 23:
+/***/ (function(module, exports, __webpack_require__) {
 
 	;(function(window, undefined) {var observable = function(el) {
 
@@ -4936,107 +5272,848 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	})(typeof window != 'undefined' ? window : undefined);
 
-/***/ },
+/***/ }),
 
-/***/ 22:
-/***/ function(module, exports) {
+/***/ 24:
+/***/ (function(module, exports, __webpack_require__) {
 
-	/*
-	object-assign
-	(c) Sindre Sorhus
-	@license MIT
-	*/
+	
+	var Keyboard = __webpack_require__(25);
+	var Locale   = __webpack_require__(26);
+	var KeyCombo = __webpack_require__(27);
 
-	'use strict';
-	/* eslint-disable no-unused-vars */
-	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+	var keyboard = new Keyboard();
 
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
+	keyboard.setLocale('us', __webpack_require__(28));
 
-		return Object(val);
+	exports          = module.exports = keyboard;
+	exports.Keyboard = Keyboard;
+	exports.Locale   = Locale;
+	exports.KeyCombo = KeyCombo;
+
+
+/***/ }),
+
+/***/ 25:
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {
+	var Locale = __webpack_require__(26);
+	var KeyCombo = __webpack_require__(27);
+
+
+	function Keyboard(targetWindow, targetElement, platform, userAgent) {
+	  this._locale               = null;
+	  this._currentContext       = null;
+	  this._contexts             = {};
+	  this._listeners            = [];
+	  this._appliedListeners     = [];
+	  this._locales              = {};
+	  this._targetElement        = null;
+	  this._targetWindow         = null;
+	  this._targetPlatform       = '';
+	  this._targetUserAgent      = '';
+	  this._isModernBrowser      = false;
+	  this._targetKeyDownBinding = null;
+	  this._targetKeyUpBinding   = null;
+	  this._targetResetBinding   = null;
+	  this._paused               = false;
+
+	  this.setContext('global');
+	  this.watch(targetWindow, targetElement, platform, userAgent);
 	}
 
-	function shouldUseNative() {
-		try {
-			if (!Object.assign) {
-				return false;
-			}
+	Keyboard.prototype.setLocale = function(localeName, localeBuilder) {
+	  var locale = null;
+	  if (typeof localeName === 'string') {
 
-			// Detect buggy property enumeration order in older V8 versions.
+	    if (localeBuilder) {
+	      locale = new Locale(localeName);
+	      localeBuilder(locale, this._targetPlatform, this._targetUserAgent);
+	    } else {
+	      locale = this._locales[localeName] || null;
+	    }
+	  } else {
+	    locale     = localeName;
+	    localeName = locale._localeName;
+	  }
 
-			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
-			test1[5] = 'de';
-			if (Object.getOwnPropertyNames(test1)[0] === '5') {
-				return false;
-			}
+	  this._locale              = locale;
+	  this._locales[localeName] = locale;
+	  if (locale) {
+	    this._locale.pressedKeys = locale.pressedKeys;
+	  }
+	};
 
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test2 = {};
-			for (var i = 0; i < 10; i++) {
-				test2['_' + String.fromCharCode(i)] = i;
-			}
-			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-				return test2[n];
-			});
-			if (order2.join('') !== '0123456789') {
-				return false;
-			}
+	Keyboard.prototype.getLocale = function(localName) {
+	  localName || (localName = this._locale.localeName);
+	  return this._locales[localName] || null;
+	};
 
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test3 = {};
-			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-				test3[letter] = letter;
-			});
-			if (Object.keys(Object.assign({}, test3)).join('') !==
-					'abcdefghijklmnopqrst') {
-				return false;
-			}
+	Keyboard.prototype.bind = function(keyComboStr, pressHandler, releaseHandler, preventRepeatByDefault) {
+	  if (keyComboStr === null || typeof keyComboStr === 'function') {
+	    preventRepeatByDefault = releaseHandler;
+	    releaseHandler         = pressHandler;
+	    pressHandler           = keyComboStr;
+	    keyComboStr            = null;
+	  }
 
-			return true;
-		} catch (err) {
-			// We don't expect any of the above to throw, but better to be safe.
-			return false;
-		}
+	  if (
+	    keyComboStr &&
+	    typeof keyComboStr === 'object' &&
+	    typeof keyComboStr.length === 'number'
+	  ) {
+	    for (var i = 0; i < keyComboStr.length; i += 1) {
+	      this.bind(keyComboStr[i], pressHandler, releaseHandler);
+	    }
+	    return;
+	  }
+
+	  this._listeners.push({
+	    keyCombo               : keyComboStr ? new KeyCombo(keyComboStr) : null,
+	    pressHandler           : pressHandler           || null,
+	    releaseHandler         : releaseHandler         || null,
+	    preventRepeat          : preventRepeatByDefault || false,
+	    preventRepeatByDefault : preventRepeatByDefault || false
+	  });
+	};
+	Keyboard.prototype.addListener = Keyboard.prototype.bind;
+	Keyboard.prototype.on          = Keyboard.prototype.bind;
+
+	Keyboard.prototype.unbind = function(keyComboStr, pressHandler, releaseHandler) {
+	  if (keyComboStr === null || typeof keyComboStr === 'function') {
+	    releaseHandler = pressHandler;
+	    pressHandler   = keyComboStr;
+	    keyComboStr = null;
+	  }
+
+	  if (
+	    keyComboStr &&
+	    typeof keyComboStr === 'object' &&
+	    typeof keyComboStr.length === 'number'
+	  ) {
+	    for (var i = 0; i < keyComboStr.length; i += 1) {
+	      this.unbind(keyComboStr[i], pressHandler, releaseHandler);
+	    }
+	    return;
+	  }
+
+	  for (var i = 0; i < this._listeners.length; i += 1) {
+	    var listener = this._listeners[i];
+
+	    var comboMatches          = !keyComboStr && !listener.keyCombo ||
+	                                listener.keyCombo && listener.keyCombo.isEqual(keyComboStr);
+	    var pressHandlerMatches   = !pressHandler && !releaseHandler ||
+	                                !pressHandler && !listener.pressHandler ||
+	                                pressHandler === listener.pressHandler;
+	    var releaseHandlerMatches = !pressHandler && !releaseHandler ||
+	                                !releaseHandler && !listener.releaseHandler ||
+	                                releaseHandler === listener.releaseHandler;
+
+	    if (comboMatches && pressHandlerMatches && releaseHandlerMatches) {
+	      this._listeners.splice(i, 1);
+	      i -= 1;
+	    }
+	  }
+	};
+	Keyboard.prototype.removeListener = Keyboard.prototype.unbind;
+	Keyboard.prototype.off            = Keyboard.prototype.unbind;
+
+	Keyboard.prototype.setContext = function(contextName) {
+	  if(this._locale) { this.releaseAllKeys(); }
+
+	  if (!this._contexts[contextName]) {
+	    this._contexts[contextName] = [];
+	  }
+	  this._listeners      = this._contexts[contextName];
+	  this._currentContext = contextName;
+	};
+
+	Keyboard.prototype.getContext = function() {
+	  return this._currentContext;
+	};
+
+	Keyboard.prototype.withContext = function(contextName, callback) {
+	  var previousContextName = this.getContext();
+	  this.setContext(contextName);
+
+	  callback();
+
+	  this.setContext(previousContextName);
+	};
+
+	Keyboard.prototype.watch = function(targetWindow, targetElement, targetPlatform, targetUserAgent) {
+	  var _this = this;
+
+	  this.stop();
+
+	  if (!targetWindow) {
+	    if (!global.addEventListener && !global.attachEvent) {
+	      throw new Error('Cannot find global functions addEventListener or attachEvent.');
+	    }
+	    targetWindow = global;
+	  }
+
+	  if (typeof targetWindow.nodeType === 'number') {
+	    targetUserAgent = targetPlatform;
+	    targetPlatform  = targetElement;
+	    targetElement   = targetWindow;
+	    targetWindow    = global;
+	  }
+
+	  if (!targetWindow.addEventListener && !targetWindow.attachEvent) {
+	    throw new Error('Cannot find addEventListener or attachEvent methods on targetWindow.');
+	  }
+
+	  this._isModernBrowser = !!targetWindow.addEventListener;
+
+	  var userAgent = targetWindow.navigator && targetWindow.navigator.userAgent || '';
+	  var platform  = targetWindow.navigator && targetWindow.navigator.platform  || '';
+
+	  targetElement   && targetElement   !== null || (targetElement   = targetWindow.document);
+	  targetPlatform  && targetPlatform  !== null || (targetPlatform  = platform);
+	  targetUserAgent && targetUserAgent !== null || (targetUserAgent = userAgent);
+
+	  this._targetKeyDownBinding = function(event) {
+	    _this.pressKey(event.keyCode, event);
+	  };
+	  this._targetKeyUpBinding = function(event) {
+	    _this.releaseKey(event.keyCode, event);
+	  };
+	  this._targetResetBinding = function(event) {
+	    _this.releaseAllKeys(event)
+	  };
+
+	  this._bindEvent(targetElement, 'keydown', this._targetKeyDownBinding);
+	  this._bindEvent(targetElement, 'keyup',   this._targetKeyUpBinding);
+	  this._bindEvent(targetWindow,  'focus',   this._targetResetBinding);
+	  this._bindEvent(targetWindow,  'blur',    this._targetResetBinding);
+
+	  this._targetElement   = targetElement;
+	  this._targetWindow    = targetWindow;
+	  this._targetPlatform  = targetPlatform;
+	  this._targetUserAgent = targetUserAgent;
+	};
+
+	Keyboard.prototype.stop = function() {
+	  var _this = this;
+
+	  if (!this._targetElement || !this._targetWindow) { return; }
+
+	  this._unbindEvent(this._targetElement, 'keydown', this._targetKeyDownBinding);
+	  this._unbindEvent(this._targetElement, 'keyup',   this._targetKeyUpBinding);
+	  this._unbindEvent(this._targetWindow,  'focus',   this._targetResetBinding);
+	  this._unbindEvent(this._targetWindow,  'blur',    this._targetResetBinding);
+
+	  this._targetWindow  = null;
+	  this._targetElement = null;
+	};
+
+	Keyboard.prototype.pressKey = function(keyCode, event) {
+	  if (this._paused) { return; }
+	  if (!this._locale) { throw new Error('Locale not set'); }
+
+	  this._locale.pressKey(keyCode);
+	  this._applyBindings(event);
+	};
+
+	Keyboard.prototype.releaseKey = function(keyCode, event) {
+	  if (this._paused) { return; }
+	  if (!this._locale) { throw new Error('Locale not set'); }
+
+	  this._locale.releaseKey(keyCode);
+	  this._clearBindings(event);
+	};
+
+	Keyboard.prototype.releaseAllKeys = function(event) {
+	  if (this._paused) { return; }
+	  if (!this._locale) { throw new Error('Locale not set'); }
+
+	  this._locale.pressedKeys.length = 0;
+	  this._clearBindings(event);
+	};
+
+	Keyboard.prototype.pause = function() {
+	  if (this._paused) { return; }
+	  if (this._locale) { this.releaseAllKeys(); }
+	  this._paused = true;
+	};
+
+	Keyboard.prototype.resume = function() {
+	  this._paused = false;
+	};
+
+	Keyboard.prototype.reset = function() {
+	  this.releaseAllKeys();
+	  this._listeners.length = 0;
+	};
+
+	Keyboard.prototype._bindEvent = function(targetElement, eventName, handler) {
+	  return this._isModernBrowser ?
+	    targetElement.addEventListener(eventName, handler, false) :
+	    targetElement.attachEvent('on' + eventName, handler);
+	};
+
+	Keyboard.prototype._unbindEvent = function(targetElement, eventName, handler) {
+	  return this._isModernBrowser ?
+	    targetElement.removeEventListener(eventName, handler, false) :
+	    targetElement.detachEvent('on' + eventName, handler);
+	};
+
+	Keyboard.prototype._getGroupedListeners = function() {
+	  var listenerGroups   = [];
+	  var listenerGroupMap = [];
+
+	  var listeners = this._listeners;
+	  if (this._currentContext !== 'global') {
+	    listeners = [].concat(listeners, this._contexts.global);
+	  }
+
+	  listeners.sort(function(a, b) {
+	    return (b.keyCombo ? b.keyCombo.keyNames.length : 0) - (a.keyCombo ? a.keyCombo.keyNames.length : 0);
+	  }).forEach(function(l) {
+	    var mapIndex = -1;
+	    for (var i = 0; i < listenerGroupMap.length; i += 1) {
+	      if (listenerGroupMap[i] === null && l.keyCombo === null ||
+	          listenerGroupMap[i] !== null && listenerGroupMap[i].isEqual(l.keyCombo)) {
+	        mapIndex = i;
+	      }
+	    }
+	    if (mapIndex === -1) {
+	      mapIndex = listenerGroupMap.length;
+	      listenerGroupMap.push(l.keyCombo);
+	    }
+	    if (!listenerGroups[mapIndex]) {
+	      listenerGroups[mapIndex] = [];
+	    }
+	    listenerGroups[mapIndex].push(l);
+	  });
+	  return listenerGroups;
+	};
+
+	Keyboard.prototype._applyBindings = function(event) {
+	  var preventRepeat = false;
+
+	  event || (event = {});
+	  event.preventRepeat = function() { preventRepeat = true; };
+	  event.pressedKeys   = this._locale.pressedKeys.slice(0);
+
+	  var pressedKeys    = this._locale.pressedKeys.slice(0);
+	  var listenerGroups = this._getGroupedListeners();
+
+
+	  for (var i = 0; i < listenerGroups.length; i += 1) {
+	    var listeners = listenerGroups[i];
+	    var keyCombo  = listeners[0].keyCombo;
+
+	    if (keyCombo === null || keyCombo.check(pressedKeys)) {
+	      for (var j = 0; j < listeners.length; j += 1) {
+	        var listener = listeners[j];
+
+	        if (keyCombo === null) {
+	          listener = {
+	            keyCombo               : new KeyCombo(pressedKeys.join('+')),
+	            pressHandler           : listener.pressHandler,
+	            releaseHandler         : listener.releaseHandler,
+	            preventRepeat          : listener.preventRepeat,
+	            preventRepeatByDefault : listener.preventRepeatByDefault
+	          };
+	        }
+
+	        if (listener.pressHandler && !listener.preventRepeat) {
+	          listener.pressHandler.call(this, event);
+	          if (preventRepeat) {
+	            listener.preventRepeat = preventRepeat;
+	            preventRepeat          = false;
+	          }
+	        }
+
+	        if (listener.releaseHandler && this._appliedListeners.indexOf(listener) === -1) {
+	          this._appliedListeners.push(listener);
+	        }
+	      }
+
+	      if (keyCombo) {
+	        for (var j = 0; j < keyCombo.keyNames.length; j += 1) {
+	          var index = pressedKeys.indexOf(keyCombo.keyNames[j]);
+	          if (index !== -1) {
+	            pressedKeys.splice(index, 1);
+	            j -= 1;
+	          }
+	        }
+	      }
+	    }
+	  }
+	};
+
+	Keyboard.prototype._clearBindings = function(event) {
+	  event || (event = {});
+
+	  for (var i = 0; i < this._appliedListeners.length; i += 1) {
+	    var listener = this._appliedListeners[i];
+	    var keyCombo = listener.keyCombo;
+	    if (keyCombo === null || !keyCombo.check(this._locale.pressedKeys)) {
+	      listener.preventRepeat = listener.preventRepeatByDefault;
+	      listener.releaseHandler.call(this, event);
+	      this._appliedListeners.splice(i, 1);
+	      i -= 1;
+	    }
+	  }
+	};
+
+	module.exports = Keyboard;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ }),
+
+/***/ 26:
+/***/ (function(module, exports, __webpack_require__) {
+
+	
+	var KeyCombo = __webpack_require__(27);
+
+
+	function Locale(name) {
+	  this.localeName     = name;
+	  this.pressedKeys    = [];
+	  this._appliedMacros = [];
+	  this._keyMap        = {};
+	  this._killKeyCodes  = [];
+	  this._macros        = [];
 	}
 
-	module.exports = shouldUseNative() ? Object.assign : function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
+	Locale.prototype.bindKeyCode = function(keyCode, keyNames) {
+	  if (typeof keyNames === 'string') {
+	    keyNames = [keyNames];
+	  }
 
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
+	  this._keyMap[keyCode] = keyNames;
+	};
 
-			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
+	Locale.prototype.bindMacro = function(keyComboStr, keyNames) {
+	  if (typeof keyNames === 'string') {
+	    keyNames = [ keyNames ];
+	  }
 
-			if (getOwnPropertySymbols) {
-				symbols = getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
+	  var handler = null;
+	  if (typeof keyNames === 'function') {
+	    handler = keyNames;
+	    keyNames = null;
+	  }
 
-		return to;
+	  var macro = {
+	    keyCombo : new KeyCombo(keyComboStr),
+	    keyNames : keyNames,
+	    handler  : handler
+	  };
+
+	  this._macros.push(macro);
+	};
+
+	Locale.prototype.getKeyCodes = function(keyName) {
+	  var keyCodes = [];
+	  for (var keyCode in this._keyMap) {
+	    var index = this._keyMap[keyCode].indexOf(keyName);
+	    if (index > -1) { keyCodes.push(keyCode|0); }
+	  }
+	  return keyCodes;
+	};
+
+	Locale.prototype.getKeyNames = function(keyCode) {
+	  return this._keyMap[keyCode] || [];
+	};
+
+	Locale.prototype.setKillKey = function(keyCode) {
+	  if (typeof keyCode === 'string') {
+	    var keyCodes = this.getKeyCodes(keyCode);
+	    for (var i = 0; i < keyCodes.length; i += 1) {
+	      this.setKillKey(keyCodes[i]);
+	    }
+	    return;
+	  }
+
+	  this._killKeyCodes.push(keyCode);
+	};
+
+	Locale.prototype.pressKey = function(keyCode) {
+	  if (typeof keyCode === 'string') {
+	    var keyCodes = this.getKeyCodes(keyCode);
+	    for (var i = 0; i < keyCodes.length; i += 1) {
+	      this.pressKey(keyCodes[i]);
+	    }
+	    return;
+	  }
+
+	  var keyNames = this.getKeyNames(keyCode);
+	  for (var i = 0; i < keyNames.length; i += 1) {
+	    if (this.pressedKeys.indexOf(keyNames[i]) === -1) {
+	      this.pressedKeys.push(keyNames[i]);
+	    }
+	  }
+
+	  this._applyMacros();
+	};
+
+	Locale.prototype.releaseKey = function(keyCode) {
+	  if (typeof keyCode === 'string') {
+	    var keyCodes = this.getKeyCodes(keyCode);
+	    for (var i = 0; i < keyCodes.length; i += 1) {
+	      this.releaseKey(keyCodes[i]);
+	    }
+	  }
+
+	  else {
+	    var keyNames         = this.getKeyNames(keyCode);
+	    var killKeyCodeIndex = this._killKeyCodes.indexOf(keyCode);
+	    
+	    if (killKeyCodeIndex > -1) {
+	      this.pressedKeys.length = 0;
+	    } else {
+	      for (var i = 0; i < keyNames.length; i += 1) {
+	        var index = this.pressedKeys.indexOf(keyNames[i]);
+	        if (index > -1) {
+	          this.pressedKeys.splice(index, 1);
+	        }
+	      }
+	    }
+
+	    this._clearMacros();
+	  }
+	};
+
+	Locale.prototype._applyMacros = function() {
+	  var macros = this._macros.slice(0);
+	  for (var i = 0; i < macros.length; i += 1) {
+	    var macro = macros[i];
+	    if (macro.keyCombo.check(this.pressedKeys)) {
+	      if (macro.handler) {
+	        macro.keyNames = macro.handler(this.pressedKeys);
+	      }
+	      for (var j = 0; j < macro.keyNames.length; j += 1) {
+	        if (this.pressedKeys.indexOf(macro.keyNames[j]) === -1) {
+	          this.pressedKeys.push(macro.keyNames[j]);
+	        }
+	      }
+	      this._appliedMacros.push(macro);
+	    }
+	  }
+	};
+
+	Locale.prototype._clearMacros = function() {
+	  for (var i = 0; i < this._appliedMacros.length; i += 1) {
+	    var macro = this._appliedMacros[i];
+	    if (!macro.keyCombo.check(this.pressedKeys)) {
+	      for (var j = 0; j < macro.keyNames.length; j += 1) {
+	        var index = this.pressedKeys.indexOf(macro.keyNames[j]);
+	        if (index > -1) {
+	          this.pressedKeys.splice(index, 1);
+	        }
+	      }
+	      if (macro.handler) {
+	        macro.keyNames = null;
+	      }
+	      this._appliedMacros.splice(i, 1);
+	      i -= 1;
+	    }
+	  }
 	};
 
 
-/***/ },
+	module.exports = Locale;
 
-/***/ 23:
-/***/ function(module, exports) {
+
+/***/ }),
+
+/***/ 27:
+/***/ (function(module, exports) {
+
+	
+	function KeyCombo(keyComboStr) {
+	  this.sourceStr = keyComboStr;
+	  this.subCombos = KeyCombo.parseComboStr(keyComboStr);
+	  this.keyNames  = this.subCombos.reduce(function(memo, nextSubCombo) {
+	    return memo.concat(nextSubCombo);
+	  });
+	}
+
+	// TODO: Add support for key combo sequences
+	KeyCombo.sequenceDeliminator = '>>';
+	KeyCombo.comboDeliminator    = '>';
+	KeyCombo.keyDeliminator      = '+';
+
+	KeyCombo.parseComboStr = function(keyComboStr) {
+	  var subComboStrs = KeyCombo._splitStr(keyComboStr, KeyCombo.comboDeliminator);
+	  var combo        = [];
+
+	  for (var i = 0 ; i < subComboStrs.length; i += 1) {
+	    combo.push(KeyCombo._splitStr(subComboStrs[i], KeyCombo.keyDeliminator));
+	  }
+	  return combo;
+	};
+
+	KeyCombo.prototype.check = function(pressedKeyNames) {
+	  var startingKeyNameIndex = 0;
+	  for (var i = 0; i < this.subCombos.length; i += 1) {
+	    startingKeyNameIndex = this._checkSubCombo(
+	      this.subCombos[i],
+	      startingKeyNameIndex,
+	      pressedKeyNames
+	    );
+	    if (startingKeyNameIndex === -1) { return false; }
+	  }
+	  return true;
+	};
+
+	KeyCombo.prototype.isEqual = function(otherKeyCombo) {
+	  if (
+	    !otherKeyCombo ||
+	    typeof otherKeyCombo !== 'string' &&
+	    typeof otherKeyCombo !== 'object'
+	  ) { return false; }
+
+	  if (typeof otherKeyCombo === 'string') {
+	    otherKeyCombo = new KeyCombo(otherKeyCombo);
+	  }
+
+	  if (this.subCombos.length !== otherKeyCombo.subCombos.length) {
+	    return false;
+	  }
+	  for (var i = 0; i < this.subCombos.length; i += 1) {
+	    if (this.subCombos[i].length !== otherKeyCombo.subCombos[i].length) {
+	      return false;
+	    }
+	  }
+
+	  for (var i = 0; i < this.subCombos.length; i += 1) {
+	    var subCombo      = this.subCombos[i];
+	    var otherSubCombo = otherKeyCombo.subCombos[i].slice(0);
+
+	    for (var j = 0; j < subCombo.length; j += 1) {
+	      var keyName = subCombo[j];
+	      var index   = otherSubCombo.indexOf(keyName);
+
+	      if (index > -1) {
+	        otherSubCombo.splice(index, 1);
+	      }
+	    }
+	    if (otherSubCombo.length !== 0) {
+	      return false;
+	    }
+	  }
+
+	  return true;
+	};
+
+	KeyCombo._splitStr = function(str, deliminator) {
+	  var s  = str;
+	  var d  = deliminator;
+	  var c  = '';
+	  var ca = [];
+
+	  for (var ci = 0; ci < s.length; ci += 1) {
+	    if (ci > 0 && s[ci] === d && s[ci - 1] !== '\\') {
+	      ca.push(c.trim());
+	      c = '';
+	      ci += 1;
+	    }
+	    c += s[ci];
+	  }
+	  if (c) { ca.push(c.trim()); }
+
+	  return ca;
+	};
+
+	KeyCombo.prototype._checkSubCombo = function(subCombo, startingKeyNameIndex, pressedKeyNames) {
+	  subCombo = subCombo.slice(0);
+	  pressedKeyNames = pressedKeyNames.slice(startingKeyNameIndex);
+
+	  var endIndex = startingKeyNameIndex;
+	  for (var i = 0; i < subCombo.length; i += 1) {
+
+	    var keyName = subCombo[i];
+	    if (keyName[0] === '\\') {
+	      var escapedKeyName = keyName.slice(1);
+	      if (
+	        escapedKeyName === KeyCombo.comboDeliminator ||
+	        escapedKeyName === KeyCombo.keyDeliminator
+	      ) {
+	        keyName = escapedKeyName;
+	      }
+	    }
+
+	    var index = pressedKeyNames.indexOf(keyName);
+	    if (index > -1) {
+	      subCombo.splice(i, 1);
+	      i -= 1;
+	      if (index > endIndex) {
+	        endIndex = index;
+	      }
+	      if (subCombo.length === 0) {
+	        return endIndex;
+	      }
+	    }
+	  }
+	  return -1;
+	};
+
+
+	module.exports = KeyCombo;
+
+
+/***/ }),
+
+/***/ 28:
+/***/ (function(module, exports) {
+
+	
+	module.exports = function(locale, platform, userAgent) {
+
+	  // general
+	  locale.bindKeyCode(3,   ['cancel']);
+	  locale.bindKeyCode(8,   ['backspace']);
+	  locale.bindKeyCode(9,   ['tab']);
+	  locale.bindKeyCode(12,  ['clear']);
+	  locale.bindKeyCode(13,  ['enter']);
+	  locale.bindKeyCode(16,  ['shift']);
+	  locale.bindKeyCode(17,  ['ctrl']);
+	  locale.bindKeyCode(18,  ['alt', 'menu']);
+	  locale.bindKeyCode(19,  ['pause', 'break']);
+	  locale.bindKeyCode(20,  ['capslock']);
+	  locale.bindKeyCode(27,  ['escape', 'esc']);
+	  locale.bindKeyCode(32,  ['space', 'spacebar']);
+	  locale.bindKeyCode(33,  ['pageup']);
+	  locale.bindKeyCode(34,  ['pagedown']);
+	  locale.bindKeyCode(35,  ['end']);
+	  locale.bindKeyCode(36,  ['home']);
+	  locale.bindKeyCode(37,  ['left']);
+	  locale.bindKeyCode(38,  ['up']);
+	  locale.bindKeyCode(39,  ['right']);
+	  locale.bindKeyCode(40,  ['down']);
+	  locale.bindKeyCode(41,  ['select']);
+	  locale.bindKeyCode(42,  ['printscreen']);
+	  locale.bindKeyCode(43,  ['execute']);
+	  locale.bindKeyCode(44,  ['snapshot']);
+	  locale.bindKeyCode(45,  ['insert', 'ins']);
+	  locale.bindKeyCode(46,  ['delete', 'del']);
+	  locale.bindKeyCode(47,  ['help']);
+	  locale.bindKeyCode(145, ['scrolllock', 'scroll']);
+	  locale.bindKeyCode(187, ['equal', 'equalsign', '=']);
+	  locale.bindKeyCode(188, ['comma', ',']);
+	  locale.bindKeyCode(190, ['period', '.']);
+	  locale.bindKeyCode(191, ['slash', 'forwardslash', '/']);
+	  locale.bindKeyCode(192, ['graveaccent', '`']);
+	  locale.bindKeyCode(219, ['openbracket', '[']);
+	  locale.bindKeyCode(220, ['backslash', '\\']);
+	  locale.bindKeyCode(221, ['closebracket', ']']);
+	  locale.bindKeyCode(222, ['apostrophe', '\'']);
+
+	  // 0-9
+	  locale.bindKeyCode(48, ['zero', '0']);
+	  locale.bindKeyCode(49, ['one', '1']);
+	  locale.bindKeyCode(50, ['two', '2']);
+	  locale.bindKeyCode(51, ['three', '3']);
+	  locale.bindKeyCode(52, ['four', '4']);
+	  locale.bindKeyCode(53, ['five', '5']);
+	  locale.bindKeyCode(54, ['six', '6']);
+	  locale.bindKeyCode(55, ['seven', '7']);
+	  locale.bindKeyCode(56, ['eight', '8']);
+	  locale.bindKeyCode(57, ['nine', '9']);
+
+	  // numpad
+	  locale.bindKeyCode(96, ['numzero', 'num0']);
+	  locale.bindKeyCode(97, ['numone', 'num1']);
+	  locale.bindKeyCode(98, ['numtwo', 'num2']);
+	  locale.bindKeyCode(99, ['numthree', 'num3']);
+	  locale.bindKeyCode(100, ['numfour', 'num4']);
+	  locale.bindKeyCode(101, ['numfive', 'num5']);
+	  locale.bindKeyCode(102, ['numsix', 'num6']);
+	  locale.bindKeyCode(103, ['numseven', 'num7']);
+	  locale.bindKeyCode(104, ['numeight', 'num8']);
+	  locale.bindKeyCode(105, ['numnine', 'num9']);
+	  locale.bindKeyCode(106, ['nummultiply', 'num*']);
+	  locale.bindKeyCode(107, ['numadd', 'num+']);
+	  locale.bindKeyCode(108, ['numenter']);
+	  locale.bindKeyCode(109, ['numsubtract', 'num-']);
+	  locale.bindKeyCode(110, ['numdecimal', 'num.']);
+	  locale.bindKeyCode(111, ['numdivide', 'num/']);
+	  locale.bindKeyCode(144, ['numlock', 'num']);
+
+	  // function keys
+	  locale.bindKeyCode(112, ['f1']);
+	  locale.bindKeyCode(113, ['f2']);
+	  locale.bindKeyCode(114, ['f3']);
+	  locale.bindKeyCode(115, ['f4']);
+	  locale.bindKeyCode(116, ['f5']);
+	  locale.bindKeyCode(117, ['f6']);
+	  locale.bindKeyCode(118, ['f7']);
+	  locale.bindKeyCode(119, ['f8']);
+	  locale.bindKeyCode(120, ['f9']);
+	  locale.bindKeyCode(121, ['f10']);
+	  locale.bindKeyCode(122, ['f11']);
+	  locale.bindKeyCode(123, ['f12']);
+
+	  // secondary key symbols
+	  locale.bindMacro('shift + `', ['tilde', '~']);
+	  locale.bindMacro('shift + 1', ['exclamation', 'exclamationpoint', '!']);
+	  locale.bindMacro('shift + 2', ['at', '@']);
+	  locale.bindMacro('shift + 3', ['number', '#']);
+	  locale.bindMacro('shift + 4', ['dollar', 'dollars', 'dollarsign', '$']);
+	  locale.bindMacro('shift + 5', ['percent', '%']);
+	  locale.bindMacro('shift + 6', ['caret', '^']);
+	  locale.bindMacro('shift + 7', ['ampersand', 'and', '&']);
+	  locale.bindMacro('shift + 8', ['asterisk', '*']);
+	  locale.bindMacro('shift + 9', ['openparen', '(']);
+	  locale.bindMacro('shift + 0', ['closeparen', ')']);
+	  locale.bindMacro('shift + -', ['underscore', '_']);
+	  locale.bindMacro('shift + =', ['plus', '+']);
+	  locale.bindMacro('shift + [', ['opencurlybrace', 'opencurlybracket', '{']);
+	  locale.bindMacro('shift + ]', ['closecurlybrace', 'closecurlybracket', '}']);
+	  locale.bindMacro('shift + \\', ['verticalbar', '|']);
+	  locale.bindMacro('shift + ;', ['colon', ':']);
+	  locale.bindMacro('shift + \'', ['quotationmark', '\'']);
+	  locale.bindMacro('shift + !,', ['openanglebracket', '<']);
+	  locale.bindMacro('shift + .', ['closeanglebracket', '>']);
+	  locale.bindMacro('shift + /', ['questionmark', '?']);
+
+	  //a-z and A-Z
+	  for (var keyCode = 65; keyCode <= 90; keyCode += 1) {
+	    var keyName = String.fromCharCode(keyCode + 32);
+	    var capitalKeyName = String.fromCharCode(keyCode);
+	  	locale.bindKeyCode(keyCode, keyName);
+	  	locale.bindMacro('shift + ' + keyName, capitalKeyName);
+	  	locale.bindMacro('capslock + ' + keyName, capitalKeyName);
+	  }
+
+	  // browser caveats
+	  var semicolonKeyCode = userAgent.match('Firefox') ? 59  : 186;
+	  var dashKeyCode      = userAgent.match('Firefox') ? 173 : 189;
+	  var leftCommandKeyCode;
+	  var rightCommandKeyCode;
+	  if (platform.match('Mac') && (userAgent.match('Safari') || userAgent.match('Chrome'))) {
+	    leftCommandKeyCode  = 91;
+	    rightCommandKeyCode = 93;
+	  } else if(platform.match('Mac') && userAgent.match('Opera')) {
+	    leftCommandKeyCode  = 17;
+	    rightCommandKeyCode = 17;
+	  } else if(platform.match('Mac') && userAgent.match('Firefox')) {
+	    leftCommandKeyCode  = 224;
+	    rightCommandKeyCode = 224;
+	  }
+	  locale.bindKeyCode(semicolonKeyCode,    ['semicolon', ';']);
+	  locale.bindKeyCode(dashKeyCode,         ['dash', '-']);
+	  locale.bindKeyCode(leftCommandKeyCode,  ['command', 'windows', 'win', 'super', 'leftcommand', 'leftwindows', 'leftwin', 'leftsuper']);
+	  locale.bindKeyCode(rightCommandKeyCode, ['command', 'windows', 'win', 'super', 'rightcommand', 'rightwindows', 'rightwin', 'rightsuper']);
+
+	  // kill keys
+	  locale.setKillKey('command');
+	};
+
+
+/***/ }),
+
+/***/ 29:
+/***/ (function(module, exports) {
 
 	var Parser;
 
@@ -5054,6 +6131,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      path: path
 	    };
 	  };
+
+
+	  /**
+	   * getStrInfo 第一引数で指定されたkey stringの情報を得る
+	   * @param  {string} str testPatternのkey string
+	   * @return info.toggleMode 2個以上の選択可能な切り替えが出来るkey stringである。 - [ja | en | ch]
+	   * @return info.paramMode 表示用のテキストの他に、パラメーターを渡すkey stringである。 - dispString(param=kakarotto)
+	   * @return name 表示用のテキスト
+	   * @return path parameterに使われるパス
+	   * @return patterns toggleMode時に使われる、選択可能なパターン配列。
+	   */
 
 	  Parser.getStrInfo = function(str) {
 	    var name, paramMode, path, patternStr, patterns, ref, ref1, toggleMode;
@@ -5134,24 +6222,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 
 
-/***/ },
+/***/ }),
 
-/***/ 98:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 142:
+/***/ (function(module, exports, __webpack_require__) {
 
 	var generate, testcases;
 
-	generate = __webpack_require__(14);
+	generate = __webpack_require__(14)["default"];
 
-	testcases = __webpack_require__(99);
+	testcases = __webpack_require__(143);
 
 	generate(testcases);
 
 
-/***/ },
+/***/ }),
 
-/***/ 99:
-/***/ function(module, exports) {
+/***/ 143:
+/***/ (function(module, exports) {
 
 	module.exports = {
 		"am-module": {
@@ -5159,7 +6247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 	};
 
-/***/ }
+/***/ })
 
 /******/ })
 });

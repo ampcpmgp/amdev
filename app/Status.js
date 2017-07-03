@@ -44,15 +44,15 @@ module.exports =
 /******/ ({
 
 /***/ 0:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(10);
 
 
-/***/ },
+/***/ }),
 
 /***/ 10:
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	var Status,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -83,6 +83,6 @@ module.exports =
 	module.exports = new Status();
 
 
-/***/ }
+/***/ })
 
 /******/ });

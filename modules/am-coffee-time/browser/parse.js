@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["modules/am-coffee-time/web/list"] = factory();
+		exports["modules/am-coffee-time/browser/parse"] = factory();
 	else
-		root["modules/am-coffee-time/web/list"] = factory();
+		root["modules/am-coffee-time/browser/parse"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -54,7 +54,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(78);
+	module.exports = __webpack_require__(34);
 
 
 /***/ }),
@@ -18665,22 +18665,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports.dump     = dump;
 	module.exports.safeDump = safeDump;
 
-
-/***/ }),
-/* 70 */,
-/* 71 */,
-/* 72 */,
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	__webpack_require__(34);
 
 /***/ })
 /******/ ])
