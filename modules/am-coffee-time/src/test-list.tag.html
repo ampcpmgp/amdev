@@ -176,21 +176,25 @@ require("./test-iframe")
 
 <list-line>
   <open-close-icon ref="icon" length="16" stroke="#333" if={!singleTaskUrl} callback={toggleItem} />
-  <section class="{line: 1,hover: isHover, last-execute: routerExecutionPath === Status.lastExecutePath}">
+  <section class="{line: 1,hover: isHover, last-execute: singleTaskExecutionPath === Status.lastExecutePath}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error}"></span>
       <a class="tree" href={routing} onclick={router}>{treeName}</a>
       <label each={pattern, i in patterns} class={focus: pattern.focus} data-id={i} onclick={changePatternEvent}>
         {pattern.name}
       </label>
-      <a class="single" if={singleTaskUrl} href={routerExecutionPath} onclick={router}>{singleTaskName}</a>
+      <a class="single" if={singleTaskUrl} href={singleTaskExecutionPath} onclick={router}>{singleTaskName}</a>
     </div>
     <recursive-item
       depth={opts.depth - 0 + 1}
       ref="item" if={!singleTaskUrl} data={data} routing={routing}
       style="display: {isItemOpen ? 'block' : 'none'}" />
   </section>
-  <test-iframe ref="testFrame" if={singleTaskUrl && status.onExecute} url={routerExecutionPath} config={Status.config}></test-iframe>
+  <test-iframe
+    ref="testFrame"
+    if={singleTaskUrl && status.onExecute}
+    url={singleTaskExecutionPath}
+    config={Status.config} />
   <style type="less">
     :scope {
       display: block;
@@ -262,13 +266,13 @@ require("./test-iframe")
     route = require("riot-route")
     setObservableEvent = =>
       Status.executablePath[@routing] =  () => @multiExecuteTask()
-      Status.executablePath[@routerExecutionPath] = () => @executeTask() if @singleTaskUrl
+      Status.executablePath[@singleTaskExecutionPath] = () => @executeTask() if @singleTaskUrl
     setRouter = (path) =>
       @routing = if @initialRouting then "#{@initialRouting}/#{path}" else path
-      @routerExecutionPath = @singleTaskUrl + Status.basePath + @routing
+      @singleTaskExecutionPath = @singleTaskUrl + Status.basePath + @routing
     checkLastExecute = =>
       Status.one('finished', () =>
-        if Status.lastExecutePath is @routerExecutionPath
+        if Status.lastExecutePath is @singleTaskExecutionPath
           checkLastExecute()
         else
           @update()
@@ -326,7 +330,7 @@ require("./test-iframe")
       executeIframe()
     @executeTask = (callback) =>
       @status.onExecute = true
-      Status.lastExecutePath = @routerExecutionPath
+      Status.lastExecutePath = @singleTaskExecutionPath
       Status.next()
       checkLastExecute()
       this.update()
