@@ -180,7 +180,7 @@ require("./test-iframe")
 </recursive-item>
 
 <list-line>
-  <open-close-icon ref="icon" length="16" stroke="#333" if={!singleTaskUrl} callback={toggleItem} />
+  <open-close-icon ref="icon" length="16" stroke="#333" if={hasChildNode} callback={toggleItem} />
   <section class="{line: 1,hover: isHover, last-execute: singleTaskExecutionPath === Status.lastExecutePath}">
     <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
       <span class="bold {success: success, error: error}"></span>
@@ -192,7 +192,7 @@ require("./test-iframe")
     </div>
     <recursive-item
       depth={opts.depth - 0 + 1}
-      ref="item" if={typeof data === 'object'} data={data} routing={routing}
+      ref="item" if={hasChildNode} data={data} routing={routing}
       style="display: {isItemOpen ? 'block' : 'none'}" />
   </section>
   <test-iframe
@@ -287,6 +287,7 @@ require("./test-iframe")
     #親から渡されるkey情報に基づく設定
     keyStrInfo = Parser.getStrInfo(@key)
     @initialRouting = opts.routing
+    @hasChildNode = typeof @data is 'object'
     @treeName = keyStrInfo.name
     if keyStrInfo.toggleMode
       initialPattern = keyStrInfo.patterns[0]
