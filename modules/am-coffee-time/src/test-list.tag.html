@@ -181,10 +181,12 @@ require("./test-iframe")
 
 <list-line>
   <open-close-icon ref="icon" length="16" stroke="#333" if={hasChildNode} callback={toggleItem} />
-  <section class="{line: 1,hover: isHover, last-execute: singleTaskExecutionPath === Status.lastExecutePath}">
-    <div class="" onmouseover={mouseOn} onmouseout={mouseOut}>
+  <section class="{line: 1,hover: isHover}">
+    <div class={last-execute: singleTaskExecutionPath === Status.lastExecutePath}>
       <span class="bold {success: success, error: error}"></span>
-      <a class="tree" href={routing} onclick={router}>{treeName}</a>
+      <a class="tree" href={routing} onclick={router}
+        onmouseover={mouseOn}
+        onmouseout={mouseOut}>{treeName}</a>
       <label each={pattern, i in patterns} class={focus: pattern.focus} data-id={i} onclick={changePatternEvent}>
         {pattern.name}
       </label>
@@ -212,7 +214,7 @@ require("./test-iframe")
     }
      > .line > {
       display: inline-block;
-      &.last-execute {
+      div.last-execute {
         border: solid 1px;
         display: inline-block;
         padding: 0px 8px;

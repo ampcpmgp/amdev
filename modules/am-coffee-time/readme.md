@@ -6,7 +6,7 @@ repository
 https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time
 
 sample page (Japanese)
-https://ampcpmgp.github.io/amdev/modules/am-coffee-time/web/list.html
+https://ampcpmgp.github.io/amdev/modules/am-coffee-time/web/
 
 
 ## Overview
@@ -17,25 +17,42 @@ This page displays the test pattern. Throwing events to mock pages and collabora
 
 #### sample code
 
-testListPage.html
+list.html
 ```html
 <script type="text/yaml" for="test-list">
-  click=.config: ./url.html
+  click=.config: ./index.html
   click=.edit:
-    default: ./url.html #default is used as parent node.
-    input=name,takasi: ./url.html
-    input=age,94: ./url.html
-    description(input=param): pageName(./index.html)
+    default: ./index.html #default is used as parent node.
+    input=name,takasi: ./index.html
+    input=age,94: ./index.html
+    description(input=param): pageName(./other.html)
   langSwitch[ja | en | zh-cn | zh-tw]: langPage(./lang.html)
 </script>
 <test-list></test-list>
-<script src="./test.js">
+<script src="./list.js">
 ```
 
-test.js
+list.js
 ```javascript
 import 'am-coffee-time/browser/parse'
 ```
+
+##### sample code 2 (when preparing json data yourself)
+
+list.html
+```html
+<test-list></test-list>
+<script src="./list.js"></script>
+```
+
+list.js
+```javascript
+import generate from 'am-coffee-time'
+import testcases from './cases.yml'
+
+generate(testcases)
+```
+
 
 ### mock pages
 This module watch event of console.assert.
