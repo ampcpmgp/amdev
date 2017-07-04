@@ -55,7 +55,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(70);
+	module.exports = __webpack_require__(71);
 
 
 /***/ }),
@@ -12523,7 +12523,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 
-/***/ 29:
+/***/ 30:
 /***/ (function(module, exports) {
 
 	var Parser;
@@ -12635,14 +12635,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 
-/***/ 70:
+/***/ 71:
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $, Parser, assert, test;
 
 	$ = __webpack_require__(10);
 
-	Parser = __webpack_require__(29);
+	Parser = __webpack_require__(30);
 
 	assert = __webpack_require__(2);
 
@@ -12691,9 +12691,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  タスクリスト一覧: (function(_this) {
 	    return function() {
 	      var answerPattern, list, testPattern;
-	      testPattern = __webpack_require__(71);
+	      testPattern = __webpack_require__(72);
 	      list = Parser.getSingleTaskList(testPattern);
-	      answerPattern = __webpack_require__(72);
+	      answerPattern = __webpack_require__(73);
 	      return assert(JSON.stringify(list) === JSON.stringify(answerPattern));
 	    };
 	  })(this),
@@ -12742,7 +12742,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 
-/***/ 71:
+/***/ 72:
 /***/ (function(module, exports) {
 
 	module.exports = {
@@ -12837,7 +12837,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 
-/***/ 72:
+/***/ 73:
 /***/ (function(module, exports) {
 
 	module.exports = [

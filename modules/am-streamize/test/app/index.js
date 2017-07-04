@@ -46,7 +46,7 @@ module.exports =
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(53);
+	module.exports = __webpack_require__(54);
 
 
 /***/ }),
@@ -524,7 +524,7 @@ module.exports =
 
 /***/ }),
 
-/***/ 53:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 	var assert, fs, parser;
@@ -533,14 +533,14 @@ module.exports =
 
 	assert = __webpack_require__(34);
 
-	parser = __webpack_require__(54);
+	parser = __webpack_require__(55);
 
 	__webpack_require__(30).start({
 	  simple: (function(_this) {
 	    return function() {
 	      var flow, json, result;
-	      flow = __webpack_require__(55);
-	      json = __webpack_require__(56);
+	      flow = __webpack_require__(56);
+	      json = __webpack_require__(57);
 	      result = parser(flow);
 	      return assert(JSON.stringify(result) === JSON.stringify(json), "simple flow is not same");
 	    };
@@ -552,7 +552,7 @@ module.exports =
 
 /***/ }),
 
-/***/ 54:
+/***/ 55:
 /***/ (function(module, exports) {
 
 	var Sections, expressions,
@@ -636,14 +636,14 @@ module.exports =
 
 /***/ }),
 
-/***/ 55:
+/***/ 56:
 /***/ (function(module, exports) {
 
 	module.exports = "[プロモーション画面]\r\nユーザーが見るものを書きます。\r\nユーザーがする行動を書きます。\r\n\r\n[ようこそ画面]\r\nユーザー情報を取得\r\nif ログインユーザー or ゲストユーザー\r\n  if ゲストユーザー\r\n    ゲスト機能を表示=>チャット画面\r\nelse if 管理者\r\n  =2段階認証=>管理画面\r\nelse\r\n  =>ログイン画面\r\n--\r\nユーザーがすること１ => その結果１\r\nユーザーがすること２ => その結果２\r\n\r\n[その結果１]\r\n結果\r\n\r\n[その結果２]\r\n結果\r\n\r\n[ログイン画面]\r\nログイン機能\r\nゲスト機能\r\n\r\n[チャット画面]\r\nチャット機能\r\n"
 
 /***/ }),
 
-/***/ 56:
+/***/ 57:
 /***/ (function(module, exports) {
 
 	module.exports = [
