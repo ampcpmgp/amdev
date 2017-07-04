@@ -6,7 +6,7 @@ repository
 https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time
 
 sample page (Japanese)
-https://ampcpmgp.github.io/amdev/modules/am-coffee-time/web/list.html
+https://ampcpmgp.github.io/amdev/modules/am-coffee-time/web/
 
 
 ## Overview

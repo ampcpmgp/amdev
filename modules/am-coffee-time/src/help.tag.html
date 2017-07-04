@@ -1,14 +1,24 @@
+require("./octocat")
+
 <help>
   <section class="inner {isOpen ? 'show' : 'hide'}">
     <header>
       Keyboard Shortcuts
     </header>
     <div>
+      <kbd>?</kbd><span class="detail">Open this window.</span>
+    </div>
+    <div>
       <kbd>1</kbd>-<kbd>9</kbd><span class="detail">Fold [1 -  9] depth tree node.</span>
     </div>
     <div>
       <kbd>0</kbd><span class="detail">Unfold all tree node.</span>
     </div>
+    <footer>
+      <a href="https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time" target="_blank">
+        <octocat />
+      </a>
+    </footer>
   </section>
   <section class="background {isOpen ? 'show' : 'hide'}" onclick={close}></section>
   <style scoped type="less">
@@ -27,7 +37,7 @@
         left: 50%;
         transform: translate(-50%, 0);
         width: 80%;
-        min-height: 40%;
+        min-height: 300px;
         background: white;
         z-index: 30;
         padding: 16px;
@@ -56,6 +66,19 @@
             margin-left: 10px;
             font-size: 12px;
             color: #333;
+          }
+        }
+        > footer {
+          > a {
+            display: inline-block;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            width: 80px;
+            height: 80px;
+            &:hover {
+              opacity: 1;
+            }
           }
         }
       }
