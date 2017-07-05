@@ -7,6 +7,6 @@ mount = (flow) =>
 
 require("am-coffee-time/browser/Test").start(
   simple: =>
-    flow = parser(require("raw!../app/simple.flow"))
+    flow = parser(require("raw-loader!../app/simple.flow"))
     mount(flow)
 )
