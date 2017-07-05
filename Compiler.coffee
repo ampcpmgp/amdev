@@ -5,9 +5,6 @@ fs =require("fs")
 path = require("path")
 
 module.exports = class Compiler
-  @executionOption:
-    aggregateTimeout: 300
-    poll: true
   @baseOption:
     output:
       path: path.resolve()
