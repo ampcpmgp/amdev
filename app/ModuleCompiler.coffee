@@ -43,7 +43,7 @@ module.exports = class ModuleCompiler extends require("../Compiler")
   @config: =>
     #minified
     @browserOption.plugins = [
-      new webpack.optimize.OccurenceOrderPlugin(true)
+      new webpack.optimize.OccurrenceOrderPlugin(true)
       new webpack.optimize.DedupePlugin()
       # new webpack.optimize.UglifyJsPlugin()
     ]
