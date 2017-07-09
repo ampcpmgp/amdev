@@ -46,7 +46,7 @@ color picker - http://www.vector.co.jp/soft/dl/win95/art/se350616.html
 gapdebug - ios debug
 
 # atom package
-apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify quantum-shell language-riot-tag linter-eslint git-time-machine atom-mermaid docblockr
+apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify linter-eslint linter-ui-default standard atom-mermaid docblockr
 
 # windows config environment
 * 拡張子を表示する
