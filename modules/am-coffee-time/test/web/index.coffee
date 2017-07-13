@@ -42,6 +42,8 @@ test =
   typecheck: ([string, int]) =>
     assert (typeof string) is "string"
     assert (typeof int) is "number"
+  typecheck2: (arg) =>
+    assert arg is "01"
   nullcheck: (data) =>
     assert data is null
   undefinedCheck: (data) =>
