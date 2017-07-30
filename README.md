@@ -32,7 +32,10 @@ npm i
 npm start
 ```
 
-### my environment
+### Recommended development environment
+* 2 display (1920x1080 * 2) adove
+
+### author's software environment
 
 ```
 # bash user
