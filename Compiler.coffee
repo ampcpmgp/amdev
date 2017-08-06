@@ -67,7 +67,6 @@ module.exports = class Compiler
     ).forEach((filepath) => @browserOption.entry[filepath.replace(/\.(coffee|es)$/, "").replace(/^\.\//, "")] = [filepath])
   @callback: (err, stats) =>
     return console.log(err) if (err)
-    jsonStats = stats.toJson()
     console.log stats.toString(
       colors: true
       assets: false
