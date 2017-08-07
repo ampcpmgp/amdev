@@ -58,12 +58,12 @@ module.exports = class Compiler
     @browserOption.entry = {}
     # TODO: 開発に必要なファイル軍だけをコンパイルする方針に変えたい
     require("glob").sync(
-      "./**/@(electron|app)/*.@(coffee|es)"
-      , {ignore: "./**/@(node_modules)/**"}
+      "./**/{,.*/**}/{electron,app}/*.{coffee,es}"
+      , {ignore: "./**/{,.*/**}/node_modules/**"}
     ).forEach((filepath) => @electronOption.entry[filepath.replace(/\.(coffee|es)$/, "").replace(/^\.\//, "")] = [filepath])
     require("glob").sync(
-      "./**/@(web|browser)/*.@(coffee|es)"
-      , {ignore: "./**/@(node_modules)/**"}
+      "./**/{,.*/**}/{web,browser}/*.{coffee,es}"
+      , {ignore: "./**/{,.*/**}/node_modules/**"}
     ).forEach((filepath) => @browserOption.entry[filepath.replace(/\.(coffee|es)$/, "").replace(/^\.\//, "")] = [filepath])
   @callback: (err, stats) =>
     return console.log(err) if (err)
