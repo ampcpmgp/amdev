@@ -1,11 +1,10 @@
 ipcRenderer = require('electron').ipcRenderer
-fs = require("fs")
 
 $ = require("jquery")
 chokidar = require("chokidar")
 glob = require("glob")
 
-module.exports = class ElectronApp
+class ElectronApp
   _inspector: 1
   publishFlg: true
   constructor: ->
@@ -34,15 +33,17 @@ module.exports = class ElectronApp
           stabilityThreshold: 10
           pollInterval: 10
       )
-      .on("change", (path) =>
+      .on("change", () =>
         return unless localStorage.liveReloadFlg is "true"
         location.reload()
       )
   serverStart: ->
     # TODO: ../electron/Browser.coffeeのコードと統一する。
     try
-      @config = cson.load('.config.cson')
+      @config = require("cson").load('.config.cson')
     catch
       @config = require("../electron/config.cson")
-    @port = @config.server.port || 8091
+    @port = @config.server?.port || 8091
     require("am-simple-server").prototype.start(@port, @port)
+
+module.exports = ElectronApp
