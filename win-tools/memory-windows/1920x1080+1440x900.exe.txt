@@ -1,5 +1,5 @@
-atom.exe,Atom=======>819,20,1107,987
-atom.exe,Atom=======>779,0,1107,987
+atom.exe,Atom=======>819,40,1107,987
+atom.exe,Atom=======>779,20,1107,987
 clover.exe,Clover=======>2495,0,714,439
 clover.exe,Clover=======>2495,434,714,432
 GitHub.exe,GitHub=======>467,364,1224,675
