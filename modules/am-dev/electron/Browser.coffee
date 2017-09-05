@@ -10,7 +10,6 @@ cson = require("cson")
 
 fs = require("fs")
 exec = require("child_process").exec
-fork = require("child_process").fork
 # path = require("path")
 {ipcMain, app, BrowserWindow} = require("electron")
 
@@ -32,7 +31,7 @@ class Watcher
         @restart()
       )
 
-module.exports = class Browser
+class Browser
   configCson: ".config.cson"
   init: =>
     try
@@ -68,7 +67,7 @@ module.exports = class Browser
       mainWindow.on("closed", =>
         mainWindow = null
       )
-      mainWindow.on("close", (e) =>
+      mainWindow.on("close", () =>
         return unless mainWindow?.getPosition
         xy = mainWindow.getPosition()
         wh = mainWindow.getSize()
@@ -97,3 +96,5 @@ module.exports = class Browser
     exec(fse.readJsonSync("package.json").scripts.watch).stdout.on("data", @sendMsg)
   sendMsg: (msg) =>
     mainWindow?.webContents.send("electron send msg", msg)
+
+module.exports = Browser
