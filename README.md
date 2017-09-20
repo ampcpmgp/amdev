@@ -41,7 +41,7 @@ npm start
 # bash user
 python2 nvm node yarn
 # windows user - install chocolatey
-choco install -yf --allow-empty-checksums nodist lhaplus notepadplusplus googlechrome firefox crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install virtualbox slack autoit winmerge atom screentogif githubforwindows visualstudio2015community
+choco install -yf --allow-empty-checksums nodist lhaplus notepadplusplus googlechrome firefox crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install virtualbox slack autoit winmerge atom screentogif githubforwindows wechat visualstudio2015community
 # download
 TODO: cliborを含んだ開発環境を作る
 clover - http://www.vector.co.jp/download/file/winnt/util/fh608107.html 3.2は不安定　( choco install clover )

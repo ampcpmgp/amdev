@@ -16,3 +16,4 @@ cmd.exe,npm=======>1931,525,993,519
 electron.exe,Electron=======>1922,6,1027,914
 electron.exe,Electron=======>2268,44,757,497
 notepad++.exe,Notepad++=======>3192,98,646,883
+WeChat.exe,WeChat=======>2767,454,810,590
