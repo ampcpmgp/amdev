@@ -81,7 +81,7 @@ require("./test-iframe")
   </style>
   <script type="coffee">
     Status = @Status = require("./Status")
-    route = require("riot-route")
+    import route from 'riot-route'
     keyboardjs = require("keyboardjs")
     bodyStyle = document.body.style
     @init = =>
@@ -270,7 +270,7 @@ require("./test-iframe")
   <script type="coffee">
     Status = @Status = require("./Status")
     Parser = require("../Parser")
-    route = require("riot-route")
+    import route from 'riot-route'
     setObservableEvent = =>
       Status.executablePath[@routing] =  () => @multiExecuteTask()
       Status.executablePath[@singleTaskExecutionPath] = () => @executeTask() if @singleTaskUrl

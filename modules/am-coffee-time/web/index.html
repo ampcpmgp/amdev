@@ -13,12 +13,12 @@
     <script type="text/yaml" for="test-list">
       全パターン:
         動作フロー確認用:
-          結果=成功: ./app.html
-          結果=失敗: ./app.html
+          結果=成功: consoleにfinished(./app.html)
+          結果=失敗: consoleにAssertionError(./app.html)
         ID入力=melon:
-          PW入力=google: ./app.html
-          PW入力=apple: ./app.html
-        スイッチ[日本語(lang=ja) | 英語(lang=en) | 中国語(lang=ch)]: 多言語化(./app.html)
+          PW入力=google: 「PWが正しくないです」表示(./app.html)
+          PW入力=apple: 「ログイン成功」表示(./app.html)
+        スイッチ[日本語(lang=ja) | 英語(lang=en) | 中国語(lang=ch)]: 多言語化されている(./app.html)
     </script>
     <test-list></test-list>
     <script src="./list.js" charset="utf-8"></script>

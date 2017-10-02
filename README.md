@@ -32,13 +32,16 @@ npm i
 npm start
 ```
 
-### my environment
+### Recommended development environment
+* 2 display (1920x1080 * 2) adove
+
+### author's software environment
 
 ```
 # bash user
 python2 nvm node yarn
 # windows user - install chocolatey
-choco install -yf --allow-empty-checksums nodist lhaplus notepadplusplus googlechrome firefox crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install virtualbox slack autoit winmerge atom screentogif githubforwindows visualstudio2015community
+choco install -yf --allow-empty-checksums nodist lhaplus notepadplusplus googlechrome firefox crystaldiskinfo greenshot crystaldiskmark gitkraken libreoffice googlechrome.canarcy win32diskimager.install virtualbox slack autoit winmerge atom screentogif githubforwindows wechat visualstudio2015community
 # download
 TODO: cliborを含んだ開発環境を作る
 clover - http://www.vector.co.jp/download/file/winnt/util/fh608107.html 3.2は不安定　( choco install clover )
@@ -46,7 +49,7 @@ color picker - http://www.vector.co.jp/soft/dl/win95/art/se350616.html
 gapdebug - ios debug
 
 # atom package
-apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify quantum-shell language-riot-tag linter-eslint git-time-machine atom-mermaid docblockr
+apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify linter-eslint linter-ui-default linter-js-standard standard-formatter markdown-preview-enhanced docblockr linter-coffee-variables svg-preview restart-atom busy-signal intentions atom-mermaid@2.2.1 language-riot-tag sort-lines atom-live-server atom-html-preview
 
 # windows config environment
 * 拡張子を表示する

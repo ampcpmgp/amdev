@@ -56,13 +56,14 @@
     getGhPage = (moduleName) => "#{@getDirName(moduleName)}/web/index.html"
     @getDirName = (moduleName) => "./modules/#{moduleName}"
     @exsitsBrowserModule = (moduleName) => fs.existsSync(getBrowserTestPage(moduleName))
-    @exsitsGhPage = (moduleName) => fs.existsSync(getBrowserTestPage(moduleName))
+    @exsitsGhPage = (moduleName) => fs.existsSync(getGhPage(moduleName))
     @exsitsAppModule = (moduleName) => fs.existsSync(getAppTestPage(moduleName))
     @getAppTestLinkPage = (moduleName) => ".#{getAppTestPage(moduleName)}"
     @openBrowser = (e) =>
-      shell.openExternal("http://localhost:#{ea.config.server.port}/#{getBrowserTestPage(e.currentTarget.dataset.name)}")
+      # TODO: port設定がamdev modulesと合わさっているため解消したい
+      shell.openExternal("http://localhost:#{ea.config.server?.port || 8091}/#{getBrowserTestPage(e.currentTarget.dataset.name)}")
     @openBrowserForGhPage = (e) =>
-      shell.openExternal("http://localhost:#{ea.config.server.port}/#{getGhPage(e.currentTarget.dataset.name)}")
+      shell.openExternal("http://localhost:#{ea.config.server?.port || 8091}/#{getGhPage(e.currentTarget.dataset.name)}")
     @modules = fs.readdirSync("./modules/")
     @yarn = (e) =>
       exec(

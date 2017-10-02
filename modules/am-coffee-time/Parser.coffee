@@ -1,4 +1,4 @@
-module.exports = class Parser
+class Parser
   @patternForPathName: /^(.+)\((.+)\)$/
   @parseStr: (str) =>
     [paramMode, name, path] = str.match(@patternForPathName) or [false, str, str]
@@ -52,3 +52,5 @@ module.exports = class Parser
             taskList.push({testName, testUrl, mockName, mockUrl})
     recursiveFunc(patterns)
     taskList
+
+module.exports = Parser
