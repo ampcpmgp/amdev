@@ -5,7 +5,7 @@ fs = require("fs")
 module.exports = class ModuleCompiler extends require("../Compiler")
   @compile: ({baseOption, moduleDir, preExt = "", callback}) =>
     option = _.cloneDeep(baseOption)
-    option.resolve.root = process.cwd()
+    option.resolve.modules.unshift(process.cwd())
     try
       files = fs.readdirSync(moduleDir)
     catch error
