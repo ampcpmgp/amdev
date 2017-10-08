@@ -1,21 +1,22 @@
 _ = require("lodash")
 webpack = require("webpack")
 fs = require("fs")
+path = require("path")
 
 module.exports = class ModuleCompiler extends require("../Compiler")
   @compile: ({baseOption, moduleDir, preExt = "", callback}) =>
     option = _.cloneDeep(baseOption)
-    option.resolve.modules.unshift(process.cwd())
+    option.resolve.modules.map((module) => path.resolve(process.cwd(), module))
     try
       files = fs.readdirSync(moduleDir)
     catch error
       return callback()
     try
-      coffeeFiles = (file for file in files when file.match(/.coffee$/))
+      coffeeFiles = (file for file in files when file.match(/.(coffee|es)$/))
       delete option.devtool
       for coffeeFile in coffeeFiles
         option.entry = {}
-        option.entry["#{moduleDir}/#{coffeeFile.replace(/\.coffee/, preExt)}"] = "./#{moduleDir}/#{coffeeFile}"
+        option.entry["#{moduleDir}/#{coffeeFile.replace(/\.(coffee|es)/, preExt)}"] = "./#{moduleDir}/#{coffeeFile}"
         yield webpack(option).run(=>
           @compileGen.next()
         )
