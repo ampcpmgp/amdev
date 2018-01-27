@@ -1,7 +1,7 @@
 # あまりに開発しづらいとdisられるため分離します
 分離予定module
-* am-coffee-time
-* am-autoevent
+* am-coffee-time - https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time
+* am-autoevent - https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent
 *
 
 # まだ工事中
