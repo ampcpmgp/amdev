@@ -1,3 +1,9 @@
+# あまりに開発しづらいとdisられるため分離します
+分離予定module
+* am-coffee-time
+* am-autoevent
+*
+
 # まだ工事中
 
 出来ること
