@@ -1,8 +1,9 @@
-# あまりに開発しづらいとdisられるため分離します
+# 各moduleを、別repositoryに分離します
 分離予定module
 * am-coffee-time - https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time
-* am-autoevent - https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent
-*
+  * 進行中 - https://github.com/ampcpmgp/amdev
+* am-autoevent - https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent ->
+  * 未着手
 
 # まだ工事中
 
