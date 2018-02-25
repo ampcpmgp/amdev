@@ -1,8 +1,9 @@
-# あまりに開発しづらいとdisられるため分離します
+# 各moduleを、別repositoryに分離します
 分離予定module
 * am-coffee-time - https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time
-* am-autoevent - https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent
-*
+  * 進行中 - https://github.com/ampcpmgp/am-coffee-time
+* am-autoevent - https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent ->
+  * 未着手
 
 # まだ工事中
 
@@ -55,7 +56,7 @@ color picker - http://www.vector.co.jp/soft/dl/win95/art/se350616.html
 gapdebug - ios debug
 
 # atom package
-apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify linter-eslint linter-ui-default linter-js-standard standard-formatter markdown-preview-enhanced docblockr linter-coffee-variables svg-preview restart-atom busy-signal intentions atom-mermaid@2.2.1 sort-lines atom-live-server atom-html-preview prettier-atom autoclose-html file-watcher
+apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify linter-eslint linter-ui-default linter-js-standard standard-formatter markdown-preview-enhanced docblockr linter-coffee-variables svg-preview restart-atom busy-signal intentions atom-mermaid@2.2.1 sort-lines atom-live-server atom-html-preview prettier-atom autoclose-html file-watcher GhostText/GhostText-for-Atom
 
 # windows config environment
 * 拡張子を表示する
