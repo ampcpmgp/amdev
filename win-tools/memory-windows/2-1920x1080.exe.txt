@@ -1,6 +1,7 @@
 atom.exe,Atom=======>819,45,1107,987
 atom.exe,Atom=======>799,30,1107,987
 atom.exe,Atom=======>779,15,1107,987
+Code.exe,Visual Studio Code=======>2508,92,1337,906
 clover.exe,Clover=======>2406,519,796,498
 clover.exe,Clover=======>2406,26,796,498
 GitHub.exe,GitHub=======>467,364,1224,675
