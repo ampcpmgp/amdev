@@ -8,5 +8,4 @@ node_modules
 *.map
 *.js
 *.css
-*.exe
 !*.src.js
