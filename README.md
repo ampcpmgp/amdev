@@ -56,7 +56,7 @@ color picker - http://www.vector.co.jp/soft/dl/win95/art/se350616.html
 gapdebug - ios debug
 
 # atom package
-apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify linter-eslint linter-ui-default linter-js-standard standard-formatter markdown-preview-enhanced docblockr linter-coffee-variables svg-preview restart-atom busy-signal intentions atom-mermaid@2.2.1 sort-lines atom-live-server atom-html-preview prettier-atom autoclose-html file-watcher GhostText/GhostText-for-Atom
+apm install pigments highlight-selected editorconfig linter script atom-terminal file-icons atom-beautify linter-eslint linter-ui-default linter-js-standard standard-formatter markdown-preview-enhanced docblockr linter-coffee-variables svg-preview restart-atom busy-signal intentions atom-mermaid@2.2.1 sort-lines atom-live-server atom-html-preview prettier-atom autoclose-html file-watcher GhostText/GhostText-for-Atom sequential-number
 
 # windows config environment
 * 拡張子を表示する
