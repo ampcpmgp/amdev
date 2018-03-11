@@ -1,6 +1,0 @@
-clover.exe,Clover=======>1129,544,796,498
-atom.exe,Atom=======>932,3,988,1016
-electron.exe,Electron=======>0,521,960,498
-chrome.exe,Google Chrome=======>0,0,960,527
-GitHub.exe,GitHub=======>450,363,1224,675
-cmd.exe,npm=======>-3,562,900,486
