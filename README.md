@@ -1,11 +1,11 @@
-# 各moduleを、別repositoryに分離します
+# ここで作られた各moduleを、別repositoryに分離します。
 分離予定module
 * am-coffee-time - https://github.com/ampcpmgp/amdev/tree/master/modules/am-coffee-time
   * 進行中 - https://github.com/ampcpmgp/am-coffee-time
 * am-autoevent - https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent ->
   * 未着手
 
-# まだ工事中
+# 工事中のまま終了
 
 出来ること
 coffeescriptを用い
@@ -40,4 +40,4 @@ npm start
 ```
 
 ### Recommended development environment
-* 2 display (1920x1080 * 2) adove
+* 2 display (1920x1080 * 2)
