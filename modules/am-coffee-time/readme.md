@@ -1,7 +1,8 @@
-# am-coffee-time
-
-This project has been replaced am-mocktimes.
+This project has been replaced am-mocktimes.  
 https://github.com/ampcpmgp/am-mocktimes/
+
+
+# am-coffee-time
 
 Testing and development of the mock page using a router.
 this is renamed from am-lunch-time.
