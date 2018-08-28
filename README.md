@@ -5,7 +5,7 @@
 * am-autoevent - https://github.com/ampcpmgp/amdev/tree/master/modules/am-autoevent ->
   * 未着手
 
-# 工事中のまま終了
+# やりたかったこと
 
 出来ること
 coffeescriptを用い
